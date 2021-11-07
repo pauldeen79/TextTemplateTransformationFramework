@@ -41,12 +41,9 @@ namespace Utilities
 
         public IEnumerable<TResult> EvaluateAll(T value)
         {
-            foreach (var clause in _clauses)
+            foreach (var clause in _clauses.Where(x => x.Predicate(value)))
             {
-                if (clause.Predicate(value))
-                {
-                    yield return clause.Function(value);
-                }
+                yield return clause.Function(value);
             }
         }
 

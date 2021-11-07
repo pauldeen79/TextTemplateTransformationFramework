@@ -296,7 +296,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
             stringBuilder.AppendFormat("{0}=\"{1}\"", name, formattedValue);
         }
 
-        private class DirectiveAttribute
+        private sealed class DirectiveAttribute
         {
             public DirectiveAttribute(PropertyInfo propertyInfo, string name)
             {
