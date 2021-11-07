@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TemplateTransformationFramework.T4.NetFramework")]
+[assembly: AssemblyTitle("TextTemplateTransformationFramework.T4.Plus.GUI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TemplateTransformationFramework.T4.NetFramework")]
+[assembly: AssemblyProduct("TextTemplateTransformationFramework.T4.Plus.GUI")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d9f64a4a-af61-4608-a9c6-67f1071f25fc")]
+[assembly: Guid("c420f22d-8ea2-4e88-a10e-149bb5592a70")]
 
 // Version information for an assembly consists of the following four values:
 //

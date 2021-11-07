@@ -2,7 +2,6 @@
 
 namespace TextTemplateTransformationFramework.Common
 {
-    [Serializable]
     public class TextTemplate
     {
         public string Template { get; }

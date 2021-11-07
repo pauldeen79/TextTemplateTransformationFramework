@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace TextTemplateTransformationFramework.Common
 {
-    [Serializable]
     public sealed class ExtractParametersResult
     {
         private ExtractParametersResult

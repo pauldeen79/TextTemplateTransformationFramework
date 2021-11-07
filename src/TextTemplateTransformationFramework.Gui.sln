@@ -13,27 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Core", "T4.Plus.Core\TextTemplateTransformationFramework.T4.Plus.Core.csproj", "{6AC261C4-9B14-4E75-9371-6A4E542720EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.T4.NetFramework", "T4.NetFramework\TextTemplateTransformationFramework.T4.NetFramework.csproj", "{D9F64A4A-AF61-4608-A9C6-67F1071F25FC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.T4.Plus.NetFramework", "T4.Plus.NetFramework\TextTemplateTransformationFramework.T4.Plus.NetFramework.csproj", "{E5D687AF-2F63-4C2C-BF7E-AD79F689770C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.GUI", "T4.Plus.GUI\TextTemplateTransformationFramework.T4.Plus.GUI.csproj", "{DAE397F4-53C6-4217-89EC-7EE8C50F5E94}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.T4.Plus.GUI.NetFramework", "T4.Plus.GUI.NetFramework\TextTemplateTransformationFramework.T4.Plus.GUI.NetFramework.csproj", "{C420F22D-8EA2-4E88-A10E-149BB5592A70}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{47CA51D3-DF35-407A-8BE7-A6CA725F01AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.GridOutput", "Utilities.GridOutput\Utilities.GridOutput.csproj", "{FD7B90FF-E985-43D8-A819-072D7CFFA797}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainRunner", "DomainRunner\DomainRunner.csproj", "{04AE495F-942B-4ACB-9C14-5E372084E7E7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainRunner.Tests", "DomainRunner.Tests\DomainRunner.Tests.csproj", "{7634DB05-A14A-44D6-9FB4-BBF27F0E0B83}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd", "Common.Cmd\TextTemplateTransformationFramework.Common.Cmd.csproj", "{CC3D156B-7218-4E83-A976-AF3E683455A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Cmd", "T4.Plus.Cmd\TextTemplateTransformationFramework.T4.Plus.Cmd.csproj", "{A4C23964-3A28-4FAF-A2EC-E364D06A753B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.T4.Plus.Cmd.NetFramework", "T4.Plus.Cmd.NetFramework\TextTemplateTransformationFramework.T4.Plus.Cmd.NetFramework.csproj", "{FD1C4AFE-C571-425F-B4E2-C15AB38E6604}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Runtime", "Runtime\TextTemplateTransformationFramework.Runtime.csproj", "{06C63855-132E-45C6-93FB-0899305E414A}"
 EndProject
@@ -63,22 +51,10 @@ Global
 		{6AC261C4-9B14-4E75-9371-6A4E542720EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AC261C4-9B14-4E75-9371-6A4E542720EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AC261C4-9B14-4E75-9371-6A4E542720EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9F64A4A-AF61-4608-A9C6-67F1071F25FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9F64A4A-AF61-4608-A9C6-67F1071F25FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9F64A4A-AF61-4608-A9C6-67F1071F25FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9F64A4A-AF61-4608-A9C6-67F1071F25FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5D687AF-2F63-4C2C-BF7E-AD79F689770C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5D687AF-2F63-4C2C-BF7E-AD79F689770C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5D687AF-2F63-4C2C-BF7E-AD79F689770C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5D687AF-2F63-4C2C-BF7E-AD79F689770C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DAE397F4-53C6-4217-89EC-7EE8C50F5E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DAE397F4-53C6-4217-89EC-7EE8C50F5E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAE397F4-53C6-4217-89EC-7EE8C50F5E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAE397F4-53C6-4217-89EC-7EE8C50F5E94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C420F22D-8EA2-4E88-A10E-149BB5592A70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C420F22D-8EA2-4E88-A10E-149BB5592A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C420F22D-8EA2-4E88-A10E-149BB5592A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C420F22D-8EA2-4E88-A10E-149BB5592A70}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47CA51D3-DF35-407A-8BE7-A6CA725F01AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47CA51D3-DF35-407A-8BE7-A6CA725F01AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47CA51D3-DF35-407A-8BE7-A6CA725F01AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -87,14 +63,6 @@ Global
 		{FD7B90FF-E985-43D8-A819-072D7CFFA797}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD7B90FF-E985-43D8-A819-072D7CFFA797}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD7B90FF-E985-43D8-A819-072D7CFFA797}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04AE495F-942B-4ACB-9C14-5E372084E7E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04AE495F-942B-4ACB-9C14-5E372084E7E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04AE495F-942B-4ACB-9C14-5E372084E7E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04AE495F-942B-4ACB-9C14-5E372084E7E7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7634DB05-A14A-44D6-9FB4-BBF27F0E0B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7634DB05-A14A-44D6-9FB4-BBF27F0E0B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7634DB05-A14A-44D6-9FB4-BBF27F0E0B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7634DB05-A14A-44D6-9FB4-BBF27F0E0B83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC3D156B-7218-4E83-A976-AF3E683455A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC3D156B-7218-4E83-A976-AF3E683455A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC3D156B-7218-4E83-A976-AF3E683455A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -103,10 +71,6 @@ Global
 		{A4C23964-3A28-4FAF-A2EC-E364D06A753B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4C23964-3A28-4FAF-A2EC-E364D06A753B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4C23964-3A28-4FAF-A2EC-E364D06A753B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD1C4AFE-C571-425F-B4E2-C15AB38E6604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD1C4AFE-C571-425F-B4E2-C15AB38E6604}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD1C4AFE-C571-425F-B4E2-C15AB38E6604}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD1C4AFE-C571-425F-B4E2-C15AB38E6604}.Release|Any CPU.Build.0 = Release|Any CPU
 		{06C63855-132E-45C6-93FB-0899305E414A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{06C63855-132E-45C6-93FB-0899305E414A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C63855-132E-45C6-93FB-0899305E414A}.Release|Any CPU.ActiveCfg = Release|Any CPU

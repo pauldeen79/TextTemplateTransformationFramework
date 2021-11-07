@@ -1,10 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using TextTemplateTransformationFramework.Common.Contracts;
 
 namespace TextTemplateTransformationFramework.Common.Default
 {
-    [Serializable]
     public class Logger : ILogger
     {
         private readonly StringBuilder _stringBuilder = new StringBuilder();

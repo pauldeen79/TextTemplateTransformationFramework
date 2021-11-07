@@ -6,8 +6,7 @@ namespace TextTemplateTransformationFramework.Common
     /// <summary>
     /// Represents a parameter that is used in the template.
     /// </summary>
-    [Serializable]
-    public sealed class TemplateParameter : ISerializable
+    public sealed class TemplateParameter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateParameter"/> class.
@@ -108,69 +107,5 @@ namespace TextTemplateTransformationFramework.Common
         /// Gets or sets possible values
         /// </summary>
         public string[] PossibleValues { get; set; }
-
-        #region ISerializable Members
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TemplateParameter"/> class.
-        /// </summary>
-        /// <param name="info">The info.</param>
-        /// <param name="context">The context.</param>
-        private TemplateParameter(SerializationInfo info, StreamingContext context)
-        {
-            Name = info.GetString("name");
-            Description = info.GetString("description");
-            DisplayName = info.GetString("displayName");
-            Browsable = info.GetBoolean("browsable");
-            ReadOnly = info.GetBoolean("readOnly");
-            var typeName = info.GetString("typeName");
-            Type = Type.GetType(typeName);
-            EditorAttributeEditorTypeName = info.GetString("editorAttributeEditorTypeName");
-            EditorAttributeEditorBaseTypeName = info.GetString("editorAttributeEditorBaseTypeName");
-            Value = GetValue(info);
-            OmitValueAssignment = info.GetBoolean("omitValueAssignment");
-            TypeConverterTypeName = info.GetString("typeConverterTypeName");
-            PossibleValues = info.GetString("possibleValues").Split('|');
-        }
-
-        private object GetValue(SerializationInfo info) =>
-            Type == null
-                ? null
-                : Convert.ChangeType
-                (
-                    GetValueToConvert(info),
-                    GetConversionType()
-                );
-
-        private Type GetConversionType()
-            => Type.IsEnum
-                ? typeof(int)
-                : Type;
-
-        private object GetValueToConvert(SerializationInfo info)
-            => Type.IsEnum && info.GetValue("value", typeof(object)) is string
-                ? Enum.Parse(Type, info.GetValue("value", typeof(object)).ToString().Replace(Type + ".", string.Empty))
-                : info.GetValue("value", typeof(object));
-
-        /// <summary>
-        /// Populates a <see cref="SerializationInfo" /> with the data needed to serialize the target object.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo" /> to populate with data.</param>
-        /// <param name="context">The destination (see <see cref="StreamingContext" />) for this serialization.</param>
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("name", Name);
-            info.AddValue("value", Value);
-            info.AddValue("description", Description);
-            info.AddValue("displayName", DisplayName);
-            info.AddValue("browsable", Browsable);
-            info.AddValue("readOnly", ReadOnly);
-            info.AddValue("typeName", Type.AssemblyQualifiedName);
-            info.AddValue("editorAttributeEditorTypeName", EditorAttributeEditorTypeName);
-            info.AddValue("editorAttributeEditorBaseTypeName", EditorAttributeEditorBaseTypeName);
-            info.AddValue("typeConverterTypeName", TypeConverterTypeName);
-            info.AddValue("omitValueAssignment", OmitValueAssignment);
-            info.AddValue("possibleValues", PossibleValues == null ? string.Empty : string.Join("|", PossibleValues));
-        }
-        #endregion
     }
 }
