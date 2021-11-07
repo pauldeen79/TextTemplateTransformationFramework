@@ -22,7 +22,7 @@ jobs:
       - name: sonarscan-dotnet
         uses: highbyte/sonarscan-dotnet@2.0
         with:
-          sonarProjectKey: TextTemplateTransformationFramework
+          sonarProjectKey: pauldeen79_TextTemplateTransformationFramework
           sonarProjectName: TextTemplateTransformationFramework
           sonarOrganization: pauldeen79
           dotnetBuildArguments: src/TextTemplateTransformationFramework.sln
