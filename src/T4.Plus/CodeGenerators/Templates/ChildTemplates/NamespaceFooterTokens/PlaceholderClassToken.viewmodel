@@ -1,0 +1,16 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.ViewModel" #>
+<#@ copyPropertiesToViewModel enabled="false" #>
+<#@ model type="IPlaceholderClassToken<TokenParserState>" #>
+<#@ templateContext #>
+<#+
+        public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
+        public string ClassNameSanitized => Model.ClassName.Sanitize();
+        public string ClassNameCsharpFormatted => Model.ClassName.CsharpFormat();
+        public string BaseClass => Model.BaseClass;
+        public string RootClassName => Model.RootClassName;
+        public string ModelType => Model.UseModelForRoutingOnly
+            ? string.Empty
+            : Model.ModelType;
+        public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
+#>

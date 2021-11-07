@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.InitializeBaseToken.Template" #>
+<#@ model type="IInitializeBaseToken<TokenParserState>" #>
+            base.Initialize(<# if (Model.AdditionalActionDelegate) { #>additionalActionDelegate<# } #>);

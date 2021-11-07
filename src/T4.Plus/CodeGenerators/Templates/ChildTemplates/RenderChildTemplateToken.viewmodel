@@ -1,0 +1,61 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.RenderChildTemplateToken.ViewModel" #>
+<#@ model type="IRenderChildTemplateToken<TokenParserState>" #>
+<#+
+        public string Name => Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral);
+
+        public IEnumerable<string> Arguments
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Model.Model))
+                {
+                    yield return ", " + Model.Model.FormatLiteral(Model.ModelIsLiteral);
+                }
+                if (Model.Enumerable != null)
+                {
+                    yield return ", renderAsEnumerable: " + Model.Enumerable.Value.CsharpFormat();
+                }
+                if (Model.SilentlyContinueOnError)
+                {
+                    yield return ", silentlyContinueOnError: true";
+                }
+                if (!string.IsNullOrEmpty(Model.SeparatorTemplateName))
+                {
+                    yield return ", separatorTemplateName: " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
+                }
+                if (!string.IsNullOrEmpty(Model.HeaderTemplateName))
+                {
+                    yield return ", headerTemplateName: " + Model.HeaderTemplateName.FormatLiteral(Model.HeaderTemplateNameIsLiteral);
+                }
+                if (!string.IsNullOrEmpty(Model.HeaderCondition))
+                {
+                    yield return ", headerCondition: " + Model.HeaderCondition;
+                }
+                if (!string.IsNullOrEmpty(Model.FooterTemplateName))
+                {
+                    yield return ", footerTemplateName: " + Model.FooterTemplateName.FormatLiteral(Model.FooterTemplateNameIsLiteral);
+                }
+                if (!string.IsNullOrEmpty(Model.FooterCondition))
+                {
+                    yield return ", footerCondition: " + Model.FooterCondition;
+                }
+                if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
+                {
+                    yield return ", customResolverDelegate: " + Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral);
+                }
+                if (!string.IsNullOrEmpty(Model.ResolverDelegateModel))
+                {
+                    yield return ", resolverDelegateModel: " + Model.ResolverDelegateModel.FormatLiteral(Model.ResolverDelegateModelIsLiteral);
+                }
+                if (!string.IsNullOrEmpty(Model.CustomRenderChildTemplateDelegateExpression))
+                {
+                    yield return ", customRenderChildTemplateDelegate: " + Model.CustomRenderChildTemplateDelegateExpression.FormatLiteral(Model.CustomRenderChildTemplateDelegateExpressionIsLiteral);
+                }
+                if (!string.IsNullOrEmpty(Model.CustomTemplateNameDelegateExpression))
+                {
+                    yield return ", customTemplateNameDelegate: " + Model.CustomTemplateNameDelegateExpression.FormatLiteral(Model.CustomTemplateNameDelegateExpressionIsLiteral);
+                }
+            }
+        }
+#>

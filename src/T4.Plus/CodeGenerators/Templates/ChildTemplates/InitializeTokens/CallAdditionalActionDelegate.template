@@ -1,0 +1,10 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.CallAdditionalActionDelegateToken.Template" #>
+<#@ model type="ICallAdditionalActionDelegateToken<TokenParserState>" #>
+<# if (!Model.SkipInitializationCode)
+   { #>
+            if (additionalActionDelegate != null)
+            {
+                additionalActionDelegate();
+            }
+<# } #>

@@ -1,0 +1,57 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.BaseClassFooterTokens.AddChildTemplateCodeToken.Template" #>
+<#@ model type="IAddChildTemplateCodeToken<TokenParserState>" #>
+        #region Child templates
+        private global::System.Collections.Generic.List<global::System.Tuple<string, Func<object>, global::System.Type>> _childTemplatesField = new global::System.Collections.Generic.List<Tuple<string, Func<object>, Type>>();
+        public global::System.Collections.Generic.List<global::System.Tuple<string, Func<object>, global::System.Type>> ChildTemplates { get { return _childTemplatesField; } protected set { _childTemplatesField = value; } }
+        private global::System.Collections.Generic.List<global::System.Tuple<string, Func<object>, global::System.Type>> _viewModelsField = new global::System.Collections.Generic.List<Tuple<string, Func<object>, Type>>();
+        public global::System.Collections.Generic.List<global::System.Tuple<string, Func<object>, global::System.Type>> ViewModels { get { return _viewModelsField; } protected set { _viewModelsField = value; } }
+        public global::System.Action<object> ChildTemplateCreated { get; set; }
+
+        public void RegisterChildTemplate(string templateName, Func<object> templateDelegate, Type modelType = null)
+        {
+            ChildTemplates.Add(new Tuple<string,Func<object>,Type>(templateName, templateDelegate, modelType));
+        }
+
+        public void RegisterViewModel(string viewModelName, Func<object> viewModelDelegate, Type modelType = null)
+        {
+            ViewModels.Add(new Tuple<string,Func<object>,Type>(viewModelName, viewModelDelegate, modelType));
+        }
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.PlaceholderCode.Template" #>
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.RenderTemplateCode.Template" #>
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.RenderChildTemplateCode.Template" #>
+
+        protected virtual object GetChildTemplate(string templateName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
+        {
+            var result = GetRegisteredObject(ChildTemplates, "Child template", templateName, model, silentlyContinueOnError, customResolverDelegate);
+            if (ChildTemplateCreated != null)
+            {
+                ChildTemplateCreated.Invoke(result);
+            }
+            return result;
+        }
+
+        protected virtual object GetViewModel(string viewModelName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
+        {
+            var returnValue = GetRegisteredObject(ViewModels, "View model", viewModelName, model, silentlyContinueOnError, customResolverDelegate);
+            if (returnValue != null && model != null)
+            {
+                var modelProperty = returnValue.GetType().GetProperty("Model", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                modelProperty?.SetValue(returnValue, model);
+            }
+            return returnValue;
+        }
+
+        protected virtual object GetRegisteredObject(List<Tuple<string, Func<object>, Type>> registrations, string objectName, string name, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
+        {
+            return GetRegisteredObject(registrations, objectName, name, model, silentlyContinueOnError, customResolverDelegate, Error);
+        }
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.GetRegisteredObjectCode.Template" #>
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.ConvertTypeCode.Template" #>
+
+        #endregion

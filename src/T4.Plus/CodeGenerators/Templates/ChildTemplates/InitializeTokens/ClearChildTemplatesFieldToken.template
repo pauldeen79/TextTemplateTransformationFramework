@@ -1,0 +1,5 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.ClearChildTemplatesFieldToken.Template" #>
+<#@ model type="IClearChildTemplatesFieldToken<TokenParserState>" useForRoutingOnly="true" #>
+            this.ChildTemplates.Clear();
+            this.ViewModels.Clear();

@@ -1,0 +1,11 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ChildTemplateInitializeCodeTokens.RouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken.Template" #>
+<#@ model type="IRouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken<TokenParserState>" useForRoutingOnly="true" #>
+            if (RootTemplate != null)
+            {
+                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
+            }
+            else
+            {
+                PlaceholderChildrenDictionary.Clear();
+            }

@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.MessageTokens.WarningToken.Template" #>
+<#@ model type="IWarningToken<TokenParserState>" #>
+Warning(<#= Model.Message.CsharpFormat() #>);

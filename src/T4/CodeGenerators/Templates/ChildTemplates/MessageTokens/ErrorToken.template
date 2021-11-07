@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.MessageTokens.ErrorToken.Template" #>
+<#@ model type="IErrorToken<TokenParserState>" #>
+Error(<#= Model.Message.CsharpFormat() #>);

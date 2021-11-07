@@ -1,0 +1,18 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildViewModelClassToken.ViewModel" #>
+<#@ copyPropertiesToViewModel enabled="false" #>
+<#@ model type="IChildViewModelNamespaceFooterClassToken<TokenParserState>" #>
+<#@ templateContext #>
+<#+
+        public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
+        public string ClassName => Model.ClassName.Sanitize();
+        public string BaseClass => Model.BaseClass;
+        public string ModelType => Model.ModelType;
+        public IEnumerable<TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TokenParserState>> ParameterTokens => Model.ChildTemplateTokens.OfType<TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TokenParserState>>();
+        public IEnumerable<TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TokenParserState>> CopyParameterTokens => Model.CopyPropertiesFromTemplate
+            ? Model.SectionContext.ExistingTokens.GetTemplateTokensFromSections<TokenParserState, TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TokenParserState>>().Where(t => t.TypeName != ClassName && (t.Name != "Model" || string.IsNullOrEmpty(ModelType)) && !ParameterTokens.Any(pt => pt.Name == t.Name)).Select(t => t.WithPropertySetter())
+            : Enumerable.Empty<TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ClassFooterTokens => Model.ChildTemplateTokens.OfType<IClassFooterToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ViewModelClassFooterTokens => Model.ChildTemplateTokens.OfType<IViewModelClassFooterToken<TokenParserState>>();
+        public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
+#>

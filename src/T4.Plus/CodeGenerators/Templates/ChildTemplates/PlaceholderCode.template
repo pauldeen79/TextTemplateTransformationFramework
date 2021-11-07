@@ -1,0 +1,31 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.PlaceholderCode.Template" #>
+        public void ClearPlaceholder(string placeholderName)
+        {
+            PerformActionOnPlaceholder(placeholderName, (val) => val.Clear());
+        }
+
+        public void AddTemplateToPlaceholder(string placeholderName, string templateName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
+        {
+            PerformActionOnPlaceholder(placeholderName, (val) =>
+                {
+                    var childTemplate = GetChildTemplate(templateName, model, silentlyContinueOnError, customResolverDelegate);
+                    if (childTemplate != null)
+                    {
+                        val.Add(childTemplate);
+                    }
+                });
+        }
+
+        protected global::System.Collections.Generic.Dictionary<string, global::System.Collections.Generic.IList<object>> _placeholderChildrenDictionaryField = new global::System.Collections.Generic.Dictionary<string, global::System.Collections.Generic.IList<object>>();
+        public global::System.Collections.Generic.Dictionary<string, global::System.Collections.Generic.IList<object>> PlaceholderChildrenDictionary { get { return _placeholderChildrenDictionaryField; } protected set { _placeholderChildrenDictionaryField = value; } }
+        protected void PerformActionOnPlaceholder(string placeholderName, Action<global::System.Collections.Generic.IList<object>> placeholderAction)
+        {
+            if (!PlaceholderChildrenDictionary.ContainsKey(placeholderName))
+            {
+                PlaceholderChildrenDictionary.Add(placeholderName, new global::System.Collections.Generic.List<object>());
+            }
+
+            var childrenList = PlaceholderChildrenDictionary[placeholderName];
+            placeholderAction(childrenList);
+        }

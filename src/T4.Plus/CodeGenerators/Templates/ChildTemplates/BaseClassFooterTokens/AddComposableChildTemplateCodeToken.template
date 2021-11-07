@@ -1,0 +1,27 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.BaseClassFooterTokens.AddComposableChildTemplateCodeToken.Template" #>
+<#@ model type="IAddComposableChildTemplateCodeToken<TokenParserState>" #>
+        #region Child templates
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.RenderTemplateCode.Template" #>
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.RenderChildTemplateCode.Template" #>
+
+        public Func<string, object, bool, global::System.Func<string, string, global::System.Type, object, bool>, Action<string>, object> GetChildTemplateDelegate { get; set; }
+
+        protected virtual object GetChildTemplate(string templateName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
+        {
+            return GetChildTemplateDelegate == null ? null : GetChildTemplateDelegate.Invoke(templateName, model, silentlyContinueOnError, customResolverDelegate, errorMessage => Error(errorMessage));
+        }
+
+        public Func<string, object, bool, global::System.Func<string, string, global::System.Type, object, bool>, Action<string>, object> GetViewModelDelegate { get; set; }
+
+        protected virtual object GetViewModel(string viewModelName, object model = null, bool silentlyContinueOnError = false, global::System.Func<string, string, global::System.Type, object, bool> customResolverDelegate = null)
+        {
+            return GetViewModelDelegate == null ? null : GetViewModelDelegate.Invoke(viewModelName, model, silentlyContinueOnError, customResolverDelegate, errorMessage => Error(errorMessage));
+        }
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.PlaceholderCode.Template" #>
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.ConvertTypeCode.Template" #>
+
+        #endregion

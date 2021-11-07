@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.LineNumber.Header.Template" #>
+<#@ model type="ITemplateToken<TokenParserState>" useForRouting="false" #>
+#line <#= Model.SectionContext.LineNumber #> "<#= Model.SectionContext.FileName #>"

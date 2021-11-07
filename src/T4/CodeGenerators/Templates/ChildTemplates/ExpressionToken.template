@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.ExpressionToken.Template" #>
+<#@ model type="IExpressionToken<TokenParserState>" #>
+Write(this.ToStringHelper.ToStringWithCulture(<#= Model.Expression #>));

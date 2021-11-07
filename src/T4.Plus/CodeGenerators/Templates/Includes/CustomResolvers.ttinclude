@@ -1,0 +1,63 @@
+﻿<#+
+
+        public override bool ParameterTokenDeclarationTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return model is TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.IParameterToken<TokenParserState>
+                ? childTemplateName == "T4PlusCSharpCodeGenerator.ParameterToken.Declaration.Template"
+                : base.ParameterTokenDeclarationTemplate(templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public override bool ParameterTokenInitializationTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return model is TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.IParameterToken<TokenParserState>
+                ? childTemplateName == "T4PlusCSharpCodeGenerator.ParameterToken.Initialization.Template"
+                : base.ParameterTokenInitializationTemplate(templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public override bool MainClassTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return childTemplateName == "T4PlusCSharpCodeGenerator.MainClass.Template";
+        }
+
+        public override bool BaseTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return base.BaseTemplate(templateName, childTemplateName, childTemplateModelType, model)
+                && !ChildTemplateRenderCodeTemplate(templateName, childTemplateName, childTemplateModelType, model)
+                && !ChildTemplateInitializeCodeTemplate(templateName, childTemplateName, childTemplateModelType, model)
+        	    && !ViewModelClassFooterTemplate(templateName, childTemplateName, childTemplateModelType, model)
+        	    && !ChildTemplateFooterTemplate(templateName, childTemplateName, childTemplateModelType, model)
+                && !CompositionRootConstructorCodeTemplate(templateName, childTemplateName, childTemplateModelType, model)
+                && !CompositionRootFeatureTemplate(templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public virtual bool ChildTemplateRenderCodeTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return ChildTemplateNameContains("ChildTemplateRenderCodeTokens", templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public virtual bool ChildTemplateInitializeCodeTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return ChildTemplateNameContains("ChildTemplateInitializeCodeTokens", templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public virtual bool ViewModelClassFooterTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return ChildTemplateNameContains("ViewModelClassFooterTokens", templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public virtual bool ChildTemplateFooterTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return ChildTemplateNameContains("ChildTemplateFooterTokens", templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public virtual bool CompositionRootConstructorCodeTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return ChildTemplateNameContains("CompositionRootConstructorTokens", templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+        public virtual bool CompositionRootFeatureTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+        {
+            return ChildTemplateNameContains("CompositionRootFeatureTokens", templateName, childTemplateName, childTemplateModelType, model);
+        }
+
+#>

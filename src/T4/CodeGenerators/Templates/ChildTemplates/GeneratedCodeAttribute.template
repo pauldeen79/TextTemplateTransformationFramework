@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.GeneratedCodeAttribute.Template" #>
+<#@ model type="GeneratorModel" #>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(<#= Model.GeneratorName.CsharpFormat() #>, <#= Model.GeneratorVersion.CsharpFormat() #>)]

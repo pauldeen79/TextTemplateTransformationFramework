@@ -1,0 +1,21 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassToken.ViewModel" #>
+<#@ copyPropertiesToViewModel enabled="false" #>
+<#@ model type="IChildTemplateClassToken<TokenParserState>" #>
+<#@ templateContext #>
+<#+
+        public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
+        public string ClassName => Model.ClassName.Sanitize();
+        public string BaseClass => Model.BaseClass;
+        public string RootClassName => Model.RootClassName;
+        public string ModelType => Model.UseModelForRoutingOnly
+            ? string.Empty
+            : Model.ModelType;
+        public IEnumerable<ITemplateToken<TokenParserState>> RenderTokens => Model.ChildTemplateTokens.OfType<IRenderToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ParameterTokens => Model.ChildTemplateTokens.OfType<TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> InitializeTokens => Model.ChildTemplateTokens.OfType<IInitializeToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ChildInitializeTokens => RootTemplate.Model.OfType<IChildInitializeToken<TokenParserState>>().Concat(Model.ChildTemplateTokens.OfType<IChildInitializeToken<TokenParserState>>());
+        public IEnumerable<ITemplateToken<TokenParserState>> ClassFooterTokens => Model.ChildTemplateTokens.OfType<IClassFooterToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ChildTemplateFooterTokens => Model.ChildTemplateTokens.OfType<IChildTemplateFooterToken<TokenParserState>>();
+        public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
+#>

@@ -1,0 +1,6 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template" #>
+<#@ model type="T4CSharpCodeGenerator" #>
+<# if (Model.AddExcludeFromCodeCoverageAttribute) { #>
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
+<# } #>

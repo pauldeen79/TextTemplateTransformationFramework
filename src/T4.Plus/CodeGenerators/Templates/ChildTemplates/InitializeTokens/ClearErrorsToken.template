@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.ClearErrorsToken.Template" #>
+<#@ model type="IClearErrorsToken<TokenParserState>" useForRoutingOnly="true" #>
+            this.Errors.Clear();

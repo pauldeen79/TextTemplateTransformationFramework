@@ -1,0 +1,92 @@
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using TextTemplateTransformationFramework.Common.Contracts;
+using TextTemplateTransformationFramework.Common.Extensions;
+using TextTemplateTransformationFramework.T4.Plus.Core.Extensions;
+using Xunit;
+
+namespace TextTemplateTransformationFramework.T4.Plus.Tests
+{
+    [ExcludeFromCodeCoverage]
+    public sealed class IntegrationTests : IDisposable
+    {
+        private readonly ServiceProvider _provider;
+
+        public IntegrationTests()
+        {
+            var serviceCollection = new ServiceCollection()
+                .AddTextTemplateTransformationT4PlusNetCore();
+            _provider = serviceCollection.BuildServiceProvider();
+        }
+
+        [Fact]
+        public void CanRenderTemplateUsingT4PlusTemplateProcessor()
+        {
+            // Arrange
+            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
+            const string Src = @"<#@ template language=""c#"" #>
+Hello <#= ""world"" #><# Write(""!""); #>";
+
+            // Act
+            var actual = sut.Process(Src);
+
+            // Assert
+            actual.ToString().Should().Be("Hello world!");
+        }
+
+        [Fact]
+        public void CanRenderTemplateUsingT4PlusTemplateProcessorWithRuntimeBaseClass()
+        {
+            // Arrange
+            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
+            const string Src = @"<#@ template language=""c#"" #><#@ useTemplateRuntimeBaseClass #>
+<#@ assembly name=""TextTemplateTransformationFramework.T4.Plus.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"" #>
+Hello <#= ""world"" #><# Write(""!""); #>";
+
+            // Act
+            var actual = sut.Process(Src);
+
+            // Assert
+            actual.ToString().Should().Be("Hello world!");
+        }
+
+        [Fact]
+        public void CanAddCodeToCompositionRootClassOnComposableTemplate()
+        {
+            // Arrange
+            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
+            const string Src = @"<#@ template language=""c#"" #>
+<#@ AddChildTemplateCode composable=""true"" #>
+<#& // Some extra code to add to the composition root class #>";
+
+            // Act
+            var actual = sut.Process(Src);
+
+            // Assert
+            actual.CompilerErrors.Should().BeEmpty();
+            actual.SourceCode.Should().Contain("// Some extra code to add to the composition root class");
+        }
+
+        [Fact]
+        public void CanAddCodeToConstructorOfCompositionRootOnComposableTemplate()
+        {
+            // Arrange
+            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
+            const string Src = @"<#@ template language=""c#"" #>
+<#@ AddChildTemplateCode composable=""true"" #>
+<#$ // Some initialization code to run #>";
+
+            // Act
+            var actual = sut.Process(Src);
+
+            // Assert
+            actual.CompilerErrors.Should().BeEmpty();
+            actual.SourceCode.Should().Contain("// Some initialization code to run");
+        }
+
+        public void Dispose()
+            => _provider.Dispose();
+    }
+}

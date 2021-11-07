@@ -1,0 +1,15 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.ParameterToken.Declaration.Template" #>
+<#@ model type="IParameterToken<TokenParserState>" #>
+        protected <#= Model.TypeName.FixTypeName() #> _<#= Model.Name.ToPascalCase() #>Field;
+
+        /// <summary>
+        /// Access the <#= Model.Name #> parameter of the template.
+        /// </summary>
+        public <#= Model.TypeName.FixTypeName() #> <#= Model.Name #>
+        {
+            get
+            {
+                return this._<#= Model.Name.ToPascalCase() #>Field;
+            }
+        }

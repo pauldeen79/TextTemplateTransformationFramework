@@ -1,0 +1,9 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ChildTemplateInitializeCodeTokens.InitializeViewModelTokenTemplate" #>
+<#@ model type="IInitializeViewModelToken<TokenParserState>" #>
+            ViewModel = GetViewModel(<#= Model.ViewModelName.FormatLiteral(Model.ViewModelNameIsLiteral) #><#
+   if (!string.IsNullOrEmpty(Model.Model)) { #>, <#= Model.Model.FormatLiteral(Model.ModelIsLiteral) #><# }
+   if (Model.SilentlyContinueOnError) { #>, silentlyContinueOnError: true<# }
+   if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression)) { #>, customResolverDelegate: <#= Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral) #><# }
+   if (!string.IsNullOrEmpty(Model.ResolverDelegateModel)) { #>, resolverDelegateModel: <#= Model.ResolverDelegateModel.FormatLiteral(Model.ResolverDelegateModelIsLiteral) #><# } #>
+) as <#= Model.ViewModelName.Sanitize() #>;

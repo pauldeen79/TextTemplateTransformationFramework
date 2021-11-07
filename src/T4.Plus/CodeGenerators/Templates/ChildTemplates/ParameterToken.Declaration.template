@@ -1,0 +1,58 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ParameterToken.Declaration.Template" #>
+<#@ model type="T4.Plus.Contracts.TemplateTokens.IParameterToken<TokenParserState>" #>
+        protected <#= Model.TypeName.FixTypeName() #> _<#= Model.Name.ToPascalCase() #>Field;
+
+        /// <summary>
+        /// Access the <#= Model.Name #> parameter of the template.
+        /// </summary>
+<# if (!string.IsNullOrEmpty(Model.Category))
+   { #>
+        [global::System.ComponentModel.Category(<#= Model.Category.CsharpFormat() #>)]
+<# } #>
+<# if (!string.IsNullOrEmpty(Model.Description))
+   { #>
+        [global::System.ComponentModel.Description(<#= Model.Description.CsharpFormat() #>)]
+<# } #>
+<# if (!string.IsNullOrEmpty(Model.DisplayName))
+   { #>
+        [global::System.ComponentModel.DisplayName(<#= Model.DisplayName.CsharpFormat() #>)]
+<# } #>
+<# if (Model.ReadOnly)
+   { #>
+        [global::System.ComponentModel.ReadOnly(true)]
+<# } #>
+<# if (Model.Required)
+   { #>
+        [global::System.ComponentModel.DataAnnotations.Required]
+<# } #>
+<# if (!Model.Browsable)
+   { #>
+        [global::System.ComponentModel.Browsable(false)]
+<# } #>
+<# if (Model.DefaultValue != null && !Model.OmitValueAssignment)
+   { #>
+        [global::System.ComponentModel.DefaultValue(<#= Model.DefaultValue.CsharpFormat() #>)]
+<# } #>
+<# if (!string.IsNullOrEmpty(Model.EditorAttributeEditorTypeName) && !string.IsNullOrEmpty(Model.EditorAttributeEditorBaseType))
+   { #>
+        [global::System.ComponentModel.EditorAttribute(<#= Model.EditorAttributeEditorTypeName #>, <#= Model.EditorAttributeEditorBaseType #>)]
+<# } #>
+<# if (!string.IsNullOrEmpty(Model.TypeConverterTypeName))
+   { #>
+        [global::System.ComponentModel.TypeConverter(typeof(<#= Model.TypeConverterTypeName #>))]
+<# } #>
+        public <#= Model.TypeName.FixTypeName() #> <#= Model.Name #>
+        {
+            get
+            {
+                return this._<#= Model.Name.ToPascalCase() #>Field;
+            }
+<# if (Model.AddPropertySetter)
+   { #>
+            set
+            {
+                 this._<#= Model.Name.ToPascalCase() #>Field = value;
+            }
+<# } #>
+        }

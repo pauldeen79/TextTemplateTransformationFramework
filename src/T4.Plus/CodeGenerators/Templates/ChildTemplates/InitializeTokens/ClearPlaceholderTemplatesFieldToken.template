@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.ClearPlaceholderTemplatesFieldToken.Template" #>
+<#@ model type="IClearPlaceholderTemplatesFieldToken<TokenParserState>" useForRoutingOnly="true" #>
+            PlaceholderChildrenDictionary.Clear();

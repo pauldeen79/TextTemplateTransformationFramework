@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.RegisterPlaceholderToken.Template" #>
+<#@ model type="IRegisterPlaceholderToken<TokenParserState>" #>
+            RegisterChildTemplate(<#= Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral) #>, () => new <#= Model.ChildTemplateName.Sanitize() #>()<# if (!string.IsNullOrEmpty(Model.ModelTypeName)) { #>, typeof(<#= Model.ModelTypeName #>) <# } #>);

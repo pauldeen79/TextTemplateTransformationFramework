@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.ClassFooterTokens.ClassFooterTextToken.Template" #>
+<#@ model type="IClassFooterTextToken<TokenParserState>" #>
+        <#@ RenderChildTemplate model="Model" customResolverDelegate="RootTemplate.BaseTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>

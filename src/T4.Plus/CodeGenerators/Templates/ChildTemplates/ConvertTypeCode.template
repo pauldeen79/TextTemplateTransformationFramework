@@ -1,0 +1,12 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ConvertTypeCode.Template" #>
+        private static object ConvertType(KeyValuePair<string, object> parameter, Type type)
+        {
+            var property = type.GetProperty(parameter.Key);
+
+            return property == null
+                ? parameter.Value
+                : parameter.Value is int && property.PropertyType.IsEnum
+                    ? Enum.ToObject(property.PropertyType, parameter.Value)
+                    : Convert.ChangeType(parameter.Value, property.PropertyType);
+        }

@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.NamespaceFooterTokens.NamespaceFooterExpressionToken.Template" #>
+<#@ model type="INamespaceFooterExpressionToken<TokenParserState>" #>
+    <#@ RenderChildTemplate model="Model" customResolverDelegate="RootTemplate.BaseTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>

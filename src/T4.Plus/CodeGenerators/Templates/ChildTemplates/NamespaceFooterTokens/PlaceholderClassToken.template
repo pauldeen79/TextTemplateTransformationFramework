@@ -1,0 +1,52 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.Template" #>
+<#@ model type="IPlaceholderClassToken<TokenParserState>" #>
+<#@ viewModel name="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.ViewModel" #>
+<#@ RenderChildTemplate model="ViewModel.GeneratorModel" name="T4CSharpCodeGenerator.GeneratedCodeAttribute.Template" #>
+<#@ RenderChildTemplate model="ViewModel.RootTemplate" name="T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+    public class <#= ViewModel.ClassNameSanitized #> : <#= ViewModel.BaseClass #>
+    {
+        public void Render(global::System.Text.StringBuilder builder)
+        {
+            var backup = this.GenerationEnvironment;
+            try
+            {
+                this.GenerationEnvironment = builder;
+                TransformText();
+            }
+            finally
+            {
+                this.GenerationEnvironment = backup;
+            }
+        }
+
+        public virtual string TransformText()
+        {
+            RootTemplate.ProcessPlaceholder(<#= ViewModel.ClassNameCsharpFormatted #><# if (!string.IsNullOrEmpty(ViewModel.ModelType)) { #>, Model<# } #>);
+            return this.GenerationEnvironment.ToString();
+        }
+
+        public virtual void Initialize()
+        {
+            this.GenerationEnvironment.Clear();
+        }
+
+        public <#= ViewModel.RootClassName #> RootTemplate { get; set; }
+
+        public override void Write(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.Write(textToAppend);
+            }
+            else
+            {
+                base.Write(textToAppend);
+            }
+        }
+
+<# if (!string.IsNullOrEmpty(ViewModel.ModelType))
+   { #>
+        public <#= ViewModel.ModelType #> Model { get; set; }
+<# } #>
+    }

@@ -1,0 +1,6 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.AddTemplateToPlaceholderToken.Template" #>
+<#@ model type="IAddTemplateToPlaceholderToken<TokenParserState>" #>
+<# WriteLine(""); #>
+AddTemplateToPlaceholder(<#= Model.PlaceholderName.FormatLiteral(Model.PlaceholderNameIsLiteral) #>, <#= Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral) #>);
+<# WriteLine(""); #>

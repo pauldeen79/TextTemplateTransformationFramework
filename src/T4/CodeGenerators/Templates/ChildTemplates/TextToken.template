@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.TextToken.Template" #>
+<#@ model type="ITextToken<TokenParserState>" #>
+Write(this.ToStringHelper.ToStringWithCulture(<#= Model.Contents.CsharpFormat() #>));

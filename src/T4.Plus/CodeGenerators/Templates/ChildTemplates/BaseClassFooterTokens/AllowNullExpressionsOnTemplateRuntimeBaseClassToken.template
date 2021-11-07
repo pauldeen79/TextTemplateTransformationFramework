@@ -1,0 +1,7 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.BaseClassFooterTokens.AllowNullExpressionsToken.Template" #>
+<#@ model type="IAllowNullExpressionsToken<TokenParserState>" #>
+        public <#= Model.TemplateClassName #>Base()
+        {
+            ToStringHelper.AllowNullExpressions = true;
+        }

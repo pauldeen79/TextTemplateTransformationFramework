@@ -1,0 +1,404 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.TemplateFileManagerToken.Template" #>
+<#@ model type="ITemplateFileManagerToken<TokenParserState>" #>
+    public class TemplateFileManager
+    {
+        private readonly global::System.Action<global::System.Text.StringBuilder> _setStringBuilderDelegate;
+        private readonly global::System.Text.StringBuilder _originalStringBuilder;
+        private readonly MultipleContentBuilder _builder;
+
+        public TemplateFileManager(global::System.Action<global::System.Text.StringBuilder> setStringBuilderDelegate,
+                                   global::System.Func<global::System.Text.StringBuilder> getStringBuilderDelegate,
+                                   string basePath = null)
+        {
+            _setStringBuilderDelegate = setStringBuilderDelegate;
+            _originalStringBuilder = getStringBuilderDelegate();
+            _builder = new MultipleContentBuilder(basePath);
+        }
+
+        public StringBuilder StartNewFile(string fileName = null, bool skipWhenFileExists = false)
+        {
+            var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new global::System.Text.StringBuilder());
+            _setStringBuilderDelegate(currentContent.Builder);
+            return currentContent.Builder;
+        }
+
+        public void ResetToDefaultOutput()
+        {
+            _setStringBuilderDelegate(_originalStringBuilder);
+        }
+
+        public override string ToString()
+        {
+            return _builder.ToString();
+        }
+
+        public void Process(bool split = true, bool silentOutput = false)
+        {
+            ResetToDefaultOutput();
+
+            if (split)
+            {
+                _originalStringBuilder.Clear();
+                if (!silentOutput) _originalStringBuilder.Append(_builder.ToString());
+            }
+            else if (!silentOutput)
+            {
+                foreach (var item in _builder.Contents)
+                {
+                    _originalStringBuilder.Append(item.Builder.ToString());
+                }
+            }
+        }
+
+        public void SaveAll()
+        {
+            _builder.SaveAll();
+        }
+
+        public void SaveLastGeneratedFiles(string lastGeneratedFilesPath)
+        {
+            _builder.SaveLastGeneratedFiles(lastGeneratedFilesPath);
+        }
+
+        public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath)
+        {
+            _builder.DeleteLastGeneratedFiles(lastGeneratedFilesPath);
+        }
+
+        <#= RootTemplate.GenerationEnvironmentAccessor #> MultipleContentBuilder MultipleContentBuilder { get { return _builder; } }
+    }
+
+    public class MultipleContentBuilder
+    {
+        private readonly global::System.Collections.Generic.List<Content> _contentList;
+
+        public MultipleContentBuilder(string basePath = null)
+        {
+            _contentList = new global::System.Collections.Generic.List<Content>();
+            BasePath = basePath;
+        }
+
+        public string BasePath { get; set; }
+
+        public void SaveAll(Func<string, string> filenameTransformFunc = null, Func<string, string> contentTransformFunc = null)
+        {
+            foreach (var content in _contentList)
+            {
+                var path = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(content.FileName)
+                    ? content.FileName
+                    : global::System.IO.Path.Combine(BasePath, content.FileName);
+
+                if (filenameTransformFunc != null)
+                {
+                    path = filenameTransformFunc(path);
+                }
+                var contents = content.Builder.ToString();
+                if (contentTransformFunc != null)
+                {
+                    contents = contentTransformFunc(contents);
+                }
+                var dir = global::System.IO.Path.GetDirectoryName(path);
+                if (!global::System.IO.Directory.Exists(dir))
+                {
+                    global::System.IO.Directory.CreateDirectory(dir);
+                }
+                global::System.IO.File.WriteAllText(path, contents, global::System.Text.Encoding.UTF8);
+            }
+        }
+
+        public void SaveLastGeneratedFiles(string lastGeneratedFilesPath)
+        {
+            var fullPath = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(lastGeneratedFilesPath)
+                ? lastGeneratedFilesPath
+                : global::System.IO.Path.Combine(BasePath, lastGeneratedFilesPath);
+
+            var dir = global::System.IO.Path.GetDirectoryName(fullPath);
+            if (!global::System.IO.Directory.Exists(dir))
+            {
+                global::System.IO.Directory.CreateDirectory(dir);
+            }
+
+            if (fullPath != null && !fullPath.Contains("*"))
+            {
+                global::System.IO.File.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName));
+            }
+        }
+
+        public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath)
+        {
+            var fullPath = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(lastGeneratedFilesPath)
+                ? lastGeneratedFilesPath
+                : global::System.IO.Path.Combine(BasePath, lastGeneratedFilesPath);
+
+            if (!global::System.IO.File.Exists(fullPath))
+            {
+                if (fullPath != null && fullPath.Contains("*") && !string.IsNullOrEmpty(BasePath))
+                {
+                    foreach (var filename in global::System.IO.Directory.GetFiles(BasePath, lastGeneratedFilesPath, global::System.IO.SearchOption.AllDirectories))
+                    {
+                        global::System.IO.File.Delete(filename);
+                    }
+                }
+                // No previously generated files to delete
+                return;
+            }
+
+            foreach (var fileName in global::System.IO.File.ReadAllLines(fullPath))
+            {
+                var fileFullPath = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(fileName)
+                    ? fileName
+                    : global::System.IO.Path.Combine(BasePath, fileName);
+
+                if (global::System.IO.File.Exists(fileFullPath))
+                {
+                    global::System.IO.File.Delete(fileFullPath);
+                }
+            }
+        }
+
+        public Content AddContent(string fileName = null, bool skipWhenFileExists = false, global::System.Text.StringBuilder builder = null)
+        {
+            var content = builder == null
+            ? new Content
+            {
+                FileName = fileName,
+                SkipWhenFileExists = skipWhenFileExists
+            }
+            : new Content(builder)
+            {
+                FileName = fileName,
+                SkipWhenFileExists = skipWhenFileExists
+            };
+            _contentList.Add(content);
+            return content;
+        }
+
+        public override string ToString()
+        {
+            var mc = new MultipleContents
+            {
+                BasePath = BasePath,
+                Contents = _contentList.Select(c => new Contents
+                {
+                    FileName = c.FileName,
+                    Lines = c.Builder.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
+                    SkipWhenFileExists = c.SkipWhenFileExists
+                }).ToList()
+            };
+
+            var serializer = new global::System.Runtime.Serialization.DataContractSerializer(typeof(MultipleContents));
+            var sb = new global::System.Text.StringBuilder();
+
+            using (var writer = global::System.Xml.XmlWriter.Create(sb, new global::System.Xml.XmlWriterSettings { Indent = true }))
+            {
+                serializer.WriteObject(writer, mc);
+            }
+
+            return sb.ToString();
+        }
+
+        public static MultipleContentBuilder FromString(string xml)
+        {
+            if (string.IsNullOrEmpty(xml))
+            {
+                return null;
+            }
+
+            var result = new MultipleContentBuilder();
+
+            MultipleContents mc;
+
+            // Cope with CA2202 analysis warning by using this unusual statement with try.finally instead of nested usings
+            var stringReader = new global::System.IO.StringReader(xml);
+            try
+            {
+                using (var reader = global::System.Xml.XmlReader.Create(stringReader))
+                {
+                    // Set reference to null because the reader will destroy it
+                    stringReader = null;
+
+                    var serializer = new global::System.Runtime.Serialization.DataContractSerializer(typeof(MultipleContents));
+                    mc = serializer.ReadObject(reader) as MultipleContents;
+                }
+            }
+            finally
+            {
+                if (stringReader != null)
+                {
+                    stringReader.Dispose();
+                }
+            }
+
+            if (mc == null)
+            {
+                return null;
+            }
+
+            result.BasePath = mc.BasePath;
+            foreach (var item in mc.Contents)
+            {
+                var c = result.AddContent(item.FileName, item.SkipWhenFileExists);
+                foreach (var line in item.Lines)
+                {
+                    c.Builder.AppendLine(line);
+                }
+            }
+
+            return result;
+        }
+
+        public global::System.Collections.Generic.IEnumerable<Content> Contents { get { return _contentList.AsReadOnly(); } }
+    }
+
+    public class Content
+    {
+        private readonly global::System.Text.StringBuilder _builder;
+
+        public Content()
+        {
+            _builder = new global::System.Text.StringBuilder();
+        }
+
+        public Content(global::System.Text.StringBuilder builder)
+        {
+            _builder = builder;
+        }
+
+        public string FileName { get; set; }
+
+        public bool SkipWhenFileExists { get; set; }
+
+        public global::System.Text.StringBuilder Builder { get { return _builder; } }
+    }
+
+    [global::System.Runtime.Serialization.DataContract(Name = "MultipleContents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
+    public class MultipleContents
+    {
+        public static MultipleContents FromXmlString(string xml)
+        {
+            if (string.IsNullOrEmpty(xml))
+            {
+                return null;
+            }
+
+            if (xml.IndexOf(XmlStringFragment) == -1)
+            {
+                return null;
+            }
+
+            MultipleContents mc;
+
+            // Cope with CA2202 analysis warning by using this unusual statement with try.finally instead of nested usings
+            var stringReader = new global::System.IO.StringReader(xml);
+            try
+            {
+                using (var reader = global::System.Xml.XmlReader.Create(stringReader))
+                {
+                    // Set reference to null because the reader will destroy it
+                    stringReader = null;
+
+                    var serializer = new global::System.Runtime.Serialization.DataContractSerializer(typeof(MultipleContents));
+                    mc = serializer.ReadObject(reader) as MultipleContents;
+                }
+            }
+            finally
+            {
+                if (stringReader != null)
+                {
+                    stringReader.Dispose();
+                }
+            }
+
+            return mc;
+        }
+
+        public static MultipleContents FromDelimitedString(string delimitedString)
+        {
+            if (string.IsNullOrEmpty(delimitedString))
+            {
+                return null;
+            }
+
+            if (delimitedString.IndexOf(DelimitedStringFragment) == -1)
+            {
+                return null;
+            }
+
+            var result = new MultipleContents { Contents = new global::System.Collections.Generic.List<Contents>() };
+            var split = delimitedString.Split(new[] { DelimitedStringFragment }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < split.Length; i += 2)
+            {
+                var fileName = Normalize(split[i]);
+                bool skipWhenFileExists = false;
+                if (fileName.StartsWith("(") && fileName.EndsWith(")"))
+                {
+                    fileName = fileName.Substring(1, fileName.Length - 2);
+                    skipWhenFileExists = true;
+                }
+                if (split.Length <= i + 1)
+                {
+                    continue;
+                }
+                var lines = split[i + 1].Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+                var c = new Contents
+                {
+                    FileName = fileName,
+                    SkipWhenFileExists = skipWhenFileExists,
+                    Lines = lines
+                };
+                result.Contents.Add(c);
+            }
+
+            return result;
+        }
+
+        [global::System.Runtime.Serialization.DataMember]
+        public string BasePath { get; set; }
+
+        [global::System.Runtime.Serialization.DataMember]
+        public global::System.Collections.Generic.List<Contents> Contents { get; set; }
+
+        public const string XmlStringFragment = @"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformation"">";
+
+        public const string DelimitedStringFragment = "!@#$";
+
+        private static string Normalize(string input)
+        {
+            return input
+                .Replace(Environment.NewLine, "")
+                .Trim();
+        }
+
+        public void SaveAll(Func<string, string> filenameTransformFunc = null, Func<string, string> contentTransformFunc = null)
+        {
+            foreach (var content in Contents)
+            {
+                var path = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(content.FileName)
+                    ? content.FileName
+                    : global::System.IO.Path.Combine(BasePath, content.FileName);
+
+                if (filenameTransformFunc != null)
+                {
+                    path = filenameTransformFunc(path);
+                }
+                var contents = string.Join(Environment.NewLine, content.Lines);
+                if (contentTransformFunc != null)
+                {
+                    contents = contentTransformFunc(contents);
+                }
+                global::System.IO.File.WriteAllText(path, contents, global::System.Text.Encoding.UTF8);
+            }
+        }
+    }
+
+    [global::System.Runtime.Serialization.DataContract(Name = "Contents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
+    public class Contents
+    {
+        [global::System.Runtime.Serialization.DataMember]
+        public string FileName { get; set; }
+        [global::System.Runtime.Serialization.DataMember]
+        public global::System.Collections.Generic.List<string> Lines { get; set; }
+        [global::System.Runtime.Serialization.DataMember]
+        public bool SkipWhenFileExists { get; set; }
+    }

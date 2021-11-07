@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.NamespaceImportToken.Template" #>
+<#@ model type="INamespaceImportToken<TokenParserState>" #>
+    using <#= Model.Namespace #>;

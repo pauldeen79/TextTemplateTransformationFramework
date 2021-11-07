@@ -1,0 +1,13 @@
+﻿<#^
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
+    public class GeneratorModel
+    {
+        public GeneratorModel(string generatorName, string generatorVersion)
+        {
+            GeneratorName = generatorName;
+            GeneratorVersion = generatorVersion;
+        }
+        public string GeneratorName { get; private set; }
+        public string GeneratorVersion { get; private set; }
+    }
+#>

@@ -1,0 +1,33 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.MainClass.Template" #>
+<#@ model type="T4CSharpCodeGenerator" #>
+<#@ viewModel name="T4PlusCSharpCodeGenerator.MainClass.ViewModel" #>
+<#@ RenderChildTemplate model="new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion)" name="T4CSharpCodeGenerator.GeneratedCodeAttribute.Template" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+<#@ RenderChildTemplate model="Model" name="T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+    public partial class <#= ViewModel.ClassName #> : <#= ViewModel.BaseClass #><# WriteLine(""); #>
+    {
+<# if (ViewModel.AddRenderMethod)
+   { #>
+        public virtual void Render(global::System.Text.StringBuilder builder)
+        {
+            var backup = this.GenerationEnvironment;
+            if (builder != null) this.GenerationEnvironment = builder;
+<#@ RenderChildTemplate model="ViewModel.RenderTokens" customResolverDelegate="Model.RenderTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+            if (builder != null) this.GenerationEnvironment = backup;
+        }
+
+<# } #>
+
+<#@ RenderChildTemplate model="ViewModel.ParameterTokens" customResolverDelegate="Model.ParameterTokenDeclarationTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+        public <#= ViewModel.InitializeAccessor #> void Initialize(<# if (ViewModel.EnableAdditionalActionDelegate) { #>global::System.Action additionalActionDelegate = null<# } #>)
+        {
+<#@ RenderChildTemplate model="ViewModel.PreParameterInitializeTokens" customResolverDelegate="Model.InitializeTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+<#@ RenderChildTemplate model="ViewModel.ParameterTokens" customResolverDelegate="Model.ParameterTokenInitializationTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+<#@ RenderChildTemplate model="ViewModel.PostParameterInitializeTokens" customResolverDelegate="Model.InitializeTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+        }
+<#@ RenderChildTemplate model="ViewModel.ClassFooterTokens" customResolverDelegate="Model.ClassFooterTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+    }

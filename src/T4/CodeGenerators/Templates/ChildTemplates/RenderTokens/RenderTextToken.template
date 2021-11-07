@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.RenderTokens.RenderTextToken.Template" #>
+<#@ model type="IRenderTextToken<TokenParserState>" #>
+            <#@ RenderChildTemplate model="Model" customResolverDelegate="RootTemplate.BaseTemplate" #>

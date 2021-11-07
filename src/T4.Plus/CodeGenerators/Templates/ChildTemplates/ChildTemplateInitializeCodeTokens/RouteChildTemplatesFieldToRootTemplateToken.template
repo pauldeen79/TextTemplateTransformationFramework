@@ -1,0 +1,13 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ChildTemplateInitializeCodeTokens.RouteChildTemplatesFieldToRootTemplateToken.Template" #>
+<#@ model type="IRouteChildTemplatesFieldToRootTemplateToken<TokenParserState>" useForRoutingOnly="true" #>
+            if (RootTemplate != null)
+            {
+                ChildTemplates = RootTemplate.ChildTemplates;
+                ViewModels = RootTemplate.ViewModels;
+            }
+            else
+            {
+                ChildTemplates.Clear();
+                ViewModels.Clear();
+            }

@@ -1,0 +1,25 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.MainClass.Template" #>
+<#@ model type="T4CSharpCodeGenerator" #>
+<#@ viewModel name="T4CSharpCodeGenerator.MainClass.ViewModel" #>
+<#@ RenderChildTemplate model="new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion)" name="T4CSharpCodeGenerator.GeneratedCodeAttribute.Template" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+    public partial class <#= ViewModel.ClassName #> : <#= ViewModel.BaseClass #><# WriteLine(""); #>
+    {
+        public virtual string TransformText()
+        {
+<#@ RenderChildTemplate model="ViewModel.RenderTokens" customResolverDelegate="Model.RenderTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+            return this.GenerationEnvironment.ToString();
+        }
+        
+<#@ RenderChildTemplate model="ViewModel.ParameterTokens" customResolverDelegate="Model.ParameterTokenDeclarationTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+        public virtual void Initialize()
+        {
+<#@ RenderChildTemplate model="ViewModel.InitializeTokens" customResolverDelegate="Model.InitializeTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+<#@ RenderChildTemplate model="ViewModel.ParameterTokens" customResolverDelegate="Model.ParameterTokenInitializationTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+        }
+<#@ RenderChildTemplate model="ViewModel.ClassFooterTokens" customResolverDelegate="Model.ClassFooterTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+    }

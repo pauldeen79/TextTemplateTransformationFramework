@@ -1,0 +1,114 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.RenderTemplateCode.Template" #>
+        public virtual void RenderTemplate(object template, object model, int? iterationNumber = null, int? iterationCount = null, string resolveTemplateName = null)
+        {
+            var templateType = template.GetType();
+
+            var childRootTemplateProperty = templateType.GetProperty("RootTemplate");
+            if (childRootTemplateProperty != null && childRootTemplateProperty.GetSetMethod() != null)
+            {
+                var currentTemplateRootTemplate = this.GetType().GetProperty("RootTemplate");
+                var rootTemplate = currentTemplateRootTemplate == null
+                    ? this
+                    : currentTemplateRootTemplate.GetValue(this, null);
+                childRootTemplateProperty.SetValue(template, rootTemplate, null);
+            }
+
+<#@ RenderChildTemplate model="RootTemplate.Model.OfType<IChildTemplateRenderCodeToken<TokenParserState>>()" customResolverDelegate="((T4PlusCSharpCodeGenerator)RootTemplate).ChildTemplateRenderCodeTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+            var modelProperty = model == null ? null : templateType.GetProperty("Model");
+            if (modelProperty != null)
+            {
+                modelProperty.SetValue(template, model, null);
+            }
+
+            var initializeMethod = templateType.GetMethod("Initialize");
+            if (initializeMethod != null)
+            {
+                initializeMethod.Invoke(template, initializeMethod.GetParameters().Length == 0 ? new object[0] : new object[] { null });
+            }
+
+            var viewModelProperty = templateType.GetProperty("ViewModel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (viewModelProperty != null)
+            {
+                var viewModelValue = viewModelProperty.GetValue(template);
+                if (viewModelValue == null)
+                {
+                    viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
+                    viewModelProperty.SetValue(template, viewModelValue);
+                }
+
+                var viewModelValueType = viewModelValue.GetType();
+                foreach (var kvp in Session.Where(kvp => kvp.Key != "Model"))
+                {
+                    var prop = viewModelValueType.GetProperty(kvp.Key);
+                    if (prop != null)
+                    {
+                        if (prop.GetSetMethod() == null) { continue; }
+                        prop.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
+                    }
+                }
+
+                var modelProp = viewModelValueType.GetProperty("Model", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (modelProp != null)
+                {
+                    modelProp.SetValue(viewModelValue, model);
+                }
+
+                var viewModelRootTemplateProp = viewModelValueType.GetProperty("RootTemplate", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                var templateRootTemplateProp = templateType.GetProperty("RootTemplate", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (viewModelRootTemplateProp != null && templateRootTemplateProp != null && viewModelRootTemplateProp.GetSetMethod() != null)
+                {
+                    viewModelRootTemplateProp.SetValue(viewModelValue, templateRootTemplateProp.GetValue(template));
+                }
+
+                var templateContextProp = viewModelValueType.GetProperty("TemplateContext", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                var templateContextPropOnTemplate = this.GetType().GetProperty("TemplateContext", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                if (templateContextProp != null && templateContextPropOnTemplate != null)
+                {
+                    templateContextProp.SetValue(viewModelValue, templateContextPropOnTemplate.GetValue(this));
+                }
+            }
+
+            var toStringHelperProperty = templateType.GetProperty("ToStringHelper");
+            if (toStringHelperProperty != null && toStringHelperProperty.GetSetMethod() != null)
+            {
+                toStringHelperProperty.SetValue(template, ToStringHelper, null);
+            }
+
+            var renderMethod = templateType.GetMethod("Render");
+            var transformTextMethod = templateType.GetMethod("TransformText");
+            if (renderMethod != null)
+            {
+                renderMethod.Invoke(template, new[] { this.GenerationEnvironment });
+            }
+            else if (transformTextMethod != null)
+            {
+                this.GenerationEnvironment.Append((string)transformTextMethod.Invoke(template, new object[0]));
+            }
+            else
+            {
+                var toStringMethod = templateType.GetMethod("ToString");
+                this.GenerationEnvironment.Append((string)toStringMethod.Invoke(template, new object[0]));
+            }
+
+            var errorsProperty = template.GetType().GetProperty("Errors");
+            if (errorsProperty != null)
+            {
+                var errors = errorsProperty.GetValue(template, null) as System.Collections.Generic.List<CompilerError>;
+                if (errors != null)
+                {
+                    foreach (var error in errors)
+                    {
+                        if (error.IsWarning)
+                        {
+                            Warning(error.ErrorText);
+                        }
+                        else
+                        {
+                            Error(error.ErrorText);
+                        }
+                    }
+                }
+            }
+        }

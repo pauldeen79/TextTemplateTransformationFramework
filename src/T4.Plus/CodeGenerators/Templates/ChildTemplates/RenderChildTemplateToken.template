@@ -1,0 +1,7 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.RenderChildTemplateToken.Template" #>
+<#@ model type="IRenderChildTemplateToken<TokenParserState>" #>
+<#@ viewModel name="T4PlusCSharpCodeGenerator.RenderChildTemplateToken.ViewModel" #>
+<# WriteLine(""); #>
+            RenderChildTemplate(<#= ViewModel.Name #><#= string.Concat(ViewModel.Arguments) #>);
+<# WriteLine(""); #>

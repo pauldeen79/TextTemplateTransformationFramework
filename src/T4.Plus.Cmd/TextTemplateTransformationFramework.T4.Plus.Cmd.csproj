@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>t4plus</ToolCommandName>
+    <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Cmd\TextTemplateTransformationFramework.Common.Cmd.csproj" />
+    <ProjectReference Include="..\Common\TextTemplateTransformationFramework.Common.csproj" />
+    <ProjectReference Include="..\T4.Plus.Core\TextTemplateTransformationFramework.T4.Plus.Core.csproj" />
+    <ProjectReference Include="..\T4\TextTemplateTransformationFramework.T4.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+﻿<#@ template language="C#" inherits="T4CSharpCodeGenerator" className="TextTemplateTransformationFramework.T4.Plus.CodeGenerators.T4PlusCSharpCodeGenerator" #>
+<#@ parameterProperties #>
+<#@ additionalActionDelegate skipInitializationCode="true" #>
+<#@ skipInitializationCode #>
+<#@ overrideTemplate #>
+<#@ addChildTemplateCode override="true" #>
+<#@ initializeBase additionalActionDelegate="true" #>
+<#@ addExcludeFromCodeCoverageAttributes #>
+<#@ output extension="cs" #>
+<#@ assembly name="TextTemplateTransformationFramework.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
+<#@ assembly name="TextTemplateTransformationFramework.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
+<#@ assembly name="TextTemplateTransformationFramework.T4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
+<#@ assembly name="TextTemplateTransformationFramework.T4.Plus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
+<#@ assembly name="Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
+<#@ assembly hintPath="$(BasePath)T4.Plus\bin\Debug\netstandard2.0" #>
+<#@ includes Path="$(BasePath)T4.Plus\CodeGenerators\Templates\Includes" SearchPattern="*.ttinclude" Recurse="true" #>
+<#@ registerChildTemplates path="$(BasePath)T4.Plus\CodeGenerators\Templates\ChildTemplates" searchPattern="*.template" recurse="true" baseClass="T4CSharpCodeGeneratorBase" #>
+<#@ registerViewModels path="$(BasePath)T4.Plus\CodeGenerators\Templates\ChildTemplates" searchPattern="*.viewmodel" recurse="true" #>
+<#@ import namespace="TextTemplateTransformationFramework.Common.Contracts" #>
+<#@ import namespace="TextTemplateTransformationFramework.Common.Contracts.TemplateTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.BaseClassFooterTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.Common.Extensions" #>
+<#@ import namespace="TextTemplateTransformationFramework.Runtime" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.CodeGenerators" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.BaseClassFooterTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ChildTemplateInitializeCodeTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ChildTemplateRenderCodeTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.CompositionRootConstructorTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.InitializeTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.NamespaceFooterTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.RenderTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ViewModelClassFooterTokens" #>
+<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Extensions" #>
+<#@ import namespace="Utilities.Extensions" #>
+<#@ property name="EnableAdditionalActionDelegate" type="System.Boolean" browsable="false" defaultValue="false" #>

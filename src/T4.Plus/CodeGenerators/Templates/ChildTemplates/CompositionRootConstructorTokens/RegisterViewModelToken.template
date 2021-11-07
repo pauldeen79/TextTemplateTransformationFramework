@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.CompositionRootConstructorTokens.RegisterComposableViewModelToken.Template" #>
+<#@ model type="IRegisterComposableViewModelToken<TokenParserState>" #>
+            RegisterViewModel(<#= Model.ViewModelName.FormatLiteral(Model.ViewModelNameIsLiteral) #>, () => new <#= Model.ViewModelName.Sanitize() #>()<# if (!string.IsNullOrEmpty(Model.ModelTypeName) && Model.UseForRouting) { #>, typeof(<#= Model.ModelTypeName #>)<# } #>);

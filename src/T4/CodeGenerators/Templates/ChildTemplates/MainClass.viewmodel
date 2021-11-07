@@ -1,0 +1,21 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.MainClass.ViewModel" #>
+<#@ model type="T4CSharpCodeGenerator" #>
+<#@ copyPropertiesToViewModel enabled="false" #>
+<#+
+        public string BaseClass
+        {
+            get
+            {
+                var baseClass = Model.Model.OfType<IBaseClassToken<TokenParserState>>().FirstOrDefault()?.BaseClassName;
+                return baseClass.WhenNullOrEmpty(Model.TemplateClassName + "Base");
+            }
+        }
+        public string GeneratorName => Model.GeneratorName.CsharpFormat();
+        public string GeneratorVersion => Model.GeneratorVersion.CsharpFormat();
+        public string ClassName => Model.TemplateClassName;
+        public IEnumerable<ITemplateToken<TokenParserState>> RenderTokens => Model.Model.OfType<IRenderToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ParameterTokens => Model.Model.OfType<IParameterToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> InitializeTokens => Model.Model.OfType<IInitializeToken<TokenParserState>>();
+        public IEnumerable<ITemplateToken<TokenParserState>> ClassFooterTokens => Model.Model.OfType<IClassFooterToken<TokenParserState>>();
+#>

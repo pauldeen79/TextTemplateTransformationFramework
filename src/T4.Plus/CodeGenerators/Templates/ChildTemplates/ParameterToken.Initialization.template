@@ -1,0 +1,59 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ParameterToken.Initialization.Template" #>
+<#@ model type="T4.Plus.Contracts.TemplateTokens.IParameterToken<TokenParserState>" #>
+<# if (!Model.OmitInitialization)
+   {
+       if (!Model.NetCoreCompatible || !Model.OmitValueAssignment)
+       { #>
+            bool <#= Model.Name.ToPascalCase() #>ValueAcquired = false;
+<#     } #>
+            if (this.Session != null && this.Session.ContainsKey("<#= Model.Name #>") && this.Session["<#= Model.Name #>"] != null)
+            {
+                if ((typeof(<#= Model.TypeName.FixTypeName() #>).IsAssignableFrom(this.Session["<#= Model.Name #>"].GetType()) == false))
+                {
+                    this.Error("The type \'<#= Model.TypeName.FixTypeName() #>\' of the parameter \'<#= Model.Name #>\' did not match the type of the data passed to the template.");
+                }
+                else
+                {
+                    this._<#= Model.Name.ToPascalCase() #>Field = ((<#= Model.TypeName.FixTypeName() #>)(this.Session["<#= Model.Name #>"]));
+<#     if (!Model.NetCoreCompatible || !Model.OmitValueAssignment)
+       { #>
+                    <#= Model.Name.ToPascalCase() #>ValueAcquired = true;
+<#     } #>
+                }
+            }
+<#     if (!Model.NetCoreCompatible)
+       { #>
+            if ((<#= Model.Name.ToPascalCase() #>ValueAcquired == false))
+            {
+                object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("<#= Model.Name #>");
+                if ((data != null))
+                {
+                    if ((typeof(<#= Model.TypeName.FixTypeName() #>).IsAssignableFrom(data.GetType()) == false))
+                    {
+                        this.Error("The type \'<#= Model.TypeName.FixTypeName() #>\' of the parameter \'<#= Model.Name #>\' did not match the type of the data passed to the template.");
+                    }
+                    else
+                    {
+                        this._<#= Model.Name.ToPascalCase() #>Field = ((<#= Model.TypeName.FixTypeName() #>)(data));
+                        <#= Model.Name.ToPascalCase() #>ValueAcquired = true;
+                    }
+                }
+            }
+<#     }
+       if (!Model.OmitValueAssignment)
+       { #>
+            if ((<#= Model.Name.ToPascalCase() #>ValueAcquired == false))
+            {
+<#     if (Model.DefaultValue != null)
+       { #>
+                this._<#= Model.Name.ToPascalCase() #>Field = <#= Model.DefaultValue.FormatLiteral(Model.DefaultValueIsLiteral) #>;
+<#     }
+       else
+       { #>
+                this._<#= Model.Name.ToPascalCase() #>Field = default(<#= Model.TypeName.FixTypeName() #>);
+<#     } #>
+                <#= Model.Name.ToPascalCase() #>ValueAcquired = true;
+            }
+<#     }
+   } #>

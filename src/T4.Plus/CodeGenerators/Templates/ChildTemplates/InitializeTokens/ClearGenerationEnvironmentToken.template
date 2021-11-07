@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.ClearGenerationEnvironmentToken.Template" #>
+<#@ model type="IClearGenerationEnvironmentToken<TokenParserState>" useForRoutingOnly="true" #>
+            this.GenerationEnvironment.Clear();

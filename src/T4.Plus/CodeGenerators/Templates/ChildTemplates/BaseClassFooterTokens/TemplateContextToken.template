@@ -1,0 +1,16 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.BaseClassFooterTokens.TemplateContextToken.Template" #>
+<#@ model type="ITemplateContextFieldToken<TokenParserState>" useForRoutingOnly="true" #>
+        private TemplateInstanceContext _templateContextField;
+        <#= RootTemplate.GenerationEnvironmentAccessor #> TemplateInstanceContext TemplateContext
+        {
+            get
+            {
+                if (_templateContextField == null)
+                {
+                    _templateContextField = TemplateInstanceContext.CreateRootContext(this);
+                }
+                return _templateContextField;
+            }
+            set { _templateContextField = value; }
+        }

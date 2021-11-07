@@ -1,0 +1,63 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.GetRegisteredObjectCode.Template" #>
+        protected virtual object GetRegisteredObject(List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>> registrations, string objectName, string name, object model, bool silentlyContinueOnError, global::System.Func<string, string, global::System.Type, object, bool> customResolverDelegate, global::System.Action<string> errorDelegate)
+        {
+            var registrationTuples = customResolverDelegate != null
+                ? registrations.Where(t => customResolverDelegate(name, t.Item1, t.Item3, model))
+                : Resolve(registrations, name, model);
+
+            if (!registrationTuples.Any() && customResolverDelegate == null && string.IsNullOrEmpty(name) && model != null)
+            {
+                registrationTuples = registrations.Where(t => t.Item3?.IsAssignableFrom(model.GetType()) == true);
+            }
+
+            var templateTuplesArray = registrationTuples.ToArray();
+            if (templateTuplesArray.Length > 1)
+            {
+                if (!silentlyContinueOnError)
+                {
+                    errorDelegate("Multiple " + objectName.ToLower() + "s found with model type " + (model == null ? "{null}" : model.GetType().FullName) + ": " + string.Join(", ", templateTuplesArray.Select(t => t.Item1)));
+                }
+                return null;
+            }
+            else
+            {
+                var registrationTuple = templateTuplesArray.Length == 1 ? templateTuplesArray[0] : null;
+                if (registrationTuple == null)
+                {
+                    if (string.IsNullOrEmpty(name) && model != null)
+                    {
+                        if (!silentlyContinueOnError)
+                        {
+                            errorDelegate("Could not resolve " + objectName.ToLower() + " with model type " + model.GetType().FullName);
+                        }
+                    }
+                    else
+                    {
+                        if (!silentlyContinueOnError)
+                        {
+                            errorDelegate("Could not resolve " + objectName.ToLower() + " with name " + name);
+                        }
+                    }
+
+                    return null;
+                }
+
+                var registeredInstance = registrationTuple.Item2();
+                if (registeredInstance == null)
+                {
+                    if (!silentlyContinueOnError)
+                    {
+                        errorDelegate(objectName + " [" + registrationTuple.Item1 + "] did not instanciate");
+                    }
+                    return null;
+                }
+
+                return registeredInstance;
+            }
+        }
+
+        private static global::System.Collections.Generic.IEnumerable<global::System.Tuple<string, global::System.Func<object>, global::System.Type>> Resolve(global::System.Collections.Generic.List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>> registrations, string name, object model)
+            => string.IsNullOrEmpty(name) && model != null
+                ? registrations.Where(t => t.Item3 == model.GetType())
+                : registrations.Where(t => t.Item1 == name);

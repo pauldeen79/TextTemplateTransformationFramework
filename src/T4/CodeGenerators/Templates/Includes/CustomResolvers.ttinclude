@@ -1,0 +1,69 @@
+﻿<#%
+public virtual bool ParameterTokenDeclarationTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateName == "T4CSharpCodeGenerator.ParameterToken.Declaration.Template";
+}
+
+public virtual bool ParameterTokenInitializationTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateName == "T4CSharpCodeGenerator.ParameterToken.Initialization.Template";
+}
+
+public virtual bool BaseClassTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateName == "T4CSharpCodeGenerator.BaseClass.Template";
+}
+
+public virtual bool MainClassTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateName == "T4CSharpCodeGenerator.MainClass.Template";
+}
+
+public virtual bool ToStringInstanceHelperTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateName == "T4CSharpCodeGenerator.ToStringInstanceHelper.Template";
+}
+
+public virtual bool RenderTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return ChildTemplateNameContains("RenderTokens", templateName, childTemplateName, childTemplateModelType, model);
+}
+
+public virtual bool InitializeTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return ChildTemplateNameContains("InitializeTokens", templateName, childTemplateName, childTemplateModelType, model);
+}
+
+public virtual bool ClassFooterTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return ChildTemplateNameContains("ClassFooterTokens", templateName, childTemplateName, childTemplateModelType, model);
+}
+
+public virtual bool NamespaceFooterTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return ChildTemplateNameContains("NamespaceFooterTokens", templateName, childTemplateName, childTemplateModelType, model);
+}
+
+public virtual bool BaseClassFooterTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return ChildTemplateNameContains("BaseClassFooterTokens", templateName, childTemplateName, childTemplateModelType, model);
+}
+
+public virtual bool BaseTemplate(string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateModelType != null
+        && childTemplateModelType.IsAssignableFrom(model.GetType())
+        && !RenderTemplate(templateName, childTemplateName, childTemplateModelType, model)
+	    && !InitializeTemplate(templateName, childTemplateName, childTemplateModelType, model)
+	    && !ClassFooterTemplate(templateName, childTemplateName, childTemplateModelType, model)
+	    && !NamespaceFooterTemplate(templateName, childTemplateName, childTemplateModelType, model)
+	    && !BaseClassFooterTemplate(templateName, childTemplateName, childTemplateModelType, model);
+}
+
+protected virtual bool ChildTemplateNameContains(string partialName, string templateName, string childTemplateName, Type childTemplateModelType, object model)
+{
+    return childTemplateModelType != null
+        && childTemplateModelType.IsAssignableFrom(model.GetType())
+        && childTemplateName.Contains(partialName);
+}
+#>

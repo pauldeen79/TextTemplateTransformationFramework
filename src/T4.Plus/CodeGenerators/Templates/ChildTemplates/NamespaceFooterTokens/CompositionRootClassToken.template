@@ -1,0 +1,127 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.Template" #>
+<#@ model type="ICompositionRootClassToken<TokenParserState>" #>
+<#@ viewModel name="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.ViewModel" #>
+<#@ RenderChildTemplate model="ViewModel.GeneratorModel" name="T4CSharpCodeGenerator.GeneratedCodeAttribute.Template" #>
+<#@ RenderChildTemplate model="ViewModel.RootTemplate" name="T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+    public class <#= ViewModel.ClassName #>CompositionRoot<#= ViewModel.BaseClass #>
+    {
+        public <#= ViewModel.ClassName #>CompositionRoot() : this(null, null, null, null)
+        {
+        }
+
+        public <#= ViewModel.ClassName #>CompositionRoot(global::System.Func<Tuple<string, global::System.Func<object>, global::System.Type>, global::System.Tuple<string, global::System.Func<object>, global::System.Type>> childTemplateModifierDelegate, global::System.Func<Tuple<string, Func<object>, global::System.Type>, global::System.Tuple<string, global::System.Func<object>, global::System.Type>> viewModelModifierDelegate, global::System.Action<string, global::System.Func<object>, global::System.Type> registerChildTemplateDelegate = null, global::System.Action<string, global::System.Func<object>, global::System.Type> registerViewModelDelegate = null)<#= ViewModel.BaseCallArguments #>
+        {
+<# if (!ViewModel.HasBaseClass)
+   { #>
+            ChildTemplates = new global::System.Collections.Generic.List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>>();
+            ViewModels = new global::System.Collections.Generic.List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>>();
+            ChildTemplateModifierDelegate = childTemplateModifierDelegate;
+            ViewModelModifierDelegate = viewModelModifierDelegate;
+            RegisterChildTemplateDelegate = registerChildTemplateDelegate;
+            RegisterViewModelDelegate = registerViewModelDelegate;
+<# } #>
+<#@ RenderChildTemplate model="ViewModel.CompositionRootConstructorCodeTokens" customResolverDelegate="((T4PlusCSharpCodeGenerator)RootTemplate).CompositionRootConstructorCodeTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+        }
+
+        public <#= ViewModel.ClassName #> ResolveTemplate()
+        {
+            return new <#= ViewModel.ClassName #>
+            {
+                GetChildTemplateDelegate = GetChildTemplate,
+                GetViewModelDelegate = GetViewModel
+            };
+        }
+
+<# if (!ViewModel.HasBaseClass)
+   { #>
+        private global::System.Collections.Generic.List<Tuple<string, global::System.Func<object>, global::System.Type>> ChildTemplates { get; set; }
+        private global::System.Collections.Generic.List<Tuple<string, global::System.Func<object>, global::System.Type>> ViewModels { get; set; }
+        private global::System.Func<Tuple<string, Func<object>, global::System.Type>, global::System.Tuple<string, Func<object>, global::System.Type>> ChildTemplateModifierDelegate { get; set; }
+        private global::System.Func<Tuple<string, Func<object>, global::System.Type>, global::System.Tuple<string, Func<object>, global::System.Type>> ViewModelModifierDelegate { get; set; }
+        private global::System.Action<string, global::System.Func<object>, global::System.Type> RegisterChildTemplateDelegate { get; set; }
+        private global::System.Action<string, global::System.Func<object>, global::System.Type> RegisterViewModelDelegate { get; set; }
+
+        <#= ViewModel.RegistrationMethodsAccessor #> void RegisterChildTemplate(string templateName, global::System.Func<object> templateDelegate, global::System.Type modelType = null)
+        {
+            var registration = new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(templateName, templateDelegate, modelType);
+            if (ChildTemplateModifierDelegate != null)
+            {
+                var newRegistration = ChildTemplateModifierDelegate(registration);
+                if (newRegistration != null)
+                {
+                    if (RegisterChildTemplateDelegate != null)
+                    {
+                        RegisterChildTemplateDelegate(templateName, newRegistration.Item2, modelType);
+                    }
+                    else
+                    {
+                        ChildTemplates.Add(new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(templateName, newRegistration.Item2, modelType));
+                    }
+                    return;
+                }
+            }
+
+            if (RegisterChildTemplateDelegate != null)
+            {
+                RegisterChildTemplateDelegate(registration.Item1, registration.Item2, registration.Item3);
+            }
+            else
+            {
+                ChildTemplates.Add(registration);
+            }
+        }
+
+        <#= ViewModel.RegistrationMethodsAccessor #> void RegisterViewModel(string viewModelName, global::System.Func<object> viewModelDelegate, global::System.Type modelType = null)
+        {
+            var registration = new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(viewModelName, viewModelDelegate, modelType);
+            if (ViewModelModifierDelegate != null)
+            {
+                var newRegistration = ViewModelModifierDelegate(registration);
+                if (newRegistration != null)
+                {
+                    if (RegisterChildTemplateDelegate != null)
+                    {
+                        RegisterViewModelDelegate(viewModelName, newRegistration.Item2, modelType);
+                    }
+                    else
+                    {
+                        ViewModels.Add(new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(viewModelName, newRegistration.Item2, modelType));
+                    }
+                    return;
+                }
+            }
+
+            if (RegisterChildTemplateDelegate != null)
+            {
+                RegisterViewModelDelegate(registration.Item1, registration.Item2, registration.Item3);
+            }
+            else
+            {
+                ViewModels.Add(registration);
+            }
+        }
+
+        protected virtual object GetChildTemplate(string templateName, object model, bool silentlyContinueOnError, Func<string, string, Type, object, bool> customResolverDelegate, Action<string> errorDelegate)
+        {
+            return GetRegisteredObject(ChildTemplates, "Child template", templateName, model, silentlyContinueOnError, customResolverDelegate, errorDelegate);
+        }
+
+        protected virtual object GetViewModel(string viewModelName, object model, bool silentlyContinueOnError, Func<string, string, Type, object, bool> customResolverDelegate, Action<string> errorDelegate)
+        {
+            var returnValue = GetRegisteredObject(ViewModels, "View model", viewModelName, model, silentlyContinueOnError, customResolverDelegate, errorDelegate);
+            if (returnValue != null && model != null)
+            {
+                var modelProperty = returnValue.GetType().GetProperty("Model", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                modelProperty?.SetValue(returnValue, model);
+            }
+            return returnValue;
+        }
+
+<#@ RenderChildTemplate name="T4PlusCSharpCodeGenerator.GetRegisteredObjectCode.Template" #>
+
+<# } #>
+
+<#@ RenderChildTemplate model="ViewModel.CompositionRootFeatureTokens" customResolverDelegate="((T4PlusCSharpCodeGenerator)RootTemplate).CompositionRootFeatureTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+
+    }

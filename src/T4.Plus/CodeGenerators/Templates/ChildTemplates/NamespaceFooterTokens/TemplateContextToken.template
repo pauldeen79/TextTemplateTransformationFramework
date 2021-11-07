@@ -1,0 +1,106 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.TemplateContextToken.Template" #>
+<#@ model type="ITemplateContextToken<TokenParserState>" useForRoutingOnly="true" #>
+    public class TemplateInstanceContext
+    {
+        public object Template { get; private set; }
+        public object Model { get; set; }
+        public object ViewModel { get; set; }
+        public string ResolveTemplateName { get; private set; }
+        public TemplateInstanceContext ParentContext { get; private set; }
+        public TemplateInstanceContext RootContext
+        {
+            get
+            {
+                var p = this;
+                while (p != null && p.ParentContext != null) p = p.ParentContext;
+                return p;
+            }
+        }
+        public T GetModelFromContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
+        {
+            var p = this;
+            while (p != null)
+            {
+                if (p.Model != null && typeof(T).IsAssignableFrom(p.Model.GetType()))
+                {
+                    return (T)p.Model;
+                }
+                p = p.ParentContext;
+            }
+            return default(T);
+        }
+        public T GetViewModelFromContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
+        {
+            var p = this;
+            while (p != null)
+            {
+                if (p.ViewModel != null && typeof(T).IsAssignableFrom(p.ViewModel.GetType()))
+                {
+                    return (T)p.ViewModel;
+                }
+                p = p.ParentContext;
+            }
+            return default(T);
+        }
+        public T GetContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
+        {
+            var p = this;
+            while (p != null)
+            {
+                if (p.Template != null && typeof(T).IsAssignableFrom(p.Template.GetType()))
+                {
+                    return (T)p.Template;
+                }
+                p = p.ParentContext;
+            }
+            return default(T);
+        }
+        public bool IsRootContext
+        {
+            get
+            {
+                return ParentContext == null;
+            }
+        }
+        public TemplateInstanceContext CreateChildContext(object template, object model, object viewModel = null, int? iterationNumber = null, int? iterationCount = null, string resolveTemplateName = null)
+        {
+            return new TemplateInstanceContext
+            {
+                Template = template,
+                Model = model,
+                ViewModel = viewModel,
+                ParentContext = this,
+                IterationNumber = iterationNumber,
+                IterationCount = iterationCount,
+                ResolveTemplateName = resolveTemplateName
+            };
+        }
+        public static TemplateInstanceContext CreateRootContext(object template)
+        {
+            return new TemplateInstanceContext
+            {
+                Template = template
+            };
+        }
+        public int? IterationNumber { get; set; }
+        public int? IterationCount { get; set; }
+        public bool IsFirstIteration
+        {
+            get
+            {
+                return IterationNumber.HasValue
+                    && IterationCount.HasValue
+                    && IterationNumber.Value == 0;
+            }
+        }
+        public bool IsLastIteration
+        {
+            get
+            {
+                return IterationNumber.HasValue
+                    && IterationCount.HasValue
+                    && IterationNumber.Value + 1 == IterationCount.Value;
+            }
+        }
+    }

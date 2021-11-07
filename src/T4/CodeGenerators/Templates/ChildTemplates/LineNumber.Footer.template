@@ -1,0 +1,5 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.LineNumber.Footer.Template" #>
+
+            #line default
+            #line hidden

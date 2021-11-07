@@ -1,0 +1,42 @@
+﻿<#@ template langauge="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.ParameterToken.Initialization.Template" #>
+<#@ model type="IParameterToken<TokenParserState>" #>
+<# if (!Model.NetCoreCompatible)
+   { #>
+            bool <#= Model.Name.ToPascalCase() #>ValueAcquired = false;
+<# } #>
+            if (this.Session != null && this.Session.ContainsKey("<#= Model.Name #>") && this.Session["<#= Model.Name #>"] != null)
+            {
+                if ((typeof(<#= Model.TypeName.FixTypeName() #>).IsAssignableFrom(this.Session["<#= Model.Name #>"].GetType()) == false))
+                {
+                    this.Error("The type \'<#= Model.TypeName.FixTypeName() #>\' of the parameter \'<#= Model.Name #>\' did not match the type of the data passed to the template.");
+                }
+                else
+                {
+                    this._<#= Model.Name.ToPascalCase() #>Field = ((<#= Model.TypeName.FixTypeName() #>)(this.Session["<#= Model.Name #>"]));
+<# if (!Model.NetCoreCompatible)
+   { #>
+                    <#= Model.Name.ToPascalCase() #>ValueAcquired = true;
+<# } #>
+                }
+            }
+<# if (!Model.NetCoreCompatible)
+   { #>
+            if ((<#= Model.Name.ToPascalCase() #>ValueAcquired == false))
+            {
+                object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("<#= Model.Name #>");
+                if ((data != null))
+                {
+                    if ((typeof(<#= Model.TypeName.FixTypeName() #>).IsAssignableFrom(data.GetType()) == false))
+                    {
+                        this.Error("The type \'<#= Model.TypeName.FixTypeName() #>\' of the parameter \'<#= Model.Name #>\' did not match the type of the data passed to the template.");
+                    }
+                    else
+                    {
+                        this._<#= Model.Name.ToPascalCase() #>Field = ((<#= Model.TypeName.FixTypeName() #>)(data));
+                        <#= Model.Name.ToPascalCase() #>ValueAcquired = true;
+                    }
+                }
+            }
+<# } #>
+

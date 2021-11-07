@@ -1,0 +1,40 @@
+﻿<#%
+public virtual void RenderWithHeaderAndFooterIndent12(string templateName, object template, object model, bool renderAsEnumerable, bool silentlyContinueOnError, int? iterationNumber, int? iterationCount)
+{
+    RenderWithHeaderAndFooterInner(templateName, template, model, renderAsEnumerable, silentlyContinueOnError, iterationNumber, iterationCount, "            ");
+}
+
+public virtual void RenderWithHeaderAndFooter(string templateName, object template, object model, bool renderAsEnumerable, bool silentlyContinueOnError, int? iterationNumber, int? iterationCount)
+{
+    RenderWithHeaderAndFooterInner(templateName, template, model, renderAsEnumerable, silentlyContinueOnError, iterationNumber, iterationCount, string.Empty);
+}
+
+protected virtual void RenderWithHeaderAndFooterInner(string templateName, object template, object model, bool renderAsEnumerable, bool silentlyContinueOnError, int? iterationNumber, int? iterationCount, string indent)
+{
+    var shouldRenderLineNumberAndFooter = ShouldRenderLineNumberAndFooter(template, model, iterationNumber, iterationCount, templateName);
+    
+    if (shouldRenderLineNumberAndFooter)
+    {
+        RenderTemplate(new T4CSharpCodeGenerator_LineNumber_Header_Template(), model);
+        Write(indent);
+    }
+    
+    RenderTemplate(template, model, iterationNumber, iterationCount, templateName);
+    
+    if (shouldRenderLineNumberAndFooter)
+    {
+        RenderTemplate(new T4CSharpCodeGenerator_LineNumber_Footer_Template(), model);
+    }
+}
+
+protected virtual bool ShouldRenderLineNumberAndFooter(object template, object model, int? iterationNumber = null, int? iterationCount = null, string resolveTemplateName = null)
+{
+    return
+        model is ITemplateToken<TokenParserState>
+        && ((ITemplateToken<TokenParserState>)model).SectionContext?.FileName != null
+        && !(model is ICodeToken<TokenParserState> && !(template is T4CSharpCodeGenerator_CodeToken_Template))
+        && !(model is IExpressionToken<TokenParserState> && !(template is T4CSharpCodeGenerator_ExpressionToken_Template))
+        && !(model is ITextToken<TokenParserState>)
+		&& !(TemplateContext.RootContext.Template is T4CSharpCodeGenerator && !((T4CSharpCodeGenerator)TemplateContext.RootContext.Template).AddTemplateLineNumbers);
+}
+#>

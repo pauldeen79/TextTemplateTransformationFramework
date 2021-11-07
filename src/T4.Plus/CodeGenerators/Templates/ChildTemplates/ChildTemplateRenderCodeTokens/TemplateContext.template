@@ -1,0 +1,9 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ChildTemplateRenderCodeTokens.TemplateContext.Template" #>
+<#@ model type="IInitializeTemplateContextToken<TokenParserState>" useForRoutingOnly="true" #>
+            var templateContextProperty = templateType.GetProperty("TemplateContext", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (templateContextProperty != null)
+            {
+                var childContext = TemplateContext.CreateChildContext(template, model, templateType.GetProperty("ViewModel")?.GetValue(template), iterationNumber, iterationCount, resolveTemplateName);
+                templateContextProperty.SetValue(template, childContext, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null, null, global::System.Globalization.CultureInfo.CurrentCulture);
+            }

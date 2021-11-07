@@ -1,0 +1,5 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4CSharpCodeGenerator.CodeToken.Template" #>
+<#@ model type="ICodeToken<TokenParserState>" #>
+<#= Model.Code #>
+<# WriteLine(""); #>

@@ -1,0 +1,7 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.InitializeTokens.EnsureSessionInitializedToken.Template" #>
+<#@ model type="IEnsureSessionInitializedToken<TokenParserState>" useForRoutingOnly="true" #>
+            if (Session == null)
+            {
+                Session = new global::System.Collections.Generic.Dictionary<string, object>();
+            }

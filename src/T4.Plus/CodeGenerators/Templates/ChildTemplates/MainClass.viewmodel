@@ -1,0 +1,10 @@
+﻿<#@ template language="c#" inherits="TextTemplateTransformationFramework.T4.CodeGenerators.T4CSharpCodeGenerator_MainClass_ViewModel" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.MainClass.ViewModel" #>
+<#@ copyPropertiesToViewModel enabled="false" #>
+<#+
+        public string InitializeAccessor => Model.TemplateIsOverride ? "override" : "virtual";
+        public bool EnableAdditionalActionDelegate => ((T4PlusCSharpCodeGenerator)Model).EnableAdditionalActionDelegate;
+        public bool AddRenderMethod => !Model.TemplateIsOverride;
+        public IEnumerable<ITemplateToken<TokenParserState>> PreParameterInitializeTokens => Model.Model.OfType<IInitializeToken<TokenParserState>>().Where(t => !(t is IPostParameterInitializeToken<TokenParserState>));
+        public IEnumerable<ITemplateToken<TokenParserState>> PostParameterInitializeTokens => Model.Model.OfType<IInitializeToken<TokenParserState>>().Where(t => t is IPostParameterInitializeToken<TokenParserState>);
+#>

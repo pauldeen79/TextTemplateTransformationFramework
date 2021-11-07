@@ -1,0 +1,4 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.ViewModelClassFooterTokens.TemplateContextViewModelFieldToken.Template" #>
+<#@ model type="ITemplateContextViewModelFieldToken<TokenParserState>" useForRoutingOnly="true" #>
+        public TemplateInstanceContext TemplateContext { get; set; }
