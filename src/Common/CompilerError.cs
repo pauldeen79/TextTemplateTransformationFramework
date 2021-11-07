@@ -2,7 +2,6 @@
 
 namespace TextTemplateTransformationFramework.Common
 {
-    [Serializable]
     public sealed class CompilerError
     {
         public CompilerError(int column, string errorNumber, string errorText, string fileName, bool isWarning, int line)

@@ -4,7 +4,6 @@ using TextTemplateTransformationFramework.Common.Requests;
 
 namespace TextTemplateTransformationFramework.Common.Default
 {
-    [Serializable]
     public class TextTemplateProcessor<TState> : ITextTemplateProcessor
         where TState : class
     {

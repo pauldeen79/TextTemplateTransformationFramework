@@ -26,8 +26,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DomainRunner\DomainRunner.csproj" />
-  </ItemGroup>
-
 </Project>

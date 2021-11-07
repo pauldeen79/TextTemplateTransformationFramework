@@ -5,7 +5,6 @@ using TextTemplateTransformationFramework.Common.Extensions;
 
 namespace TextTemplateTransformationFramework.Common
 {
-    [Serializable]
     public sealed class ProcessResult
     {
         private ProcessResult(CompilerError[] compilerErrors,

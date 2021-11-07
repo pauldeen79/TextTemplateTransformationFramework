@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C420F22D-8EA2-4E88-A10E-149BB5592A70}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TextTemplateTransformationFramework.T4.Plus.GUI.NetFramework</RootNamespace>
+    <AssemblyName>TextTemplateTransformationFramework.T4.Plus.GUI.NetFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Form1.cs" />
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ItemWrapper.cs" />
+    <Compile Include="ParameterPropertyDescriptor.cs" />
+    <Compile Include="ParametersViewModel.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DomainRunner\DomainRunner.csproj">
+      <Project>{d1e7a846-1c5c-4ef4-bdea-34bc039ede29}</Project>
+      <Name>DomainRunner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\T4.NetFramework\TextTemplateTransformationFramework.T4.NetFramework.csproj">
+      <Project>{d9f64a4a-af61-4608-a9c6-67f1071f25fc}</Project>
+      <Name>TextTemplateTransformationFramework.T4.NetFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\TextTemplateTransformationFramework.Common.csproj">
+      <Project>{1be26ff0-38de-49e0-bdfb-1d547445eca5}</Project>
+      <Name>TextTemplateTransformationFramework.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Runtime\TextTemplateTransformationFramework.Runtime.csproj">
+      <Project>{ff967ce6-55c7-404b-8731-5545b1c649ec}</Project>
+      <Name>TextTemplateTransformationFramework.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\T4.Plus.NetFramework\TextTemplateTransformationFramework.T4.Plus.NetFramework.csproj">
+      <Project>{e5d687af-2f63-4c2c-bf7e-ad79f689770c}</Project>
+      <Name>TextTemplateTransformationFramework.T4.Plus.NetFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\T4.Plus\TextTemplateTransformationFramework.T4.Plus.csproj">
+      <Project>{63ad5ecf-0ddf-44e2-b0d7-c1a52604a5f6}</Project>
+      <Name>TextTemplateTransformationFramework.T4.Plus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\T4\TextTemplateTransformationFramework.T4.csproj">
+      <Project>{24ede0f3-7c45-458e-8ac4-14f43c07b3af}</Project>
+      <Name>TextTemplateTransformationFramework.T4</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities.GridOutput\Utilities.GridOutput.csproj">
+      <Project>{6B55A0B1-2A2D-40FB-8D90-EAA28059BF8B}</Project>
+      <Name>Utilities.GridOutput</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{4e68e040-d653-4053-8d5b-423b18c093d1}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
+      <Version>5.0.3</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection">
+      <Version>5.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.ComponentModel.Annotations">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Data.SqlClient">
+      <Version>4.8.3</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
