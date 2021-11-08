@@ -11,6 +11,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Extensions
             where TState : class
             => instance
                 .AddSingleton<ICommandLineProcessor, CommandLineProcessor>()
+                .AddSingleton<ICommandLineCommand, VersionCommand>()
                 .AddSingleton<ICommandLineCommand, GenerateDirectiveCommand<TState>>()
                 .AddSingleton<ICommandLineCommand, ListDirectivesCommand<TState>>()
                 .AddSingleton<ICommandLineCommand, ListDirectiveCommand<TState>>()
