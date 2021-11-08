@@ -12,7 +12,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
         {
             var app = new CommandLineApplication
             {
-                Name = "t3f",
+                Name = "t4plus",
                 Description = "TextTemplateTransformationFramework",
                 UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.CollectAndContinue
             };
