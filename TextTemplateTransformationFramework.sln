@@ -3,31 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common", "Common\TextTemplateTransformationFramework.Common.csproj", "{7D16279E-F1D6-4CEA-B947-4FA62E755ABD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common", "src\Common\TextTemplateTransformationFramework.Common.csproj", "{7D16279E-F1D6-4CEA-B947-4FA62E755ABD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4", "T4\TextTemplateTransformationFramework.T4.csproj", "{729AB8A0-C9F4-4D79-A0D3-5A422900A80A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4", "src\T4\TextTemplateTransformationFramework.T4.csproj", "{729AB8A0-C9F4-4D79-A0D3-5A422900A80A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Core", "T4.Core\TextTemplateTransformationFramework.T4.Core.csproj", "{A3B72956-7079-4837-99DE-E0A2D4363182}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Core", "src\T4.Core\TextTemplateTransformationFramework.T4.Core.csproj", "{A3B72956-7079-4837-99DE-E0A2D4363182}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Runtime", "Runtime\TextTemplateTransformationFramework.Runtime.csproj", "{34F3AC5E-0D4F-4EF3-8079-6F8E920B173B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Runtime", "src\Runtime\TextTemplateTransformationFramework.Runtime.csproj", "{34F3AC5E-0D4F-4EF3-8079-6F8E920B173B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus", "T4.Plus\TextTemplateTransformationFramework.T4.Plus.csproj", "{2A26199E-6E2C-4950-9293-C60721C3ACF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus", "src\T4.Plus\TextTemplateTransformationFramework.T4.Plus.csproj", "{2A26199E-6E2C-4950-9293-C60721C3ACF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd", "Common.Cmd\TextTemplateTransformationFramework.Common.Cmd.csproj", "{C381A95D-5EC0-42E1-93CD-8DF0436BFFFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd", "src\Common.Cmd\TextTemplateTransformationFramework.Common.Cmd.csproj", "{C381A95D-5EC0-42E1-93CD-8DF0436BFFFB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Tests", "Common.Tests\TextTemplateTransformationFramework.Common.Tests.csproj", "{F441D208-6F83-4269-9EAF-087E6F1A96FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Tests", "src\Common.Tests\TextTemplateTransformationFramework.Common.Tests.csproj", "{F441D208-6F83-4269-9EAF-087E6F1A96FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Tests", "T4.Tests\TextTemplateTransformationFramework.T4.Tests.csproj", "{F54DED3A-9801-4AA6-BB96-A6A9A1F78825}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Tests", "src\T4.Tests\TextTemplateTransformationFramework.T4.Tests.csproj", "{F54DED3A-9801-4AA6-BB96-A6A9A1F78825}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{64200F1D-837B-46DA-B337-870AE1E254A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "src\Utilities\Utilities.csproj", "{64200F1D-837B-46DA-B337-870AE1E254A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.Tests", "Utilities.Tests\Utilities.Tests.csproj", "{B63F4AF8-BB65-46D8-B0AB-25B974EB5B36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities.Tests", "src\Utilities.Tests\Utilities.Tests.csproj", "{B63F4AF8-BB65-46D8-B0AB-25B974EB5B36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Cmd", "T4.Plus.Cmd\TextTemplateTransformationFramework.T4.Plus.Cmd.csproj", "{53C60272-EB59-4D12-A7AD-42921EFAE3A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Cmd", "src\T4.Plus.Cmd\TextTemplateTransformationFramework.T4.Plus.Cmd.csproj", "{53C60272-EB59-4D12-A7AD-42921EFAE3A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Core", "T4.Plus.Core\TextTemplateTransformationFramework.T4.Plus.Core.csproj", "{244D5944-C844-4B97-93E8-2515869BEB91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Core", "src\T4.Plus.Core\TextTemplateTransformationFramework.T4.Plus.Core.csproj", "{244D5944-C844-4B97-93E8-2515869BEB91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Tests", "T4.Plus.Tests\TextTemplateTransformationFramework.T4.Plus.Tests.csproj", "{32780F36-0282-4599-B067-3164DB0C9525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Tests", "src\T4.Plus.Tests\TextTemplateTransformationFramework.T4.Plus.Tests.csproj", "{32780F36-0282-4599-B067-3164DB0C9525}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DF0E3F3D-000B-4E6C-BD14-9EF543D12218}"
 	ProjectSection(SolutionItems) = preProject
