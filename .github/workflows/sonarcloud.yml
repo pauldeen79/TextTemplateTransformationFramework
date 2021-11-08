@@ -25,8 +25,8 @@ jobs:
           sonarProjectKey: pauldeen79_TextTemplateTransformationFramework
           sonarProjectName: TextTemplateTransformationFramework
           sonarOrganization: pauldeen79
-          dotnetBuildArguments: src/TextTemplateTransformationFramework.sln
-          dotnetTestArguments: src/TextTemplateTransformationFramework.sln --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          dotnetBuildArguments: TextTemplateTransformationFramework.sln
+          dotnetTestArguments: TextTemplateTransformationFramework.sln --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           sonarBeginArguments: /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
