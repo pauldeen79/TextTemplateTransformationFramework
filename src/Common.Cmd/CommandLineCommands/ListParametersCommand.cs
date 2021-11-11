@@ -11,9 +11,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
     public class ListParametersCommand : ICommandLineCommand
     {
         private readonly ITextTemplateProcessor _processor;
+        private readonly IFileContentsProvider _fileContentsProvider;
 
-        public ListParametersCommand(ITextTemplateProcessor processor)
-            => _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+        public ListParametersCommand(ITextTemplateProcessor processor, IFileContentsProvider fileContentsProvider)
+        {
+            _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+        }
 
         public void Initialize(CommandLineApplication app)
         {
@@ -49,13 +53,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    if (!File.Exists(filename))
+                    if (!_fileContentsProvider.FileExists(filename))
                     {
                         app.Error.WriteLine($"Error: File [{filename}] does not exist.");
                         return;
                     }
 
-                    var result = _processor.ExtractParameters(new TextTemplate(File.ReadAllText(filename), filename));
+                    var result = _processor.ExtractParameters(new TextTemplate(_fileContentsProvider.GetFileContents(filename), filename));
 
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {

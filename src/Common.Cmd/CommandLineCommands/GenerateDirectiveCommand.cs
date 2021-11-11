@@ -44,7 +44,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     }
 #endif
                     var directiveName = directiveNameOption.Value();
-                    if (directiveName == null)
+                    if (string.IsNullOrEmpty(directiveName))
                     {
                         app.Error.WriteLine("Error: Directive name is required.");
                         return;

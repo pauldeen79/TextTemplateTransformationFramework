@@ -1,8 +1,7 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts;
 
@@ -11,9 +10,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
     public class RunTemplateCommand : ICommandLineCommand
     {
         private readonly ITextTemplateProcessor _processor;
+        private readonly IFileContentsProvider _fileContentsProvider;
 
-        public RunTemplateCommand(ITextTemplateProcessor processor)
-            => _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+        public RunTemplateCommand(ITextTemplateProcessor processor, IFileContentsProvider fileContentsProvider)
+        {
+            _processor = processor ?? throw new ArgumentNullException(nameof(processor));
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+        }
 
         public void Initialize(CommandLineApplication app)
         {
@@ -52,13 +55,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    if (!File.Exists(filename))
+                    if (!_fileContentsProvider.FileExists(filename))
                     {
                         app.Error.WriteLine($"Error: File [{filename}] does not exist.");
                         return;
                     }
 
-                    var result = _processor.Process(new TextTemplate(File.ReadAllText(filename), filename), parameters);
+                    var result = _processor.Process(new TextTemplate(_fileContentsProvider.GetFileContents(filename), filename), parameters);
 
                     if (!string.IsNullOrEmpty(result.Exception))
                     {
@@ -73,13 +76,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     if (!string.IsNullOrEmpty(diagnosticDumpOutput))
                     {
-                        File.WriteAllText(diagnosticDumpOutput, result.DiagnosticDump);
+                        _fileContentsProvider.WriteFileContents(diagnosticDumpOutput, result.DiagnosticDump);
                         app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
                     }
 
                     if (!string.IsNullOrEmpty(output))
                     {
-                        File.WriteAllText(output, templateOutput);
+                        _fileContentsProvider.WriteFileContents(output, templateOutput);
                         app.Out.WriteLine($"Written template output to file: {output}");
                     }
                     else

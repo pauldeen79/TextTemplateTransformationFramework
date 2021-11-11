@@ -481,9 +481,19 @@ Hello <#= ""world"" #><# Write(""!""); #>";
         [ExcludeFromCodeCoverage]
         private class FileContentsProviderMock : IFileContentsProvider
         {
+            public bool FileExists(string fileName)
+            {
+                throw new NotImplementedException();
+            }
+
             public string GetFileContents(string fileName)
             {
                 return @"<# Write(""!""); #>";
+            }
+
+            public void WriteFileContents(string path, string contents)
+            {
+                throw new NotImplementedException();
             }
         }
     }

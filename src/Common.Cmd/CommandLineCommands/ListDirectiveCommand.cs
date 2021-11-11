@@ -24,7 +24,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 throw new ArgumentNullException(nameof(app));
             }
 
-            app.Command("list-directive", command =>
+            app.Command("list-directive-arguments", command =>
             {
                 command.Description = "Lists available directive arguments";
 
@@ -44,7 +44,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     }
 #endif
                     var directiveName = directiveNameOption.Value();
-                    if (directiveName == null)
+                    if (string.IsNullOrEmpty(directiveName))
                     {
                         app.Error.WriteLine("Error: Directive name is required.");
                         return;

@@ -9,9 +9,19 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures
     {
         public Func<string, string> GetFileContentsDelegate { get; set; }
 
+        public bool FileExists(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetFileContents(string fileName)
             => GetFileContentsDelegate == null
                 ? default
                 : GetFileContentsDelegate(fileName);
+
+        public void WriteFileContents(string path, string contents)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
