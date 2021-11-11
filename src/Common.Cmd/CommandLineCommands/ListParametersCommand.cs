@@ -1,8 +1,7 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using System;
+﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts;
 
