@@ -46,7 +46,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
-        public void Missing_Directive_Leads_To_Error()
+        public void Execute_With_Missing_Directive_Leads_To_Error()
         {
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
@@ -56,7 +56,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
-        public void Unknown_Directive_Leads_To_Error()
+        public void Execute_With_Unknown_Directive_Leads_To_Error()
         {
             // Arrange
             var argument = "-n unknown";
@@ -69,7 +69,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
-        public void Known_Directive_Generates_Correct_Output()
+        public void Execute_With_Known_Directive_Generates_Correct_Output()
         {
             // Arrange
             var argument = "-n MyDirective";
