@@ -77,13 +77,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             _scriptBuilderMock.Setup(x => x.GetKnownDirectives())
                               .Returns(new[] { templateSectionProcessorMock.Object });
             _scriptBuilderMock.Setup(x => x.Build(templateSectionProcessorMock.Object, It.IsAny<object[]>()))
-                              .Returns($"<# {nameof(GenerateDirectiveCommandTests)} #>");
+                              .Returns("<# MyDirective #>");
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, argument);
 
             // Assert
-            actual.Should().Be(@"<# GenerateDirectiveCommandTests #>" + Environment.NewLine);
+            actual.Should().Be(@"<# MyDirective #>" + Environment.NewLine);
         }
 
         [Fact]
@@ -97,13 +97,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             _scriptBuilderMock.Setup(x => x.GetKnownDirectives())
                               .Returns(new[] { templateSectionProcessorMock.Object });
             _scriptBuilderMock.Setup(x => x.Build(templateSectionProcessorMock.Object, It.IsAny<object[]>()))
-                              .Returns($"<# {nameof(GenerateDirectiveCommandTests)} MyParameter=Value #>");
+                              .Returns("<# MyDirective MyParameter=Value #>");
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, argument, parametersArgument);
 
             // Assert
-            actual.Should().Be(@"<# GenerateDirectiveCommandTests MyParameter=Value #>" + Environment.NewLine);
+            actual.Should().Be(@"<# MyDirective MyParameter=Value #>" + Environment.NewLine);
         }
     }
 }

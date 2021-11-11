@@ -63,6 +63,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     var result = _processor.Process(new TextTemplate(_fileContentsProvider.GetFileContents(filename), filename), parameters);
 
+                    if (result.CompilerErrors.Any(e => !e.IsWarning))
+                    {
+                        app.Error.WriteLine("Compiler errors:");
+                        foreach (var error in result.CompilerErrors.Select(err => err.ToString()))
+                        {
+                            app.Error.WriteLine(error);
+                        }
+                        return;
+                    }
+
                     if (!string.IsNullOrEmpty(result.Exception))
                     {
                         app.Error.WriteLine("Exception occured:");

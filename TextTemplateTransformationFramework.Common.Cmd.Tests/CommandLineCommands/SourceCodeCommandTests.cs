@@ -1,9 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
+using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
 using Xunit;
 
@@ -12,6 +14,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     [ExcludeFromCodeCoverage]
     public class SourceCodeCommandTests
     {
+        private readonly Mock<ITextTemplateProcessor> _processorMock;
+        private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+
+        private SourceCodeCommand CreateSut() => new SourceCodeCommand(_processorMock.Object, _fileContentsProviderMock.Object);
+
+        public SourceCodeCommandTests()
+        {
+            _processorMock = new Mock<ITextTemplateProcessor>();
+            _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+        }
+
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
         {
@@ -32,6 +45,56 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 
             // Assert
             app.Commands.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void Execute_Without_Filename_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
+
+            // Assert
+            actual.Should().Be("Error: Filename is required." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_Non_Existing_Filename_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f nonexisting.template");
+
+            // Assert
+            actual.Should().Be("Error: File [nonexisting.template] does not exist." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_Exception_Leads_To_Error()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "code", exception: new InvalidOperationException("kaboom")));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
+
+            // Assert
+            actual.Should().Be(@"Exception occured:
+System.InvalidOperationException: kaboom
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
+
+            // Assert
+            actual.Should().Be(@"Source code output:
+CodeGoesHere();
+");
         }
     }
 }
