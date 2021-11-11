@@ -96,5 +96,20 @@ System.InvalidOperationException: kaboom
 CodeGoesHere();
 ");
         }
+
+        [Fact]
+        public void Execute_With_Output_Option_Saves_Output_To_File()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-o output.cs");
+
+            // Assert
+            actual.Should().Be(@"Written source code output to file: output.cs
+");
+            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.cs", "CodeGoesHere();"), Times.Once);
+        }
     }
 }

@@ -111,5 +111,20 @@ System.InvalidOperationException: kaboom
 template output
 ");
         }
+
+        [Fact]
+        public void Execute_With_Output_Option_Saves_Output_To_File()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-o output.txt");
+
+            // Assert
+            actual.Should().Be(@"Written template output to file: output.txt
+");
+            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.txt", "template output"), Times.Once);
+        }
     }
 }
