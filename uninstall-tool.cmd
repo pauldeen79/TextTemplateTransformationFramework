@@ -1,0 +1,1 @@
+dotnet tool uninstall -g pauldeen79.texttemplatetransformationframework.t4.plus.cmd

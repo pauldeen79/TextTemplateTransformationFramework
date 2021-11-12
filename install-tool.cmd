@@ -1,0 +1,1 @@
+dotnet tool install -g pauldeen79.TextTemplateTransformationFramework.T4.Plus.Cmd --add-source .
