@@ -31,7 +31,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     { nameof(T4PlusCSharpCodeGenerator.GeneratorVersion), request.TemplateTokens.OfType<IGeneratorToken<TState>>().FirstOrDefault()?.Version ?? "1.0.0.0" },
                     { nameof(T4PlusCSharpCodeGenerator.CultureCode), request.TemplateTokens.GetCultureCode() },
                     { nameof(T4PlusCSharpCodeGenerator.TemplateNamespace), request.TemplateTokens.GetTemplateNamespace() },
-                    { nameof(T4PlusCSharpCodeGenerator.TemplateClassName), request.TemplateTokens.GetTemplateClassName() },
+                    { nameof(T4PlusCSharpCodeGenerator.TemplateClassName), request.TemplateTokens.GetClassName() },
                     { nameof(T4PlusCSharpCodeGenerator.Model), request.TemplateTokens },
                     { nameof(T4PlusCSharpCodeGenerator.TemplateIsOverride), request.TemplateTokens.GetTemplateIsOverride() },
                     { nameof(T4PlusCSharpCodeGenerator.GenerationEnvironmentAccessor), request.TemplateTokens.GetGenerationEnvironmentAccessor() },

@@ -397,7 +397,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             // Assert
             actual.Output.Should().Be("ErrorGeneratingOutput");
             actual.CompilerErrors.Where(e => !e.IsWarning).Should().HaveCount(1);
-            actual.CompilerErrors.First(e => !e.IsWarning).ErrorText.Should().Be("There is no argument given that corresponds to the required formal parameter 'objectToConvert' of 'GeneratedTemplateBase.ToStringInstanceHelper.ToStringWithCulture(object)'");
+            actual.CompilerErrors.First(e => !e.IsWarning).ErrorText.Should().Be("There is no argument given that corresponds to the required formal parameter 'objectToConvert' of 'GeneratedClassBase.ToStringInstanceHelper.ToStringWithCulture(object)'");
         }
 
         [Fact]

@@ -53,10 +53,10 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         /// <param name="instance">The instance.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
-        public static string GetTemplateClassName<TState>(this IEnumerable<ITemplateToken<TState>> instance, string defaultValue = "GeneratedTemplate")
+        public static string GetTemplateClassName<TState>(this IEnumerable<ITemplateToken<TState>> instance, string defaultValue = "GeneratedClass")
             where TState : class
             => instance
-                .GetTemplateTokensFromSections<TState, ITemplateClassNameToken<TState>>()
+                .OfType<ITemplateClassNameToken<TState>>()
                 .Select(t => t.ClassName)
                 .Distinct()
                 .LastOrDefaultWhenEmpty(defaultValue); //design decision: when multiple values are found, use the last one
@@ -70,7 +70,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static string GetTemplateBaseClassName<TState>(this IEnumerable<ITemplateToken<TState>> instance, string defaultValue)
             where TState : class
             => instance
-                .GetTemplateTokensFromSections<TState, ITemplateClassNameToken<TState>>()
+                .OfType<ITemplateClassNameToken<TState>>()
                 .Select(t => t.BaseClassName.WhenNullOrEmpty(t.ClassName + "Base"))
                 .Distinct()
                 .LastOrDefaultWhenEmpty(defaultValue); //design decision: when multiple values are found, use the last one
