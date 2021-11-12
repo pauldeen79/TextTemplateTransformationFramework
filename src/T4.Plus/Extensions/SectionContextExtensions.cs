@@ -118,11 +118,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
 
         public static string GetRootClassName<TState>(this SectionContext<TState> context)
             where TState : class
-            => context.ExistingTokens.GetRootClassName();
+            => context.ExistingTokens.GetTemplateTokensFromSections().GetRootClassName();
 
         public static string GetClassName<TState>(this SectionContext<TState> context)
             where TState : class
-            => context.ExistingTokens.GetClassName();
+            => context.ExistingTokens.GetTemplateTokensFromSections().GetClassName();
 
         public static ITextTemplateProcessorContext<TState> GetTextTemplateProcessorContext<TState>(this SectionContext<TState> context)
             where TState : class

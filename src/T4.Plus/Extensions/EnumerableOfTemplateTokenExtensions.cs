@@ -44,7 +44,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
             => instance.GetTemplateBaseClassName
             (
                 instance
-                    .GetTemplateTokensFromSections<TState, IBaseClassInheritsFromToken<TState>>()
+                    .OfType<IBaseClassInheritsFromToken<TState>>()
                     .Select(t => t.ClassName)
                     .Distinct()
                     .LastOrDefault() ?? "GeneratedTemplateBase"
@@ -55,7 +55,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
             => instance.GetTemplateClassName
             (
                 instance
-                    .GetTemplateTokensFromSections<TState, ITemplateClassNameToken<TState>>()
+                    .OfType<ITemplateClassNameToken<TState>>()
                     .Select(t => t.ClassName)
                     .Distinct()
                     .LastOrDefault() ?? "GeneratedTemplate"

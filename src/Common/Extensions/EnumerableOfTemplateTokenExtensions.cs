@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens;
-using TextTemplateTransformationFramework.Common.Default.TemplateTokens.InitializeTokens;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Extensions

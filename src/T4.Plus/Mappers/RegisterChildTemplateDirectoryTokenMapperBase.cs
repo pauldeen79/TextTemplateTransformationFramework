@@ -6,6 +6,7 @@ using TextTemplateTransformationFramework.Common.Attributes;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens;
 using TextTemplateTransformationFramework.Common.Contracts.TokenMappers;
+using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.InitializeTokens;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.NamespaceFooterTokens;
@@ -45,7 +46,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
             var modelTypeName = childTemplateTokens.ChildTokens.GetModelTypeName();
             var useModelForRoutingOnly = childTemplateTokens.ChildTokens.GetUseModelForRoutingOnly(modelTypeName);
             var useModelForRouting = childTemplateTokens.ChildTokens.GetUseModelForRouting(modelTypeName);
-            var rootClassName = model.SectionContext.ExistingTokens.GetRootClassName();
+            var rootClassName = model.SectionContext.ExistingTokens.GetTemplateTokensFromSections().GetRootClassName();
             var copyPropertiesFromTemplate = childTemplateTokens.ChildTokens.OfType<ICopyPropertiesToViewModelToken<TState>>().All(t => t.Enabled);
             var baseClassTokenValue = childTemplateTokens.ChildTokens.OfType<IBaseClassToken<TState>>().FirstOrDefault()?.BaseClassName;
 
