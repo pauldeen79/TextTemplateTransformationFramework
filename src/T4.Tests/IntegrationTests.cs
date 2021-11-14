@@ -8,7 +8,10 @@ using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Attributes;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens;
+using TextTemplateTransformationFramework.Common.Default.TemplateTokens.RenderTokens;
 using TextTemplateTransformationFramework.Common.Extensions;
+using TextTemplateTransformationFramework.Runtime;
+using TextTemplateTransformationFramework.T4.CodeGenerators;
 using TextTemplateTransformationFramework.T4.Core.Extensions;
 using Xunit;
 
@@ -431,6 +434,22 @@ Hello <#= ""world"" #><# Write(""!""); #>";
 
             // Assert
             actual.Parameters.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void CanCreateNestedTemplateWithAdditionalPropertiesOnRootTemplate()
+        {
+            // Arrange
+            var context = SectionContext<TokenParserState>.Empty;
+            var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
+            var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
+            (
+                model,
+                rootAdditionalParameters: new { EnvironmentVersion = "1.2.3.4" }
+            );
+
+            // Act
+            sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>().EnvironmentVersion.Should().Be("1.2.3.4");
         }
 
         public interface IMyInterface

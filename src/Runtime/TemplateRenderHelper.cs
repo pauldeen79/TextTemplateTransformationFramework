@@ -67,40 +67,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
             var templateType = template.GetType();
 
-            var sessionProperty = templateType.GetProperty("Session");
-            if (sessionProperty != null)
-            {
-                var parameters = model != null && !string.IsNullOrEmpty(modelPropertyName)
-                    ? new Dictionary<string, object> { { modelPropertyName, model } }
-                    : new Dictionary<string, object>();
-
-                foreach (var item in additionalParameters.ToKeyValuePairs())
-                {
-                    parameters.Add(item.Key, item.Value);
-                }
-
-                sessionProperty.SetValue(template, parameters, null);
-            }
-            else
-            {
-                var props = TypeDescriptor
-                    .GetProperties(template)
-                    .OfType<PropertyDescriptor>()
-                    .ToArray();
-
-                var modelProperty = model == null || string.IsNullOrEmpty(modelPropertyName)
-                    ? null
-                    : Array.Find(props, p => p.Name == modelPropertyName);
-
-                modelProperty?.SetValue(template, model);
-
-                foreach (var item in additionalParameters.ToKeyValuePairs())
-                {
-                    var additionalProperty = Array.Find(props, p => p.Name == item.Key);
-                    additionalProperty?.SetValue(template, item.Value);
-                }
-            }
-
+            SetAdditionalParametersOnTemplate(template, model, additionalParameters, modelPropertyName);
             InitializeTemplate(template, additionalActionDelegate, templateModifierDelegate);
 
             var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
@@ -189,11 +156,12 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                    object rootModel = null,
                                                                    StringBuilder builder = null,
                                                                    Action additionalActionDelegate = null,
-                                                                   Action<object> templateModifierDelegate = null)
+                                                                   Action<object> templateModifierDelegate = null,
+                                                                   object rootAdditionalParameters = null)
             where TParent : new()
             where TChild : new()
         {
-            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate);
+            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, rootAdditionalParameters);
 
             return (TChild)context.GetType().GetProperty("Template").GetValue(context);
         }
@@ -203,26 +171,26 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                                       StringBuilder builder = null,
                                                                                       Action additionalActionDelegate = null,
                                                                                       Action<object> templateModifierDelegate = null,
+                                                                                      object rootAdditionalParameters = null,
                                                                                       bool forceRuntimeTemplateContext = false)
             where TParent : new()
             where TChild : new()
-            => (TContext)CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, forceRuntimeTemplateContext);
+            => (TContext)CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, rootAdditionalParameters, forceRuntimeTemplateContext);
 
         public static object CreateNestedTemplateContext<TParent, TChild>(object model = null,
                                                                           object rootModel = null,
                                                                           StringBuilder builder = null,
                                                                           Action additionalActionDelegate = null,
                                                                           Action<object> templateModifierDelegate = null,
-                                                                          bool forceRuntimeTemplateContext = false)
+                                                                          object rootAdditionalParameters = null,
+                                                                          bool forceRuntimeTemplateContext = false,
+                                                                          string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
         {
             var rootTemplate = new TParent();
+            SetAdditionalParametersOnTemplate(rootTemplate, rootModel, rootAdditionalParameters, modelPropertyName);
             InitializeTemplate(rootTemplate, additionalActionDelegate, templateModifierDelegate);
-            if (rootModel != null)
-            {
-                SetModelOnRootTemplateContextModel(rootTemplate, rootModel);
-            }
 
             var childTemplate = new TChild();
             if (model != null)
@@ -458,6 +426,7 @@ namespace TextTemplateTransformationFramework.Runtime
             var viewModelTemplateContextProperty = viewModelValue.GetType().GetProperty("TemplateContext");
             viewModelTemplateContextProperty?.SetValue(viewModelValue, templateContextValue);
         }
+
         private static object ConvertType(KeyValuePair<string, object> parameter, Type parentContainerType)
         {
             var property = parentContainerType.GetProperty(parameter.Key);
@@ -527,14 +496,44 @@ namespace TextTemplateTransformationFramework.Runtime
             }
         }
 
-        private static void SetModelOnRootTemplateContextModel(object rootTemplate, object rootModel)
+        private static void SetAdditionalParametersOnTemplate(object template,
+                                                              object model,
+                                                              object additionalParameters,
+                                                              string modelPropertyName)
         {
-            var rootTemplateContextProperty = rootTemplate.GetType().GetProperty("TemplateContext");
-            if (rootTemplateContextProperty != null)
+            var templateType = template.GetType();
+            var sessionProperty = templateType.GetProperty("Session");
+            if (sessionProperty != null)
             {
-                var rootTemplateContext = rootTemplateContextProperty.GetValue(rootTemplate);
-                var templateContextModelProperty = rootTemplateContext.GetType().GetProperty("Model");
-                templateContextModelProperty?.SetValue(rootTemplateContext, rootModel);
+                var parameters = model != null && !string.IsNullOrEmpty(modelPropertyName)
+                    ? new Dictionary<string, object> { { modelPropertyName, model } }
+                    : new Dictionary<string, object>();
+
+                foreach (var item in additionalParameters.ToKeyValuePairs())
+                {
+                    parameters.Add(item.Key, item.Value);
+                }
+
+                sessionProperty.SetValue(template, parameters, null);
+            }
+            else
+            {
+                var props = TypeDescriptor
+                    .GetProperties(template)
+                    .OfType<PropertyDescriptor>()
+                    .ToArray();
+
+                var modelProperty = model == null || string.IsNullOrEmpty(modelPropertyName)
+                    ? null
+                    : Array.Find(props, p => p.Name == modelPropertyName);
+
+                modelProperty?.SetValue(template, model);
+
+                foreach (var item in additionalParameters.ToKeyValuePairs())
+                {
+                    var additionalProperty = Array.Find(props, p => p.Name == item.Key);
+                    additionalProperty?.SetValue(template, item.Value);
+                }
             }
         }
 
