@@ -17,8 +17,7 @@ namespace TextTemplateTransformationFramework.Runtime
                                                Action preRenderDelegate = null,
                                                Action additionalActionDelegate = null,
                                                StringBuilder builder = null,
-                                               object additionalParameters = null,
-                                               Action<object> templateModifierDelegate = null)
+                                               object additionalParameters = null)
         {
             if (template == null)
             {
@@ -40,7 +39,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
             }
 
-            var errors = GetCompilerErrors(template, builder, model, modelPropertyName, preRenderDelegate, additionalActionDelegate, additionalParameters, templateModifierDelegate);
+            var errors = GetCompilerErrors(template, builder, model, modelPropertyName, preRenderDelegate, additionalActionDelegate, additionalParameters);
             return errors.Any(e => !e.IsWarning)
                 ? string.Join(Environment.NewLine, errors.Select(e => string.Format("{0}: {1}", e.GetErrorType(), e.ErrorText)))
                 : builder.ToString();
@@ -52,8 +51,7 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                    string modelPropertyName = "Model",
                                                                    Action preRenderDelegate = null,
                                                                    Action additionalActionDelegate = null,
-                                                                   object additionalParameters = null,
-                                                                   Action<object> templateModifierDelegate = null)
+                                                                   object additionalParameters = null)
         {
             if (template == null)
             {
@@ -68,7 +66,7 @@ namespace TextTemplateTransformationFramework.Runtime
             var templateType = template.GetType();
 
             SetAdditionalParametersOnTemplate(template, model, additionalParameters, modelPropertyName);
-            InitializeTemplate(template, additionalActionDelegate, templateModifierDelegate);
+            InitializeTemplate(template, additionalActionDelegate);
 
             var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
             if (viewModelProperty != null)
@@ -119,8 +117,7 @@ namespace TextTemplateTransformationFramework.Runtime
                                           string fileNamePrefix = "",
                                           string defaultFileName = null,
                                           Action additionalActionDelegate = null,
-                                          object additionalParameters = null,
-                                          Action<object> templateModifierDelegate = null)
+                                          object additionalParameters = null)
         {
             if (template == null)
             {
@@ -133,7 +130,7 @@ namespace TextTemplateTransformationFramework.Runtime
             }
 
             SetSessionOnIncludedTemplate(template, session, additionalParameters);
-            InitializeTemplate(template, additionalActionDelegate, templateModifierDelegate);
+            InitializeTemplate(template, additionalActionDelegate);
             SetViewModelOnTemplate(template, session, additionalParameters);
             var errorsProperty = template.GetType().GetProperty("Errors");
             var errors = GetErrors(errorsProperty, template, out bool hasErrors);
@@ -154,46 +151,40 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public static TChild CreateNestedTemplate<TParent, TChild>(object model = null,
                                                                    object rootModel = null,
-                                                                   StringBuilder builder = null,
                                                                    Action additionalActionDelegate = null,
-                                                                   Action<object> templateModifierDelegate = null,
                                                                    object rootAdditionalParameters = null,
                                                                    object iterationContextModel = null,
                                                                    string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
         {
-            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
+            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, additionalActionDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
 
             return (TChild)context.GetType().GetProperty("Template").GetValue(context);
         }
 
         public static TContext CreateNestedTemplateContext<TParent, TChild, TContext>(object model = null,
                                                                                       object rootModel = null,
-                                                                                      StringBuilder builder = null,
                                                                                       Action additionalActionDelegate = null,
-                                                                                      Action<object> templateModifierDelegate = null,
                                                                                       object rootAdditionalParameters = null,
-                                                                                      bool forceRuntimeTemplateContext = false)
+                                                                                      object iterationContextModel = null,
+                                                                                      string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
-            => (TContext)CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, rootAdditionalParameters, forceRuntimeTemplateContext);
+            => (TContext)CreateNestedTemplateContext<TParent, TChild>(model, rootModel, additionalActionDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
 
         public static object CreateNestedTemplateContext<TParent, TChild>(object model = null,
                                                                           object rootModel = null,
-                                                                          StringBuilder builder = null,
                                                                           Action additionalActionDelegate = null,
-                                                                          Action<object> templateModifierDelegate = null,
                                                                           object rootAdditionalParameters = null,
                                                                           object iterationContextModel = null,
-                                                                          string modelPropertyName = "Model",
-                                                                          bool forceRuntimeTemplateContext = false)
+                                                                          string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
         {
             var rootTemplate = new TParent();
             SetAdditionalParametersOnTemplate(rootTemplate, rootModel, rootAdditionalParameters, modelPropertyName);
-            InitializeTemplate(rootTemplate, additionalActionDelegate, templateModifierDelegate);
+            InitializeTemplate(rootTemplate, additionalActionDelegate);
 
             var childTemplate = new TChild();
             if (model != null)
@@ -203,12 +194,9 @@ namespace TextTemplateTransformationFramework.Runtime
             SetRootTemplateOnChildTemplate(rootTemplate, childTemplate, true);
 
             var viewModel = childTemplate.GetType().GetProperty("ViewModelProperty")?.GetValue(childTemplate);
-            var context = SetTemplateContextOnChildTemplate(rootTemplate, childTemplate, model, viewModel, rootModel, null, iterationContextModel, forceRuntimeTemplateContext);
+            var context = SetTemplateContextOnChildTemplate(rootTemplate, childTemplate, model, viewModel, rootModel, null, iterationContextModel);
 
-            if (builder == null)
-            {
-                builder = new StringBuilder();
-            }
+            var builder = new StringBuilder();
 
             SetGenerationEnvironmentOnTemplate(builder, rootTemplate);
             SetGenerationEnvironmentOnTemplate(builder, childTemplate);
@@ -249,8 +237,7 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                object viewModel = null,
                                                                object rootModel = null,
                                                                object childTemplateContext = null,
-                                                               object iterationContextModel = null,
-                                                               bool forceRuntimeTemplateContext = false)
+                                                               object iterationContextModel = null)
         {
             if (rootTemplate == null)
             {
@@ -266,7 +253,7 @@ namespace TextTemplateTransformationFramework.Runtime
             var childTemplateContextProperty = childTemplate.GetType().GetProperty("TemplateContext");
 
             object childContext = childTemplateContext;
-            if (rootTemplateContextProperty != null && childContext == null && !forceRuntimeTemplateContext)
+            if (rootTemplateContextProperty != null && childContext == null)
             {
                 var rootTemplateContext = rootTemplateContextProperty.GetValue(rootTemplate);
                 var rootModelProperty = rootTemplateContext.GetType().GetProperty("Model");
@@ -384,7 +371,7 @@ namespace TextTemplateTransformationFramework.Runtime
         private static void SetSessionOnIncludedTemplate(object template,
                                                          IEnumerable<KeyValuePair<string, object>> session,
                                                          object additionalParameters)
-        => template.GetType().GetProperty("Session")?.SetValue(template, CombineSession(ConvertSession(session, template), additionalParameters.ToKeyValuePairs()), null);
+            => template.GetType().GetProperty("Session")?.SetValue(template, CombineSession(ConvertSession(session, template), additionalParameters.ToKeyValuePairs()), null);
 
         private static IEnumerable<KeyValuePair<string, object>> ConvertSession(IEnumerable<KeyValuePair<string, object>> session,
                                                                                 object template)
@@ -575,9 +562,7 @@ namespace TextTemplateTransformationFramework.Runtime
             generationEnvironmentProperty.SetValue(rootTemplate, builder);
         }
 
-        private static void InitializeTemplate(object template,
-                                               Action additionalActionDelegate = null,
-                                               Action<object> templateModifierDelegate = null)
+        private static void InitializeTemplate(object template, Action additionalActionDelegate = null)
         {
             var initializeMethod = template.GetType().GetMethod("Initialize");
             if (initializeMethod != null)
@@ -594,7 +579,6 @@ namespace TextTemplateTransformationFramework.Runtime
                         throw new InvalidOperationException($"Template of type [{template.GetType().FullName}] has Initialize method with more than 1 argument. This is not supported.");
                 }
             }
-            templateModifierDelegate?.Invoke(template);
         }
     }
 }
