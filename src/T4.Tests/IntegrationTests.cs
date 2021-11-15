@@ -436,20 +436,43 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             actual.Parameters.Should().HaveCount(2);
         }
 
+
         [Fact]
-        public void CanCreateNestedTemplateWithAdditionalPropertiesOnRootTemplate()
+        public void CanCreateNestedTemplateWithModelOnRootTemplate()
         {
             // Arrange
             var context = SectionContext<TokenParserState>.Empty;
             var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
+            var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
             var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
             (
                 model,
-                rootAdditionalParameters: new { EnvironmentVersion = "1.2.3.4" }
+                rootModel
             );
+            var rootTemplate = sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>();
 
             // Act
-            sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>().EnvironmentVersion.Should().Be("1.2.3.4");
+            rootTemplate.Model.Should().BeEquivalentTo(rootModel);
+        }
+
+        [Fact]
+        public void CanCreateNestedTemplateWithModelAndAdditionalPropertiesOnRootTemplate()
+        {
+            // Arrange
+            var context = SectionContext<TokenParserState>.Empty;
+            var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
+            var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
+            var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
+            (
+                model,
+                rootModel,
+                rootAdditionalParameters: new { EnvironmentVersion = "1.2.3.4" }
+            );
+            var rootTemplate = sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>();
+
+            // Act
+            rootTemplate.EnvironmentVersion.Should().Be("1.2.3.4");
+            rootTemplate.Model.Should().BeEquivalentTo(rootModel);
         }
 
         public interface IMyInterface
