@@ -62,7 +62,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
             if (_rootTemplate != null)
             {
-                TemplateRenderHelper.SetTemplateContextOnChildTemplate(_rootTemplate, _currentInstance, Model, ViewModel, TemplateContext);
+                TemplateRenderHelper.SetTemplateContextOnChildTemplate(_rootTemplate, _currentInstance, Model, ViewModel, null, TemplateContext);
 
                 if (TemplateContext != null)
                 {

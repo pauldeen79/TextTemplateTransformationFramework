@@ -157,11 +157,13 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                    StringBuilder builder = null,
                                                                    Action additionalActionDelegate = null,
                                                                    Action<object> templateModifierDelegate = null,
-                                                                   object rootAdditionalParameters = null)
+                                                                   object rootAdditionalParameters = null,
+                                                                   object iterationContextModel = null,
+                                                                   string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
         {
-            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, rootAdditionalParameters);
+            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, builder, additionalActionDelegate, templateModifierDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
 
             return (TChild)context.GetType().GetProperty("Template").GetValue(context);
         }
@@ -183,8 +185,9 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                           Action additionalActionDelegate = null,
                                                                           Action<object> templateModifierDelegate = null,
                                                                           object rootAdditionalParameters = null,
-                                                                          bool forceRuntimeTemplateContext = false,
-                                                                          string modelPropertyName = "Model")
+                                                                          object iterationContextModel = null,
+                                                                          string modelPropertyName = "Model",
+                                                                          bool forceRuntimeTemplateContext = false)
             where TParent : new()
             where TChild : new()
         {
@@ -200,7 +203,7 @@ namespace TextTemplateTransformationFramework.Runtime
             SetRootTemplateOnChildTemplate(rootTemplate, childTemplate, true);
 
             var viewModel = childTemplate.GetType().GetProperty("ViewModelProperty")?.GetValue(childTemplate);
-            var context = SetTemplateContextOnChildTemplate(rootTemplate, childTemplate, model, viewModel, null, forceRuntimeTemplateContext);
+            var context = SetTemplateContextOnChildTemplate(rootTemplate, childTemplate, model, viewModel, rootModel, null, iterationContextModel, forceRuntimeTemplateContext);
 
             if (builder == null)
             {
@@ -244,7 +247,9 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                object childTemplate,
                                                                object model,
                                                                object viewModel = null,
+                                                               object rootModel = null,
                                                                object childTemplateContext = null,
+                                                               object iterationContextModel = null,
                                                                bool forceRuntimeTemplateContext = false)
         {
             if (rootTemplate == null)
@@ -264,13 +269,35 @@ namespace TextTemplateTransformationFramework.Runtime
             if (rootTemplateContextProperty != null && childContext == null && !forceRuntimeTemplateContext)
             {
                 var rootTemplateContext = rootTemplateContextProperty.GetValue(rootTemplate);
-                childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, new[] { childTemplate, model, viewModel, null, null, null });
+                var rootModelProperty = rootTemplateContext.GetType().GetProperty("Model");
+                if (rootModelProperty != null && rootModelProperty.GetValue(rootTemplateContext) == null)
+                {
+                    rootModelProperty.SetValue(rootTemplateContext, rootModel);
+                }
+                if (iterationContextModel != null)
+                {
+                    childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, new[] { rootTemplate, iterationContextModel, null, null, null, null });
+                    childContext = childContext.GetType().GetMethod("CreateChildContext").Invoke(childContext, new[] { childTemplate, model, viewModel, null, null, null });
+                }
+                else
+                {
+                    childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, new[] { childTemplate, model, viewModel, null, null, null });
+                }
             }
 
             if (childContext == null)
             {
                 //no child context on root template, and no custom child context via argument
-                childContext = TemplateInstanceContext.CreateRootContext(rootTemplate).CreateChildContext(childTemplate, model, viewModel);
+                if (iterationContextModel != null)
+                {
+                    childContext = TemplateInstanceContext.CreateRootContext(rootTemplate)
+                        .CreateChildContext(rootTemplate, iterationContextModel)
+                        .CreateChildContext(childTemplate, model, viewModel);
+                }
+                else
+                {
+                    childContext = TemplateInstanceContext.CreateRootContext(rootTemplate).CreateChildContext(childTemplate, model, viewModel);
+                }
             }
 
             childTemplateContextProperty?.SetValue(childTemplate, childContext);

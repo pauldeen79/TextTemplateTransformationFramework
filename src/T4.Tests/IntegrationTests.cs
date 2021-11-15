@@ -466,7 +466,8 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             (
                 model,
                 rootModel,
-                rootAdditionalParameters: new { EnvironmentVersion = "1.2.3.4" }
+                rootAdditionalParameters: new { EnvironmentVersion = "1.2.3.4" },
+                iterationContextModel: rootModel.First()
             );
             var rootTemplate = sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>();
 
