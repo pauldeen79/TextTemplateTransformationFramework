@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd.Tests", "TextTemplateTransformationFramework.Common.Cmd.Tests\TextTemplateTransformationFramework.Common.Cmd.Tests.csproj", "{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd.Tests", "src\Common.Cmd.Tests\TextTemplateTransformationFramework.Common.Cmd.Tests.csproj", "{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

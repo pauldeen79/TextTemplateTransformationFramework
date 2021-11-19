@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Common.Cmd\TextTemplateTransformationFramework.Common.Cmd.csproj" />
+    <ProjectReference Include="..\Common.Cmd\TextTemplateTransformationFramework.Common.Cmd.csproj" />
   </ItemGroup>
 
 </Project>
