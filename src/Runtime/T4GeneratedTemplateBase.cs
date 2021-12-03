@@ -126,7 +126,7 @@ namespace TextTemplateTransformationFramework.Runtime
         /// <summary>
         /// Write text directly into the generated output
         /// </summary>
-        public void WriteLine(string textToAppend)
+        public virtual void WriteLine(string textToAppend)
         {
             Write(textToAppend);
             GenerationEnvironment.AppendLine();

@@ -45,6 +45,18 @@
             }
         }
 
+        public override void WriteLine(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.WriteLine(textToAppend);
+            }
+            else
+            {
+                base.WriteLine(textToAppend);
+            }
+        }
+
 <# if (!string.IsNullOrEmpty(ViewModel.ModelType))
    { #>
         public <#= ViewModel.ModelType #> Model { get; set; }
