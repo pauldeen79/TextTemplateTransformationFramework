@@ -103,7 +103,8 @@ namespace TextTemplateTransformationFramework.Runtime
                 return;
             }
             // Everywhere there is a newline in the text, add an indent after it
-            textToAppend = textToAppend.Replace(Environment.NewLine, Environment.NewLine + currentIndentField);
+            textToAppend = textToAppend.Replace(Environment.NewLine, Environment.NewLine + currentIndentField)
+                .Replace("\n", "\n" + currentIndentField);
             // If the text ends with a newline, then we should strip off the indent added at the very end
             // because the appropriate indent will be added when the next time Write() is called
             if (endsWithNewline)
