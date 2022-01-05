@@ -112,6 +112,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             // Assert
             actual.Should().Be(@"Hello world!");
         }
+
         public void Dispose()
             => _provider.Dispose();
     }
