@@ -24,7 +24,6 @@ namespace TextTemplateTransformationFramework.T4.CodeGenerators
     using Utilities.Extensions;
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class T4CSharpCodeGenerator : T4CSharpCodeGeneratorBase
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -544,7 +543,6 @@ namespace "));
     /// Base class for this transformation
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class T4CSharpCodeGeneratorBase : TextTemplateTransformationFramework.Runtime.T4PlusGeneratedTemplateBase
     {
 
@@ -659,7 +657,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     #endregion
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGeneratorBaseChild : T4CSharpCodeGeneratorBase
     {
         public T4CSharpCodeGenerator RootTemplate { get; set; }
@@ -701,7 +698,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_BaseClass_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1027,7 +1023,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_CodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1077,7 +1072,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ExcludeFromCodeCoverageAttribute_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1128,7 +1122,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1177,7 +1170,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_GeneratedCodeAttribute_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1228,7 +1220,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_LineNumber_Footer_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1277,7 +1268,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_LineNumber_Header_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1328,7 +1318,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_MainClass_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1437,7 +1426,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_NamespaceImportToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1486,7 +1474,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ParameterToken_Declaration_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1556,7 +1543,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ParameterToken_Initialization_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1690,7 +1676,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_TextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1739,7 +1724,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ToStringInstanceHelper_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1851,7 +1835,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1900,7 +1883,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1949,7 +1931,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1998,7 +1979,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2047,7 +2027,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2096,7 +2075,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_InitializeTokens_InitializeCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2145,7 +2123,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_InitializeTokens_InitializeErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2194,7 +2171,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_InitializeTokens_InitializeExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2243,7 +2219,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_InitializeTokens_InitializeTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2292,7 +2267,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_InitializeTokens_InitializeWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2341,7 +2315,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_MessageTokens_ErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2390,7 +2363,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_MessageTokens_WarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2439,7 +2411,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2488,7 +2459,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2537,7 +2507,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2586,7 +2555,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2635,7 +2603,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2684,7 +2651,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_RenderTokens_RenderCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2733,7 +2699,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_RenderTokens_RenderErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2782,7 +2747,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_RenderTokens_RenderExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2831,7 +2795,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_RenderTokens_RenderTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2880,7 +2843,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_RenderTokens_RenderWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2929,7 +2891,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGenerator_MainClass_ViewModel
     {
         [global::System.ComponentModel.Browsable(false)]

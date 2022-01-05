@@ -32,7 +32,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     using Utilities.Extensions;
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public partial class T4PlusCSharpCodeGenerator : T4CSharpCodeGenerator
     {
 
@@ -193,7 +192,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4CSharpCodeGeneratorBaseChild : T4CSharpCodeGeneratorBase
     {
         public T4PlusCSharpCodeGenerator RootTemplate { get; set; }
@@ -223,7 +221,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_AddTemplateToPlaceholderToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -278,7 +275,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ConvertTypeCode_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -333,7 +329,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_GetRegisteredObjectCode_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -439,7 +434,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_MainClass_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -572,7 +566,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ParameterToken_Declaration_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -733,7 +726,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ParameterToken_Initialization_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -903,7 +895,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_PlaceholderCode_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -977,7 +968,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_RenderChildTemplateCode_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1132,7 +1122,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_RenderChildTemplateToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1203,7 +1192,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_RenderTemplateCode_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1364,7 +1352,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AddChildTemplateCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1481,7 +1468,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AddComposableChildTemplateCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1565,7 +1551,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AllowNullExpressionsToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1617,7 +1602,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1666,7 +1650,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1715,7 +1698,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1764,7 +1746,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1813,7 +1794,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1862,7 +1842,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_TemplateContextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1922,7 +1901,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ChildTemplateInitializeCodeTokens_InitializeViewModelTokenTemplate : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -1993,7 +1971,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ChildTemplateInitializeCodeTokens_RouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2046,7 +2023,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ChildTemplateInitializeCodeTokens_RouteChildTemplatesFieldToRootTemplateToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2101,7 +2077,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ChildTemplateRenderCodeTokens_TemplateContext_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2152,7 +2127,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_CodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2201,7 +2175,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_RegisterComposableChildTemplateToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2260,7 +2233,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_RegisterComposableViewModelToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2319,7 +2291,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_CompositionRootFeatureTokens_CompositionRootFeatureCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2368,7 +2339,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_CallAdditionalActionDelegateToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2423,7 +2393,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_ClearChildTemplatesFieldToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2470,7 +2439,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_ClearErrorsToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2516,7 +2484,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_ClearGenerationEnvironmentToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2562,7 +2529,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_ClearPlaceholderTemplatesFieldToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2608,7 +2574,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_EnsureSessionInitializedToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2657,7 +2622,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_InitializeAddTemplateToPlaceholderToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2706,7 +2670,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_InitializeBaseToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2759,7 +2722,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_InitializeViewModelTokenTemplate : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2830,7 +2792,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_RegisterChildTemplateToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2889,7 +2850,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_RegisterPlaceholderToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2948,7 +2908,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_InitializeTokens_RegisterViewModelToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3007,7 +2966,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3110,7 +3068,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3239,7 +3196,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3345,7 +3301,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3570,7 +3525,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3716,7 +3670,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_TemplateContextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -3864,7 +3817,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_TemplateFileManagerToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -4313,7 +4265,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_RenderTokens_RenderRenderChildTemplateTokenTemplate : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -4362,7 +4313,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_ViewModelClassFooterTokens_TemplateContextViewModelFieldToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -4408,7 +4358,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_MainClass_ViewModel : TextTemplateTransformationFramework.T4.CodeGenerators.T4CSharpCodeGenerator_MainClass_ViewModel
     {
         public string InitializeAccessor => Model.TemplateIsOverride ? "override" : "virtual";
@@ -4420,7 +4369,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_RenderChildTemplateToken_ViewModel
     {
         [global::System.ComponentModel.Browsable(false)]
@@ -4502,7 +4450,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel
     {
         public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
@@ -4512,7 +4459,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_ViewModel
     {
         [global::System.ComponentModel.Browsable(false)]
@@ -4536,7 +4482,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_ViewModel
     {
         [global::System.ComponentModel.Browsable(false)]
@@ -4557,7 +4502,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel
     {
         [global::System.ComponentModel.Browsable(false)]
@@ -4580,7 +4524,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_ViewModel
     {
         [global::System.ComponentModel.Browsable(false)]

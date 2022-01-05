@@ -5,7 +5,6 @@
 <#@ overrideTemplate #>
 <#@ addChildTemplateCode override="true" baseClass="T4CSharpCodeGeneratorBase" #>
 <#@ initializeBase additionalActionDelegate="true" #>
-<#@ addExcludeFromCodeCoverageAttributes #>
 <#@ output extension="cs" #>
 <#@ assembly name="TextTemplateTransformationFramework.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
 <#@ assembly name="TextTemplateTransformationFramework.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
