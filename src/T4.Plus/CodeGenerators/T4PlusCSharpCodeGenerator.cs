@@ -93,6 +93,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.InitializeTokens.RegisterChildTemplateToken.Template", () => new T4PlusCSharpCodeGenerator_InitializeTokens_RegisterChildTemplateToken_Template(), typeof(IRegisterChildTemplateToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.InitializeTokens.RegisterPlaceholderToken.Template", () => new T4PlusCSharpCodeGenerator_InitializeTokens_RegisterPlaceholderToken_Template(), typeof(IRegisterPlaceholderToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.InitializeTokens.RegisterViewModelToken.Template", () => new T4PlusCSharpCodeGenerator_InitializeTokens_RegisterViewModelToken_Template(), typeof(IRegisterViewModelToken<TokenParserState>));
+            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_Template(), typeof(IChildTemplateClassBaseToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_Template(), typeof(IChildTemplateClassToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildViewModelClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_Template(), typeof(IChildViewModelNamespaceFooterClassToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_Template(), typeof(ICompositionRootClassToken<TokenParserState>));
@@ -103,6 +104,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.ViewModelClassFooterTokens.TemplateContextViewModelFieldToken.Template", () => new T4PlusCSharpCodeGenerator_ViewModelClassFooterTokens_TemplateContextViewModelFieldToken_Template(), typeof(ITemplateContextViewModelFieldToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.MainClass.ViewModel", () => new T4PlusCSharpCodeGenerator_MainClass_ViewModel());
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.RenderChildTemplateToken.ViewModel", () => new T4PlusCSharpCodeGenerator_RenderChildTemplateToken_ViewModel(), typeof(IRenderChildTemplateToken<TokenParserState>));
+            RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel());
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_ViewModel(), typeof(IChildTemplateClassToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildViewModelClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_ViewModel(), typeof(IChildViewModelNamespaceFooterClassToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel(), typeof(ICompositionRootClassToken<TokenParserState>));
@@ -3990,6 +3992,135 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
+    public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_Template : T4CSharpCodeGeneratorBase
+    {
+        public virtual void Render(global::System.Text.StringBuilder builder)
+        {
+            var backup = this.GenerationEnvironment;
+            if (builder != null) this.GenerationEnvironment = builder;
+            
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel);
+
+            
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+
+            Write(this.ToStringHelper.ToStringWithCulture(@"    public class "));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
+            Write(this.ToStringHelper.ToStringWithCulture(@"Child : "));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
+            Write(this.ToStringHelper.ToStringWithCulture(@"
+    {
+        public "));
+            Write(this.ToStringHelper.ToStringWithCulture(RootTemplate.TemplateClassName));
+            Write(this.ToStringHelper.ToStringWithCulture(@" RootTemplate { get; set; }
+
+        public override void Write(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.Write(textToAppend);
+            }
+            else
+            {
+                base.Write(textToAppend);
+            }
+        }
+
+        public override void WriteLine(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.WriteLine(textToAppend);
+            }
+            else
+            {
+                base.WriteLine(textToAppend);
+            }
+        }
+    }
+"));
+
+            if (builder != null) this.GenerationEnvironment = backup;
+        }
+
+        protected T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel _viewModelField;
+
+        /// <summary>
+        /// Access the ViewModel parameter of the template.
+        /// </summary>
+        public T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel ViewModel
+        {
+            get
+            {
+                return this._viewModelField;
+            }
+            set
+            {
+                 this._viewModelField = value;
+            }
+        }
+
+        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
+        {
+            this.Errors.Clear();
+            this.GenerationEnvironment.Clear();
+            if (Session == null)
+            {
+                Session = new global::System.Collections.Generic.Dictionary<string, object>();
+            }
+            if (RootTemplate != null)
+            {
+                ChildTemplates = RootTemplate.ChildTemplates;
+                ViewModels = RootTemplate.ViewModels;
+            }
+            else
+            {
+                ChildTemplates.Clear();
+                ViewModels.Clear();
+            }
+            if (RootTemplate != null)
+            {
+                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
+            }
+            else
+            {
+                PlaceholderChildrenDictionary.Clear();
+            }
+            ViewModel = GetViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.ViewModel") as T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel;
+
+        }
+
+        public T4PlusCSharpCodeGenerator RootTemplate { get; set; }
+
+        public override void Write(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.Write(textToAppend);
+            }
+            else
+            {
+                base.Write(textToAppend);
+            }
+        }
+
+        public override void WriteLine(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.WriteLine(textToAppend);
+            }
+            else
+            {
+                base.WriteLine(textToAppend);
+            }
+        }
+
+        public IChildTemplateClassBaseToken<TokenParserState> Model { get; set; }
+
+    }
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_Template : T4CSharpCodeGeneratorBase
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -4042,34 +4173,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             Write(this.ToStringHelper.ToStringWithCulture(@"        }
-
-        public "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.RootClassName));
-            Write(this.ToStringHelper.ToStringWithCulture(@" RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
 
 "));
             if (!string.IsNullOrEmpty(ViewModel.ModelType))
@@ -5614,6 +5717,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
         }
 
+
+    }
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
+    public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel
+    {
+        public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
+        public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
+
+        public TemplateInstanceContext TemplateContext { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]

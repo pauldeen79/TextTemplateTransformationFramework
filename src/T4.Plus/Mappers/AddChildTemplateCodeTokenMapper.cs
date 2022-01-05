@@ -11,6 +11,7 @@ using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Namespa
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.TokenConverterTokens;
 using TextTemplateTransformationFramework.T4.Plus.Extensions;
 using TextTemplateTransformationFramework.T4.Plus.Models;
+using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 {
@@ -33,6 +34,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
         {
             if (model != null)
             {
+                yield return new ChildTemplateClassBaseToken<TState>(context, model.BaseClass.WhenNullOrEmpty($"{context.GetClassName()}Base"));
                 if (!model.Override)
                 {
                     if (model.Composable)

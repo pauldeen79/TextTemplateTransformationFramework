@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
+using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.T4.Plus.Core.Extensions;
 using Xunit;
 
@@ -86,6 +87,31 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             actual.SourceCode.Should().Contain("// Some initialization code to run");
         }
 
+        [Fact]
+        public void CanRunOldChildTemplateClassUsingRuntime()
+        {
+            // Arrange
+            var template = new OldTemplate.GeneratedTemplate();
+
+            // Act
+            var actual = TemplateRenderHelper.GetTemplateOutput(template);
+
+            // Assert
+            actual.Should().Be(@"Hello world!");
+        }
+
+        [Fact]
+        public void CanRunNewChildTemplateClassUsingRuntime()
+        {
+            // Arrange
+            var template = new NewTemplate.GeneratedTemplate();
+
+            // Act
+            var actual = TemplateRenderHelper.GetTemplateOutput(template);
+
+            // Assert
+            actual.Should().Be(@"Hello world!");
+        }
         public void Dispose()
             => _provider.Dispose();
     }
