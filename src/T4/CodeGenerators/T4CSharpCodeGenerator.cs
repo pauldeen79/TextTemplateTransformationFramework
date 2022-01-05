@@ -658,6 +658,36 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     }
     #endregion
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
+    public class T4CSharpCodeGeneratorBaseChild : T4CSharpCodeGeneratorBase
+    {
+        public T4CSharpCodeGenerator RootTemplate { get; set; }
+
+        public override void Write(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.Write(textToAppend);
+            }
+            else
+            {
+                base.Write(textToAppend);
+            }
+        }
+
+        public override void WriteLine(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.WriteLine(textToAppend);
+            }
+            else
+            {
+                base.WriteLine(textToAppend);
+            }
+        }
+    }
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
     public class GeneratorModel
     {
@@ -672,7 +702,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_BaseClass_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_BaseClass_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -993,38 +1023,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public T4CSharpCodeGenerator Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_CodeToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_CodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1069,38 +1073,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public ICodeToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ExcludeFromCodeCoverageAttribute_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ExcludeFromCodeCoverageAttribute_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1146,38 +1124,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public T4CSharpCodeGenerator Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ExpressionToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1221,38 +1173,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IExpressionToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_GeneratedCodeAttribute_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_GeneratedCodeAttribute_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1298,38 +1224,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public GeneratorModel Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_LineNumber_Footer_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_LineNumber_Footer_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1374,37 +1274,11 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_LineNumber_Header_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_LineNumber_Header_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1450,38 +1324,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public ITemplateToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_MainClass_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_MainClass_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1585,38 +1433,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public T4CSharpCodeGenerator Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_NamespaceImportToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_NamespaceImportToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1660,38 +1482,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public INamespaceImportToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ParameterToken_Declaration_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ParameterToken_Declaration_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1756,38 +1552,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IParameterToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ParameterToken_Initialization_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ParameterToken_Initialization_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1916,38 +1686,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IParameterToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_TextToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_TextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -1991,38 +1735,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public ITextToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ToStringInstanceHelper_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ToStringInstanceHelper_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2129,38 +1847,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public T4CSharpCodeGenerator Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterCodeToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2202,32 +1894,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IClassFooterCodeToken<TokenParserState> Model { get; set; }
@@ -2235,7 +1901,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterErrorToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2277,32 +1943,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IClassFooterErrorToken<TokenParserState> Model { get; set; }
@@ -2310,7 +1950,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterExpressionToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2352,32 +1992,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IClassFooterExpressionToken<TokenParserState> Model { get; set; }
@@ -2385,7 +1999,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterTextToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2427,32 +2041,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IClassFooterTextToken<TokenParserState> Model { get; set; }
@@ -2460,7 +2048,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterWarningToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_ClassFooterTokens_ClassFooterWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2504,38 +2092,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IClassFooterWarningToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_InitializeTokens_InitializeCodeToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_InitializeTokens_InitializeCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2577,32 +2139,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IInitializeCodeToken<TokenParserState> Model { get; set; }
@@ -2610,7 +2146,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_InitializeTokens_InitializeErrorToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_InitializeTokens_InitializeErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2652,32 +2188,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IInitializeErrorToken<TokenParserState> Model { get; set; }
@@ -2685,7 +2195,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_InitializeTokens_InitializeExpressionToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_InitializeTokens_InitializeExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2727,32 +2237,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IInitializeExpressionToken<TokenParserState> Model { get; set; }
@@ -2760,7 +2244,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_InitializeTokens_InitializeTextToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_InitializeTokens_InitializeTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2802,32 +2286,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IInitializeTextToken<TokenParserState> Model { get; set; }
@@ -2835,7 +2293,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_InitializeTokens_InitializeWarningToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_InitializeTokens_InitializeWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2879,38 +2337,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IInitializeWarningToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_MessageTokens_ErrorToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_MessageTokens_ErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -2954,38 +2386,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IErrorToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_MessageTokens_WarningToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_MessageTokens_WarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3029,38 +2435,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IWarningToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterCodeToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3102,32 +2482,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public INamespaceFooterCodeToken<TokenParserState> Model { get; set; }
@@ -3135,7 +2489,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterErrorToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3177,32 +2531,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public INamespaceFooterErrorToken<TokenParserState> Model { get; set; }
@@ -3210,7 +2538,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterExpressionToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3252,32 +2580,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public INamespaceFooterExpressionToken<TokenParserState> Model { get; set; }
@@ -3285,7 +2587,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterTextToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3327,32 +2629,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public INamespaceFooterTextToken<TokenParserState> Model { get; set; }
@@ -3360,7 +2636,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterWarningToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_NamespaceFooterTokens_NamespaceFooterWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3404,38 +2680,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public INamespaceFooterWarningToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_RenderTokens_RenderCodeToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_RenderTokens_RenderCodeToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3477,32 +2727,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IRenderCodeToken<TokenParserState> Model { get; set; }
@@ -3510,7 +2734,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_RenderTokens_RenderErrorToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_RenderTokens_RenderErrorToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3552,32 +2776,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IRenderErrorToken<TokenParserState> Model { get; set; }
@@ -3585,7 +2783,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_RenderTokens_RenderExpressionToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_RenderTokens_RenderExpressionToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3629,38 +2827,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IRenderExpressionToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_RenderTokens_RenderTextToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_RenderTokens_RenderTextToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3704,38 +2876,12 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
 
         }
 
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
-        }
-
         public IRenderTextToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]
-    public class T4CSharpCodeGenerator_RenderTokens_RenderWarningToken_Template : T4CSharpCodeGeneratorBase
+    public class T4CSharpCodeGenerator_RenderTokens_RenderWarningToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
@@ -3777,32 +2923,6 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
                 PlaceholderChildrenDictionary.Clear();
             }
 
-        }
-
-        public T4CSharpCodeGeneratorBase RootTemplate { get; set; }
-
-        public override void Write(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.Write(textToAppend);
-            }
-            else
-            {
-                base.Write(textToAppend);
-            }
-        }
-
-        public override void WriteLine(string textToAppend)
-        {
-            if (RootTemplate != null)
-            {
-                RootTemplate.WriteLine(textToAppend);
-            }
-            else
-            {
-                base.WriteLine(textToAppend);
-            }
         }
 
         public IRenderWarningToken<TokenParserState> Model { get; set; }
