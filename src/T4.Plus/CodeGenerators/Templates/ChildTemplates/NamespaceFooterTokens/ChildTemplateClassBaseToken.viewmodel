@@ -1,0 +1,8 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.ViewModel" #>
+<#@ copyPropertiesToViewModel enabled="false" #>
+<#@ templateContext #>
+<#+
+        public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
+        public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
+#>

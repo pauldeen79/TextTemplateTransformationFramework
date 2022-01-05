@@ -3,7 +3,6 @@
 <#@ addChildTemplateCode override="true" clearFieldsOnOverride="true" #>
 <#@ additionalActionDelegate #>
 <#@ useTemplateRuntimeBaseClass #>
-<#@ addExcludeFromCodeCoverageAttributes #>
 <#@ output extension="cs" #>
 <#@ assembly name="TextTemplateTransformationFramework.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
 <#@ assembly name="TextTemplateTransformationFramework.T4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>

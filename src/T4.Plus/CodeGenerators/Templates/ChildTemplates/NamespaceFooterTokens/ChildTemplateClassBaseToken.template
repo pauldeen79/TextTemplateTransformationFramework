@@ -1,0 +1,34 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.Template" #>
+<#@ model type="IChildTemplateClassBaseToken<TokenParserState>" #>
+<#@ viewModel name="T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.ViewModel" #>
+<#@ RenderChildTemplate model="ViewModel.GeneratorModel" name="T4CSharpCodeGenerator.GeneratedCodeAttribute.Template" #>
+<#@ RenderChildTemplate model="ViewModel.RootTemplate" name="T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>
+    public class <#= Model.ClassName #>Child : <#= Model.ClassName #>
+    {
+        public <#= RootTemplate.TemplateClassName #> RootTemplate { get; set; }
+
+        public override void Write(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.Write(textToAppend);
+            }
+            else
+            {
+                base.Write(textToAppend);
+            }
+        }
+
+        public override void WriteLine(string textToAppend)
+        {
+            if (RootTemplate != null)
+            {
+                RootTemplate.WriteLine(textToAppend);
+            }
+            else
+            {
+                base.WriteLine(textToAppend);
+            }
+        }
+    }

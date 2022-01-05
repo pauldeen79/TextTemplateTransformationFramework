@@ -21,5 +21,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Models
         [Description("Accessor for RegisterChildTemlpate and RegisterViewModel methods on CompositionRoot class")]
         [DefaultValue("protected")]
         public string ComposableRegistrationMethodsAccessor { get; set; }
+
+        [Description("Optional custom base class for child templates")]
+        public string BaseClass { get; set; }
     }
 }

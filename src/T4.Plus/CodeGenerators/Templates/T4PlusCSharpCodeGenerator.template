@@ -3,9 +3,8 @@
 <#@ additionalActionDelegate skipInitializationCode="true" #>
 <#@ skipInitializationCode #>
 <#@ overrideTemplate #>
-<#@ addChildTemplateCode override="true" #>
+<#@ addChildTemplateCode override="true" baseClass="T4CSharpCodeGeneratorBase" #>
 <#@ initializeBase additionalActionDelegate="true" #>
-<#@ addExcludeFromCodeCoverageAttributes #>
 <#@ output extension="cs" #>
 <#@ assembly name="TextTemplateTransformationFramework.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
 <#@ assembly name="TextTemplateTransformationFramework.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
@@ -14,7 +13,7 @@
 <#@ assembly name="Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" #>
 <#@ assembly hintPath="$(BasePath)T4.Plus\bin\Debug\netstandard2.0" #>
 <#@ includes Path="$(BasePath)T4.Plus\CodeGenerators\Templates\Includes" SearchPattern="*.ttinclude" Recurse="true" #>
-<#@ registerChildTemplates path="$(BasePath)T4.Plus\CodeGenerators\Templates\ChildTemplates" searchPattern="*.template" recurse="true" baseClass="T4CSharpCodeGeneratorBase" #>
+<#@ registerChildTemplates path="$(BasePath)T4.Plus\CodeGenerators\Templates\ChildTemplates" searchPattern="*.template" recurse="true" baseClass="T4CSharpCodeGeneratorBaseChild" #>
 <#@ registerViewModels path="$(BasePath)T4.Plus\CodeGenerators\Templates\ChildTemplates" searchPattern="*.viewmodel" recurse="true" #>
 <#@ import namespace="TextTemplateTransformationFramework.Common.Contracts" #>
 <#@ import namespace="TextTemplateTransformationFramework.Common.Contracts.TemplateTokens" #>

@@ -71,7 +71,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 (
                     model.SectionContext,
                     childTemplateName,
-                    model.BaseClass.WhenNullOrEmpty(rootClassName),
+                    model.BaseClass.WhenNullOrEmpty($"{rootClassName}Child"),
                     rootClassName,
                     modelTypeName,
                     useModelForRoutingOnly,

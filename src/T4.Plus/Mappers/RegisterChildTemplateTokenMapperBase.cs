@@ -58,7 +58,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                         (
                             context,
                             model.Name,
-                            model.BaseClass.WhenNullOrEmpty(context.GetRootClassName()),
+                            model.BaseClass.WhenNullOrEmpty($"{context.GetRootClassName()}Child"),
                             context.GetRootClassName(),
                             model.ModelTypeName.WhenNullOrEmpty(context.GetChildTemplateTokens(FileContentsProvider, model.FileName).ChildTokens.GetModelTypeName),
                             model.UseModelForRoutingOnly,
