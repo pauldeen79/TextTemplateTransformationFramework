@@ -19,8 +19,36 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
             where TState : class
             => Utilities.Pattern.Match
             (
-                Utilities.Clause.Create<int, IRenderToken<TState>>(i => i == ModePosition.Render,
-                                                                   _ => new RenderChildTemplateToken<TState>(context, model))
+                Utilities.Clause.Create<int, IRenderToken<TState>>
+                (
+                    i => i == ModePosition.Render,
+                    _ => new RenderChildTemplateToken<TState>
+                    (
+                        context,
+                        model.Name,
+                        model.NameIsLiteral,
+                        model.Model,
+                        model.ModelIsLiteral,
+                        model.Enumerable,
+                        model.SilentlyContinueOnError,
+                        model.SeparatorTemplateName,
+                        model.SeparatorTemplateNameIsLiteral,
+                        model.HeaderTemplateName,
+                        model.HeaderTemplateNameIsLiteral,
+                        model.HeaderCondition,
+                        model.FooterTemplateName,
+                        model.FooterTemplateNameIsLiteral,
+                        model.FooterCondition,
+                        model.CustomResolverDelegate,
+                        model.CustomResolverDelegateIsLiteral,
+                        model.ResolverDelegateModel,
+                        model.ResolverDelegateModelIsLiteral,
+                        model.CustomRenderChildTemplateDelegate,
+                        model.CustomRenderChildTemplateDelegateIsLiteral,
+                        model.CustomTemplateNameDelegate,
+                        model.CustomTemplateNameDelegateIsLiteral
+                    )
+                )
             )
             .Default(() => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode))
             .Evaluate(context.GetModePosition());
