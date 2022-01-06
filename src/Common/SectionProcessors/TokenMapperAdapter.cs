@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using TextTemplateTransformationFramework.Common.Attributes;
+using TextTemplateTransformationFramework.Common.Data;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts.TemplateSectionProcessors;
 using TextTemplateTransformationFramework.Common.Extensions;
@@ -93,19 +94,19 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
                     ),
                 model => SectionProcessResult.Create
                 (
-                    context,
-                    model,
-                    _isValidDelegate,
-                    () => _mapMethod.Invoke
+                    new SectionProcessResultData<TState>()
+                        .WithContext(context)
+                        .WithModel(model)
+                        .WithIsValidDelegate(_isValidDelegate)
+                        .WithMapDelegate(() => _mapMethod.Invoke
                         (
                             _mapperInstance,
                             new[] { context, model }
-                        ),
-                    null,
-                    _passThrough,
-                    _tokensAreForRootTemplateSection,
-                    existingResult,
-                    TemplateCustomDirectiveName.ToCamelCase() + " directive"
+                        ))
+                        .WithPassThrough(_passThrough)
+                        .WithTokensAreForRootTemplateSection(_tokensAreForRootTemplateSection)
+                        .WithExistingResult(existingResult)
+                        .WithDirectiveName(TemplateCustomDirectiveName.ToCamelCase() + " directive")
                 )
             );
 

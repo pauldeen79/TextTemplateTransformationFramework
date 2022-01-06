@@ -1,6 +1,7 @@
 ﻿using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.RenderTokens;
+using TextTemplateTransformationFramework.T4.Plus.Models;
 
 namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.RenderTokens
 {
@@ -10,52 +11,31 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
         public RenderChildTemplateToken
         (
             SectionContext<TState> context,
-            string childTemplateName = null,
-            bool childTemplateNameIsLiteral = true,
-            string model = null,
-            bool modelIsLiteral = false,
-            bool? enumerable = null,
-            bool silentlyContinueOnError = false,
-            string separatorTemplateName = null,
-            bool separatorTemplateNameIsLiteral = true,
-            string headerTemplateName = null,
-            bool headerTemplateNameIsLiteral = true,
-            string headerCondition = null,
-            string footerTemplateName = null,
-            bool footerTemplateNameIsLiteral = true,
-            string footerCondition = null,
-            string customResolverDelegateExpression = null,
-            bool customResolverDelegateExpressionIsLiteral = true,
-            string resolverDelegateModel = null,
-            bool resolverDelegateModelIsLiteral = false,
-            string customRenderChildTemplateDelegateExpression = null,
-            bool customRenderChildTemplateDelegateExpressionIsLiteral = true,
-            string customTemplateNameDelegateExpression = null,
-            bool customTemplateNameDelegateExpressionIsLiteral = true)
+            RenderChildTemplateDirectiveModel model)
             : base(context)
         {
-            ChildTemplateName = childTemplateName;
-            ChildTemplateNameIsLiteral = childTemplateNameIsLiteral;
-            Model = model;
-            ModelIsLiteral = modelIsLiteral;
-            Enumerable = enumerable;
-            SilentlyContinueOnError = silentlyContinueOnError;
-            SeparatorTemplateName = separatorTemplateName;
-            SeparatorTemplateNameIsLiteral = separatorTemplateNameIsLiteral;
-            HeaderTemplateName = headerTemplateName;
-            HeaderTemplateNameIsLiteral = headerTemplateNameIsLiteral;
-            HeaderCondition = headerCondition;
-            FooterTemplateName = footerTemplateName;
-            FooterTemplateNameIsLiteral = footerTemplateNameIsLiteral;
-            FooterCondition = footerCondition;
-            CustomResolverDelegateExpression = customResolverDelegateExpression;
-            CustomResolverDelegateExpressionIsLiteral = customResolverDelegateExpressionIsLiteral;
-            CustomRenderChildTemplateDelegateExpression = customRenderChildTemplateDelegateExpression;
-            CustomRenderChildTemplateDelegateExpressionIsLiteral = customRenderChildTemplateDelegateExpressionIsLiteral;
-            ResolverDelegateModel = resolverDelegateModel;
-            ResolverDelegateModelIsLiteral = resolverDelegateModelIsLiteral;
-            CustomTemplateNameDelegateExpression = customTemplateNameDelegateExpression;
-            CustomTemplateNameDelegateExpressionIsLiteral = customTemplateNameDelegateExpressionIsLiteral;
+            ChildTemplateName = model.Name;
+            ChildTemplateNameIsLiteral = model.NameIsLiteral;
+            Model = model.Model;
+            ModelIsLiteral = model.ModelIsLiteral;
+            Enumerable = model.Enumerable;
+            SilentlyContinueOnError = model.SilentlyContinueOnError;
+            SeparatorTemplateName = model.SeparatorTemplateName;
+            SeparatorTemplateNameIsLiteral = model.SeparatorTemplateNameIsLiteral;
+            HeaderTemplateName = model.HeaderTemplateName;
+            HeaderTemplateNameIsLiteral = model.HeaderTemplateNameIsLiteral;
+            HeaderCondition = model.HeaderCondition;
+            FooterTemplateName = model.FooterTemplateName;
+            FooterTemplateNameIsLiteral = model.FooterTemplateNameIsLiteral;
+            FooterCondition = model.FooterCondition;
+            CustomResolverDelegateExpression = model.CustomResolverDelegate;
+            CustomResolverDelegateExpressionIsLiteral = model.CustomResolverDelegateIsLiteral;
+            CustomRenderChildTemplateDelegateExpression = model.CustomRenderChildTemplateDelegate;
+            CustomRenderChildTemplateDelegateExpressionIsLiteral = model.CustomRenderChildTemplateDelegateIsLiteral;
+            ResolverDelegateModel = model.ResolverDelegateModel;
+            ResolverDelegateModelIsLiteral = model.ResolverDelegateModelIsLiteral;
+            CustomTemplateNameDelegateExpression = model.CustomTemplateNameDelegate;
+            CustomTemplateNameDelegateExpressionIsLiteral = model.CustomTemplateNameDelegateIsLiteral;
         }
 
         public string ChildTemplateName { get; }
