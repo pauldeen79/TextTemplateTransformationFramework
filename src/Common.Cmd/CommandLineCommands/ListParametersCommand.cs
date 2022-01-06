@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
+using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -39,10 +41,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
 #if DEBUG
-                    if (debuggerOption.HasValue())
-                    {
-                        Debugger.Launch();
-                    }
+                    debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
 
@@ -63,10 +62,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {
                         app.Error.WriteLine("Compiler errors:");
-                        foreach (var error in result.CompilerErrors.Select(err => err.ToString()))
-                        {
-                            app.Error.WriteLine(error);
-                        }
+                        result.CompilerErrors.Select(err => err.ToString()).ToList().ForEach(app.Error.WriteLine);
                         return;
                     }
 
@@ -77,10 +73,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    foreach (var parameter in result.Parameters.Select(p => $"{p.Name} ({p.Type.FullName})"))
-                    {
-                        app.Out.WriteLine(parameter);
-                    }
+                    result.Parameters.Select(p => $"{p.Name} ({p.Type.FullName})").ForEach(app.Out.WriteLine);
                 });
             });
         }

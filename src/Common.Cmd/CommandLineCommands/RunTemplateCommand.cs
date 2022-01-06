@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
+using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -41,10 +43,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
 #if DEBUG
-                    if (debuggerOption.HasValue())
-                    {
-                        Debugger.Launch();
-                    }
+                    debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
                     var parameters = parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
@@ -66,10 +65,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {
                         app.Error.WriteLine("Compiler errors:");
-                        foreach (var error in result.CompilerErrors.Select(err => err.ToString()))
-                        {
-                            app.Error.WriteLine(error);
-                        }
+                        result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
                         return;
                     }
 
@@ -84,24 +80,29 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var output = outputOption.Value();
                     var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
-                    if (!string.IsNullOrEmpty(diagnosticDumpOutput))
-                    {
-                        _fileContentsProvider.WriteFileContents(diagnosticDumpOutput, result.DiagnosticDump);
-                        app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
-                    }
-
-                    if (!string.IsNullOrEmpty(output))
-                    {
-                        _fileContentsProvider.WriteFileContents(output, templateOutput);
-                        app.Out.WriteLine($"Written template output to file: {output}");
-                    }
-                    else
-                    {
-                        app.Out.WriteLine("Template output:");
-                        app.Out.WriteLine(templateOutput);
-                    }
+                    WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput);
                 });
             });
+        }
+
+        private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput)
+        {
+            if (!string.IsNullOrEmpty(diagnosticDumpOutput))
+            {
+                _fileContentsProvider.WriteFileContents(diagnosticDumpOutput, result.DiagnosticDump);
+                app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
+            }
+
+            if (!string.IsNullOrEmpty(output))
+            {
+                _fileContentsProvider.WriteFileContents(output, templateOutput);
+                app.Out.WriteLine($"Written template output to file: {output}");
+            }
+            else
+            {
+                app.Out.WriteLine("Template output:");
+                app.Out.WriteLine(templateOutput);
+            }
         }
     }
 }

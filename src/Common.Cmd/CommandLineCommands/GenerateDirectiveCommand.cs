@@ -1,8 +1,8 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.Linq;
+using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
+using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
 
@@ -38,10 +38,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
 #if DEBUG
-                    if (debuggerOption.HasValue())
-                    {
-                        Debugger.Launch();
-                    }
+                    debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var directiveName = directiveNameOption.Value();
                     if (string.IsNullOrEmpty(directiveName))
