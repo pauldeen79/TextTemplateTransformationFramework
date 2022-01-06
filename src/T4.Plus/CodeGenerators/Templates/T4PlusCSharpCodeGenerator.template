@@ -25,7 +25,6 @@
 <#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.BaseClassFooterTokens" #>
 <#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ChildTemplateInitializeCodeTokens" #>
 <#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ChildTemplateRenderCodeTokens" #>
-<#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.CompositionRootConstructorTokens" #>
 <#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.InitializeTokens" #>
 <#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.NamespaceFooterTokens" #>
 <#@ import namespace="TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.RenderTokens" #>

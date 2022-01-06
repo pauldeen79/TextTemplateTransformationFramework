@@ -8,7 +8,6 @@ using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.BaseCla
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.ChildTemplateInitializeCodeTokens;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.InitializeTokens;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.NamespaceFooterTokens;
-using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.TokenConverterTokens;
 using TextTemplateTransformationFramework.T4.Plus.Extensions;
 using TextTemplateTransformationFramework.T4.Plus.Models;
 using Utilities.Extensions;
@@ -37,35 +36,18 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 yield return new ChildTemplateClassBaseToken<TState>(context, model.BaseClass.WhenNullOrEmpty($"{context.GetClassName()}Base"));
                 if (!model.Override)
                 {
-                    if (model.Composable)
-                    {
-                        yield return new AddComposableChildTemplateCodeToken<TState>(context);
-                    }
-                    else
-                    {
-                        yield return new AddChildTemplateCodeToken<TState>(context);
-                        yield return new ClearPlaceholderTemplatesFieldToken<TState>(context);
-                        yield return new ClearChildTemplatesFieldToken<TState>(context);
-                    }
+                    yield return new AddChildTemplateCodeToken<TState>(context);
+                    yield return new ClearPlaceholderTemplatesFieldToken<TState>(context);
+                    yield return new ClearChildTemplatesFieldToken<TState>(context);
                 }
-                else if (model.ClearFieldsOnOverride && !model.Composable)
+                else if (model.ClearFieldsOnOverride)
                 {
                     yield return new ClearPlaceholderTemplatesFieldToken<TState>(context);
                     yield return new ClearChildTemplatesFieldToken<TState>(context);
                 }
 
-                if (model.Composable)
-                {
-                    yield return new CompositionRootClassToken<TState>(context,
-                                                                       context.GetClassName(),
-                                                                       model.ComposableRegistrationMethodsAccessor);
-                    yield return new RegisterChildObjectTokenConverterToken<TState>(context);
-                }
-                else
-                {
-                    yield return new RouteChildTemplatesFieldToRootTemplateToken<TState>(context);
-                    yield return new RouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken<TState>(context);
-                }
+                yield return new RouteChildTemplatesFieldToRootTemplateToken<TState>(context);
+                yield return new RouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken<TState>(context);
             }
         }
     }

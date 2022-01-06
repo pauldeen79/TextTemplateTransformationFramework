@@ -23,7 +23,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.BaseClassFooterTokens;
     using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ChildTemplateInitializeCodeTokens;
     using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.ChildTemplateRenderCodeTokens;
-    using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.CompositionRootConstructorTokens;
     using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.InitializeTokens;
     using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.NamespaceFooterTokens;
     using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.RenderTokens;
@@ -64,7 +63,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.RenderChildTemplateToken.Template", () => new T4PlusCSharpCodeGenerator_RenderChildTemplateToken_Template(), typeof(IRenderChildTemplateToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.RenderTemplateCode.Template", () => new T4PlusCSharpCodeGenerator_RenderTemplateCode_Template());
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.BaseClassFooterTokens.AddChildTemplateCodeToken.Template", () => new T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AddChildTemplateCodeToken_Template(), typeof(IAddChildTemplateCodeToken<TokenParserState>));
-            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.BaseClassFooterTokens.AddComposableChildTemplateCodeToken.Template", () => new T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AddComposableChildTemplateCodeToken_Template(), typeof(IAddComposableChildTemplateCodeToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.BaseClassFooterTokens.AllowNullExpressionsToken.Template", () => new T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AllowNullExpressionsToken_Template(), typeof(IAllowNullExpressionsToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.BaseClassFooterTokens.BaseClassFooterCodeToken.Template", () => new T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterCodeToken_Template(), typeof(IBaseClassFooterCodeToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.BaseClassFooterTokens.BaseClassFooterErrorToken.Template", () => new T4PlusCSharpCodeGenerator_BaseClassFooterTokens_BaseClassFooterErrorToken_Template(), typeof(IBaseClassFooterErrorToken<TokenParserState>));
@@ -76,10 +74,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.ChildTemplateInitializeCodeTokens.RouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken.Template", () => new T4PlusCSharpCodeGenerator_ChildTemplateInitializeCodeTokens_RouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken_Template(), typeof(IRouteChildPlaceholderChildrenDictionaryFieldToRootTemplateToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.ChildTemplateInitializeCodeTokens.RouteChildTemplatesFieldToRootTemplateToken.Template", () => new T4PlusCSharpCodeGenerator_ChildTemplateInitializeCodeTokens_RouteChildTemplatesFieldToRootTemplateToken_Template(), typeof(IRouteChildTemplatesFieldToRootTemplateToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.ChildTemplateRenderCodeTokens.TemplateContext.Template", () => new T4PlusCSharpCodeGenerator_ChildTemplateRenderCodeTokens_TemplateContext_Template(), typeof(IInitializeTemplateContextToken<TokenParserState>));
-            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.CompositionRootConstructorTokens.CodeToken.Template", () => new T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_CodeToken_Template(), typeof(ICodeToken<TokenParserState>));
-            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.CompositionRootConstructorTokens.RegisterComposableChildTemplateToken.Template", () => new T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_RegisterComposableChildTemplateToken_Template(), typeof(IRegisterComposableChildTemplateToken<TokenParserState>));
-            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.CompositionRootConstructorTokens.RegisterComposableViewModelToken.Template", () => new T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_RegisterComposableViewModelToken_Template(), typeof(IRegisterComposableViewModelToken<TokenParserState>));
-            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.CompositionRootFeatureTokens.CompositionRootFeatureCodeToken.Template", () => new T4PlusCSharpCodeGenerator_CompositionRootFeatureTokens_CompositionRootFeatureCodeToken_Template(), typeof(ICodeToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.InitializeTokens.CallAdditionalActionDelegateToken.Template", () => new T4PlusCSharpCodeGenerator_InitializeTokens_CallAdditionalActionDelegateToken_Template(), typeof(ICallAdditionalActionDelegateToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.InitializeTokens.ClearChildTemplatesFieldToken.Template", () => new T4PlusCSharpCodeGenerator_InitializeTokens_ClearChildTemplatesFieldToken_Template(), typeof(IClearChildTemplatesFieldToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.InitializeTokens.ClearErrorsToken.Template", () => new T4PlusCSharpCodeGenerator_InitializeTokens_ClearErrorsToken_Template(), typeof(IClearErrorsToken<TokenParserState>));
@@ -95,7 +89,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_Template(), typeof(IChildTemplateClassBaseToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_Template(), typeof(IChildTemplateClassToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildViewModelClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_Template(), typeof(IChildViewModelNamespaceFooterClassToken<TokenParserState>));
-            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_Template(), typeof(ICompositionRootClassToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_Template(), typeof(IPlaceholderClassToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.TemplateContextToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_TemplateContextToken_Template(), typeof(ITemplateContextToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.TemplateFileManagerToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_TemplateFileManagerToken_Template(), typeof(ITemplateFileManagerToken<TokenParserState>));
@@ -106,7 +99,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassBaseToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel());
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildTemplateClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_ViewModel(), typeof(IChildTemplateClassToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildViewModelClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_ViewModel(), typeof(IChildViewModelNamespaceFooterClassToken<TokenParserState>));
-            RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel(), typeof(ICompositionRootClassToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_ViewModel(), typeof(IPlaceholderClassToken<TokenParserState>));
             bool enableAdditionalActionDelegateValueAcquired = false;
             if (this.Session != null && this.Session.ContainsKey("EnableAdditionalActionDelegate") && this.Session["EnableAdditionalActionDelegate"] != null)
@@ -1468,89 +1460,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AddComposableChildTemplateCodeToken_Template : T4CSharpCodeGeneratorBaseChild
-    {
-        public virtual void Render(global::System.Text.StringBuilder builder)
-        {
-            var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"        #region Child templates
-"));
-            
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.RenderTemplateCode.Template");
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.RenderChildTemplateCode.Template");
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            Write(this.ToStringHelper.ToStringWithCulture(@"        public Func<string, object, bool, global::System.Func<string, string, global::System.Type, object, bool>, Action<string>, object> GetChildTemplateDelegate { get; set; }
-
-        protected virtual object GetChildTemplate(string templateName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
-        {
-            return GetChildTemplateDelegate == null ? null : GetChildTemplateDelegate.Invoke(templateName, model, silentlyContinueOnError, customResolverDelegate, errorMessage => Error(errorMessage));
-        }
-
-        public Func<string, object, bool, global::System.Func<string, string, global::System.Type, object, bool>, Action<string>, object> GetViewModelDelegate { get; set; }
-
-        protected virtual object GetViewModel(string viewModelName, object model = null, bool silentlyContinueOnError = false, global::System.Func<string, string, global::System.Type, object, bool> customResolverDelegate = null)
-        {
-            return GetViewModelDelegate == null ? null : GetViewModelDelegate.Invoke(viewModelName, model, silentlyContinueOnError, customResolverDelegate, errorMessage => Error(errorMessage));
-        }
-
-"));
-            
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.PlaceholderCode.Template");
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.ConvertTypeCode.Template");
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            Write(this.ToStringHelper.ToStringWithCulture(@"        #endregion
-"));
-
-            if (builder != null) this.GenerationEnvironment = backup;
-        }
-
-
-        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
-        {
-            this.Errors.Clear();
-            this.GenerationEnvironment.Clear();
-            if (Session == null)
-            {
-                Session = new global::System.Collections.Generic.Dictionary<string, object>();
-            }
-            if (RootTemplate != null)
-            {
-                ChildTemplates = RootTemplate.ChildTemplates;
-                ViewModels = RootTemplate.ViewModels;
-            }
-            else
-            {
-                ChildTemplates.Clear();
-                ViewModels.Clear();
-            }
-            if (RootTemplate != null)
-            {
-                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
-            }
-            else
-            {
-                PlaceholderChildrenDictionary.Clear();
-            }
-
-        }
-
-        public IAddComposableChildTemplateCodeToken<TokenParserState> Model { get; set; }
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
     public class T4PlusCSharpCodeGenerator_BaseClassFooterTokens_AllowNullExpressionsToken_Template : T4CSharpCodeGeneratorBaseChild
     {
         public virtual void Render(global::System.Text.StringBuilder builder)
@@ -2124,218 +2033,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         }
 
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_CodeToken_Template : T4CSharpCodeGeneratorBaseChild
-    {
-        public virtual void Render(global::System.Text.StringBuilder builder)
-        {
-            var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            "));
-            
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
-
-
-            if (builder != null) this.GenerationEnvironment = backup;
-        }
-
-
-        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
-        {
-            this.Errors.Clear();
-            this.GenerationEnvironment.Clear();
-            if (Session == null)
-            {
-                Session = new global::System.Collections.Generic.Dictionary<string, object>();
-            }
-            if (RootTemplate != null)
-            {
-                ChildTemplates = RootTemplate.ChildTemplates;
-                ViewModels = RootTemplate.ViewModels;
-            }
-            else
-            {
-                ChildTemplates.Clear();
-                ViewModels.Clear();
-            }
-            if (RootTemplate != null)
-            {
-                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
-            }
-            else
-            {
-                PlaceholderChildrenDictionary.Clear();
-            }
-
-        }
-
-        public ICodeToken<TokenParserState> Model { get; set; }
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_RegisterComposableChildTemplateToken_Template : T4CSharpCodeGeneratorBaseChild
-    {
-        public virtual void Render(global::System.Text.StringBuilder builder)
-        {
-            var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            RegisterChildTemplate("));
-            Write(this.ToStringHelper.ToStringWithCulture(Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral)));
-            Write(this.ToStringHelper.ToStringWithCulture(@", () => new "));
-            Write(this.ToStringHelper.ToStringWithCulture(Model.ChildTemplateName.Sanitize()));
-            Write(this.ToStringHelper.ToStringWithCulture(@"()"));
-            if (!string.IsNullOrEmpty(Model.ModelTypeName) && Model.UseForRouting) {
-
-            Write(this.ToStringHelper.ToStringWithCulture(@", typeof("));
-            Write(this.ToStringHelper.ToStringWithCulture(Model.ModelTypeName));
-            Write(this.ToStringHelper.ToStringWithCulture(@")"));
-            }
-
-            Write(this.ToStringHelper.ToStringWithCulture(@");
-"));
-
-            if (builder != null) this.GenerationEnvironment = backup;
-        }
-
-
-        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
-        {
-            this.Errors.Clear();
-            this.GenerationEnvironment.Clear();
-            if (Session == null)
-            {
-                Session = new global::System.Collections.Generic.Dictionary<string, object>();
-            }
-            if (RootTemplate != null)
-            {
-                ChildTemplates = RootTemplate.ChildTemplates;
-                ViewModels = RootTemplate.ViewModels;
-            }
-            else
-            {
-                ChildTemplates.Clear();
-                ViewModels.Clear();
-            }
-            if (RootTemplate != null)
-            {
-                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
-            }
-            else
-            {
-                PlaceholderChildrenDictionary.Clear();
-            }
-
-        }
-
-        public IRegisterComposableChildTemplateToken<TokenParserState> Model { get; set; }
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_CompositionRootConstructorTokens_RegisterComposableViewModelToken_Template : T4CSharpCodeGeneratorBaseChild
-    {
-        public virtual void Render(global::System.Text.StringBuilder builder)
-        {
-            var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            RegisterViewModel("));
-            Write(this.ToStringHelper.ToStringWithCulture(Model.ViewModelName.FormatLiteral(Model.ViewModelNameIsLiteral)));
-            Write(this.ToStringHelper.ToStringWithCulture(@", () => new "));
-            Write(this.ToStringHelper.ToStringWithCulture(Model.ViewModelName.Sanitize()));
-            Write(this.ToStringHelper.ToStringWithCulture(@"()"));
-            if (!string.IsNullOrEmpty(Model.ModelTypeName) && Model.UseForRouting) {
-
-            Write(this.ToStringHelper.ToStringWithCulture(@", typeof("));
-            Write(this.ToStringHelper.ToStringWithCulture(Model.ModelTypeName));
-            Write(this.ToStringHelper.ToStringWithCulture(@")"));
-            }
-
-            Write(this.ToStringHelper.ToStringWithCulture(@");
-"));
-
-            if (builder != null) this.GenerationEnvironment = backup;
-        }
-
-
-        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
-        {
-            this.Errors.Clear();
-            this.GenerationEnvironment.Clear();
-            if (Session == null)
-            {
-                Session = new global::System.Collections.Generic.Dictionary<string, object>();
-            }
-            if (RootTemplate != null)
-            {
-                ChildTemplates = RootTemplate.ChildTemplates;
-                ViewModels = RootTemplate.ViewModels;
-            }
-            else
-            {
-                ChildTemplates.Clear();
-                ViewModels.Clear();
-            }
-            if (RootTemplate != null)
-            {
-                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
-            }
-            else
-            {
-                PlaceholderChildrenDictionary.Clear();
-            }
-
-        }
-
-        public IRegisterComposableViewModelToken<TokenParserState> Model { get; set; }
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_CompositionRootFeatureTokens_CompositionRootFeatureCodeToken_Template : T4CSharpCodeGeneratorBaseChild
-    {
-        public virtual void Render(global::System.Text.StringBuilder builder)
-        {
-            var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"        "));
-            
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
-
-
-            if (builder != null) this.GenerationEnvironment = backup;
-        }
-
-
-        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
-        {
-            this.Errors.Clear();
-            this.GenerationEnvironment.Clear();
-            if (Session == null)
-            {
-                Session = new global::System.Collections.Generic.Dictionary<string, object>();
-            }
-            if (RootTemplate != null)
-            {
-                ChildTemplates = RootTemplate.ChildTemplates;
-                ViewModels = RootTemplate.ViewModels;
-            }
-            else
-            {
-                ChildTemplates.Clear();
-                ViewModels.Clear();
-            }
-            if (RootTemplate != null)
-            {
-                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
-            }
-            else
-            {
-                PlaceholderChildrenDictionary.Clear();
-            }
-
-        }
-
-        public ICodeToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
@@ -3298,230 +2995,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 
         public IChildViewModelNamespaceFooterClassToken<TokenParserState> Model { get; set; }
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_Template : T4CSharpCodeGeneratorBaseChild
-    {
-        public virtual void Render(global::System.Text.StringBuilder builder)
-        {
-            var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
-            
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel);
-
-            
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"    public class "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
-            Write(this.ToStringHelper.ToStringWithCulture(@"CompositionRoot"));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.BaseClass));
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-    {
-        public "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
-            Write(this.ToStringHelper.ToStringWithCulture(@"CompositionRoot() : this(null, null, null, null)
-        {
-        }
-
-        public "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
-            Write(this.ToStringHelper.ToStringWithCulture(@"CompositionRoot(global::System.Func<Tuple<string, global::System.Func<object>, global::System.Type>, global::System.Tuple<string, global::System.Func<object>, global::System.Type>> childTemplateModifierDelegate, global::System.Func<Tuple<string, Func<object>, global::System.Type>, global::System.Tuple<string, global::System.Func<object>, global::System.Type>> viewModelModifierDelegate, global::System.Action<string, global::System.Func<object>, global::System.Type> registerChildTemplateDelegate = null, global::System.Action<string, global::System.Func<object>, global::System.Type> registerViewModelDelegate = null)"));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.BaseCallArguments));
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-        {
-"));
-            if (!ViewModel.HasBaseClass)
-   {
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"            ChildTemplates = new global::System.Collections.Generic.List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>>();
-            ViewModels = new global::System.Collections.Generic.List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>>();
-            ChildTemplateModifierDelegate = childTemplateModifierDelegate;
-            ViewModelModifierDelegate = viewModelModifierDelegate;
-            RegisterChildTemplateDelegate = registerChildTemplateDelegate;
-            RegisterViewModelDelegate = registerViewModelDelegate;
-"));
-            }
-
-            
-            RenderChildTemplate(null, ViewModel.CompositionRootConstructorCodeTokens, customResolverDelegate: ((T4PlusCSharpCodeGenerator)RootTemplate).CompositionRootConstructorCodeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"        }
-
-        public "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
-            Write(this.ToStringHelper.ToStringWithCulture(@" ResolveTemplate()
-        {
-            return new "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-            {
-                GetChildTemplateDelegate = GetChildTemplate,
-                GetViewModelDelegate = GetViewModel
-            };
-        }
-
-"));
-            if (!ViewModel.HasBaseClass)
-   {
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"        private global::System.Collections.Generic.List<Tuple<string, global::System.Func<object>, global::System.Type>> ChildTemplates { get; set; }
-        private global::System.Collections.Generic.List<Tuple<string, global::System.Func<object>, global::System.Type>> ViewModels { get; set; }
-        private global::System.Func<Tuple<string, Func<object>, global::System.Type>, global::System.Tuple<string, Func<object>, global::System.Type>> ChildTemplateModifierDelegate { get; set; }
-        private global::System.Func<Tuple<string, Func<object>, global::System.Type>, global::System.Tuple<string, Func<object>, global::System.Type>> ViewModelModifierDelegate { get; set; }
-        private global::System.Action<string, global::System.Func<object>, global::System.Type> RegisterChildTemplateDelegate { get; set; }
-        private global::System.Action<string, global::System.Func<object>, global::System.Type> RegisterViewModelDelegate { get; set; }
-
-        "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.RegistrationMethodsAccessor));
-            Write(this.ToStringHelper.ToStringWithCulture(@" void RegisterChildTemplate(string templateName, global::System.Func<object> templateDelegate, global::System.Type modelType = null)
-        {
-            var registration = new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(templateName, templateDelegate, modelType);
-            if (ChildTemplateModifierDelegate != null)
-            {
-                var newRegistration = ChildTemplateModifierDelegate(registration);
-                if (newRegistration != null)
-                {
-                    if (RegisterChildTemplateDelegate != null)
-                    {
-                        RegisterChildTemplateDelegate(templateName, newRegistration.Item2, modelType);
-                    }
-                    else
-                    {
-                        ChildTemplates.Add(new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(templateName, newRegistration.Item2, modelType));
-                    }
-                    return;
-                }
-            }
-
-            if (RegisterChildTemplateDelegate != null)
-            {
-                RegisterChildTemplateDelegate(registration.Item1, registration.Item2, registration.Item3);
-            }
-            else
-            {
-                ChildTemplates.Add(registration);
-            }
-        }
-
-        "));
-            Write(this.ToStringHelper.ToStringWithCulture(ViewModel.RegistrationMethodsAccessor));
-            Write(this.ToStringHelper.ToStringWithCulture(@" void RegisterViewModel(string viewModelName, global::System.Func<object> viewModelDelegate, global::System.Type modelType = null)
-        {
-            var registration = new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(viewModelName, viewModelDelegate, modelType);
-            if (ViewModelModifierDelegate != null)
-            {
-                var newRegistration = ViewModelModifierDelegate(registration);
-                if (newRegistration != null)
-                {
-                    if (RegisterChildTemplateDelegate != null)
-                    {
-                        RegisterViewModelDelegate(viewModelName, newRegistration.Item2, modelType);
-                    }
-                    else
-                    {
-                        ViewModels.Add(new global::System.Tuple<string, global::System.Func<object>, global::System.Type>(viewModelName, newRegistration.Item2, modelType));
-                    }
-                    return;
-                }
-            }
-
-            if (RegisterChildTemplateDelegate != null)
-            {
-                RegisterViewModelDelegate(registration.Item1, registration.Item2, registration.Item3);
-            }
-            else
-            {
-                ViewModels.Add(registration);
-            }
-        }
-
-        protected virtual object GetChildTemplate(string templateName, object model, bool silentlyContinueOnError, Func<string, string, Type, object, bool> customResolverDelegate, Action<string> errorDelegate)
-        {
-            return GetRegisteredObject(ChildTemplates, ""Child template"", templateName, model, silentlyContinueOnError, customResolverDelegate, errorDelegate);
-        }
-
-        protected virtual object GetViewModel(string viewModelName, object model, bool silentlyContinueOnError, Func<string, string, Type, object, bool> customResolverDelegate, Action<string> errorDelegate)
-        {
-            var returnValue = GetRegisteredObject(ViewModels, ""View model"", viewModelName, model, silentlyContinueOnError, customResolverDelegate, errorDelegate);
-            if (returnValue != null && model != null)
-            {
-                var modelProperty = returnValue.GetType().GetProperty(""Model"", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-                modelProperty?.SetValue(returnValue, model);
-            }
-            return returnValue;
-        }
-
-"));
-            
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.GetRegisteredObjectCode.Template");
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            }
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            
-            RenderChildTemplate(null, ViewModel.CompositionRootFeatureTokens, customResolverDelegate: ((T4PlusCSharpCodeGenerator)RootTemplate).CompositionRootFeatureTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
-
-            Write(this.ToStringHelper.ToStringWithCulture(@"
-"));
-            Write(this.ToStringHelper.ToStringWithCulture(@"    }
-"));
-
-            if (builder != null) this.GenerationEnvironment = backup;
-        }
-
-        protected T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel _viewModelField;
-
-        /// <summary>
-        /// Access the ViewModel parameter of the template.
-        /// </summary>
-        public T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel ViewModel
-        {
-            get
-            {
-                return this._viewModelField;
-            }
-            set
-            {
-                 this._viewModelField = value;
-            }
-        }
-
-        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
-        {
-            this.Errors.Clear();
-            this.GenerationEnvironment.Clear();
-            if (Session == null)
-            {
-                Session = new global::System.Collections.Generic.Dictionary<string, object>();
-            }
-            if (RootTemplate != null)
-            {
-                ChildTemplates = RootTemplate.ChildTemplates;
-                ViewModels = RootTemplate.ViewModels;
-            }
-            else
-            {
-                ChildTemplates.Clear();
-                ViewModels.Clear();
-            }
-            if (RootTemplate != null)
-            {
-                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
-            }
-            else
-            {
-                PlaceholderChildrenDictionary.Clear();
-            }
-            ViewModel = GetViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.CompositionRootClassToken.ViewModel") as T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel;
-
-        }
-
-        public ICompositionRootClassToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
@@ -4497,28 +3970,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public IEnumerable<ITemplateToken<TokenParserState>> ClassFooterTokens => Model.ChildTemplateTokens.OfType<IClassFooterToken<TokenParserState>>();
         public IEnumerable<ITemplateToken<TokenParserState>> ViewModelClassFooterTokens => Model.ChildTemplateTokens.OfType<IViewModelClassFooterToken<TokenParserState>>();
         public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
-
-        public TemplateInstanceContext TemplateContext { get; set; }
-
-    }
-    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
-    public class T4PlusCSharpCodeGenerator_NamespaceFooterTokens_CompositionRootClassToken_ViewModel
-    {
-        [global::System.ComponentModel.Browsable(false)]
-        public ICompositionRootClassToken<TokenParserState> Model { get; set; }
-        public T4PlusCSharpCodeGenerator RootTemplate => TemplateContext.GetContextByType<T4PlusCSharpCodeGenerator>();
-        public string ClassName => Model.ClassName.Sanitize();
-        public string RegistrationMethodsAccessor => Model.RegistrationMethodsAccessor;
-        public bool HasBaseClass => RootTemplate.Model.OfType<IBaseClassInheritsFromToken<TokenParserState>>().Any(t => t.ClassName == typeof(T4PlusComposableGeneratedTemplateBase).FullName);
-        public string BaseClass => !HasBaseClass
-            ? string.Empty
-            : " : " + nameof(T4PlusComposableGeneratedTemplateBaseCompositionRoot);
-        public string BaseCallArguments => !HasBaseClass
-            ? string.Empty
-            : " : base(childTemplateModifierDelegate, viewModelModifierDelegate, registerChildTemplateDelegate, registerViewModelDelegate)";
-        public GeneratorModel GeneratorModel => new GeneratorModel(RootTemplate.GeneratorName, RootTemplate.GeneratorVersion);
-        public IEnumerable<ITemplateToken<TokenParserState>> CompositionRootConstructorCodeTokens => RootTemplate.Model.OfType<ICompositionRootInitializeToken<TokenParserState>>();
-        public IEnumerable<ITemplateToken<TokenParserState>> CompositionRootFeatureTokens => RootTemplate.Model.OfType<ICompositionRootFeatureToken<TokenParserState>>();
 
         public TemplateInstanceContext TemplateContext { get; set; }
 

@@ -1,4 +1,0 @@
-﻿<#@ template language="c#" #>
-<#@ templateName value="T4PlusCSharpCodeGenerator.CompositionRootConstructorTokens.RegisterComposableChildTemplateToken.Template" #>
-<#@ model type="IRegisterComposableChildTemplateToken<TokenParserState>" #>
-            RegisterChildTemplate(<#= Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral) #>, () => new <#= Model.ChildTemplateName.Sanitize() #>()<# if (!string.IsNullOrEmpty(Model.ModelTypeName) && Model.UseForRouting) { #>, typeof(<#= Model.ModelTypeName #>)<# } #>);
