@@ -33,6 +33,18 @@ namespace TextTemplateTransformationFramework.T4.Plus
             var viewModelValueType = viewModelValue.GetType();
             SetPropertyValuesFromSession(viewModelValue, sessionPropertyValue, viewModelValueType);
 
+            SetViewModelDefaultValues(viewModelProperty, viewModelValue, sessionPropertyValue);
+
+            var templateContextProp = viewModelValueType.GetProperty("TemplateContext");
+            var templateContextProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("TemplateContext", Constants.BindingFlags);
+            if (templateContextProp != null && templateContextProperty != null)
+            {
+                templateContextProp.SetValue(viewModelValue, templateContextProperty.GetValue(context.TemplateCompilerOutput.Template));
+            }
+        }
+
+        private static void SetViewModelDefaultValues(PropertyInfo viewModelProperty, object viewModelValue, IDictionary<string, object> sessionPropertyValue)
+        {
             foreach (var info in viewModelProperty.PropertyType.GetProperties()
                 .Where(p => sessionPropertyValue?.ContainsKey(p.Name) != true)
                 .Select(p => new
@@ -47,17 +59,10 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     info.Property.SetValue(viewModelValue, new TemplateParameter { Name = info.Property.Name, Value = info.Attributes.First().Value }.ConvertType(viewModelValue.GetType()));
                 }
 
-                if (sessionPropertyValue?.ContainsKey(info.Property.Name) == false)
+                if (sessionPropertyValue != null && !sessionPropertyValue.ContainsKey(info.Property.Name))
                 {
                     sessionPropertyValue.Add(info.Property.Name, info.Attributes.First().Value);
                 }
-            }
-
-            var templateContextProp = viewModelValueType.GetProperty("TemplateContext");
-            var templateContextProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("TemplateContext", Constants.BindingFlags);
-            if (templateContextProp != null && templateContextProperty != null)
-            {
-                templateContextProp.SetValue(viewModelValue, templateContextProperty.GetValue(context.TemplateCompilerOutput.Template));
             }
         }
 
@@ -67,10 +72,14 @@ namespace TextTemplateTransformationFramework.T4.Plus
             {
                 return;
             }
+            
             foreach (var kvp in sessionPropertyValue.Where(kvp => kvp.Key != "Model"))
             {
                 var prop = viewModelValueType.GetProperty(kvp.Key);
-                if (prop != null && prop.GetSetMethod() == null) { continue; }
+                if (prop != null && prop.GetSetMethod() == null)
+                {
+                    continue;
+                }
                 prop?.SetValue(viewModelValue, new TemplateParameter { Name = kvp.Key, Value = kvp.Value }.ConvertType(viewModelValueType));
             }
         }
