@@ -28,49 +28,15 @@ namespace TextTemplateTransformationFramework.T4.Plus
             }
 
             //Second, set ViewModel property, if available
-            var viewModelProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("ViewModel");
-            if (viewModelProperty != null)
-            {
-                var viewModelValue = viewModelProperty.GetValue(context.TemplateCompilerOutput.Template);
-                if (viewModelValue == null)
-                {
-                    viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
-                    viewModelProperty.SetValue(context.TemplateCompilerOutput.Template, viewModelValue);
-                }
-
-                var sessionProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("Session");
-                var sessionPropertyValue = sessionProperty == null
-                    ? null
-                    : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
-
-                if (sessionPropertyValue != null)
-                {
-                    var viewModelValueType = viewModelValue.GetType();
-                    foreach (var kvp in sessionPropertyValue.Where(kvp => kvp.Key != "Model"))
-                    {
-                        var prop = viewModelValueType.GetProperty(kvp.Key);
-                        if (prop != null && prop.GetSetMethod() == null) { continue; }
-                        prop?.SetValue(viewModelValue, new TemplateParameter { Name = kvp.Key, Value = kvp.Value }.ConvertType(viewModelValueType));
-                    }
-                }
-
-                foreach (var info in viewModelProperty.PropertyType.GetProperties()
-                    .Where(p => sessionPropertyValue?.ContainsKey(p.Name) != true
-                        && p.CanWrite
-                        && p.GetSetMethod() != null)
-                    .Select(p => new
-                    {
-                        Property = p,
-                        Attributes = p.GetCustomAttributes(typeof(DefaultValueAttribute), true).Cast<DefaultValueAttribute>()
-                    }
-                    ).Where(p => p.Attributes?.Any() == true))
-                {
-                    info.Property.SetValue(viewModelValue, new TemplateParameter { Name = info.Property.Name, Value = info.Attributes.First().Value }.ConvertType(viewModelValue.GetType()));
-                }
-            }
+            SetViewModel(context);
 
             //Third, set properties for all parameters that are not set from the session
             //(in the current implementation of the code generator, this is done based on parameter tokens)
+            SetProperties(context);
+        }
+
+        private static void SetProperties(ITemplateProcessorContext<TState> context)
+        {
             var props = TypeDescriptor
                 .GetProperties(context.TemplateCompilerOutput.Template)
                 .OfType<PropertyDescriptor>()
@@ -85,6 +51,52 @@ namespace TextTemplateTransformationFramework.T4.Plus
                 }
 
                 prop.SetValue(context.TemplateCompilerOutput.Template, parameter.ConvertType(prop.PropertyType));
+            }
+        }
+
+        private static void SetViewModel(ITemplateProcessorContext<TState> context)
+        {
+            var viewModelProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("ViewModel");
+            if (viewModelProperty == null)
+            {
+                return;
+            }
+
+            var viewModelValue = viewModelProperty.GetValue(context.TemplateCompilerOutput.Template);
+            if (viewModelValue == null)
+            {
+                viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
+                viewModelProperty.SetValue(context.TemplateCompilerOutput.Template, viewModelValue);
+            }
+
+            var sessionProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("Session");
+            var sessionPropertyValue = sessionProperty == null
+                ? null
+                : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
+
+            if (sessionPropertyValue != null)
+            {
+                var viewModelValueType = viewModelValue.GetType();
+                foreach (var kvp in sessionPropertyValue.Where(kvp => kvp.Key != "Model"))
+                {
+                    var prop = viewModelValueType.GetProperty(kvp.Key);
+                    if (prop != null && prop.GetSetMethod() == null) { continue; }
+                    prop?.SetValue(viewModelValue, new TemplateParameter { Name = kvp.Key, Value = kvp.Value }.ConvertType(viewModelValueType));
+                }
+            }
+
+            foreach (var info in viewModelProperty.PropertyType.GetProperties()
+                .Where(p => sessionPropertyValue?.ContainsKey(p.Name) != true
+                    && p.CanWrite
+                    && p.GetSetMethod() != null)
+                .Select(p => new
+                {
+                    Property = p,
+                    Attributes = p.GetCustomAttributes(typeof(DefaultValueAttribute), true).Cast<DefaultValueAttribute>()
+                }
+                ).Where(p => p.Attributes?.Any() == true))
+            {
+                info.Property.SetValue(viewModelValue, new TemplateParameter { Name = info.Property.Name, Value = info.Attributes.First().Value }.ConvertType(viewModelValue.GetType()));
             }
         }
     }
