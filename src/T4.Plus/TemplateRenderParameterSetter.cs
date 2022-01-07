@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
@@ -24,28 +25,13 @@ namespace TextTemplateTransformationFramework.T4.Plus
             {
                 return;
             }
-            var viewModelValue = viewModelProperty.GetValue(context.TemplateCompilerOutput.Template);
-            if (viewModelValue == null)
-            {
-                viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
-                viewModelProperty.SetValue(context.TemplateCompilerOutput.Template, viewModelValue);
-            }
+            var viewModelValue = GetViewModelValue(context, viewModelProperty);
 
             var sessionProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("Session");
-            var sessionPropertyValue = sessionProperty == null
-                ? null
-                : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
+            var sessionPropertyValue = GetSessionPropertyValue(context, sessionProperty);
 
             var viewModelValueType = viewModelValue.GetType();
-            if (sessionPropertyValue != null)
-            {
-                foreach (var kvp in sessionPropertyValue.Where(kvp => kvp.Key != "Model"))
-                {
-                    var prop = viewModelValueType.GetProperty(kvp.Key);
-                    if (prop != null && prop.GetSetMethod() == null) { continue; }
-                    prop?.SetValue(viewModelValue, new TemplateParameter { Name = kvp.Key, Value = kvp.Value }.ConvertType(viewModelValueType));
-                }
-            }
+            SetPropertyValuesFromSession(viewModelValue, sessionPropertyValue, viewModelValueType);
 
             foreach (var info in viewModelProperty.PropertyType.GetProperties()
                 .Where(p => sessionPropertyValue?.ContainsKey(p.Name) != true)
@@ -73,6 +59,37 @@ namespace TextTemplateTransformationFramework.T4.Plus
             {
                 templateContextProp.SetValue(viewModelValue, templateContextProperty.GetValue(context.TemplateCompilerOutput.Template));
             }
+        }
+
+        private static void SetPropertyValuesFromSession(object viewModelValue, IDictionary<string, object> sessionPropertyValue, Type viewModelValueType)
+        {
+            if (sessionPropertyValue == null)
+            {
+                return;
+            }
+            foreach (var kvp in sessionPropertyValue.Where(kvp => kvp.Key != "Model"))
+            {
+                var prop = viewModelValueType.GetProperty(kvp.Key);
+                if (prop != null && prop.GetSetMethod() == null) { continue; }
+                prop?.SetValue(viewModelValue, new TemplateParameter { Name = kvp.Key, Value = kvp.Value }.ConvertType(viewModelValueType));
+            }
+        }
+
+        private static IDictionary<string, object> GetSessionPropertyValue(ITemplateProcessorContext<TState> context, PropertyInfo sessionProperty)
+            => sessionProperty == null
+                ? null
+                : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
+
+        private static object GetViewModelValue(ITemplateProcessorContext<TState> context, PropertyInfo viewModelProperty)
+        {
+            var viewModelValue = viewModelProperty.GetValue(context.TemplateCompilerOutput.Template);
+            if (viewModelValue == null)
+            {
+                viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
+                viewModelProperty.SetValue(context.TemplateCompilerOutput.Template, viewModelValue);
+            }
+
+            return viewModelValue;
         }
     }
 }
