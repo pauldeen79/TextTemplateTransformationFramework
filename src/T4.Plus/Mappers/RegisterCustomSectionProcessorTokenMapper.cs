@@ -5,14 +5,11 @@ using System.Linq;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Attributes;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens;
 using TextTemplateTransformationFramework.Common.Contracts.TokenMappers;
-using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.InitializeTokens;
 using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens;
-using TextTemplateTransformationFramework.T4.Plus.Extensions;
 using TextTemplateTransformationFramework.T4.Plus.Models;
 using Utilities.Extensions;
 
@@ -38,77 +35,18 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return GetTokens(context, model);
+            return GetTokens(model);
         }
 
-        private IEnumerable<ITemplateToken<TState>> GetTokens(SectionContext<TState> context, RegisterCustomSectionProcessorDirectiveModel<TState> instance)
+        private IEnumerable<ITemplateToken<TState>> GetTokens(RegisterCustomSectionProcessorDirectiveModel<TState> instance)
         {
-            if (string.IsNullOrEmpty(instance.File)
-                && !string.IsNullOrEmpty(instance.AssemblyName)
-                && instance.AssemblyName.EndsWith(".dll")
-                && !File.Exists(instance.AssemblyName))
+            if (CustomSectionProcessorDoesNotExist(instance))
             {
                 yield return new InitializeErrorToken<TState>(instance.SectionContext, string.Format("Custom section processor assembly [{0}] does not exist", instance.AssemblyName));
+                yield break;
             }
-            else if (!string.IsNullOrEmpty(instance.File))
-            {
-                //source code
-                var source = FileContentsProvider.GetFileContents(instance.File);
-                var referencedAssemblies = instance.SectionContext.ExistingTokens
-                    .GetTemplateTokensFromSections<TState, IReferenceToken<TState>>()
-                    .Select(r => r.Name)
-                    .Distinct()
-                    .ToArray();
-
-                var packageReferences = instance.SectionContext.ExistingTokens
-                    .GetTemplateTokensFromSections<TState, IPackageReferenceToken<TState>>()
-                    .Select(r => r.Name)
-                    .Distinct()
-                    .ToArray();
-
-                var tempPath = instance.SectionContext.ExistingTokens
-                    .GetTemplateTokensFromSections<TState, ITempPathToken<TState>>()
-                    .Distinct(t => t.Value)
-                    .LastOrDefault(); //design decision: when multiple values are found, use the last one
-
-                var compileOutput = TemplateCodeCompiler.Compile
-                    (
-                        context.GetTextTemplateProcessorContext(),
-                        new TemplateCodeOutput<TState>
-                        (
-                            Array.Empty<ITemplateToken<TState>>(),
-                            source,
-                            "cs",
-                            "C#",
-                            referencedAssemblies,
-                            packageReferences,
-                            instance.TypeName,
-                            tempPath,
-                            Array.Empty<CompilerError>()
-                        )
-                    );
-
-                if (!(compileOutput.Template is ITemplateSectionProcessor<TState> processor))
-                {
-                    yield return new InitializeErrorToken<TState>(instance.SectionContext, "Compilation of custom section processor failed");
-                }
-                else
-                {
-                    yield return new TemplateSectionProcessorTemplateToken<TState>(instance.SectionContext, processor);
-                    if (processor is IInitializableTemplateSectionProcessor<TState> initializableTemplateSectionProcessor)
-                    {
-                        var result = initializableTemplateSectionProcessor.Initialize(instance.SectionContext);
-                        if (result.Understood)
-                        {
-                            foreach (var t in result.Tokens)
-                            {
-                                yield return t;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (instance.SectionContext != null)
+            
+            if (instance.SectionContext != null)
             {
                 //assembly
                 var assembly = string.IsNullOrEmpty(instance.AssemblyName)
@@ -117,11 +55,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                     : System.Reflection.Assembly.LoadFrom(instance.AssemblyName.GetAssemblyName());
 #pragma warning restore S3885 // "Assembly.Load" should be used
 
-                foreach (var type in assembly == null
-                    ? GetCustomProcessorTypes(instance.TypeName, instance.SectionContext.ExistingTokens)
-                    : assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(x =>
-                        x.IsGenericType
-                        && x.GetGenericTypeDefinition() == typeof(ITemplateSectionProcessor<>))))
+                foreach (var type in GetTypes(instance, assembly))
                 {
                     if (type == null)
                     {
@@ -153,6 +87,18 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 }
             }
         }
+
+        private static bool CustomSectionProcessorDoesNotExist(RegisterCustomSectionProcessorDirectiveModel<TState> instance)
+            => !string.IsNullOrEmpty(instance.AssemblyName)
+                && instance.AssemblyName.EndsWith(".dll")
+                && !File.Exists(instance.AssemblyName);
+
+        private static IEnumerable<Type> GetTypes(RegisterCustomSectionProcessorDirectiveModel<TState> instance, System.Reflection.Assembly assembly)
+            => assembly == null
+                ? GetCustomProcessorTypes(instance.TypeName, instance.SectionContext.ExistingTokens)
+                : assembly.GetExportedTypes().Where(t => t.GetInterfaces().Any(x =>
+                    x.IsGenericType
+                    && x.GetGenericTypeDefinition() == typeof(ITemplateSectionProcessor<>)));
 
         private static Type[] GetCustomProcessorTypes(string typeName, IEnumerable<ITemplateToken<TState>> existingTokens)
         {
