@@ -161,10 +161,6 @@ namespace TextTemplateTransformationFramework.Runtime
                                         bool? renderAsEnumerable = null,
                                         bool silentlyContinueOnError = false,
                                         string separatorTemplateName = null,
-                                        string headerTemplateName = null,
-                                        bool headerCondition = true,
-                                        string footerTemplateName = null,
-                                        bool footerCondition = true,
                                         Func<string, string, Type, object, bool> customResolverDelegate = null,
                                         object resolverDelegateModel = null,
                                         Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null,
@@ -183,19 +179,31 @@ namespace TextTemplateTransformationFramework.Runtime
                 foreach (var item in items)
                 {
                     templateName = GetTemplateName(templateName, customTemplateNameDelegate, originalTemplateName, item);
-                    RenderHeader(templateName, model, renderAsEnumerable, silentlyContinueOnError, headerTemplateName, headerCondition, customResolverDelegate, resolverDelegateModel, customRenderChildTemplateDelegate, iterationCount, iterationNumber);
                     var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customResolverDelegate);
-                    RenderTemplateFromEnumerable(templateName, renderAsEnumerable, silentlyContinueOnError, customRenderChildTemplateDelegate, iterationCount, iterationNumber, item, template);
+                    if (customRenderChildTemplateDelegate != null)
+                    {
+                        customRenderChildTemplateDelegate.Invoke(templateName, template, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
+                    }
+                    else
+                    {
+                        RenderTemplate(template, item, iterationNumber, iterationCount, templateName);
+                    }
                     RenderSeparator(templateName, model, renderAsEnumerable, silentlyContinueOnError, separatorTemplateName, customResolverDelegate, resolverDelegateModel, customRenderChildTemplateDelegate, iterationCount, iterationNumber, item);
                     iterationNumber++;
                 }
-                RenderFooter(templateName, model, renderAsEnumerable, silentlyContinueOnError, footerTemplateName, footerCondition, customResolverDelegate, resolverDelegateModel, customRenderChildTemplateDelegate, iterationCount, iterationNumber);
             }
             else
             {
                 templateName = GetTemplateName(templateName, customTemplateNameDelegate, templateName, model);
                 var template = GetChildTemplate(templateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                RenderSingleTemplate(templateName, model, renderAsEnumerable, silentlyContinueOnError, customRenderChildTemplateDelegate, template);
+                if (customRenderChildTemplateDelegate != null)
+                {
+                    customRenderChildTemplateDelegate.Invoke(templateName, template, model, renderAsEnumerable.Value, silentlyContinueOnError, null, null);
+                }
+                else
+                {
+                    RenderTemplate(template, model, null, null, templateName);
+                }
             }
         }
 
@@ -215,63 +223,6 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 var toStringMethod = templateType.GetMethod("ToString");
                 GenerationEnvironment.Append((string)toStringMethod.Invoke(template, Array.Empty<object>()));
-            }
-        }
-
-        private void RenderSingleTemplate(string templateName, object model, bool? renderAsEnumerable, bool silentlyContinueOnError, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate, object template)
-        {
-            if (template == null)
-            {
-                return;
-            }
-
-            if (customRenderChildTemplateDelegate != null)
-            {
-                customRenderChildTemplateDelegate.Invoke(templateName, template, model, renderAsEnumerable.Value, silentlyContinueOnError, null, null);
-            }
-            else
-            {
-                RenderTemplate(template, model, null, null, templateName);
-            }
-        }
-
-        private void RenderTemplateFromEnumerable(string templateName, bool? renderAsEnumerable, bool silentlyContinueOnError, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate, int iterationCount, int iterationNumber, object item, object template)
-        {
-            if (template == null)
-            {
-                return;
-            }
-
-            if (customRenderChildTemplateDelegate != null)
-            {
-                customRenderChildTemplateDelegate.Invoke(templateName, template, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
-            }
-            else
-            {
-                RenderTemplate(template, item, iterationNumber, iterationCount, templateName);
-            }
-        }
-
-        private void RenderHeader(string templateName, object model, bool? renderAsEnumerable, bool silentlyContinueOnError, string headerTemplateName, bool headerCondition, Func<string, string, Type, object, bool> customResolverDelegate, object resolverDelegateModel, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate, int iterationCount, int iterationNumber)
-        {
-            if (iterationNumber != 0 || string.IsNullOrEmpty(headerTemplateName) || !headerCondition)
-            {
-                return;
-            }
-
-            var headerTemplate = GetChildTemplate(headerTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-            if (headerTemplate == null)
-            {
-                return;
-            }
-
-            if (customRenderChildTemplateDelegate != null)
-            {
-                customRenderChildTemplateDelegate.Invoke(templateName, headerTemplate, null, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber + 1, iterationCount);
-            }
-            else
-            {
-                RenderTemplate(headerTemplate, null, iterationNumber - 1, iterationCount, templateName);
             }
         }
 
@@ -295,29 +246,6 @@ namespace TextTemplateTransformationFramework.Runtime
             else
             {
                 RenderTemplate(separatorTemplate, item, iterationNumber, iterationCount, templateName);
-            }
-        }
-
-        private void RenderFooter(string templateName, object model, bool? renderAsEnumerable, bool silentlyContinueOnError, string footerTemplateName, bool footerCondition, Func<string, string, Type, object, bool> customResolverDelegate, object resolverDelegateModel, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate, int iterationCount, int iterationNumber)
-        {
-            if (iterationNumber == 0 || string.IsNullOrEmpty(footerTemplateName) || !footerCondition)
-            {
-                return;
-            }
-
-            var footerTemplate = GetChildTemplate(footerTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-            if (footerTemplate == null)
-            {
-                return;
-            }
-
-            if (customRenderChildTemplateDelegate != null)
-            {
-                customRenderChildTemplateDelegate.Invoke(templateName, footerTemplate, null, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber + 1, iterationCount);
-            }
-            else
-            {
-                RenderTemplate(footerTemplate, null, iterationNumber + 1, iterationCount, templateName);
             }
         }
 

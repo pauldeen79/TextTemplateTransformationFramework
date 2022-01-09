@@ -966,7 +966,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"        public void RenderChildTemplate(string templateName, object model = null, bool? renderAsEnumerable = null, bool silentlyContinueOnError = false, string separatorTemplateName = null, string headerTemplateName = null, bool headerCondition = true, string footerTemplateName = null, bool footerCondition = true, Func<string, string, Type, object, bool> customResolverDelegate = null, object resolverDelegateModel = null, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null, Func<object, string> customTemplateNameDelegate = null)
+            Write(this.ToStringHelper.ToStringWithCulture(@"        public void RenderChildTemplate(string templateName, object model = null, bool? renderAsEnumerable = null, bool silentlyContinueOnError = false, string separatorTemplateName = null, Func<string, string, Type, object, bool> customResolverDelegate = null, object resolverDelegateModel = null, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null, Func<object, string> customTemplateNameDelegate = null)
         {
             if (renderAsEnumerable == null)
             {
@@ -990,21 +990,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                         else
                         {
                             templateName = originalTemplateName;
-                        }
-                    }
-                    if (iterationNumber == 0 && !string.IsNullOrEmpty(headerTemplateName) && headerCondition)
-                    {
-                        var headerTemplate = GetChildTemplate(headerTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                        if (headerTemplate != null)
-                        {
-                            if (customRenderChildTemplateDelegate != null)
-                            {
-                                customRenderChildTemplateDelegate.Invoke(templateName, headerTemplate, null, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber + 1, iterationCount);
-                            }
-                            else
-                            {
-                                RenderTemplate(headerTemplate, null, iterationNumber - 1, iterationCount, templateName);
-                            }
                         }
                     }
                     var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customResolverDelegate);
@@ -1035,21 +1020,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                         }
                     }
                     iterationNumber++;
-                }
-                if (iterationNumber > 0 && !string.IsNullOrEmpty(footerTemplateName) && footerCondition)
-                {
-                    var footerTemplate = GetChildTemplate(footerTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                    if (footerTemplate != null)
-                    {
-                        if (customRenderChildTemplateDelegate != null)
-                        {
-                            customRenderChildTemplateDelegate.Invoke(templateName, footerTemplate, null, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber + 1, iterationCount);
-                        }
-                        else
-                        {
-                            RenderTemplate(footerTemplate, null, iterationNumber + 1, iterationCount);
-                        }
-                    }
                 }
             }
             else
@@ -3884,22 +3854,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 if (!string.IsNullOrEmpty(Model.SeparatorTemplateName))
                 {
                     yield return ", separatorTemplateName: " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
-                }
-                if (!string.IsNullOrEmpty(Model.HeaderTemplateName))
-                {
-                    yield return ", headerTemplateName: " + Model.HeaderTemplateName.FormatLiteral(Model.HeaderTemplateNameIsLiteral);
-                }
-                if (!string.IsNullOrEmpty(Model.HeaderCondition))
-                {
-                    yield return ", headerCondition: " + Model.HeaderCondition;
-                }
-                if (!string.IsNullOrEmpty(Model.FooterTemplateName))
-                {
-                    yield return ", footerTemplateName: " + Model.FooterTemplateName.FormatLiteral(Model.FooterTemplateNameIsLiteral);
-                }
-                if (!string.IsNullOrEmpty(Model.FooterCondition))
-                {
-                    yield return ", footerCondition: " + Model.FooterCondition;
                 }
                 if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
                 {

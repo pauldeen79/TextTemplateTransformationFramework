@@ -13,12 +13,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.R
         bool SilentlyContinueOnError { get; }
         string SeparatorTemplateName { get; }
         bool SeparatorTemplateNameIsLiteral { get; }
-        string HeaderTemplateName { get; }
-        bool HeaderTemplateNameIsLiteral { get; }
-        string HeaderCondition { get; }
-        string FooterTemplateName { get; }
-        bool FooterTemplateNameIsLiteral { get; }
-        string FooterCondition { get; }
         string CustomResolverDelegateExpression { get; }
         bool CustomResolverDelegateExpressionIsLiteral { get; }
         string ResolverDelegateModel { get; }
