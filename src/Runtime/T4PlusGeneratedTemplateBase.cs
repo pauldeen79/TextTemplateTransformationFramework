@@ -54,7 +54,7 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             if (template == null)
             {
-                throw new ArgumentNullException(nameof(template));
+                return;
             }
 
             var templateType = template.GetType();

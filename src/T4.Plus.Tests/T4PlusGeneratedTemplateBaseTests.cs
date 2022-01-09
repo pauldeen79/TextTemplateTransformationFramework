@@ -176,6 +176,19 @@ Hello 4
             baseClass.Should().BeOfType<BaseClass>("BaseClass is not resolved correctly");
             finalClass.Should().BeOfType<FinalClass>("FinalClass is not resolved correctly");
         }
+
+        [Fact]
+        public void CanRenderTemplateWithPlaceholder()
+        {
+            // Arrange
+            var sut = new Placeholder.GeneratedTemplate();
+
+            // Act
+            var actual = TemplateRenderHelper.GetTemplateOutput(sut);
+
+            // Assert
+            actual.Should().Be("Hello world!");
+        }
     }
 
     [ExcludeFromCodeCoverage]
