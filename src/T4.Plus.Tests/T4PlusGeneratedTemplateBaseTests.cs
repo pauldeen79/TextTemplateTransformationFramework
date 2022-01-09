@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using FluentAssertions;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -188,6 +189,23 @@ Hello 4
 
             // Assert
             actual.Should().Be("Hello world!");
+        }
+
+        [Fact]
+        public void AddingNonExistingTemplateToPlaceholderGivesError()
+        {
+            // Arrange
+            var sut = new Placeholder.GeneratedTemplate();
+            var builder = new StringBuilder();
+
+            // Act
+            sut.Initialize();
+            sut.AddTemplateToPlaceholder("MyPlaceholder", "NonExistingChildTemplate");
+            sut.Render(builder);
+
+            // Assert
+            sut.Errors.Should().ContainSingle();
+            sut.Errors.First().ErrorText.Should().Be("Could not resolve child template with name NonExistingChildTemplate");
         }
     }
 
