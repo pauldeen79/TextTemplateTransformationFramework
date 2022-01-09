@@ -54,40 +54,6 @@ Hello <#= ""world"" #><# Write(""!""); #>";
         }
 
         [Fact]
-        public void CanAddCodeToCompositionRootClassOnComposableTemplate()
-        {
-            // Arrange
-            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
-            const string Src = @"<#@ template language=""c#"" #>
-<#@ AddChildTemplateCode composable=""true"" #>
-<#& // Some extra code to add to the composition root class #>";
-
-            // Act
-            var actual = sut.Process(Src);
-
-            // Assert
-            actual.CompilerErrors.Should().BeEmpty();
-            actual.SourceCode.Should().Contain("// Some extra code to add to the composition root class");
-        }
-
-        [Fact]
-        public void CanAddCodeToConstructorOfCompositionRootOnComposableTemplate()
-        {
-            // Arrange
-            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
-            const string Src = @"<#@ template language=""c#"" #>
-<#@ AddChildTemplateCode composable=""true"" #>
-<#$ // Some initialization code to run #>";
-
-            // Act
-            var actual = sut.Process(Src);
-
-            // Assert
-            actual.CompilerErrors.Should().BeEmpty();
-            actual.SourceCode.Should().Contain("// Some initialization code to run");
-        }
-
-        [Fact]
         public void CanRunOldChildTemplateClassUsingRuntime()
         {
             // Arrange

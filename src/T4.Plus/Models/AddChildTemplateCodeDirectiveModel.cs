@@ -15,13 +15,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Models
         [Description("When set to true, and Override is true, then child template fields will be cleared from within the Initialize method")]
         public bool ClearFieldsOnOverride { get; set; }
 
-        [Description("When set to true, generates a CompositionRoot which holds child template and view model registrations")]
-        public bool Composable { get; set; }
-
-        [Description("Accessor for RegisterChildTemlpate and RegisterViewModel methods on CompositionRoot class")]
-        [DefaultValue("protected")]
-        public string ComposableRegistrationMethodsAccessor { get; set; }
-
         [Description("Optional custom base class for child templates")]
         public string BaseClass { get; set; }
     }

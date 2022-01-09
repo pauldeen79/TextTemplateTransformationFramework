@@ -33,26 +33,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Models
         [DefaultValue(true)]
         public bool SeparatorTemplateNameIsLiteral { get; set; }
 
-        [Description("Header template name; only used for enumerables")]
-        public string HeaderTemplateName { get; set; }
-
-        [Description("Indicator whether the header template name is a literal expression; true by default")]
-        [DefaultValue(true)]
-        public bool HeaderTemplateNameIsLiteral { get; set; }
-
-        [Description("Header condition boolean expression; only used for enumerables")]
-        public string HeaderCondition { get; set; }
-
-        [Description("Footer template name; only used for enumerables")]
-        public string FooterTemplateName { get; set; }
-
-        [Description("Indicator whether the footer template name is a literal expression; true by default")]
-        [DefaultValue(true)]
-        public bool FooterTemplateNameIsLiteral { get; set; }
-
-        [Description("Footer condition boolean expression; only used for enumerables")]
-        public string FooterCondition { get; set; }
-
         [Description("Custom resolver delegate expression or literal (optional)")]
         public string CustomResolverDelegate { get; set; }
 

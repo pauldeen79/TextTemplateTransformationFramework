@@ -10,7 +10,6 @@ using TextTemplateTransformationFramework.Common.Default.TemplateTokens;
 using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.T4.Contracts;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens;
-using Utilities;
 
 namespace TextTemplateTransformationFramework.T4.Plus
 {
@@ -32,30 +31,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     }
                     catch (Exception)
                     {
-                        //If the assemby can't be loaded, try alternate paths
-                        var name = referenceToken.Name.GetAssemblyName();
-                        var hintPathTokens = _rootTokens
-                            .GetTemplateTokensFromSections<TokenParserState, IHintPathToken<TokenParserState>>()
-                            .Where(t => t.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) != false);
-                        foreach (var hintPathToken in hintPathTokens)
-                        {
-                            foreach (var directory in hintPathToken.HintPath.GetDirectories(hintPathToken.Recursive))
-                            {
-                                var fullPath = Path.Combine(directory, name);
-                                if (File.Exists(fullPath))
-                                {
-                                    referenceToken = new ReferenceToken<TokenParserState>(SectionContext.FromToken(referenceToken, referenceToken.SectionContext.State), fullPath);
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Try current directory
-                        var currentFullPath = Path.Combine(Directory.GetCurrentDirectory(), name);
-                        if (File.Exists(currentFullPath))
-                        {
-                            referenceToken = new ReferenceToken<TokenParserState>(SectionContext.FromToken(referenceToken, referenceToken.SectionContext.State), currentFullPath);
-                        }
+                        referenceToken = GetReferenceTokenFromAlternatePaths(referenceToken);
                     }
 
                     yield return referenceToken;
@@ -76,6 +52,36 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     yield return token;
                 }
             }
+        }
+
+        private IReferenceToken<TokenParserState> GetReferenceTokenFromAlternatePaths(IReferenceToken<TokenParserState> referenceToken)
+        {
+            //If the assemby can't be loaded, try alternate paths
+            var name = referenceToken.Name.GetAssemblyName();
+            var hintPathTokens = _rootTokens
+                .GetTemplateTokensFromSections<TokenParserState, IHintPathToken<TokenParserState>>()
+                .Where(t => t.Name?.Equals(name, StringComparison.OrdinalIgnoreCase) != false);
+            foreach (var hintPathToken in hintPathTokens)
+            {
+                foreach (var directory in hintPathToken.HintPath.GetDirectories(hintPathToken.Recursive))
+                {
+                    var fullPath = Path.Combine(directory, name);
+                    if (File.Exists(fullPath))
+                    {
+                        referenceToken = new ReferenceToken<TokenParserState>(SectionContext.FromToken(referenceToken, referenceToken.SectionContext.State), fullPath);
+                        break;
+                    }
+                }
+            }
+
+            // Try current directory
+            var currentFullPath = Path.Combine(Directory.GetCurrentDirectory(), name);
+            if (File.Exists(currentFullPath))
+            {
+                referenceToken = new ReferenceToken<TokenParserState>(SectionContext.FromToken(referenceToken, referenceToken.SectionContext.State), currentFullPath);
+            }
+
+            return referenceToken;
         }
 
         private SourceSectionToken<TokenParserState> CreateSourceSectionToken(ISourceSectionToken<TokenParserState> sourceSectionToken)

@@ -1,4 +1,0 @@
-﻿<#@ template language="c#" #>
-<#@ templateName value="T4PlusCSharpCodeGenerator.CompositionRootConstructorTokens.CodeToken.Template" #>
-<#@ model type="ICodeToken<TokenParserState>" #>
-            <#@ RenderChildTemplate model="Model" customResolverDelegate="RootTemplate.BaseTemplate" customRenderChildTemplateDelegate="RenderWithHeaderAndFooter" #>

@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using Moq;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
@@ -413,204 +412,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
 </MultipleContents>");
         }
 
-        [Fact]
-        public void CanReplaceChildTemplateWithTemplateWrapper()
-        {
-            // Arrange
-            int renderCalled = 0;
-            var childTemplates = RegistrationWrapper.Create
-            (
-                RegistrationWrapper.WrapTemplate<MyPlainTemplate>(onRenderEvenHandler: (sender, args) => renderCalled++)
-            );
-            var compositionRoot = new MyComposableTemplateCompositionRoot(registration => RegistrationWrapper.Resolve(registration, childTemplates));
-            var sut = compositionRoot.ResolveTemplate();
-
-            // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(sut);
-
-            // Assert
-            actual.Should().Be("Hello world!");
-            renderCalled.Should().Be(1);
-        }
-
-        [Fact]
-        public void CanReplaceChildTemplateWithMock()
-        {
-            // Arrange
-            var templateMock = new Mock<ITemplate>();
-            templateMock.Setup(x => x.Render(It.IsAny<StringBuilder>()))
-                        .Callback<StringBuilder>(builder => builder.Append("Hello world!"));
-            var childTemplates = RegistrationWrapper.Create
-            (
-                RegistrationWrapper.WrapTemplate<MyPlainTemplate>(templateMock.Object)
-            );
-            var compositionRoot = new MyComposableTemplateCompositionRoot(registration => RegistrationWrapper.Resolve(registration, childTemplates));
-            var sut = compositionRoot.ResolveTemplate();
-
-            // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(sut);
-
-            // Assert
-            actual.Should().Be("Hello world!");
-            templateMock.Verify(x => x.Initialize(), Times.Once);
-            templateMock.Verify(x => x.Render(It.IsAny<StringBuilder>()), Times.Once);
-        }
-
-        [Fact]
-        public void CanCreateNestedTemplate()
-        {
-            // Arrange
-            var child = TemplateRenderHelper.CreateNestedTemplate<MyComposableTemplate, MyPlainTemplate>();
-            var builder = new StringBuilder();
-
-            // Act
-            child.Render(builder);
-
-            // Assert
-            builder.ToString().Should().Be("Hello world!");
-        }
-
-        [Fact]
-        public void CanCreateNestedTemplateContext()
-        {
-            // Arrange
-            var context = TemplateRenderHelper.CreateNestedTemplateContext<MyComposableTemplate, MyPlainTemplate, TemplateInstanceContext>();
-            var builder = new StringBuilder();
-
-            // Act
-            TemplateRenderHelper.RenderTemplate(context.Template, builder);
-
-            // Assert
-            builder.ToString().Should().Be("Hello world!");
-        }
-
-        [Fact]
-        public void CanReplaceViewModelWithMock()
-        {
-            // Arrange
-            var viewModelMock = new Mock<MyViewModel>();
-            viewModelMock.SetupGet(x => x.MyExpressionProperty)
-                         .Returns("Hello world!");
-            var viewModels = RegistrationWrapper.Create
-            (
-                RegistrationWrapper.WrapViewModel<MyViewModel>(viewModelMock.Object)
-            );
-            var compositionRoot = new MyViewModelTemplateCompositionRoot(viewModelModifierDelegate: registration => RegistrationWrapper.Resolve(registration, viewModels));
-            var sut = compositionRoot.ResolveTemplate();
-
-            // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(sut);
-
-            // Assert
-            actual.Should().Be("Hello world!");
-            viewModelMock.VerifyGet(x => x.MyExpressionProperty, Times.Once);
-        }
-
-        [Fact]
-        public void CanComposeTemlpateFromAnotherCompositionRoot()
-        {
-            // Arrange
-            var compositionRoot = new MyInheritedComposableTemplateCompositionRoot();
-            var sut = compositionRoot.ResolveTemplate();
-
-            // Act
-            var actual = TemplateRenderHelper.GetTemplateOutput(sut);
-
-            // Assert
-            actual.Should().Be("Hello world!Hello world!");
-        }
-
-        [ExcludeFromCodeCoverage]
-        public class MyInheritedComposableTemplateCompositionRoot : T4PlusComposableGeneratedTemplateBaseCompositionRoot<MyInheritedComposableTemplate>
-        {
-            public MyInheritedComposableTemplateCompositionRoot(Func<Tuple<string, Func<object>, Type>, Tuple<string, Func<object>, Type>> childTemplateModifierDelegate = null,
-                                                                Func<Tuple<string, Func<object>, Type>, Tuple<string, Func<object>, Type>> viewModelModifierDelegate = null,
-                                                                Action<string, Func<object>, Type> registerChildTemplateDelegate = null,
-                                                                Action<string, Func<object>, Type> registerViewModelDelegate = null)
-                : base(childTemplateModifierDelegate, viewModelModifierDelegate, registerChildTemplateDelegate, registerViewModelDelegate)
-            {
-                _ = new MyComposableTemplateCompositionRoot(registerChildTemplateDelegate: RegisterChildTemplate, registerViewModelDelegate: RegisterViewModel);
-                RegisterChildTemplate("child2", () => new MyPlainTemplate());
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public class MyInheritedComposableTemplate : T4PlusComposableGeneratedTemplateBase
-        {
-            public void Initialize()
-            {
-                // Method intentionally left empty.
-            }
-
-            public void Render(StringBuilder builder)
-            {
-                var backup = GenerationEnvironment;
-                if (builder != null) GenerationEnvironment = builder;
-                RenderChildTemplate("child");
-                RenderChildTemplate("child2");
-                if (builder != null) GenerationEnvironment = backup;
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public class MyComposableTemplateCompositionRoot : T4PlusComposableGeneratedTemplateBaseCompositionRoot<MyComposableTemplate>
-        {
-            public MyComposableTemplateCompositionRoot(Func<Tuple<string, Func<object>, Type>, Tuple<string, Func<object>, Type>> childTemplateModifierDelegate = null,
-                                                       Func<Tuple<string, Func<object>, Type>, Tuple<string, Func<object>, Type>> viewModelModifierDelegate = null,
-                                                       Action<string, Func<object>, Type> registerChildTemplateDelegate = null,
-                                                       Action<string, Func<object>, Type> registerViewModelDelegate = null)
-                : base(childTemplateModifierDelegate, viewModelModifierDelegate, registerChildTemplateDelegate, registerViewModelDelegate)
-            {
-                RegisterChildTemplate("child", () => new MyPlainTemplate());
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public class MyComposableTemplate : T4PlusComposableGeneratedTemplateBase
-        {
-            public void Initialize()
-            {
-                // Method intentionally left empty.
-            }
-
-            public void Render(StringBuilder builder)
-            {
-                var backup = GenerationEnvironment;
-                if (builder != null) GenerationEnvironment = builder;
-                RenderChildTemplate("child");
-                if (builder != null) GenerationEnvironment = backup;
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public class MyViewModelTemplateCompositionRoot : T4PlusComposableGeneratedTemplateBaseCompositionRoot<MyViewModelTemplate>
-        {
-            public MyViewModelTemplateCompositionRoot(Func<Tuple<string, Func<object>, Type>, Tuple<string, Func<object>, Type>> childTemplateModifierDelegate = null, Func<Tuple<string, Func<object>, Type>, Tuple<string, Func<object>, Type>> viewModelModifierDelegate = null)
-                : base(childTemplateModifierDelegate, viewModelModifierDelegate)
-            {
-                RegisterViewModel("MyViewModel", () => new MyViewModel());
-            }
-        }
-
-        [ExcludeFromCodeCoverage]
-        public class MyViewModelTemplate : T4PlusComposableGeneratedTemplateBase
-        {
-            public void Initialize()
-            {
-                ViewModel = (MyViewModel)GetViewModel("MyViewModel");
-            }
-
-            public void Render(StringBuilder builder)
-            {
-                var backup = GenerationEnvironment;
-                if (builder != null) GenerationEnvironment = builder;
-                this.Write(ViewModel.MyExpressionProperty);
-                if (builder != null) GenerationEnvironment = backup;
-            }
-
-            public MyViewModel ViewModel { get; set; }
-        }
-
         [ExcludeFromCodeCoverage]
         public class MyViewModel
         {
@@ -620,10 +421,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         [ExcludeFromCodeCoverage]
         private class MyPlainTemplate : T4PlusGeneratedTemplateBase
         {
+#pragma warning disable S1144 // Unused private types or members should be removed
             public void Render(StringBuilder builder)
             {
                 builder.Append("Hello world!");
             }
+#pragma warning restore S1144 // Unused private types or members should be removed
         }
 
         [ExcludeFromCodeCoverage]

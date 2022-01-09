@@ -24,22 +24,6 @@
                 {
                     yield return ", separatorTemplateName: " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
                 }
-                if (!string.IsNullOrEmpty(Model.HeaderTemplateName))
-                {
-                    yield return ", headerTemplateName: " + Model.HeaderTemplateName.FormatLiteral(Model.HeaderTemplateNameIsLiteral);
-                }
-                if (!string.IsNullOrEmpty(Model.HeaderCondition))
-                {
-                    yield return ", headerCondition: " + Model.HeaderCondition;
-                }
-                if (!string.IsNullOrEmpty(Model.FooterTemplateName))
-                {
-                    yield return ", footerTemplateName: " + Model.FooterTemplateName.FormatLiteral(Model.FooterTemplateNameIsLiteral);
-                }
-                if (!string.IsNullOrEmpty(Model.FooterCondition))
-                {
-                    yield return ", footerCondition: " + Model.FooterCondition;
-                }
                 if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
                 {
                     yield return ", customResolverDelegate: " + Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral);

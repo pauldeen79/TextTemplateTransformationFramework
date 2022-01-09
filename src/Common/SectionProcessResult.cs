@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using TextTemplateTransformationFramework.Common.Contracts;
+using TextTemplateTransformationFramework.Common.Data;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.InitializeTokens;
-using Utilities;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common
@@ -90,49 +90,21 @@ namespace TextTemplateTransformationFramework.Common
                 validationResults.Select(e => new InitializeErrorToken<TState>(context, e.ErrorMessage))
             );
 
-        public static SectionProcessResult<TState> Create<TState>
-        (
-            SectionContext<TState> context,
-            object model,
-            Func<SectionContext<TState>, object, bool> isValidDelegate,
-            Func<object> mapDelegate,
-            int? switchToMode = null,
-            bool passThrough = false,
-            bool tokensAreForRootTemplateSection = false,
-            SectionProcessResult<TState> existingResult = null,
-            string directiveName = null
-        ) where TState : class
+        public static SectionProcessResult<TState> Create<TState>(SectionProcessResultData<TState> data)
+            where TState : class
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (model == null)
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
-            if (isValidDelegate == null)
-            {
-                throw new ArgumentNullException(nameof(isValidDelegate));
-            }
-
-            if (mapDelegate == null)
-            {
-                throw new ArgumentNullException(nameof(mapDelegate));
-            }
+            data.Validate();
 
             //First validate the model...
-            if (!model.TryValidate(out ICollection<ValidationResult> validationResults))
+            if (!data.Model.TryValidate(out ICollection<ValidationResult> validationResults))
             {
-                return Create(context, validationResults, switchToMode, passThrough, tokensAreForRootTemplateSection);
+                return Create(data.Context, validationResults, data.SwitchToMode, data.PassThrough, data.TokensAreForRootTemplateSection);
             }
 
             //Then check whether the mapper should process...
-            if (!isValidDelegate(context, model))
+            if (!data.IsValidDelegate(data.Context, data.Model))
             {
-                return existingResult ?? (passThrough
+                return data.ExistingResult ?? (data.PassThrough
                     ? SectionProcessResult<TState>.EmptyPassThrough
                     : SectionProcessResult<TState>.Empty);
             }
@@ -140,7 +112,7 @@ namespace TextTemplateTransformationFramework.Common
             var totalResults = new List<ITemplateToken<TState>>();
 
             //Generate warnings when properties have a non-default value and ObsoleteAttribute
-            var properties = model
+            var properties = data.Model
                 .GetType()
                 .GetProperties()
                 .Select(p => new
@@ -152,27 +124,19 @@ namespace TextTemplateTransformationFramework.Common
                 .Select(p => new
                 {
                     p.Property,
-                    ObsoleteAttributeMessage = p.ObsoleteAttribute.Message ?? $"Property {p.Property.Name} on {directiveName ?? model.GetType().Name} is obsolete",
+                    ObsoleteAttributeMessage = p.ObsoleteAttribute.Message ?? $"Property {p.Property.Name} on {data.DirectiveName ?? data.Model.GetType().Name} is obsolete",
                     DefaultValueAttribute = p.Property.GetCustomAttribute<DefaultValueAttribute>()
                 })
                 .Where
                 (
-                    p => PropertyHasNonDefaultValue(p.Property, p.DefaultValueAttribute, model)
+                    p => PropertyHasNonDefaultValue(p.Property, p.DefaultValueAttribute, data.Model)
                 )
                 .ToArray();
-
-            foreach (var property in properties)
-            {
-                if (existingResult?.Tokens.Any(t => t.SectionContext.LineNumber == context.LineNumber && t is InitializeWarningToken<TState> token && token.Message == property.ObsoleteAttributeMessage) != true)
-                {
-                    totalResults.Add(new InitializeWarningToken<TState>(context, property.ObsoleteAttributeMessage));
-                }
-            }
-
-            AddObsoleteWarnings(context, model, existingResult, directiveName, totalResults);
+            totalResults.AddRange(properties.Where(property => data.ExistingResult?.Tokens.Any(t => t.SectionContext.LineNumber == data.Context.LineNumber && t is InitializeWarningToken<TState> token && token.Message == property.ObsoleteAttributeMessage) != true).Select(property => new InitializeWarningToken<TState>(data.Context, property.ObsoleteAttributeMessage)));
+            AddObsoleteWarnings(data.Context, data.Model, data.ExistingResult, data.DirectiveName, totalResults);
 
             //If everything is alright, then map the model to tokens
-            var mapResult = mapDelegate();
+            var mapResult = data.MapDelegate();
             if (mapResult is ITemplateToken<TState> singleResult)
             {
                 totalResults.Add(singleResult);
@@ -189,11 +153,11 @@ namespace TextTemplateTransformationFramework.Common
             return Create
             (
                 totalResults,
-                switchToMode,
-                passThrough,
-                tokensAreForRootTemplateSection,
-                existingResult,
-                existingResult?.CustomProcessorType
+                data.SwitchToMode,
+                data.PassThrough,
+                data.TokensAreForRootTemplateSection,
+                data.ExistingResult,
+                data.ExistingResult?.CustomProcessorType
             );
         }
 

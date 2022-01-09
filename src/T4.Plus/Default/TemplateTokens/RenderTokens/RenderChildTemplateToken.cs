@@ -18,12 +18,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
             bool silentlyContinueOnError = false,
             string separatorTemplateName = null,
             bool separatorTemplateNameIsLiteral = true,
-            string headerTemplateName = null,
-            bool headerTemplateNameIsLiteral = true,
-            string headerCondition = null,
-            string footerTemplateName = null,
-            bool footerTemplateNameIsLiteral = true,
-            string footerCondition = null,
             string customResolverDelegateExpression = null,
             bool customResolverDelegateExpressionIsLiteral = true,
             string resolverDelegateModel = null,
@@ -42,12 +36,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
             SilentlyContinueOnError = silentlyContinueOnError;
             SeparatorTemplateName = separatorTemplateName;
             SeparatorTemplateNameIsLiteral = separatorTemplateNameIsLiteral;
-            HeaderTemplateName = headerTemplateName;
-            HeaderTemplateNameIsLiteral = headerTemplateNameIsLiteral;
-            HeaderCondition = headerCondition;
-            FooterTemplateName = footerTemplateName;
-            FooterTemplateNameIsLiteral = footerTemplateNameIsLiteral;
-            FooterCondition = footerCondition;
             CustomResolverDelegateExpression = customResolverDelegateExpression;
             CustomResolverDelegateExpressionIsLiteral = customResolverDelegateExpressionIsLiteral;
             CustomRenderChildTemplateDelegateExpression = customRenderChildTemplateDelegateExpression;
@@ -66,12 +54,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
         public bool SilentlyContinueOnError { get; }
         public string SeparatorTemplateName { get; }
         public bool SeparatorTemplateNameIsLiteral { get; }
-        public string HeaderTemplateName { get; }
-        public bool HeaderTemplateNameIsLiteral { get; }
-        public string HeaderCondition { get; }
-        public string FooterTemplateName { get; }
-        public bool FooterTemplateNameIsLiteral { get; }
-        public string FooterCondition { get; }
         public string CustomResolverDelegateExpression { get; }
         public bool CustomResolverDelegateExpressionIsLiteral { get; }
         public string ResolverDelegateModel { get; }

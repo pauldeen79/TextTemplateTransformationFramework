@@ -1,6 +1,6 @@
 ﻿<#@ template language="c#" #>
 <#@ templateName value="T4PlusCSharpCodeGenerator.RenderChildTemplateCode.Template" #>
-        public void RenderChildTemplate(string templateName, object model = null, bool? renderAsEnumerable = null, bool silentlyContinueOnError = false, string separatorTemplateName = null, string headerTemplateName = null, bool headerCondition = true, string footerTemplateName = null, bool footerCondition = true, Func<string, string, Type, object, bool> customResolverDelegate = null, object resolverDelegateModel = null, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null, Func<object, string> customTemplateNameDelegate = null)
+        public void RenderChildTemplate(string templateName, object model = null, bool? renderAsEnumerable = null, bool silentlyContinueOnError = false, string separatorTemplateName = null, Func<string, string, Type, object, bool> customResolverDelegate = null, object resolverDelegateModel = null, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null, Func<object, string> customTemplateNameDelegate = null)
         {
             if (renderAsEnumerable == null)
             {
@@ -24,21 +24,6 @@
                         else
                         {
                             templateName = originalTemplateName;
-                        }
-                    }
-                    if (iterationNumber == 0 && !string.IsNullOrEmpty(headerTemplateName) && headerCondition)
-                    {
-                        var headerTemplate = GetChildTemplate(headerTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                        if (headerTemplate != null)
-                        {
-                            if (customRenderChildTemplateDelegate != null)
-                            {
-                                customRenderChildTemplateDelegate.Invoke(templateName, headerTemplate, null, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber + 1, iterationCount);
-                            }
-                            else
-                            {
-                                RenderTemplate(headerTemplate, null, iterationNumber - 1, iterationCount, templateName);
-                            }
                         }
                     }
                     var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customResolverDelegate);
@@ -69,21 +54,6 @@
                         }
                     }
                     iterationNumber++;
-                }
-                if (iterationNumber > 0 && !string.IsNullOrEmpty(footerTemplateName) && footerCondition)
-                {
-                    var footerTemplate = GetChildTemplate(footerTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                    if (footerTemplate != null)
-                    {
-                        if (customRenderChildTemplateDelegate != null)
-                        {
-                            customRenderChildTemplateDelegate.Invoke(templateName, footerTemplate, null, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber + 1, iterationCount);
-                        }
-                        else
-                        {
-                            RenderTemplate(footerTemplate, null, iterationNumber + 1, iterationCount);
-                        }
-                    }
                 }
             }
             else

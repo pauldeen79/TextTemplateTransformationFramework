@@ -25,31 +25,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return context.CreateRenderChildTemplateToken
-            (
-                model.Name,
-                model.NameIsLiteral,
-                model.Model,
-                model.ModelIsLiteral,
-                model.Enumerable,
-                model.SilentlyContinueOnError,
-                model.SeparatorTemplateName,
-                model.SeparatorTemplateNameIsLiteral,
-                model.HeaderTemplateName,
-                model.HeaderTemplateNameIsLiteral,
-                model.HeaderCondition,
-                model.FooterTemplateName,
-                model.FooterTemplateNameIsLiteral,
-                model.FooterCondition,
-                model.CustomResolverDelegate,
-                model.CustomResolverDelegateIsLiteral,
-                model.ResolverDelegateModel,
-                model.ResolverDelegateModelIsLiteral,
-                model.CustomRenderChildTemplateDelegate,
-                model.CustomRenderChildTemplateDelegateIsLiteral,
-                model.CustomTemplateNameDelegate,
-                model.CustomTemplateNameDelegateIsLiteral
-            );
+            return context.CreateRenderChildTemplateToken(model);
         }
     }
 }

@@ -15,54 +15,34 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
     public static class SectionContextExtensions
     {
         public static ITemplateToken<TState> CreateRenderChildTemplateToken<TState>(this SectionContext<TState> context,
-                                                                                    string childTemplateName,
-                                                                                    bool childTemplateNameIsLiteral,
-                                                                                    string model,
-                                                                                    bool modelIsLiteral,
-                                                                                    bool? enumerable,
-                                                                                    bool silentlyContinueOnError,
-                                                                                    string separatorTemplateName,
-                                                                                    bool separatorTemplateNameIsLiteral,
-                                                                                    string headerTemplateName,
-                                                                                    bool headerTemplateNameIsLiteral,
-                                                                                    string headerCondition,
-                                                                                    string footerTemplateName,
-                                                                                    bool footerTemplateNameIsLiteral,
-                                                                                    string footerCondition,
-                                                                                    string customResolverDelegate,
-                                                                                    bool customResolverDelegateIsLiteral,
-                                                                                    string resolverDelegateModel,
-                                                                                    bool resolverDelegateModelIsLiteral,
-                                                                                    string customRenderChildTemplateDelegateExpression,
-                                                                                    bool customRenderChildTemplateDelegateExpressionIsLiteral,
-                                                                                    string customTemplateNameDelegateExpression,
-                                                                                    bool customTemplateNameDelegateExpressionIsLiteral)
+                                                                                    RenderChildTemplateDirectiveModel model)
             where TState : class
             => Utilities.Pattern.Match
             (
-                Utilities.Clause.Create<int, IRenderToken<TState>>(i => i == ModePosition.Render, _ => new RenderChildTemplateToken<TState>(context,
-                                                                                                                                            childTemplateName,
-                                                                                                                                            childTemplateNameIsLiteral,
-                                                                                                                                            model,
-                                                                                                                                            modelIsLiteral,
-                                                                                                                                            enumerable,
-                                                                                                                                            silentlyContinueOnError,
-                                                                                                                                            separatorTemplateName,
-                                                                                                                                            separatorTemplateNameIsLiteral,
-                                                                                                                                            headerTemplateName,
-                                                                                                                                            headerTemplateNameIsLiteral,
-                                                                                                                                            headerCondition,
-                                                                                                                                            footerTemplateName,
-                                                                                                                                            footerTemplateNameIsLiteral,
-                                                                                                                                            footerCondition,
-                                                                                                                                            customResolverDelegate,
-                                                                                                                                            customResolverDelegateIsLiteral,
-                                                                                                                                            resolverDelegateModel,
-                                                                                                                                            resolverDelegateModelIsLiteral,
-                                                                                                                                            customRenderChildTemplateDelegateExpression,
-                                                                                                                                            customRenderChildTemplateDelegateExpressionIsLiteral,
-                                                                                                                                            customTemplateNameDelegateExpression,
-                                                                                                                                            customTemplateNameDelegateExpressionIsLiteral))
+                Utilities.Clause.Create<int, IRenderToken<TState>>
+                (
+                    i => i == ModePosition.Render,
+                    _ => new RenderChildTemplateToken<TState>
+                    (
+                        context,
+                        model.Name,
+                        model.NameIsLiteral,
+                        model.Model,
+                        model.ModelIsLiteral,
+                        model.Enumerable,
+                        model.SilentlyContinueOnError,
+                        model.SeparatorTemplateName,
+                        model.SeparatorTemplateNameIsLiteral,
+                        model.CustomResolverDelegate,
+                        model.CustomResolverDelegateIsLiteral,
+                        model.ResolverDelegateModel,
+                        model.ResolverDelegateModelIsLiteral,
+                        model.CustomRenderChildTemplateDelegate,
+                        model.CustomRenderChildTemplateDelegateIsLiteral,
+                        model.CustomTemplateNameDelegate,
+                        model.CustomTemplateNameDelegateIsLiteral
+                    )
+                )
             )
             .Default(() => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode))
             .Evaluate(context.GetModePosition());
