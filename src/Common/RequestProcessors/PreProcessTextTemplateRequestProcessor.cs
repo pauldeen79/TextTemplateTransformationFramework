@@ -34,8 +34,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
                     output: null,
                     templateCodeOutput.SourceCode,
                     request.Context.Logger.Aggregate(),
-                    templateCodeOutput.OutputExtension,
-                    templateCodeOutput.Exception
+                    templateCodeOutput.OutputExtension
                 );
             }
             catch (Exception exception)

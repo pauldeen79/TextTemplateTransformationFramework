@@ -25,22 +25,15 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                     _ => new RenderChildTemplateToken<TState>
                     (
                         context,
-                        model.Name,
-                        model.NameIsLiteral,
-                        model.Model,
-                        model.ModelIsLiteral,
+                        new ValueSpecifier(model.Name, model.NameIsLiteral),
+                        new ValueSpecifier(model.Model, model.ModelIsLiteral),
                         model.Enumerable,
                         model.SilentlyContinueOnError,
-                        model.SeparatorTemplateName,
-                        model.SeparatorTemplateNameIsLiteral,
-                        model.CustomResolverDelegate,
-                        model.CustomResolverDelegateIsLiteral,
-                        model.ResolverDelegateModel,
-                        model.ResolverDelegateModelIsLiteral,
-                        model.CustomRenderChildTemplateDelegate,
-                        model.CustomRenderChildTemplateDelegateIsLiteral,
-                        model.CustomTemplateNameDelegate,
-                        model.CustomTemplateNameDelegateIsLiteral
+                        new ValueSpecifier(model.SeparatorTemplateName, model.SeparatorTemplateNameIsLiteral),
+                        new ValueSpecifier(model.CustomResolverDelegate, model.CustomResolverDelegateIsLiteral),
+                        new ValueSpecifier(model.ResolverDelegateModel, model.ResolverDelegateModelIsLiteral),
+                        new ValueSpecifier(model.CustomRenderChildTemplateDelegate, model.CustomRenderChildTemplateDelegateIsLiteral),
+                        new ValueSpecifier(model.CustomTemplateNameDelegate, model.CustomTemplateNameDelegateIsLiteral)
                     )
                 )
             )

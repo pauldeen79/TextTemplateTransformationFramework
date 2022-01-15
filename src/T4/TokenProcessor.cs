@@ -62,7 +62,7 @@ namespace TextTemplateTransformationFramework.T4
                 );
             var outputExtension = templateTokens.GetOutputExtension();
 
-            var codeGeneratorResult = RunCodeGenerator(templateTokens);
+            var codeGeneratorResultBuilder = RunCodeGenerator(templateTokens).WithLanguage(codeDomLanguage);
 
             var tempPath = templateTokens.GetTempPath();
 
@@ -72,14 +72,12 @@ namespace TextTemplateTransformationFramework.T4
             return new TemplateCodeOutput<TState>
             (
                 tokens,
-                codeGeneratorResult.SourceCodeStringBuilder.ToString(),
+                codeGeneratorResultBuilder.Build(),
                 outputExtension,
-                codeDomLanguage,
                 GetReferencedAssemblies(templateTokens),
                 GetPackageReferences(templateTokens),
                 $"{templateNamespace}.{templateClassName}",
-                tempPath,
-                codeGeneratorResult.Errors
+                tempPath
             );
         }
 
@@ -89,7 +87,7 @@ namespace TextTemplateTransformationFramework.T4
         private IEnumerable<ITemplateToken<TState>> ConvertTokens(IEnumerable<ITemplateToken<TState>> tokens)
             => _tokenConverter.Convert(tokens);
 
-        private CodeGeneratorResult RunCodeGenerator(IEnumerable<ITemplateToken<TState>> templateTokens)
+        private CodeGeneratorResultBuilder RunCodeGenerator(IEnumerable<ITemplateToken<TState>> templateTokens)
             => _codeGenerator.Generate(new Requests.GenerateCodeRequest<TState>(templateTokens));
 
         private IEnumerable<string> GetReferencedAssemblies(IEnumerable<ITemplateToken<TState>> templateTokens)

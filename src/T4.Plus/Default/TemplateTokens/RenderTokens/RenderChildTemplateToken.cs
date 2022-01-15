@@ -10,40 +10,33 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
         public RenderChildTemplateToken
         (
             SectionContext<TState> context,
-            string childTemplateName = null,
-            bool childTemplateNameIsLiteral = true,
-            string model = null,
-            bool modelIsLiteral = false,
+            ValueSpecifier childTemplate = null,
+            ValueSpecifier model = null,
             bool? enumerable = null,
             bool silentlyContinueOnError = false,
-            string separatorTemplateName = null,
-            bool separatorTemplateNameIsLiteral = true,
-            string customResolverDelegateExpression = null,
-            bool customResolverDelegateExpressionIsLiteral = true,
-            string resolverDelegateModel = null,
-            bool resolverDelegateModelIsLiteral = false,
-            string customRenderChildTemplateDelegateExpression = null,
-            bool customRenderChildTemplateDelegateExpressionIsLiteral = true,
-            string customTemplateNameDelegateExpression = null,
-            bool customTemplateNameDelegateExpressionIsLiteral = true)
+            ValueSpecifier separatorTemplate = null,
+            ValueSpecifier customResolverDelegate = null,
+            ValueSpecifier resolverDelegateModel = null,
+            ValueSpecifier customRenderChildTemplateDelegate = null,
+            ValueSpecifier customTemplateNameDelegate = null)
             : base(context)
         {
-            ChildTemplateName = childTemplateName;
-            ChildTemplateNameIsLiteral = childTemplateNameIsLiteral;
-            Model = model;
-            ModelIsLiteral = modelIsLiteral;
+            ChildTemplateName = childTemplate?.Value;
+            ChildTemplateNameIsLiteral = childTemplate?.ValueIsLiteral ?? true;
+            Model = model?.Value;
+            ModelIsLiteral = model?.ValueIsLiteral ?? true;
             Enumerable = enumerable;
             SilentlyContinueOnError = silentlyContinueOnError;
-            SeparatorTemplateName = separatorTemplateName;
-            SeparatorTemplateNameIsLiteral = separatorTemplateNameIsLiteral;
-            CustomResolverDelegateExpression = customResolverDelegateExpression;
-            CustomResolverDelegateExpressionIsLiteral = customResolverDelegateExpressionIsLiteral;
-            CustomRenderChildTemplateDelegateExpression = customRenderChildTemplateDelegateExpression;
-            CustomRenderChildTemplateDelegateExpressionIsLiteral = customRenderChildTemplateDelegateExpressionIsLiteral;
-            ResolverDelegateModel = resolverDelegateModel;
-            ResolverDelegateModelIsLiteral = resolverDelegateModelIsLiteral;
-            CustomTemplateNameDelegateExpression = customTemplateNameDelegateExpression;
-            CustomTemplateNameDelegateExpressionIsLiteral = customTemplateNameDelegateExpressionIsLiteral;
+            SeparatorTemplateName = separatorTemplate?.Value;
+            SeparatorTemplateNameIsLiteral = separatorTemplate?.ValueIsLiteral ?? true;
+            CustomResolverDelegateExpression = customResolverDelegate?.Value;
+            CustomResolverDelegateExpressionIsLiteral = customResolverDelegate?.ValueIsLiteral ?? true;
+            CustomRenderChildTemplateDelegateExpression = customRenderChildTemplateDelegate?.Value;
+            CustomRenderChildTemplateDelegateExpressionIsLiteral = customRenderChildTemplateDelegate?.ValueIsLiteral ?? true;
+            ResolverDelegateModel = resolverDelegateModel?.Value;
+            ResolverDelegateModelIsLiteral = resolverDelegateModel?.ValueIsLiteral ?? true;
+            CustomTemplateNameDelegateExpression = customTemplateNameDelegate?.Value;
+            CustomTemplateNameDelegateExpressionIsLiteral = customTemplateNameDelegate?.ValueIsLiteral ?? true;
         }
 
         public string ChildTemplateName { get; }
