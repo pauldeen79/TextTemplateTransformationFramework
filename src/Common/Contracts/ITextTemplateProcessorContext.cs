@@ -8,5 +8,6 @@ namespace TextTemplateTransformationFramework.Common.Contracts
         TextTemplate TextTemplate { get; }
         TemplateParameter[] Parameters { get; }
         ILogger Logger { get; }
+        SectionContext<TState> ParentContext { get; }
     }
 }

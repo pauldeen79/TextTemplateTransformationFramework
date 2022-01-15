@@ -30,14 +30,14 @@ namespace TextTemplateTransformationFramework.T4
             _tokenSectionProcessor = tokenSectionProcessor ?? throw new ArgumentNullException(nameof(tokenSectionProcessor));
         }
 
-        public ProcessSectionResult<TokenParserState> Process(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger)
+        public ProcessSectionResult<TokenParserState> Process(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger, TemplateParameter[] parameters)
         {
             if (state == null)
             {
                 throw new ArgumentNullException(nameof(state));
             }
 
-            return MatchContextPattern.Evaluate(new TokenParserContext(state, CreateSectionContext(state, tokenParserCallback, logger)));
+            return MatchContextPattern.Evaluate(new TokenParserContext(state, CreateSectionContext(state, tokenParserCallback, logger, parameters)));
         }
 
         private ContextPattern MatchContextPattern
@@ -53,12 +53,13 @@ namespace TextTemplateTransformationFramework.T4
                 _ => ProcessSectionResult<TokenParserState>.Empty
             );
 
-        private SectionContext<TokenParserState> CreateSectionContext(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger)
+        private SectionContext<TokenParserState> CreateSectionContext(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger, TemplateParameter[] parameters)
             => state.ToSectionContext
             (
                 state.InitialFileName ?? state.FileName,
                 tokenParserCallback,
-                logger
+                logger,
+                parameters
             );
 
         private ProcessSectionResult<TokenParserState> ProcessStateUsingProcessor(SectionContext<TokenParserState> sectionContext, ITemplateSectionProcessor<TokenParserState> processor)

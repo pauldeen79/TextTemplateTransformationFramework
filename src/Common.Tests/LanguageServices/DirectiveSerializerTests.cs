@@ -43,7 +43,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger()
+                new Logger(),
+                Array.Empty<TemplateParameter>()
             );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
@@ -154,7 +155,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger()
+                new Logger(),
+                Array.Empty<TemplateParameter>()
             );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
@@ -183,7 +185,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger());
+                new Logger(),
+                Array.Empty<TemplateParameter>()
+            );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
             var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
@@ -217,7 +221,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger()
+                new Logger(),
+                Array.Empty<TemplateParameter>()
             );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;

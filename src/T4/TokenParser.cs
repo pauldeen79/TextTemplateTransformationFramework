@@ -90,7 +90,7 @@ namespace TextTemplateTransformationFramework.T4
             );
 
         private ProcessSectionResult<TokenParserState> ProcessState(TokenParserState state)
-            => _tokenStateProcessor.Process(state, GetTokenParserCallback(), state.Context.Logger);
+            => _tokenStateProcessor.Process(state, GetTokenParserCallback(), state.Context.Logger, state.Context.Parameters);
 
         private ITokenParserCallback<TokenParserState> GetTokenParserCallback()
             => new TokenParserCallback

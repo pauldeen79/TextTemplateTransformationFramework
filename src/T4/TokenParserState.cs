@@ -38,6 +38,7 @@ namespace TextTemplateTransformationFramework.T4
         public IEnumerable<ITemplateSectionProcessor<TokenParserState>> CustomSectionProcessors => _customSectionProcessors;
         public ITextTemplateProcessorContext<TokenParserState> Context => _context;
         public TemplateParameter[] Parameters => _context.Parameters;
+        public IEnumerable<ITemplateToken<TokenParserState>> ExistingTokens => _context.ParentContext?.ExistingTokens ?? Enumerable.Empty<ITemplateToken<TokenParserState>>();
 
         public static TokenParserState Initial(ITextTemplateProcessorContext<TokenParserState> context)
         {
@@ -57,7 +58,7 @@ namespace TextTemplateTransformationFramework.T4
                 PreviousMode = Mode.Unknown,
                 LastMode = Mode.Unknown,
                 LineCounter = 1,
-                CurrentSectionBuilder = new StringBuilder()
+                CurrentSectionBuilder = new StringBuilder(),
             };
         }
 

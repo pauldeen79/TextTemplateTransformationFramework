@@ -20,6 +20,7 @@ namespace TextTemplateTransformationFramework.Common
                 null,
                 currentMode,
                 state,
+                null,
                 null
             );
 
@@ -32,7 +33,8 @@ namespace TextTemplateTransformationFramework.Common
             IEnumerable<ITemplateToken<TState>> existingTokens,
             ITokenParserCallback<TState> tokenParserCallback,
             TState state,
-            ILogger logger
+            ILogger logger,
+            TemplateParameter[] parameters
         ) where TState : class
             => new SectionContext<TState>
             (
@@ -43,7 +45,8 @@ namespace TextTemplateTransformationFramework.Common
                 tokenParserCallback,
                 currentMode,
                 state,
-                logger
+                logger,
+                parameters
             );
 
         public static SectionContext<TState> FromToken<TState>(ITemplateToken<TState> token, TState state) where TState : class
@@ -62,7 +65,8 @@ namespace TextTemplateTransformationFramework.Common
                 token.SectionContext.ExistingTokens,
                 token.SectionContext.TokenParserCallback,
                 state,
-                token.SectionContext.Logger
+                token.SectionContext.Logger,
+                token.SectionContext.Parameters
             );
         }
     }
@@ -78,15 +82,17 @@ namespace TextTemplateTransformationFramework.Common
         public int CurrentMode { get; }
         public TState State { get; }
         public ILogger Logger { get; }
+        public TemplateParameter[] Parameters { get; }
 
         internal SectionContext(string section,
-                               IEnumerable<ITemplateToken<TState>> existingTokens,
-                               int lineNumber,
-                               string fileName,
-                               ITokenParserCallback<TState> tokenParserCallback,
-                               int currentMode,
-                               TState state,
-                               ILogger logger)
+                                IEnumerable<ITemplateToken<TState>> existingTokens,
+                                int lineNumber,
+                                string fileName,
+                                ITokenParserCallback<TState> tokenParserCallback,
+                                int currentMode,
+                                TState state,
+                                ILogger logger,
+                                TemplateParameter[] parameters)
         {
             Section = section;
             ExistingTokens = existingTokens;
@@ -96,6 +102,7 @@ namespace TextTemplateTransformationFramework.Common
             CurrentMode = currentMode;
             State = state;
             Logger = logger;
+            Parameters = parameters;
         }
 
         public IEnumerable<ITemplateSectionProcessor<TState>> CustomSectionProcessors
@@ -113,6 +120,7 @@ namespace TextTemplateTransformationFramework.Common
                 null,
                 Mode.Unknown,
                 null,
+                null,
                 null
             );
 
@@ -126,7 +134,8 @@ namespace TextTemplateTransformationFramework.Common
                 TokenParserCallback,
                 CurrentMode,
                 State,
-                Logger
+                Logger,
+                Parameters
             );
     }
 }

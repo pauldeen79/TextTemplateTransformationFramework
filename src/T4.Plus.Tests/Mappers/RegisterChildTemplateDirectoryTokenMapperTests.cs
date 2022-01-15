@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -42,7 +43,8 @@ Hello world!");
                 Enumerable.Empty<ITemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>(),
                 tokenParserCallbackMock.Object,
                 this,
-                loggerMock.Object
+                loggerMock.Object,
+                Array.Empty<TemplateParameter>()
             );
             var model = new RegisterChildTemplateDirectoryDirectiveModel<RegisterChildTemplateDirectoryTokenMapperTests>()
             {

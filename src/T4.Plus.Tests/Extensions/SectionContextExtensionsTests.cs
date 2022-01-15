@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -28,7 +29,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Extensions
                                                  Enumerable.Empty<ITemplateToken<SectionContextExtensionsTests>>(),
                                                  tokenParserCallbackMock.Object,
                                                  this,
-                                                 loggerMock.Object);
+                                                 loggerMock.Object,
+                                                 Array.Empty<TemplateParameter>());
 
             // Act
             var actual = sut.CreateRenderChildTemplateToken(new RenderChildTemplateDirectiveModel());
@@ -50,7 +52,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Extensions
                                                  Enumerable.Empty<ITemplateToken<SectionContextExtensionsTests>>(),
                                                  tokenParserCallbackMock.Object,
                                                  this,
-                                                 loggerMock.Object);
+                                                 loggerMock.Object,
+                                                 Array.Empty<TemplateParameter>());
 
             // Act
             var actual = sut.CreateRenderChildTemplateToken(new RenderChildTemplateDirectiveModel());

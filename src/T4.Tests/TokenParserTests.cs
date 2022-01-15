@@ -42,7 +42,8 @@ namespace TextTemplateTransformationFramework.T4.Tests
                 (
                     new TextTemplate(Src),
                     Array.Empty<TemplateParameter>(),
-                    _provider.GetRequiredService<ILoggerFactory>().Create()
+                    _provider.GetRequiredService<ILoggerFactory>().Create(),
+                    null
                 )
             );
 
@@ -72,7 +73,8 @@ namespace TextTemplateTransformationFramework.T4.Tests
                 (
                     new TextTemplate(Src),
                     Array.Empty<TemplateParameter>(),
-                    _provider.GetRequiredService<ILoggerFactory>().Create()
+                    _provider.GetRequiredService<ILoggerFactory>().Create(),
+                    null
                 )
             );
 

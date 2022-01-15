@@ -13,17 +13,20 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public TextTemplateProcessorContext(TextTemplate textTemplate,
                                             TemplateParameter[] parameters,
-                                            ILogger logger)
+                                            ILogger logger,
+                                            SectionContext<TState> parentContext)
         {
             TextTemplate = textTemplate ?? throw new ArgumentNullException(nameof(textTemplate));
             Parameters = parameters?.ToArray() ?? Array.Empty<TemplateParameter>();
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            ParentContext = parentContext;
             _state = new Dictionary<string, object>();
         }
 
         public TextTemplate TextTemplate { get; }
         public TemplateParameter[] Parameters { get; }
         public ILogger Logger { get; }
+        public SectionContext<TState> ParentContext { get; }
 
         /// <summary>
         /// Gets an generic collection containing the keys of the generic dictionary.
