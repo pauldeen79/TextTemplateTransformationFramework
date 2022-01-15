@@ -36,10 +36,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             });
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
@@ -148,10 +146,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             });
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
@@ -178,10 +174,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             var callback = CreateTokenParserCallback();
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
@@ -214,10 +208,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             });
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,

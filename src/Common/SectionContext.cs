@@ -4,6 +4,7 @@ using System.Linq;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens;
 using TextTemplateTransformationFramework.Common.Extensions;
+using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common
 {
@@ -13,10 +14,8 @@ namespace TextTemplateTransformationFramework.Common
             where TState : class 
             => new SectionContext<TState>
             (
-                null,
+                new Section(string.Empty, 0, string.Empty),
                 Enumerable.Empty<ITemplateToken<TState>>(),
-                0,
-                null,
                 null,
                 currentMode,
                 state,
@@ -26,10 +25,8 @@ namespace TextTemplateTransformationFramework.Common
 
         public static SectionContext<TState> FromSection<TState>
         (
-            string section,
+            Section section,
             int currentMode,
-            int lineNumber,
-            string fileName,
             IEnumerable<ITemplateToken<TState>> existingTokens,
             ITokenParserCallback<TState> tokenParserCallback,
             TState state,
@@ -40,8 +37,6 @@ namespace TextTemplateTransformationFramework.Common
             (
                 section,
                 existingTokens,
-                lineNumber,
-                fileName,
                 tokenParserCallback,
                 currentMode,
                 state,
@@ -58,16 +53,27 @@ namespace TextTemplateTransformationFramework.Common
 
             return FromSection
             (
-                token.SectionContext.Section,
+                new Section(token.SectionContext.FileName, token.SectionContext.LineNumber, token.SectionContext.Section),
                 token.SectionContext.CurrentMode,
-                token.SectionContext.LineNumber,
-                token.SectionContext.FileName,
                 token.SectionContext.ExistingTokens,
                 token.SectionContext.TokenParserCallback,
                 state,
                 token.SectionContext.Logger,
                 token.SectionContext.Parameters
             );
+        }
+    }
+
+    public class Section
+    {
+        public string Contents { get; }
+        public int LineNumber { get; }
+        public string FileName { get; }
+        public Section(string fileName, int lineNumber, string contents)
+        {
+            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            LineNumber = lineNumber;
+            Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }
     }
 
@@ -84,20 +90,18 @@ namespace TextTemplateTransformationFramework.Common
         public ILogger Logger { get; }
         public TemplateParameter[] Parameters { get; }
 
-        internal SectionContext(string section,
+        internal SectionContext(Section section,
                                 IEnumerable<ITemplateToken<TState>> existingTokens,
-                                int lineNumber,
-                                string fileName,
                                 ITokenParserCallback<TState> tokenParserCallback,
                                 int currentMode,
                                 TState state,
                                 ILogger logger,
                                 TemplateParameter[] parameters)
         {
-            Section = section;
+            Section = section.Contents;
             ExistingTokens = existingTokens;
-            LineNumber = lineNumber;
-            FileName = fileName;
+            LineNumber = section.LineNumber;
+            FileName = section.FileName.WhenNullOrEmpty(() => null);
             TokenParserCallback = tokenParserCallback;
             CurrentMode = currentMode;
             State = state;
@@ -113,10 +117,8 @@ namespace TextTemplateTransformationFramework.Common
         public static readonly SectionContext<TState> Empty
             = new SectionContext<TState>
             (
-                null,
+                new Section(string.Empty, 0, string.Empty),
                 Enumerable.Empty<ITemplateToken<TState>>(),
-                0,
-                null,
                 null,
                 Mode.Unknown,
                 null,
@@ -127,10 +129,8 @@ namespace TextTemplateTransformationFramework.Common
         public SectionContext<TState> WithFileName(string fileName)
             => new SectionContext<TState>
             (
-                Section,
+                new Section(fileName, LineNumber, Section),
                 ExistingTokens,
-                LineNumber,
-                fileName,
                 TokenParserCallback,
                 CurrentMode,
                 State,

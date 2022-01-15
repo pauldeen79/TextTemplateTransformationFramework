@@ -36,10 +36,8 @@ Hello world!");
             var loggerMock = new Mock<ILogger>();
             var context = SectionContext.FromSection
             (
-                "",
+                new Section("test.template", 1, string.Empty),
                 0,
-                1,
-                "template.template",
                 Enumerable.Empty<ITemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>(),
                 tokenParserCallbackMock.Object,
                 this,

@@ -48,10 +48,8 @@ namespace TextTemplateTransformationFramework.T4.Extensions
             TemplateParameter[] parameters
         ) => SectionContext.FromSection
         (
-            state.GetSection(),
+            new Section(fileName, state.PreviousLine ?? state.LineCounter, state.GetSection()),
             state.PreviousOrCurrentMode(),
-            state.PreviousLine ?? state.LineCounter,
-            fileName,
             state.ExistingTokens.Concat(state.Tokens),
             tokenParserCallback,
             state,
