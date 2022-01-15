@@ -71,9 +71,9 @@ namespace TextTemplateTransformationFramework.Common
         public string FileName { get; }
         public Section(string fileName, int lineNumber, string contents)
         {
-            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            FileName = fileName ?? string.Empty;
             LineNumber = lineNumber;
-            Contents = contents ?? throw new ArgumentNullException(nameof(contents));
+            Contents = contents ?? string.Empty;
         }
     }
 

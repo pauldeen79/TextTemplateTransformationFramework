@@ -59,7 +59,7 @@ namespace TextTemplateTransformationFramework.Common.Tests
         {
             // Arrange
             var types = typeof(TextTemplate).Assembly.GetExportedTypes()
-                .Where(t => !t.IsInterface && !t.IsAbstract && t.GetGenericArguments().Length == 0)
+                .Where(t => t.Name != nameof(Section) && !t.IsInterface && !t.IsAbstract && t.GetGenericArguments().Length == 0)
                 .Select(t => new
                 {
                     Type = t,
