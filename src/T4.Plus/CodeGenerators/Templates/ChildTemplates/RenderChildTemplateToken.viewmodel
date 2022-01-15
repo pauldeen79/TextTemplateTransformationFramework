@@ -12,34 +12,56 @@
                 {
                     yield return ", " + Model.Model.FormatLiteral(Model.ModelIsLiteral);
                 }
+                else
+                {
+                    yield return ", null";
+                }
                 if (Model.Enumerable != null)
                 {
-                    yield return ", renderAsEnumerable: " + Model.Enumerable.Value.CsharpFormat();
+                    yield return ", " + Model.Enumerable.Value.CsharpFormat();
+                }
+                else
+                {
+                    yield return ", null";
                 }
                 if (Model.SilentlyContinueOnError)
                 {
-                    yield return ", silentlyContinueOnError: true";
+                    yield return ", true";
+                }
+                else
+                {
+                    yield return ", false";
                 }
                 if (!string.IsNullOrEmpty(Model.SeparatorTemplateName))
                 {
-                    yield return ", separatorTemplateName: " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
+                    yield return ", " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
                 }
-                if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
+                else
                 {
-                    yield return ", customResolverDelegate: " + Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral);
+                    yield return ", null";
                 }
                 if (!string.IsNullOrEmpty(Model.ResolverDelegateModel))
                 {
-                    yield return ", resolverDelegateModel: " + Model.ResolverDelegateModel.FormatLiteral(Model.ResolverDelegateModelIsLiteral);
+                    yield return ", " + Model.ResolverDelegateModel.FormatLiteral(Model.ResolverDelegateModelIsLiteral);
+                }
+                else
+                {
+                    yield return ", null";
+                }
+                yield return ", new CustomDelegates { ";
+                if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
+                {
+                    yield return "ResolverDelegate = " + Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral) + ", ";
                 }
                 if (!string.IsNullOrEmpty(Model.CustomRenderChildTemplateDelegateExpression))
                 {
-                    yield return ", customRenderChildTemplateDelegate: " + Model.CustomRenderChildTemplateDelegateExpression.FormatLiteral(Model.CustomRenderChildTemplateDelegateExpressionIsLiteral);
+                    yield return "RenderChildTemplateDelegate = " + Model.CustomRenderChildTemplateDelegateExpression.FormatLiteral(Model.CustomRenderChildTemplateDelegateExpressionIsLiteral) + ", ";
                 }
                 if (!string.IsNullOrEmpty(Model.CustomTemplateNameDelegateExpression))
                 {
-                    yield return ", customTemplateNameDelegate: " + Model.CustomTemplateNameDelegateExpression.FormatLiteral(Model.CustomTemplateNameDelegateExpressionIsLiteral);
+                    yield return "TemplateNameDelegate = " + Model.CustomTemplateNameDelegateExpression.FormatLiteral(Model.CustomTemplateNameDelegateExpressionIsLiteral) + ", ";
                 }
+                yield return "}";
             }
         }
 #>

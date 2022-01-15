@@ -47,12 +47,12 @@ namespace "));
 {
 "));
             
-            RenderChildTemplate(null, Model.OfType<INamespaceImportToken<TokenParserState>>().DistinctBy(t => t.Namespace).OrderBy(t => t.Namespace), customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model.OfType<INamespaceImportToken<TokenParserState>>().DistinctBy(t => t.Namespace).OrderBy(t => t.Namespace), null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             
-            RenderChildTemplate(null, this, customResolverDelegate: MainClassTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, this, null, false, null, null, new CustomDelegates { ResolverDelegate = MainClassTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -60,12 +60,12 @@ namespace "));
    {
 
             
-            RenderChildTemplate(null, this, customResolverDelegate: BaseClassTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, this, null, false, null, null, new CustomDelegates { ResolverDelegate = BaseClassTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             }
 
             
-            RenderChildTemplate(null, Model.OfType<INamespaceFooterToken<TokenParserState>>(), customResolverDelegate: NamespaceFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model.OfType<INamespaceFooterToken<TokenParserState>>(), null, false, null, null, new CustomDelegates { ResolverDelegate = NamespaceFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -710,10 +710,10 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
     /// </summary>
 "));
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", Model, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", Model, null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public partial class "));
             Write(this.ToStringHelper.ToStringWithCulture(Model.TemplateClassName));
@@ -969,7 +969,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
         #endregion
 "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: ToStringInstanceHelperTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = ToStringInstanceHelperTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -978,7 +978,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             
-            RenderChildTemplate(null, Model.Model.OfType<IBaseClassFooterToken<TokenParserState>>(), customResolverDelegate: BaseClassFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model.Model.OfType<IBaseClassFooterToken<TokenParserState>>(), null, false, null, null, new CustomDelegates { ResolverDelegate = BaseClassFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1325,7 +1325,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public partial class "));
             Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
@@ -1338,7 +1338,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
         {
 "));
             
-            RenderChildTemplate(null, ViewModel.RenderTokens, customResolverDelegate: Model.RenderTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.RenderTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.RenderTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1347,7 +1347,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
         
 "));
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: Model.ParameterTokenDeclarationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.ParameterTokenDeclarationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1355,17 +1355,17 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
         {
 "));
             
-            RenderChildTemplate(null, ViewModel.InitializeTokens, customResolverDelegate: Model.InitializeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.InitializeTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.InitializeTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: Model.ParameterTokenInitializationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.ParameterTokenInitializationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             Write(this.ToStringHelper.ToStringWithCulture(@"        }
 "));
             
-            RenderChildTemplate(null, ViewModel.ClassFooterTokens, customResolverDelegate: Model.ClassFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ClassFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.ClassFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1843,7 +1843,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1891,7 +1891,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1939,7 +1939,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1987,7 +1987,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2035,7 +2035,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2083,7 +2083,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2131,7 +2131,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2179,7 +2179,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2227,7 +2227,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2275,7 +2275,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2419,7 +2419,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2467,7 +2467,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2515,7 +2515,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2563,7 +2563,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2611,7 +2611,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2659,7 +2659,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooterIndent12);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooterIndent12, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2707,7 +2707,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooterIndent12);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooterIndent12, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2755,7 +2755,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooterIndent12);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooterIndent12, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2803,7 +2803,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2851,7 +2851,7 @@ protected virtual bool ShouldRenderLineNumberAndFooter(object template, object m
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooterIndent12);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooterIndent12, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
