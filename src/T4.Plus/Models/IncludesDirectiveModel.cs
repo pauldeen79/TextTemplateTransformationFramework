@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace TextTemplateTransformationFramework.T4.Plus.Models
 {
     [Description("Includes templates from a directory into the current template")]
-    public class IncludeDirectiveModel
+    public class IncludesDirectiveModel
     {
         [Required]
         [Description("Path of the child templates")]
