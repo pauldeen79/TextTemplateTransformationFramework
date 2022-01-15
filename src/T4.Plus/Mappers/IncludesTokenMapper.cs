@@ -10,15 +10,15 @@ using CommonIncludeDirectiveModel = TextTemplateTransformationFramework.Common.M
 
 namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 {
-    [TokenMapper(typeof(IncludeDirectiveModel))]
+    [TokenMapper(typeof(IncludesDirectiveModel))]
     [DirectivePrefix("includes")]
-    public sealed class IncludesTokenMapper<TState> : IMultipleTokenMapper<TState, IncludeDirectiveModel>, IFileNameProviderContainer, IFileContentsProviderContainer
+    public sealed class IncludesTokenMapper<TState> : IMultipleTokenMapper<TState, IncludesDirectiveModel>, IFileNameProviderContainer, IFileContentsProviderContainer
         where TState : class
     {
         public IFileNameProvider FileNameProvider { get; set; }
         public IFileContentsProvider FileContentsProvider { get; set; }
 
-        public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, IncludeDirectiveModel model)
+        public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, IncludesDirectiveModel model)
         {
             if (model == null)
             {

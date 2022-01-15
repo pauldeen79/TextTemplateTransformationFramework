@@ -56,8 +56,9 @@ namespace TextTemplateTransformationFramework.Common.Mappers
                             FileContentsProvider.GetFileContents(model.File),
                             model.File
                         ),
-                        Array.Empty<TemplateParameter>(),
-                        context.Logger
+                        context.Parameters,
+                        context.Logger,
+                        context
                     )
                 )
                 .Concat(new IncludeFileToken<TState>(context, model.File));

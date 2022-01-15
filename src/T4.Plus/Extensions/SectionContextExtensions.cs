@@ -74,7 +74,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                                                  childTemplateFileName
                                              ),
                                              Array.Empty<TemplateParameter>(),
-                                             context.Logger
+                                             context.Logger,
+                                             context
                                          ).SetCustomSectionProcessors(context.CustomSectionProcessors)
                                      )
                                      .Cast<ISourceSectionToken<TState>>()

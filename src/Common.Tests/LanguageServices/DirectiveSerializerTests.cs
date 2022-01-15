@@ -36,14 +36,13 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             });
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger()
+                new Logger(),
+                Array.Empty<TemplateParameter>()
             );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
@@ -147,14 +146,13 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             });
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger()
+                new Logger(),
+                Array.Empty<TemplateParameter>()
             );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
@@ -176,14 +174,14 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             var callback = CreateTokenParserCallback();
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger());
+                new Logger(),
+                Array.Empty<TemplateParameter>()
+            );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
             var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
@@ -210,14 +208,13 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             });
             var context = SectionContext.FromSection
             (
-                Section,
+                new Section("test.template", 1, Section),
                 1,
-                1,
-                "",
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
                 callback.Object,
                 this,
-                new Logger()
+                new Logger(),
+                Array.Empty<TemplateParameter>()
             );
             var fileNameProvider = new Mock<IFileNameProvider>().Object;
             var fileContentsProvider = new Mock<IFileContentsProvider>().Object;

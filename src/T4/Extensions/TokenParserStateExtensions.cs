@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
@@ -43,17 +44,17 @@ namespace TextTemplateTransformationFramework.T4.Extensions
             this TokenParserState state,
             string fileName,
             ITokenParserCallback<TokenParserState> tokenParserCallback,
-            ILogger logger
+            ILogger logger,
+            TemplateParameter[] parameters
         ) => SectionContext.FromSection
         (
-            state.GetSection(),
+            new Section(fileName, state.PreviousLine ?? state.LineCounter, state.GetSection()),
             state.PreviousOrCurrentMode(),
-            state.PreviousLine ?? state.LineCounter,
-            fileName,
-            state.Tokens,
+            state.ExistingTokens.Concat(state.Tokens),
             tokenParserCallback,
             state,
-            logger
+            logger,
+            parameters
         );
     }
 }

@@ -60,7 +60,8 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 textTemplate,
                 parameters,
-                _loggerFactory.Create()
+                _loggerFactory.Create(),
+                null
             );
     }
 }

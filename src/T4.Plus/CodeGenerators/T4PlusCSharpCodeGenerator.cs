@@ -433,10 +433,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", Model, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", Model, null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public partial class "));
             Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
@@ -455,7 +455,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
 "));
             
-            RenderChildTemplate(null, ViewModel.RenderTokens, customResolverDelegate: Model.RenderTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.RenderTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.RenderTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -468,7 +468,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: Model.ParameterTokenDeclarationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.ParameterTokenDeclarationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -484,20 +484,20 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
 "));
             
-            RenderChildTemplate(null, ViewModel.PreParameterInitializeTokens, customResolverDelegate: Model.InitializeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.PreParameterInitializeTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.InitializeTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: Model.ParameterTokenInitializationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.ParameterTokenInitializationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.PostParameterInitializeTokens, customResolverDelegate: Model.InitializeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.PostParameterInitializeTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.InitializeTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             Write(this.ToStringHelper.ToStringWithCulture(@"        }
 "));
             
-            RenderChildTemplate(null, ViewModel.ClassFooterTokens, customResolverDelegate: Model.ClassFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ClassFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.ClassFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1176,7 +1176,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
 "));
             
-            RenderChildTemplate(null, RootTemplate.Model.OfType<IChildTemplateRenderCodeToken<TokenParserState>>(), customResolverDelegate: ((T4PlusCSharpCodeGenerator)RootTemplate).ChildTemplateRenderCodeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, RootTemplate.Model.OfType<IChildTemplateRenderCodeToken<TokenParserState>>(), null, false, null, null, new CustomDelegates { ResolverDelegate = ((T4PlusCSharpCodeGenerator)RootTemplate).ChildTemplateRenderCodeTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1339,17 +1339,17 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
 "));
             
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.PlaceholderCode.Template");
+            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.PlaceholderCode.Template", null, null, false, null, null, new CustomDelegates { });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.RenderTemplateCode.Template");
+            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.RenderTemplateCode.Template", null, null, false, null, null, new CustomDelegates { });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.RenderChildTemplateCode.Template");
+            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.RenderChildTemplateCode.Template", null, null, false, null, null, new CustomDelegates { });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1381,12 +1381,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
 "));
             
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.GetRegisteredObjectCode.Template");
+            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.GetRegisteredObjectCode.Template", null, null, false, null, null, new CustomDelegates { });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             
-            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.ConvertTypeCode.Template");
+            RenderChildTemplate(@"T4PlusCSharpCodeGenerator.ConvertTypeCode.Template", null, null, false, null, null, new CustomDelegates { });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -1489,7 +1489,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1537,7 +1537,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1585,7 +1585,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1633,7 +1633,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -1681,7 +1681,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2297,7 +2297,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2640,10 +2640,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public class "));
             Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
@@ -2742,10 +2742,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public class "));
             Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
@@ -2759,7 +2759,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
 "));
             
-            RenderChildTemplate(null, ViewModel.RenderTokens, customResolverDelegate: RenderTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.RenderTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = RenderTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -2768,7 +2768,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
 "));
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: ViewModel.RootTemplate.ParameterTokenDeclarationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ParameterTokenDeclarationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -2776,13 +2776,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
 "));
             
-            RenderChildTemplate(null, ViewModel.InitializeTokens, customResolverDelegate: InitializeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.InitializeTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = InitializeTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.ChildInitializeTokens, customResolverDelegate: ViewModel.RootTemplate.ChildTemplateInitializeCodeTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ChildInitializeTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ChildTemplateInitializeCodeTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: ViewModel.RootTemplate.ParameterTokenInitializationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ParameterTokenInitializationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -2799,14 +2799,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
 
             
-            RenderChildTemplate(null, ViewModel.ClassFooterTokens, customResolverDelegate: ClassFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ClassFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ClassFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
             Write(this.ToStringHelper.ToStringWithCulture(@"    }
 "));
             
-            RenderChildTemplate(null, ViewModel.ChildTemplateFooterTokens, customResolverDelegate: ViewModel.RootTemplate.ChildTemplateFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ChildTemplateFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ChildTemplateFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -2870,10 +2870,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public class "));
             Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassName));
@@ -2888,7 +2888,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"    {
 "));
             
-            RenderChildTemplate(null, ViewModel.ParameterTokens, customResolverDelegate: ViewModel.RootTemplate.ParameterTokenDeclarationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ParameterTokenDeclarationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             if (!string.IsNullOrEmpty(ViewModel.ModelType))
    {
@@ -2901,13 +2901,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
 
             
-            RenderChildTemplate(null, ViewModel.CopyParameterTokens, customResolverDelegate: ViewModel.RootTemplate.ParameterTokenDeclarationTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.CopyParameterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ParameterTokenDeclarationTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.ClassFooterTokens, customResolverDelegate: ClassFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ClassFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ClassFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             
-            RenderChildTemplate(null, ViewModel.ViewModelClassFooterTokens, customResolverDelegate: ViewModel.RootTemplate.ViewModelClassFooterTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(null, ViewModel.ViewModelClassFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ViewModelClassFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
@@ -2975,10 +2975,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
             
-            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, customRenderChildTemplateDelegate: RenderWithHeaderAndFooter);
+            RenderChildTemplate(@"T4CSharpCodeGenerator.ExcludeFromCodeCoverageAttribute.Template", ViewModel.RootTemplate, null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"    public class "));
             Write(this.ToStringHelper.ToStringWithCulture(ViewModel.ClassNameSanitized));
@@ -3716,7 +3716,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
-            RenderChildTemplate(null, Model, customResolverDelegate: RootTemplate.BaseTemplate);
+            RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, });
 
 
             if (builder != null) this.GenerationEnvironment = backup;
@@ -3843,34 +3843,56 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 {
                     yield return ", " + Model.Model.FormatLiteral(Model.ModelIsLiteral);
                 }
+                else
+                {
+                    yield return ", null";
+                }
                 if (Model.Enumerable != null)
                 {
-                    yield return ", renderAsEnumerable: " + Model.Enumerable.Value.CsharpFormat();
+                    yield return ", " + Model.Enumerable.Value.CsharpFormat();
+                }
+                else
+                {
+                    yield return ", null";
                 }
                 if (Model.SilentlyContinueOnError)
                 {
-                    yield return ", silentlyContinueOnError: true";
+                    yield return ", true";
+                }
+                else
+                {
+                    yield return ", false";
                 }
                 if (!string.IsNullOrEmpty(Model.SeparatorTemplateName))
                 {
-                    yield return ", separatorTemplateName: " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
+                    yield return ", " + Model.SeparatorTemplateName.FormatLiteral(Model.SeparatorTemplateNameIsLiteral);
                 }
-                if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
+                else
                 {
-                    yield return ", customResolverDelegate: " + Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral);
+                    yield return ", null";
                 }
                 if (!string.IsNullOrEmpty(Model.ResolverDelegateModel))
                 {
-                    yield return ", resolverDelegateModel: " + Model.ResolverDelegateModel.FormatLiteral(Model.ResolverDelegateModelIsLiteral);
+                    yield return ", " + Model.ResolverDelegateModel.FormatLiteral(Model.ResolverDelegateModelIsLiteral);
+                }
+                else
+                {
+                    yield return ", null";
+                }
+                yield return ", new CustomDelegates { ";
+                if (!string.IsNullOrEmpty(Model.CustomResolverDelegateExpression))
+                {
+                    yield return "ResolverDelegate = " + Model.CustomResolverDelegateExpression.FormatLiteral(Model.CustomResolverDelegateExpressionIsLiteral) + ", ";
                 }
                 if (!string.IsNullOrEmpty(Model.CustomRenderChildTemplateDelegateExpression))
                 {
-                    yield return ", customRenderChildTemplateDelegate: " + Model.CustomRenderChildTemplateDelegateExpression.FormatLiteral(Model.CustomRenderChildTemplateDelegateExpressionIsLiteral);
+                    yield return "RenderChildTemplateDelegate = " + Model.CustomRenderChildTemplateDelegateExpression.FormatLiteral(Model.CustomRenderChildTemplateDelegateExpressionIsLiteral) + ", ";
                 }
                 if (!string.IsNullOrEmpty(Model.CustomTemplateNameDelegateExpression))
                 {
-                    yield return ", customTemplateNameDelegate: " + Model.CustomTemplateNameDelegateExpression.FormatLiteral(Model.CustomTemplateNameDelegateExpressionIsLiteral);
+                    yield return "TemplateNameDelegate = " + Model.CustomTemplateNameDelegateExpression.FormatLiteral(Model.CustomTemplateNameDelegateExpressionIsLiteral) + ", ";
                 }
+                yield return "}";
             }
         }
 

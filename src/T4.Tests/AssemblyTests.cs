@@ -32,7 +32,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
             var methods = typeof(TokenParser).Assembly.GetExportedTypes()
                 .Where(t => t.IsInterface)
                 .SelectMany(t => t.GetMethods().Select(m => new { TypeName = t.FullName.FixTypeName(), MethodName = m.Name, MethodArgumentCount = m.GetParameters().Length }))
-                .Where(x => x.MethodArgumentCount > 3)
+                .Where(x => x.MethodArgumentCount > 4)
                 .OrderByDescending(x => x.MethodArgumentCount)
                 .ToArray();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.T4.Contracts;
@@ -22,11 +23,11 @@ namespace TextTemplateTransformationFramework.T4.Plus
             _baseProcessor = baseProcessor ?? throw new ArgumentNullException(nameof(baseProcessor));
         }
 
-        public ProcessSectionResult<TokenParserState> Process(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger)
+        public ProcessSectionResult<TokenParserState> Process(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger, TemplateParameter[] parameters)
             => ScopedAssemblyResolveOperation.Invoke
             (
                 CurrentDomain_AssemblyResolve,
-                () => ScopedBackingMemberOperation.InvokeAlways(ref _sourceTokens, state.Tokens, () => _baseProcessor.Process(state, tokenParserCallback, logger))
+                () => ScopedBackingMemberOperation.InvokeAlways(ref _sourceTokens, state.Tokens, () => _baseProcessor.Process(state, tokenParserCallback, logger, parameters))
             );
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

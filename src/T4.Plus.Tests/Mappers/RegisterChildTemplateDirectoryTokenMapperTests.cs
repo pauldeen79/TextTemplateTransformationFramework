@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -35,14 +36,13 @@ Hello world!");
             var loggerMock = new Mock<ILogger>();
             var context = SectionContext.FromSection
             (
-                "",
+                new Section("test.template", 1, string.Empty),
                 0,
-                1,
-                "template.template",
                 Enumerable.Empty<ITemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>(),
                 tokenParserCallbackMock.Object,
                 this,
-                loggerMock.Object
+                loggerMock.Object,
+                Array.Empty<TemplateParameter>()
             );
             var model = new RegisterChildTemplateDirectoryDirectiveModel<RegisterChildTemplateDirectoryTokenMapperTests>()
             {

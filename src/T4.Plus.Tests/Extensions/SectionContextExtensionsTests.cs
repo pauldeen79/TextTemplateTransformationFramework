@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -21,14 +22,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Extensions
             // Arrange
             var tokenParserCallbackMock = new Mock<ITokenParserCallback<SectionContextExtensionsTests>>();
             var loggerMock = new Mock<ILogger>();
-            var sut = SectionContext.FromSection("<# Hello world! #>",
+            var sut = SectionContext.FromSection(new Section("test.template", 1, "<# Hello world! #>"),
                                                  1000 + ModePosition.Initialize, //Note that it's important that we increase the mode by 1000. Else GetCurrentPosition() returns Render anyway :(
-                                                 1,
-                                                 "test.template",
                                                  Enumerable.Empty<ITemplateToken<SectionContextExtensionsTests>>(),
                                                  tokenParserCallbackMock.Object,
                                                  this,
-                                                 loggerMock.Object);
+                                                 loggerMock.Object,
+                                                 Array.Empty<TemplateParameter>());
 
             // Act
             var actual = sut.CreateRenderChildTemplateToken(new RenderChildTemplateDirectiveModel());
@@ -43,14 +43,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Extensions
             // Arrange
             var tokenParserCallbackMock = new Mock<ITokenParserCallback<SectionContextExtensionsTests>>();
             var loggerMock = new Mock<ILogger>();
-            var sut = SectionContext.FromSection("<# Hello world! #>",
+            var sut = SectionContext.FromSection(new Section("test.tempalte", 1, "<# Hello world! #>"),
                                                  ModePosition.Render,
-                                                 1,
-                                                 "test.template",
                                                  Enumerable.Empty<ITemplateToken<SectionContextExtensionsTests>>(),
                                                  tokenParserCallbackMock.Object,
                                                  this,
-                                                 loggerMock.Object);
+                                                 loggerMock.Object,
+                                                 Array.Empty<TemplateParameter>());
 
             // Act
             var actual = sut.CreateRenderChildTemplateToken(new RenderChildTemplateDirectiveModel());

@@ -7,6 +7,13 @@ using System.Reflection;
 
 namespace TextTemplateTransformationFramework.Runtime
 {
+    public class CustomDelegates
+    {
+        public Func<string, string, Type, object, bool> ResolverDelegate { get; set; }
+        public Action<string, object, object, bool, bool, int?, int?> RenderChildTemplateDelegate { get; set; }
+        public Func<object, string> TemplateNameDelegate { get; set; }
+    }
+
     public class T4PlusGeneratedTemplateBase : T4GeneratedTemplateBase
     {
         #region Child templates
@@ -161,10 +168,8 @@ namespace TextTemplateTransformationFramework.Runtime
                                         bool? renderAsEnumerable = null,
                                         bool silentlyContinueOnError = false,
                                         string separatorTemplateName = null,
-                                        Func<string, string, Type, object, bool> customResolverDelegate = null,
                                         object resolverDelegateModel = null,
-                                        Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null,
-                                        Func<object, string> customTemplateNameDelegate = null)
+                                        CustomDelegates customDelegates = null)
         {
             if (renderAsEnumerable == null)
             {
@@ -178,27 +183,27 @@ namespace TextTemplateTransformationFramework.Runtime
                 var originalTemplateName = templateName;
                 foreach (var item in items)
                 {
-                    templateName = GetTemplateName(templateName, customTemplateNameDelegate, originalTemplateName, item);
-                    var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customResolverDelegate);
-                    if (customRenderChildTemplateDelegate != null)
+                    templateName = GetTemplateName(templateName, customDelegates?.TemplateNameDelegate, originalTemplateName, item);
+                    var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customDelegates?.ResolverDelegate);
+                    if (customDelegates?.RenderChildTemplateDelegate != null)
                     {
-                        customRenderChildTemplateDelegate.Invoke(templateName, template, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
+                        customDelegates?.RenderChildTemplateDelegate.Invoke(templateName, template, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
                     }
                     else
                     {
                         RenderTemplate(template, item, iterationNumber, iterationCount, templateName);
                     }
-                    RenderSeparator(templateName, model, renderAsEnumerable, silentlyContinueOnError, separatorTemplateName, customResolverDelegate, resolverDelegateModel, customRenderChildTemplateDelegate, iterationCount, iterationNumber, item);
+                    RenderSeparator(model, renderAsEnumerable, silentlyContinueOnError, separatorTemplateName, resolverDelegateModel, iterationCount, iterationNumber, item, customDelegates);
                     iterationNumber++;
                 }
             }
             else
             {
-                templateName = GetTemplateName(templateName, customTemplateNameDelegate, templateName, model);
-                var template = GetChildTemplate(templateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                if (customRenderChildTemplateDelegate != null)
+                templateName = GetTemplateName(templateName, customDelegates?.TemplateNameDelegate, templateName, model);
+                var template = GetChildTemplate(templateName, resolverDelegateModel ?? model, silentlyContinueOnError, customDelegates?.ResolverDelegate);
+                if (customDelegates?.RenderChildTemplateDelegate != null)
                 {
-                    customRenderChildTemplateDelegate.Invoke(templateName, template, model, renderAsEnumerable.Value, silentlyContinueOnError, null, null);
+                    customDelegates?.RenderChildTemplateDelegate.Invoke(templateName, template, model, renderAsEnumerable.Value, silentlyContinueOnError, null, null);
                 }
                 else
                 {
@@ -226,26 +231,34 @@ namespace TextTemplateTransformationFramework.Runtime
             }
         }
 
-        private void RenderSeparator(string templateName, object model, bool? renderAsEnumerable, bool silentlyContinueOnError, string separatorTemplateName, Func<string, string, Type, object, bool> customResolverDelegate, object resolverDelegateModel, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate, int iterationCount, int iterationNumber, object item)
+        private void RenderSeparator(object model,
+                                     bool? renderAsEnumerable,
+                                     bool silentlyContinueOnError,
+                                     string separatorTemplateName,
+                                     object resolverDelegateModel,
+                                     int iterationCount,
+                                     int iterationNumber,
+                                     object item,
+                                     CustomDelegates customDelegates)
         {
             if (iterationNumber + 1 >= iterationCount || string.IsNullOrEmpty(separatorTemplateName))
             {
                 return;
             }
 
-            var separatorTemplate = GetChildTemplate(separatorTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
+            var separatorTemplate = GetChildTemplate(separatorTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customDelegates?.ResolverDelegate);
             if (separatorTemplate == null)
             {
                 return;
             }
 
-            if (customRenderChildTemplateDelegate != null)
+            if (customDelegates?.RenderChildTemplateDelegate != null)
             {
-                customRenderChildTemplateDelegate.Invoke(templateName, separatorTemplate, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
+                customDelegates?.RenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
             }
             else
             {
-                RenderTemplate(separatorTemplate, item, iterationNumber, iterationCount, templateName);
+                RenderTemplate(separatorTemplate, item, iterationNumber, iterationCount, separatorTemplateName);
             }
         }
 

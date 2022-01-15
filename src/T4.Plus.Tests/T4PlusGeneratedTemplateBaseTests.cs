@@ -207,6 +207,33 @@ Hello 4
             sut.Errors.Should().ContainSingle();
             sut.Errors.First().ErrorText.Should().Be("Could not resolve child template with name NonExistingChildTemplate");
         }
+
+        [Fact]
+        public void CanRenderTemplateWithSeparator()
+        {
+            // Arrange
+            var sut = new TemplateThatUsesSeparator();
+
+            // Act
+            var actual = TemplateRenderHelper.GetTemplateOutput(sut);
+
+            // Assert
+            actual.Should().Be("Test,Test,Test");
+        }
+    }
+
+    internal class TemplateThatUsesSeparator : T4PlusGeneratedTemplateBase
+    {
+        public void Initialize()
+        {
+            RegisterChildTemplate("Test", () => new SimpleTemplate("Test"), typeof(string));
+            RegisterChildTemplate("Separator", () => new SimpleTemplate(","));
+        }
+        public void Render(StringBuilder builder)
+        {
+            GenerationEnvironment = builder;
+            RenderChildTemplate("Test", Enumerable.Range(1, 3).Select(_ => string.Empty), separatorTemplateName: "Separator");
+        }
     }
 
     [ExcludeFromCodeCoverage]
@@ -304,5 +331,18 @@ Hello 4
     {
         public string Name { get; set; }
         public int Count { get; set; }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class SimpleTemplate
+    {
+        private readonly string _contents;
+
+        public SimpleTemplate(string contents)
+        {
+            _contents = contents;
+        }
+
+        public override string ToString() => _contents;
     }
 }
