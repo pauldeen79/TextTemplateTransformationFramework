@@ -9,41 +9,38 @@ namespace TextTemplateTransformationFramework.Common.Default
         where TState : class
     {
         public TemplateCodeOutput(IEnumerable<ITemplateToken<TState>> sourceTokens,
-                                  string sourceCode,
+                                  CodeGeneratorResult codeGeneratorResult,
                                   string outputExtension,
-                                  string language,
                                   IEnumerable<string> referencedAssemblies,
                                   IEnumerable<string> packageReferences,
                                   string className,
-                                  string tempPath,
-                                  IEnumerable<CompilerError> errors,
-                                  Exception exception = null)
+                                  string tempPath)
         {
-            SourceTokens = sourceTokens?.ToArray() ?? Array.Empty<ITemplateToken<TState>>();
-            SourceCode = sourceCode;
+            if (codeGeneratorResult == null)
+            {
+                throw new ArgumentNullException(nameof(codeGeneratorResult));
+            }
+            SourceTokens = sourceTokens.ToArray() ?? Array.Empty<ITemplateToken<TState>>();
+            SourceCode = codeGeneratorResult.SourceCode;
             OutputExtension = outputExtension;
-            Language = language;
+            Language = codeGeneratorResult.Language;
             ReferencedAssemblies = referencedAssemblies?.ToArray() ?? Array.Empty<string>();
             PackageReferences = packageReferences?.ToArray() ?? Array.Empty<string>();
             ClassName = className;
             TempPath = tempPath;
-            Errors = errors?.ToArray() ?? Array.Empty<CompilerError>();
-            Exception = exception;
+            Errors = codeGeneratorResult.Errors;
         }
 
         public TemplateCodeOutput(IEnumerable<ITemplateToken<TState>> sourceTokens,
                                   string sourceCode,
                                   TemplateCodeOutput<TState> previousResult)
             : this(sourceTokens,
-                   sourceCode,
-                   previousResult?.OutputExtension,
-                   previousResult?.Language,
-                   previousResult?.ReferencedAssemblies,
-                   previousResult?.PackageReferences,
-                   previousResult?.ClassName,
-                   previousResult?.TempPath,
-                   previousResult?.Errors,
-                   previousResult?.Exception)
+                   new CodeGeneratorResult(sourceCode, previousResult.Language, previousResult.Errors ?? Enumerable.Empty<CompilerError>()),
+                   previousResult.OutputExtension,
+                   previousResult.ReferencedAssemblies,
+                   previousResult.PackageReferences,
+                   previousResult.ClassName,
+                   previousResult.TempPath)
         {
         }
 
@@ -64,7 +61,5 @@ namespace TextTemplateTransformationFramework.Common.Default
         public string TempPath { get; }
 
         public IEnumerable<CompilerError> Errors { get; }
-
-        public Exception Exception { get; }
     }
 }

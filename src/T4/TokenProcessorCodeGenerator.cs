@@ -14,7 +14,7 @@ namespace TextTemplateTransformationFramework.T4
     public class TokenProcessorCodeGenerator<TState> : ITokenProcessorCodeGenerator<TState>
         where TState : class
     {
-        public CodeGeneratorResult Generate(GenerateCodeRequest<TState> request)
+        public CodeGeneratorResultBuilder Generate(GenerateCodeRequest<TState> request)
         {
             if (request == null)
             {
@@ -41,10 +41,10 @@ namespace TextTemplateTransformationFramework.T4
             var sourceCodeStringBuilder = new StringBuilder();
             codeGenerator.Render(sourceCodeStringBuilder);
 
-            return new CodeGeneratorResult
+            return new CodeGeneratorResultBuilder
             (
                 sourceCodeStringBuilder,
-                codeGenerator.Errors.Select(e => new CompilerError(e.Column, e.ErrorNumber, e.ErrorText, e.FileName, e.IsWarning, e.Line)).ToArray()
+                codeGenerator.Errors.Select(e => new CompilerError(e.Column, e.ErrorNumber, e.ErrorText, e.FileName, e.IsWarning, e.Line))
             );
         }
     }

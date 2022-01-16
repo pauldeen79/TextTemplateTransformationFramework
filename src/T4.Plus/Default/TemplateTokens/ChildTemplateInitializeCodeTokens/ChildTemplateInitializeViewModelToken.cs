@@ -9,26 +9,22 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Chi
         where TState : class
     {
         public ChildTemplateInitializeViewModelToken(SectionContext<TState> context,
-                                                     string viewModelName,
-                                                     bool viewModelNameIsLiteral,
-                                                     string model,
-                                                     bool modelIsLiteral,
+                                                     ValueSpecifier viewModel,
+                                                     ValueSpecifier model,
                                                      bool silentlyContinueOnError,
-                                                     string customResolverDelegateExpression,
-                                                     bool customResolverDelegateExpressionIsLiteral,
-                                                     string resolverDelegateModel,
-                                                     bool resolverDelegateModelIsLiteral)
+                                                     ValueSpecifier customResolverDelegate,
+                                                     ValueSpecifier resolverDelegateModel)
             : base(context)
         {
-            ViewModelName = viewModelName;
-            ViewModelNameIsLiteral = viewModelNameIsLiteral;
-            Model = model;
-            ModelIsLiteral = modelIsLiteral;
+            ViewModelName = viewModel.Value;
+            ViewModelNameIsLiteral = viewModel.ValueIsLiteral;
+            Model = model.Value;
+            ModelIsLiteral = model.ValueIsLiteral;
             SilentlyContinueOnError = silentlyContinueOnError;
-            CustomResolverDelegateExpression = customResolverDelegateExpression;
-            CustomResolverDelegateExpressionIsLiteral = customResolverDelegateExpressionIsLiteral;
-            ResolverDelegateModel = resolverDelegateModel;
-            ResolverDelegateModelIsLiteral = resolverDelegateModelIsLiteral;
+            CustomResolverDelegateExpression = customResolverDelegate.Value;
+            CustomResolverDelegateExpressionIsLiteral = customResolverDelegate.ValueIsLiteral;
+            ResolverDelegateModel = resolverDelegateModel.Value;
+            ResolverDelegateModelIsLiteral = resolverDelegateModel.ValueIsLiteral;
         }
 
         public string ViewModelName { get; }

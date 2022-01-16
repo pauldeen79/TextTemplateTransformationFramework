@@ -22,11 +22,9 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
                 throw new ArgumentNullException(nameof(request));
             }
 
-            TemplateCodeOutput<TState> templateCodeOutput = null;
-
             try
             {
-                templateCodeOutput = GetTemplateCodeOutput(request.Context);
+                var templateCodeOutput = GetTemplateCodeOutput(request.Context);
 
                 return ProcessResult.Create
                 (
@@ -34,8 +32,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
                     output: null,
                     templateCodeOutput.SourceCode,
                     request.Context.Logger.Aggregate(),
-                    templateCodeOutput.OutputExtension,
-                    templateCodeOutput.Exception
+                    templateCodeOutput.OutputExtension
                 );
             }
             catch (Exception exception)
@@ -44,9 +41,9 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
                 (
                     errors: null,
                     output: null,
-                    templateCodeOutput?.SourceCode,
+                    sourceCode: null,
                     request.Context.Logger.Aggregate(),
-                    templateCodeOutput?.OutputExtension,
+                    outputExtension: null,
                     exception
                 );
             }

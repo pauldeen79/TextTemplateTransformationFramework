@@ -6,7 +6,24 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens
     public class ParameterToken<TState> : TextTemplateTransformationFramework.Common.Default.TemplateTokens.ParameterToken<TState>, IParameterToken<TState>
         where TState : class
     {
-        public ParameterToken(SectionContext<TState> context, string name, string typeName, bool netCoreCompatible = true, string defaultValue = null, bool defaultValueIsLiteral = true, bool browsable = true, bool readOnly = false, bool required = false, string displayName = null, string description = null, bool omitValueAssignment = false, bool addPropertySetter = false, string editorAttributeEditorTypeName = null, string editorAttributeEditorBaseType = null, string typeConverterTypeName= null, string category = null, bool omitInitialization = false)
+        public ParameterToken(SectionContext<TState> context,
+                              string name,
+                              string typeName,
+                              bool netCoreCompatible = true,
+                              string defaultValue = null,
+                              bool defaultValueIsLiteral = true,
+                              bool browsable = true,
+                              bool readOnly = false,
+                              bool required = false,
+                              string displayName = null,
+                              string description = null,
+                              bool omitValueAssignment = false,
+                              bool addPropertySetter = false,
+                              string editorAttributeEditorTypeName = null,
+                              string editorAttributeEditorBaseType = null,
+                              string typeConverterTypeName= null,
+                              string category = null,
+                              bool omitInitialization = false)
             : base(context, name, typeName, netCoreCompatible)
         {
             DefaultValue = defaultValue;

@@ -8,28 +8,22 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ini
         where TState : class
     {
         public RootTemplateInitializeViewModelToken(SectionContext<TState> context,
-                                                    string viewModelName,
-                                                    bool viewModelNameIsLiteral,
-                                                    string model,
-                                                    bool modelIsLiteral,
+                                                    ValueSpecifier viewModel,
+                                                    ValueSpecifier model,
                                                     bool silentlyContinueOnError,
-                                                    string customResolverDelegateExpression,
-                                                    bool customResolverDelegateExpressionIsLiteral,
-                                                    string resolverDelegateModel,
-                                                    bool resolverDelegateModelIsLiteral,
-                                                    bool addRootTemplatePrefix = false)
+                                                    ValueSpecifier customResolverDelegate,
+                                                    ValueSpecifier resolverDelegate)
             : base(context)
         {
-            ViewModelName = viewModelName;
-            ViewModelNameIsLiteral = viewModelNameIsLiteral;
-            Model = model;
-            ModelIsLiteral = modelIsLiteral;
+            ViewModelName = viewModel.Value;
+            ViewModelNameIsLiteral = viewModel.ValueIsLiteral;
+            Model = model.Value;
+            ModelIsLiteral = model.ValueIsLiteral;
             SilentlyContinueOnError = silentlyContinueOnError;
-            CustomResolverDelegateExpression = customResolverDelegateExpression;
-            CustomResolverDelegateExpressionIsLiteral = customResolverDelegateExpressionIsLiteral;
-            ResolverDelegateModel = resolverDelegateModel;
-            ResolverDelegateModelIsLiteral = resolverDelegateModelIsLiteral;
-            AddRootTemplatePrefix = addRootTemplatePrefix;
+            CustomResolverDelegateExpression = customResolverDelegate.Value;
+            CustomResolverDelegateExpressionIsLiteral = customResolverDelegate.ValueIsLiteral;
+            ResolverDelegateModel = resolverDelegate.Value;
+            ResolverDelegateModelIsLiteral = resolverDelegate.ValueIsLiteral;
         }
 
         public string ViewModelName { get; }

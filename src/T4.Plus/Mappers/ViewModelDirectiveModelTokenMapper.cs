@@ -36,15 +36,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                         yield return new ChildTemplateInitializeViewModelToken<TState>
                         (
                             context,
-                            model.Name,
-                            model.NameIsLiteral,
-                            model.Model,
-                            model.ModelIsLiteral,
+                            new ValueSpecifier(model.Name, model.NameIsLiteral),
+                            new ValueSpecifier(model.Model, model.ModelIsLiteral),
                             model.SilentlyContinueOnError,
-                            model.CustomResolverDelegate,
-                            model.CustomResolverDelegateIsLiteral,
-                            model.ResolverDelegateModel,
-                            model.ResolverDelegateModelIsLiteral
+                            new ValueSpecifier(model.CustomResolverDelegate, model.CustomResolverDelegateIsLiteral),
+                            new ValueSpecifier(model.ResolverDelegateModel, model.ResolverDelegateModelIsLiteral)
                         );
                     }
                     else
@@ -52,15 +48,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                         yield return new RootTemplateInitializeViewModelToken<TState>
                         (
                             context,
-                            model.Name,
-                            model.NameIsLiteral,
-                            model.Model,
-                            model.ModelIsLiteral,
+                            new ValueSpecifier(model.Name, model.NameIsLiteral),
+                            new ValueSpecifier(model.Model, model.ModelIsLiteral),
                             model.SilentlyContinueOnError,
-                            model.CustomResolverDelegate,
-                            model.CustomResolverDelegateIsLiteral,
-                            model.ResolverDelegateModel,
-                            model.ResolverDelegateModelIsLiteral
+                            new ValueSpecifier(model.CustomResolverDelegate, model.CustomResolverDelegateIsLiteral),
+                            new ValueSpecifier(model.ResolverDelegateModel, model.ResolverDelegateModelIsLiteral)
                         );
                     }
                 }
