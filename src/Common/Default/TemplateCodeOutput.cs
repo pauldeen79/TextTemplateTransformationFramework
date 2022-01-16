@@ -20,7 +20,7 @@ namespace TextTemplateTransformationFramework.Common.Default
             {
                 throw new ArgumentNullException(nameof(codeGeneratorResult));
             }
-            SourceTokens = sourceTokens?.ToArray() ?? Array.Empty<ITemplateToken<TState>>();
+            SourceTokens = sourceTokens.ToArray() ?? Array.Empty<ITemplateToken<TState>>();
             SourceCode = codeGeneratorResult.SourceCode;
             OutputExtension = outputExtension;
             Language = codeGeneratorResult.Language;
@@ -35,12 +35,12 @@ namespace TextTemplateTransformationFramework.Common.Default
                                   string sourceCode,
                                   TemplateCodeOutput<TState> previousResult)
             : this(sourceTokens,
-                   new CodeGeneratorResult(sourceCode, previousResult?.Language, previousResult?.Errors ?? Enumerable.Empty<CompilerError>()),
-                   previousResult?.OutputExtension,
-                   previousResult?.ReferencedAssemblies,
-                   previousResult?.PackageReferences,
-                   previousResult?.ClassName,
-                   previousResult?.TempPath)
+                   new CodeGeneratorResult(sourceCode, previousResult.Language, previousResult.Errors ?? Enumerable.Empty<CompilerError>()),
+                   previousResult.OutputExtension,
+                   previousResult.ReferencedAssemblies,
+                   previousResult.PackageReferences,
+                   previousResult.ClassName,
+                   previousResult.TempPath)
         {
         }
 

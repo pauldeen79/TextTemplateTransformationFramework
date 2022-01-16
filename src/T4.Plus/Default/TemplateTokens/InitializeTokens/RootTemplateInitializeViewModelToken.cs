@@ -12,8 +12,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ini
                                                     ValueSpecifier model,
                                                     bool silentlyContinueOnError,
                                                     ValueSpecifier customResolverDelegate,
-                                                    ValueSpecifier resolverDelegate,
-                                                    bool addRootTemplatePrefix = false)
+                                                    ValueSpecifier resolverDelegate)
             : base(context)
         {
             ViewModelName = viewModel.Value;
@@ -25,7 +24,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ini
             CustomResolverDelegateExpressionIsLiteral = customResolverDelegate.ValueIsLiteral;
             ResolverDelegateModel = resolverDelegate.Value;
             ResolverDelegateModelIsLiteral = resolverDelegate.ValueIsLiteral;
-            AddRootTemplatePrefix = addRootTemplatePrefix;
         }
 
         public string ViewModelName { get; }
