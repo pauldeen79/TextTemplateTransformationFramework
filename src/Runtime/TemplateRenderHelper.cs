@@ -67,21 +67,9 @@ namespace TextTemplateTransformationFramework.Runtime
 
             SetAdditionalParametersOnTemplate(template, model, additionalParameters, modelPropertyName);
             InitializeTemplate(template, additionalActionDelegate);
+            SetViewModelOnTemplate(templateType, template, Enumerable.Empty<KeyValuePair<string, object>>(), additionalParameters); 
 
-            var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
-            if (viewModelProperty != null)
-            {
-                var viewModelValue = viewModelProperty.GetValue(template);
-                if (viewModelValue == null)
-                {
-                    viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
-                    viewModelProperty.SetValue(template, viewModelValue);
-                }
-                CopySessionVariablesToViewModel(viewModelValue, additionalParameters.ToKeyValuePairs());
-                CopyTemplateContextToViewModel(viewModelValue, template);
-            }
-
-            var errorsProperty = template.GetType().GetProperty("Errors");
+            var errorsProperty = templateType.GetProperty("Errors");
             var errors = GetErrors(errorsProperty, template, out bool hasErrors);
             if (hasErrors)
             {
@@ -101,16 +89,6 @@ namespace TextTemplateTransformationFramework.Runtime
             return Enumerable.Empty<CompilerError>();
         }
 
-        /// <summary>
-        /// Renders the template (with initialization)
-        /// </summary>
-        /// <param name="template">The template to render.</param>
-        /// <param name="generationEnvironment">The StringBuilder, MultipleContentBuilder or TemplateFileManager instance to render to.</param>
-        /// <param name="session">The session to use.</param>
-        /// <param name="fileNamePrefix">Optional filename prefix.</param>
-        /// <param name="defaultFileName">Default file name, in case the child template doesn't support multiple file contents.</param>
-        /// <param name="additionalActionDelegate">Optional additional action delegate to use on initialization.</param>
-        /// <param name="additionalParameters">Additional parameters. When keys already exist in the session, additional parameters take precedence.</param>
         public static void RenderTemplate(object template,
                                           object generationEnvironment,
                                           IEnumerable<KeyValuePair<string, object>> session = null,
@@ -131,7 +109,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
             SetSessionOnIncludedTemplate(template, session, additionalParameters);
             InitializeTemplate(template, additionalActionDelegate);
-            SetViewModelOnTemplate(template, session, additionalParameters);
+            SetViewModelOnTemplate(template.GetType(), template, session, additionalParameters);
             var errorsProperty = template.GetType().GetProperty("Errors");
             var errors = GetErrors(errorsProperty, template, out bool hasErrors);
             if (hasErrors)
@@ -146,6 +124,45 @@ namespace TextTemplateTransformationFramework.Runtime
             else
             {
                 RenderIncludedTemplate(template, generationEnvironment, fileNamePrefix, defaultFileName);
+            }
+        }
+
+        public static void RenderTemplateWithModel(object template,
+                                                   object generationEnvironment,
+                                                   object model,
+                                                   string modelPropertyName = "Model",
+                                                   Action additionalActionDelegate = null,
+                                                   object additionalParameters = null)
+        {
+            if (template == null)
+            {
+                throw new ArgumentNullException(nameof(template));
+            }
+
+            if (generationEnvironment == null)
+            {
+                throw new ArgumentNullException(nameof(generationEnvironment));
+            }
+
+            SetAdditionalParametersOnTemplate(template, model, additionalParameters, modelPropertyName);
+            InitializeTemplate(template, additionalActionDelegate);
+
+            var templateType = template.GetType();
+            SetViewModelOnTemplate(templateType, template, Enumerable.Empty<KeyValuePair<string, object>>(), additionalParameters);
+            var errorsProperty = templateType.GetProperty("Errors");
+            var errors = GetErrors(errorsProperty, template, out bool hasErrors);
+            if (hasErrors)
+            {
+                throw new AggregateException(string.Join(Environment.NewLine, errors.Select(e => string.Format("{0}: {1}", e.GetErrorType(), e.ErrorText))));
+            }
+
+            if (generationEnvironment is StringBuilder sb)
+            {
+                DoRender(template, sb, template.GetType());
+            }
+            else
+            {
+                RenderIncludedTemplate(template, generationEnvironment);
             }
         }
 
@@ -394,13 +411,13 @@ namespace TextTemplateTransformationFramework.Runtime
             }
         }
 
-        private static void SetViewModelOnTemplate(object template,
+        private static void SetViewModelOnTemplate(Type templateType,
+                                                   object template,
                                                    IEnumerable<KeyValuePair<string, object>> session,
                                                    object additionalParameters)
         {
-            var templateType = template.GetType();
             var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
-            if (viewModelProperty != null && viewModelProperty != typeof(object))
+            if (viewModelProperty != null && viewModelProperty.PropertyType != typeof(object))
             {
                 var viewModelValue = viewModelProperty.GetValue(template);
                 if (viewModelValue == null)
@@ -410,6 +427,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
                 CopySessionVariablesToViewModel(viewModelValue, session);
                 CopySessionVariablesToViewModel(viewModelValue, additionalParameters.ToKeyValuePairs());
+                CopyTemplateContextToViewModel(viewModelValue, template);
             }
         }
 
@@ -465,14 +483,6 @@ namespace TextTemplateTransformationFramework.Runtime
                 .Concat(additionalParameters ?? Enumerable.Empty<KeyValuePair<string, object>>())
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
-        /// <summary>
-        /// Renders the template (without initialization)
-        /// </summary>
-        /// <param name="template">The template to render.</param>
-        /// <param name="multipleContentBuilder">The MultipleContentBuilder to render to.</param>
-        /// <param name="fileNamePrefix">Optional filename prefix.</param>
-        /// <param name="defaultFileName">File name to use, in case the template produces a string for one file instead of a MutlipleContentBuilder string.</param>
-        /// <param name="defaultSkipWhenFileExists">Value to use for SkipWhenFileExists, in case the template produces a string for one file instead of a MultipleContentBuilder string.</param>
         private static void RenderIncludedTemplate(object template,
                                                    object multipleContentBuilder,
                                                    string fileNamePrefix = "",

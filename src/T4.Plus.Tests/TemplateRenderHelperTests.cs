@@ -412,6 +412,89 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
 </MultipleContents>");
         }
 
+        [Fact]
+        public void CanRenderModelTemplate()
+        {
+            // Arrange
+            var template = new MyModelTemplateWithPocoModelAndTransformText();
+            var builder = new StringBuilder();
+
+            // Act
+            TemplateRenderHelper.RenderTemplateWithModel(template, builder, "Hello world!");
+
+            // Assert
+            builder.ToString().Should().Be("Hello world!");
+        }
+
+        [Fact]
+        public void CanRenderModelTemplateUsingTemplateFileManager()
+        {
+            // Arrange
+            var template = new MyMultipleContentStringBuilderTemplate();
+            var templateFileManager = new TemplateFileManager(b => template.GenerationEnvironment = b, () => template.GenerationEnvironment);
+
+            // Act
+            TemplateRenderHelper.RenderTemplateWithModel(template, templateFileManager, "Hello world!");
+            var result = templateFileManager.MultipleContentBuilder.Contents.First().Builder.ToString();
+
+            // Assert
+            result.Should().Be("Hello world!" + Environment.NewLine);
+        }
+
+        [Fact]
+        public void RenderModelTemplate_Throws_AggregateException_On_Errors()
+        {
+            // Arrange
+            var template = new MyErrorTemplate();
+            var builder = new StringBuilder();
+
+            // Act & Assert
+            this.Invoking(_ => TemplateRenderHelper.RenderTemplateWithModel(template, builder, "Hello world!"))
+                .Should().Throw<AggregateException>();
+        }
+
+        [Fact]
+        public void RenderModelTemplate_Throws_On_Null_Template()
+        {
+            this.Invoking(_ => TemplateRenderHelper.RenderTemplateWithModel(null, new StringBuilder(), "unused model"))
+                .Should().Throw<ArgumentNullException>().WithParameterName("template");
+        }
+
+        [Fact]
+        public void RenderModelTemplate_Throws_On_Null_GenerationEnvironment()
+        {
+            this.Invoking(_ => TemplateRenderHelper.RenderTemplateWithModel(this, null, "unused model"))
+                .Should().Throw<ArgumentNullException>().WithParameterName("generationEnvironment");
+        }
+
+        [Fact]
+        public void RenderTemplate_Throws_On_Null_Template()
+        {
+            this.Invoking(_ => TemplateRenderHelper.RenderTemplate(null, new StringBuilder()))
+                .Should().Throw<ArgumentNullException>().WithParameterName("template");
+        }
+
+        [Fact]
+        public void RenderTemplate_Throws_On_Null_GenerationEnvironment()
+        {
+            this.Invoking(_ => TemplateRenderHelper.RenderTemplate(this, null))
+                .Should().Throw<ArgumentNullException>().WithParameterName("generationEnvironment");
+        }
+
+        [Fact]
+        public void GetCompilerErrors_Throws_On_Null_Template()
+        {
+            this.Invoking(_ => TemplateRenderHelper.GetCompilerErrors(null, new StringBuilder()))
+                .Should().Throw<ArgumentNullException>().WithParameterName("template");
+        }
+
+        [Fact]
+        public void GetCompilerErrors_Throws_On_Null_GenerationEnvironment()
+        {
+            this.Invoking(_ => TemplateRenderHelper.GetCompilerErrors(this, null))
+                .Should().Throw<ArgumentNullException>().WithParameterName("generationEnvironment");
+        }
+
         [ExcludeFromCodeCoverage]
         public class MyViewModel
         {
