@@ -131,6 +131,7 @@ namespace TextTemplateTransformationFramework.Runtime
                                                    object generationEnvironment,
                                                    object model,
                                                    string modelPropertyName = "Model",
+                                                   string defaultFileName = null,
                                                    Action additionalActionDelegate = null,
                                                    object additionalParameters = null)
         {
@@ -162,7 +163,7 @@ namespace TextTemplateTransformationFramework.Runtime
             }
             else
             {
-                RenderIncludedTemplate(template, generationEnvironment);
+                RenderIncludedTemplate(template, generationEnvironment, string.Empty, defaultFileName);
             }
         }
 

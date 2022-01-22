@@ -489,10 +489,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         }
 
         [Fact]
-        public void GetCompilerErrors_Throws_On_Null_GenerationEnvironment()
+        public void GetCompilerErrors_Throws_On_Null_Builder()
         {
             this.Invoking(_ => TemplateRenderHelper.GetCompilerErrors(this, null))
-                .Should().Throw<ArgumentNullException>().WithParameterName("generationEnvironment");
+                .Should().Throw<ArgumentNullException>().WithParameterName("builder");
         }
 
         [ExcludeFromCodeCoverage]
