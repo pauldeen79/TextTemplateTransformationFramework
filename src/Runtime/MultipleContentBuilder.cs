@@ -57,7 +57,7 @@ namespace TextTemplateTransformationFramework.Runtime
             }
         }
 
-        public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath)
+        public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
         {
             var fullPath = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(lastGeneratedFilesPath)
                 ? lastGeneratedFilesPath
@@ -67,7 +67,7 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 if (fullPath?.Contains("*") == true && !string.IsNullOrEmpty(BasePath))
                 {
-                    foreach (var filename in Directory.GetFiles(BasePath, lastGeneratedFilesPath, SearchOption.AllDirectories))
+                    foreach (var filename in Directory.GetFiles(BasePath, lastGeneratedFilesPath, GetSearchOption(recurse)))
                     {
                         File.Delete(filename);
                     }
@@ -88,6 +88,11 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
             }
         }
+
+        private static SearchOption GetSearchOption(bool recurse)
+            => recurse
+                ? SearchOption.AllDirectories
+                : SearchOption.TopDirectoryOnly;
 
         public Content AddContent(string fileName = null, bool skipWhenFileExists = false, StringBuilder builder = null)
         {
