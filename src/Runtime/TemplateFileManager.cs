@@ -67,9 +67,9 @@ namespace TextTemplateTransformationFramework.Runtime
             MultipleContentBuilder.SaveLastGeneratedFiles(lastGeneratedFilesPath);
         }
 
-        public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath)
+        public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse = true)
         {
-            MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath);
+            MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath, recurse);
         }
 
         public MultipleContentBuilder MultipleContentBuilder { get; }
