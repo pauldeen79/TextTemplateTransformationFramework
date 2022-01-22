@@ -149,7 +149,7 @@ namespace TextTemplateTransformationFramework.Runtime
             InitializeTemplate(template, additionalActionDelegate);
 
             var templateType = template.GetType();
-            SetViewModelOnTemplate(templateType, template, Enumerable.Empty<KeyValuePair<string, object>>(), additionalParameters);
+            SetViewModelOnTemplate(templateType, template, model == null ? Enumerable.Empty<KeyValuePair<string, object>>() : new[] { new KeyValuePair<string, object>("Model", model) }, additionalParameters);
             var errorsProperty = templateType.GetProperty("Errors");
             var errors = GetErrors(errorsProperty, template, out bool hasErrors);
             if (hasErrors)
@@ -426,8 +426,7 @@ namespace TextTemplateTransformationFramework.Runtime
                     viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
                     viewModelProperty.SetValue(template, viewModelValue);
                 }
-                CopySessionVariablesToViewModel(viewModelValue, session);
-                CopySessionVariablesToViewModel(viewModelValue, additionalParameters.ToKeyValuePairs());
+                CopySessionVariablesToViewModel(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
                 CopyTemplateContextToViewModel(viewModelValue, template);
             }
         }
@@ -445,6 +444,12 @@ namespace TextTemplateTransformationFramework.Runtime
                 var prop = viewModelValueType.GetProperty(kvp.Key);
                 if (prop != null && prop.GetSetMethod() == null) { continue; }
                 prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
+            }
+
+            var modelProperty = viewModelValueType.GetProperty("Model");
+            if (modelProperty != null && modelProperty.GetValue(viewModelValue) == null && session.Any(kvp => kvp.Key == "Model"))
+            {
+                modelProperty.SetValue(viewModelValue, session.First(kvp => kvp.Key == "Model").Value);
             }
         }
 

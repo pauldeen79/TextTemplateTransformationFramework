@@ -442,6 +442,20 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         }
 
         [Fact]
+        public void CanRenderModelTemplateWithViewModel()
+        {
+            // Arrange
+            var template = new MyViewModelTemplate();
+            var builder = new StringBuilder();
+
+            // Act
+            TemplateRenderHelper.RenderTemplateWithModel(template, builder, "Hello world!");
+
+            // Assert
+            builder.ToString().Should().Be("Hello world!");
+        }
+
+        [Fact]
         public void RenderModelTemplate_Throws_AggregateException_On_Errors()
         {
             // Arrange
@@ -499,6 +513,18 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         public class MyViewModel
         {
             public virtual string MyExpressionProperty => "Some very complex value";
+            public string Model { get; set; }
+        }
+
+        [ExcludeFromCodeCoverage]
+        public class MyViewModelTemplate
+        {
+            public MyViewModel ViewModel { get; set; }
+            public string Model { get; set; }
+            public override string ToString()
+            {
+                return ViewModel.Model;
+            }
         }
 
         [ExcludeFromCodeCoverage]
