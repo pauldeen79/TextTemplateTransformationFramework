@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Moq;
-using SparkyTestHelpers.Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Extensions;
@@ -23,7 +22,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             // Arrange
             const string Section = @"@ Directive name=""name 1"" optionalBoolean=""false"" language=""vb"" list=""a"" list=""b"" list=""c""";
             var callback = CreateTokenParserCallback();
-            callback.Setup(x => x.GetSectionArguments(Any.InstanceOf<SectionContext<DirectiveSerializerTests>>(), Any.String)).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
+            callback.Setup(x => x.GetSectionArguments(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>())).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
             {
                 return name.ToLower(CultureInfo.InvariantCulture) switch
                 {
@@ -136,7 +135,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             // Arrange
             const string Section = @"@ Directive MyFloatProperty=""2.3""";
             var callback = CreateTokenParserCallback();
-            callback.Setup(x => x.GetSectionArguments(Any.InstanceOf<SectionContext<DirectiveSerializerTests>>(), Any.String)).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
+            callback.Setup(x => x.GetSectionArguments(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>())).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
             {
                 return name.ToLower(CultureInfo.InvariantCulture) switch
                 {
@@ -198,7 +197,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             // Arrange
             const string Section = @"@ Directive MyStringArrayProperty=""2.3"" MyStringArrayProperty=""2.4"" MyStringArrayProperty=""2.5""";
             var callback = CreateTokenParserCallback();
-            callback.Setup(x => x.GetSectionArguments(Any.InstanceOf<SectionContext<DirectiveSerializerTests>>(), Any.String)).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
+            callback.Setup(x => x.GetSectionArguments(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>())).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
             {
                 return name.ToLower(CultureInfo.InvariantCulture) switch
                 {
@@ -234,11 +233,11 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
         private static Mock<ITokenParserCallback<DirectiveSerializerTests>> CreateTokenParserCallback()
         {
             var mock = new Mock<ITokenParserCallback<DirectiveSerializerTests>>();
-            mock.Setup(x => x.Parse(Any.InstanceOf<ITextTemplateProcessorContext<DirectiveSerializerTests>>()))
+            mock.Setup(x => x.Parse(It.IsAny<ITextTemplateProcessorContext<DirectiveSerializerTests>>()))
                 .Returns(Array.Empty<ITemplateToken<DirectiveSerializerTests>>());
-            mock.Setup(x => x.SectionIsDirectiveWithName(Any.InstanceOf<SectionContext<DirectiveSerializerTests>>(), Any.String))
+            mock.Setup(x => x.SectionIsDirectiveWithName(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>()))
                 .Returns<SectionContext<DirectiveSerializerTests>, string>((context, name) => context.Section.IsDirective(name, "@ ", " "));
-            mock.Setup(x => x.SectionStartsWithPrefix(Any.InstanceOf<SectionContext<DirectiveSerializerTests>>(), Any.String))
+            mock.Setup(x => x.SectionStartsWithPrefix(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>()))
                 .Returns<SectionContext<DirectiveSerializerTests>, string>((context, prefix) => context.Section.StartsWith(prefix));
             return mock;
         }
