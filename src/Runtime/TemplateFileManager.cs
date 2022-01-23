@@ -10,7 +10,8 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public TemplateFileManager(Action<StringBuilder> setStringBuilderDelegate,
                                    Func<StringBuilder> getStringBuilderDelegate,
-                                   string basePath = null)
+                                   string basePath = null,
+                                   IMultipleContentBuilder multipleContentBuilder = null)
         {
             if (getStringBuilderDelegate == null)
             {
@@ -24,7 +25,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
             _setStringBuilderDelegate = setStringBuilderDelegate;
             _originalStringBuilder = getStringBuilderDelegate();
-            MultipleContentBuilder = new MultipleContentBuilder(basePath);
+            MultipleContentBuilder = multipleContentBuilder ?? new MultipleContentBuilder(basePath);
         }
 
         public StringBuilder StartNewFile(string fileName = null, bool skipWhenFileExists = false)
@@ -72,6 +73,6 @@ namespace TextTemplateTransformationFramework.Runtime
             MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath, recurse);
         }
 
-        public MultipleContentBuilder MultipleContentBuilder { get; }
+        public IMultipleContentBuilder MultipleContentBuilder { get; }
     }
 }

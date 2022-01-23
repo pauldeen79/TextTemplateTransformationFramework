@@ -6,10 +6,10 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
     {
         private const string Parent = "\\";
 
-        private GenerateCode(string basePath)
+        private GenerateCode(string basePath, IMultipleContentBuilder multipleContentBuilder = null)
         {
             GenerationEnvironment = new StringBuilder();
-            TemplateFileManager = new TemplateFileManager(b => GenerationEnvironment = b, () => GenerationEnvironment, basePath);
+            TemplateFileManager = new TemplateFileManager(b => GenerationEnvironment = b, () => GenerationEnvironment, basePath, multipleContentBuilder);
         }
 
         public TemplateFileManager TemplateFileManager { get; }
@@ -17,10 +17,14 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 
         public static GenerateCode For<T>(CodeGenerationSettings settings)
             where T : ICodeGenerationProvider, new()
+            => For<T>(settings, null);
+
+        public static GenerateCode For<T>(CodeGenerationSettings settings, IMultipleContentBuilder multipleContentBuilder)
+            where T : ICodeGenerationProvider, new()
         {
             var provider = new T();
             provider.Initialize(settings.GenerateMultipleFiles, settings.BasePath);
-            var result = new GenerateCode(provider.BasePath);
+            var result = new GenerateCode(provider.BasePath, multipleContentBuilder);
             var generator = provider.CreateGenerator();
             var shouldSave = !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun;
             var shouldUseLastGeneratedFiles = !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
+using Moq;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.RenderTokens;
+using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 using TextTemplateTransformationFramework.T4.Plus.CodeGenerators;
 using Xunit;
@@ -22,6 +24,21 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
             result.Should().NotBeNull();
         }
 
+        [Fact]
+        public void Can_Save_Generated_Code()
+        {
+            // Arrange
+            var multipleContentBuilderMock = new Mock<IMultipleContentBuilder>();
+
+            // Act
+            GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(@"C:\", true, false), multipleContentBuilderMock.Object);
+
+            // Assert
+            multipleContentBuilderMock.Verify(x => x.DeleteLastGeneratedFiles(@"\Generated.cs", false), Times.Once);
+            multipleContentBuilderMock.Verify(x => x.SaveLastGeneratedFiles(@"\Generated.cs"), Times.Once);
+            multipleContentBuilderMock.Verify(x => x.SaveAll(), Times.Once);
+        }
+
         [ExcludeFromCodeCoverage]
         private class T4PlusCSharp : ICodeGenerationProvider
         {
@@ -29,7 +46,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
 
             public string BasePath { get; private set; }
 
-            public string Path => null;
+            public string Path => string.Empty;
 
             public string DefaultFileName => "Generated.cs";
 
