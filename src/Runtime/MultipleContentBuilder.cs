@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace TextTemplateTransformationFramework.Runtime
 {
-    public class MultipleContentBuilder
+    public class MultipleContentBuilder : IMultipleContentBuilder
     {
         private readonly List<Content> _contentList;
 
@@ -89,11 +89,6 @@ namespace TextTemplateTransformationFramework.Runtime
             }
         }
 
-        private static SearchOption GetSearchOption(bool recurse)
-            => recurse
-                ? SearchOption.AllDirectories
-                : SearchOption.TopDirectoryOnly;
-
         public Content AddContent(string fileName = null, bool skipWhenFileExists = false, StringBuilder builder = null)
         {
             var content = builder == null
@@ -173,5 +168,11 @@ namespace TextTemplateTransformationFramework.Runtime
         }
 
         public IEnumerable<Content> Contents { get { return _contentList.AsReadOnly(); } }
+
+        private static SearchOption GetSearchOption(bool recurse)
+            => recurse
+                ? SearchOption.AllDirectories
+                : SearchOption.TopDirectoryOnly;
+
     }
 }
