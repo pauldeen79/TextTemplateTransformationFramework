@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd.Tests", "src\Common.Cmd.Tests\TextTemplateTransformationFramework.Common.Cmd.Tests.csproj", "{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.Runtime.Tests", "src\Runtime.Tests\TextTemplateTransformationFramework.Runtime.Tests.csproj", "{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

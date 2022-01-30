@@ -4,10 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
-namespace TextTemplateTransformationFramework.T4.Plus.Tests
+namespace TextTemplateTransformationFramework.Runtime.Tests
 {
     [ExcludeFromCodeCoverage]
     public class TemplateRenderHelperTests
