@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
+using TextTemplateTransformationFramework.Runtime.Extensions;
 
 namespace TextTemplateTransformationFramework.Runtime
 {
@@ -34,7 +35,7 @@ namespace TextTemplateTransformationFramework.Runtime
                     Directory.CreateDirectory(dir);
                 }
 
-                var contents = content.Builder.ToString();
+                var contents = content.Builder.ToString().NormalizeLineEndings();
                 File.WriteAllText(path, contents, Encoding.UTF8);
             }
         }
@@ -114,7 +115,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 Contents = _contentList.Select(c => new Contents
                 {
                     FileName = c.FileName,
-                    Lines = c.Builder.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
+                    Lines = c.Builder.ToString().NormalizeLineEndings().Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
                     SkipWhenFileExists = c.SkipWhenFileExists
                 }).ToList()
             };
@@ -173,6 +174,5 @@ namespace TextTemplateTransformationFramework.Runtime
             => recurse
                 ? SearchOption.AllDirectories
                 : SearchOption.TopDirectoryOnly;
-
     }
 }
