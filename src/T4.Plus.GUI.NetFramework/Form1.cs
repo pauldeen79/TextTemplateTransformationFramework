@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
-#if NETCOREAPP3_1 || NET5_0
+#if NETCOREAPP3_1 || NET5_0_OR_GREATER
 using TextTemplateTransformationFramework.T4.Plus.Core.Extensions;
 #else
 using TextTemplateTransformationFramework.T4.Plus.NetFramework.Extensions;
@@ -29,7 +29,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.GUI
             InitializeComponent();
 
             var serviceCollection = new ServiceCollection();
-#if NETCOREAPP3_1 || NET5_0
+#if NETCOREAPP3_1 || NET5_0_OR_GREATER
             serviceCollection.AddTextTemplateTransformationT4PlusNetCore();
 #else
             serviceCollection.AddTextTemplateTransformationT4PlusNetFramework();

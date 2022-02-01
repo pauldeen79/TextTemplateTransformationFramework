@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -12,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
