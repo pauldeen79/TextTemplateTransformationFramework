@@ -169,31 +169,31 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public static TChild CreateNestedTemplate<TParent, TChild>(object model = null,
                                                                    object rootModel = null,
-                                                                   Action additionalActionDelegate = null,
+                                                                   Action<TParent> rootAdditionalActionDelegate = null,
                                                                    object rootAdditionalParameters = null,
                                                                    object iterationContextModel = null,
                                                                    string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
         {
-            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, additionalActionDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
+            var context = CreateNestedTemplateContext<TParent, TChild>(model, rootModel, rootAdditionalActionDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
 
             return (TChild)context.GetType().GetProperty("Template").GetValue(context);
         }
 
         public static TContext CreateNestedTemplateContext<TParent, TChild, TContext>(object model = null,
                                                                                       object rootModel = null,
-                                                                                      Action additionalActionDelegate = null,
+                                                                                      Action<TParent> rootAdditionalActionDelegate = null,
                                                                                       object rootAdditionalParameters = null,
                                                                                       object iterationContextModel = null,
                                                                                       string modelPropertyName = "Model")
             where TParent : new()
             where TChild : new()
-            => (TContext)CreateNestedTemplateContext<TParent, TChild>(model, rootModel, additionalActionDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
+            => (TContext)CreateNestedTemplateContext<TParent, TChild>(model, rootModel, rootAdditionalActionDelegate, rootAdditionalParameters, iterationContextModel, modelPropertyName);
 
         public static object CreateNestedTemplateContext<TParent, TChild>(object model = null,
                                                                           object rootModel = null,
-                                                                          Action additionalActionDelegate = null,
+                                                                          Action<TParent> rootAdditionalActionDelegate = null,
                                                                           object rootAdditionalParameters = null,
                                                                           object iterationContextModel = null,
                                                                           string modelPropertyName = "Model")
@@ -202,7 +202,7 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             var rootTemplate = new TParent();
             SetAdditionalParametersOnTemplate(rootTemplate, rootModel, rootAdditionalParameters, modelPropertyName);
-            InitializeTemplate(rootTemplate, additionalActionDelegate);
+            InitializeTemplate(rootTemplate, () => rootAdditionalActionDelegate?.Invoke(rootTemplate));
 
             var childTemplate = new TChild();
             if (model != null)
