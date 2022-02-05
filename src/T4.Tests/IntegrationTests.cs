@@ -436,7 +436,6 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             actual.Parameters.Should().HaveCount(2);
         }
 
-
         [Fact]
         public void CanCreateNestedTemplateWithModelOnRootTemplate()
         {
@@ -444,6 +443,8 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             var context = SectionContext<TokenParserState>.Empty;
             var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
             var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
+
+            // Act
             var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
             (
                 model,
@@ -451,7 +452,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             );
             var rootTemplate = sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>();
 
-            // Act
+            // Assert
             rootTemplate.Model.Should().BeEquivalentTo(rootModel);
         }
 
@@ -462,6 +463,8 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             var context = SectionContext<TokenParserState>.Empty;
             var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
             var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
+
+            // Act
             var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
             (
                 model,
@@ -471,9 +474,29 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             );
             var rootTemplate = sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>();
 
-            // Act
+            // Assert
             rootTemplate.EnvironmentVersion.Should().Be("1.2.3.4");
             rootTemplate.Model.Should().BeEquivalentTo(rootModel);
+        }
+
+        [Fact]
+        public void CanCreateNestedTemplateWithAdditionalActionOnRootTemplate()
+        {
+            // Arrange
+            var context = SectionContext<TokenParserState>.Empty;
+            var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
+            var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
+
+            // Act
+            var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
+            (
+                model,
+                rootAdditionalActionDelegate: x => x.RegisterChildTemplate("Test", () => new object(), typeof(object))
+            );
+            var rootTemplate = sut.TemplateContext.GetContextByType<T4CSharpCodeGenerator>();
+
+            // Assert
+            rootTemplate.ChildTemplates.Should().Contain(x => x.Item1 == "Test");
         }
 
         public interface IMyInterface
