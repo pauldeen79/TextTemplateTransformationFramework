@@ -511,7 +511,7 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 throw new ArgumentException("Parameter does not have an AddContent method, and cannot be used as multiple content builder", nameof(multipleContentBuilder));
             }
-            if (s.StartsWith(@"<?xml version=""1.0"" encoding=""utf-16""?>
+            if (s.NormalizeLineEndings().StartsWith(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
             {
                 var multipleContents = MultipleContentBuilder.FromString(s);

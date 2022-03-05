@@ -9,7 +9,10 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
         private GenerateCode(string basePath, IMultipleContentBuilder multipleContentBuilder = null)
         {
             GenerationEnvironment = new StringBuilder();
-            TemplateFileManager = new TemplateFileManager(b => GenerationEnvironment = b, () => GenerationEnvironment, basePath, multipleContentBuilder);
+            TemplateFileManager = new TemplateFileManager(b => GenerationEnvironment = b,
+                                                          () => GenerationEnvironment,
+                                                          basePath,
+                                                          multipleContentBuilder);
         }
 
         public TemplateFileManager TemplateFileManager { get; }
@@ -31,13 +34,13 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
             var additionalParameters = provider.CreateAdditionalParameters();
 
             TemplateRenderHelper.RenderTemplateWithModel(template: generator,
-                                                         generationEnvironment: !provider.GenerateMultipleFiles
-                                                            ? (object)result.TemplateFileManager.StartNewFile(provider.Path + Parent + provider.DefaultFileName)
-                                                            : result.TemplateFileManager,
+                                                         generationEnvironment: provider.GenerateMultipleFiles
+                                                            ? result.TemplateFileManager
+                                                            : result.TemplateFileManager.StartNewFile(provider.Path + Parent + provider.DefaultFileName),
                                                          model: provider.CreateModel(),
-                                                         defaultFileName: !provider.GenerateMultipleFiles
-                                                            ? null
-                                                            : provider.DefaultFileName,
+                                                         defaultFileName: provider.GenerateMultipleFiles
+                                                            ? provider.DefaultFileName
+                                                            : null,
                                                          additionalActionDelegate: provider.AdditionalActionDelegate,
                                                          additionalParameters: additionalParameters);
 
