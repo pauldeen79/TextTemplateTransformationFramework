@@ -66,7 +66,9 @@ namespace TextTemplateTransformationFramework.Runtime
 
             if (!File.Exists(fullPath))
             {
-                if (fullPath?.Contains("*") == true && !string.IsNullOrEmpty(BasePath))
+                if (fullPath?.Contains("*") == true
+                    && !string.IsNullOrEmpty(BasePath)
+                    && Directory.Exists(BasePath))
                 {
                     foreach (var filename in Directory.GetFiles(BasePath, lastGeneratedFilesPath, GetSearchOption(recurse)))
                     {

@@ -133,7 +133,7 @@
 
             if (!global::System.IO.File.Exists(fullPath))
             {
-                if (fullPath != null && fullPath.Contains("*") && !string.IsNullOrEmpty(BasePath))
+                if (fullPath != null && fullPath.Contains("*") && !string.IsNullOrEmpty(BasePath) && Directory.Exists(BasePath))
                 {
                     foreach (var filename in global::System.IO.Directory.GetFiles(BasePath, lastGeneratedFilesPath, global::System.IO.SearchOption.AllDirectories))
                     {
