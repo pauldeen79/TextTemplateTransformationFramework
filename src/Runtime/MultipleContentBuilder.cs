@@ -60,17 +60,23 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
         {
-            var fullPath = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(lastGeneratedFilesPath)
-                ? lastGeneratedFilesPath
-                : Path.Combine(BasePath, lastGeneratedFilesPath);
+            var basePath = BasePath;
+            if (lastGeneratedFilesPath?.Contains("\\") == true)
+            {
+                var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
+
+                basePath = basePath + "\\" + lastGeneratedFilesPath.Substring(0, lastSlash);
+                lastGeneratedFilesPath = lastGeneratedFilesPath.Substring(lastSlash + 1);
+            }
+            var fullPath = GetFullPath(lastGeneratedFilesPath, basePath);
 
             if (!File.Exists(fullPath))
             {
                 if (fullPath?.Contains("*") == true
-                    && !string.IsNullOrEmpty(BasePath)
-                    && Directory.Exists(BasePath))
+                    && !string.IsNullOrEmpty(basePath)
+                    && Directory.Exists(basePath))
                 {
-                    foreach (var filename in Directory.GetFiles(BasePath, lastGeneratedFilesPath, GetSearchOption(recurse)))
+                    foreach (var filename in Directory.GetFiles(basePath, lastGeneratedFilesPath, GetSearchOption(recurse)))
                     {
                         File.Delete(filename);
                     }
@@ -81,15 +87,22 @@ namespace TextTemplateTransformationFramework.Runtime
 
             foreach (var fileName in File.ReadAllLines(fullPath))
             {
-                var fileFullPath = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(fileName)
+                var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(fileName)
                     ? fileName
-                    : Path.Combine(BasePath, fileName);
+                    : Path.Combine(basePath, fileName);
 
                 if (File.Exists(fileFullPath))
                 {
                     File.Delete(fileFullPath);
                 }
             }
+        }
+
+        private static string GetFullPath(string lastGeneratedFilesPath, string basePath)
+        {
+            return string.IsNullOrEmpty(basePath) || Path.IsPathRooted(lastGeneratedFilesPath)
+                            ? lastGeneratedFilesPath
+                            : Path.Combine(basePath, lastGeneratedFilesPath);
         }
 
         public Content AddContent(string fileName = null, bool skipWhenFileExists = false, StringBuilder builder = null)

@@ -127,15 +127,24 @@
 
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath)
         {
-            var fullPath = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(lastGeneratedFilesPath)
+            var basePath = BasePath;
+            if (lastGeneratedFilesPath?.Contains("\\") == true)
+            {
+                var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
+
+                basePath = basePath + "\\" + lastGeneratedFilesPath.Substring(0, lastSlash);
+                lastGeneratedFilesPath = lastGeneratedFilesPath.Substring(lastSlash + 1);
+            }
+
+            var fullPath = string.IsNullOrEmpty(basePath) || global::System.IO.Path.IsPathRooted(lastGeneratedFilesPath)
                 ? lastGeneratedFilesPath
-                : global::System.IO.Path.Combine(BasePath, lastGeneratedFilesPath);
+                : global::System.IO.Path.Combine(basePath, lastGeneratedFilesPath);
 
             if (!global::System.IO.File.Exists(fullPath))
             {
-                if (fullPath != null && fullPath.Contains("*") && !string.IsNullOrEmpty(BasePath) && Directory.Exists(BasePath))
+                if (fullPath != null && fullPath.Contains("*") && !string.IsNullOrEmpty(basePath) && Directory.Exists(basePath))
                 {
-                    foreach (var filename in global::System.IO.Directory.GetFiles(BasePath, lastGeneratedFilesPath, global::System.IO.SearchOption.AllDirectories))
+                    foreach (var filename in global::System.IO.Directory.GetFiles(basePath, lastGeneratedFilesPath, global::System.IO.SearchOption.AllDirectories))
                     {
                         global::System.IO.File.Delete(filename);
                     }
@@ -146,9 +155,9 @@
 
             foreach (var fileName in global::System.IO.File.ReadAllLines(fullPath))
             {
-                var fileFullPath = string.IsNullOrEmpty(BasePath) || global::System.IO.Path.IsPathRooted(fileName)
+                var fileFullPath = string.IsNullOrEmpty(basePath) || global::System.IO.Path.IsPathRooted(fileName)
                     ? fileName
-                    : global::System.IO.Path.Combine(BasePath, fileName);
+                    : global::System.IO.Path.Combine(basePath, fileName);
 
                 if (global::System.IO.File.Exists(fileFullPath))
                 {
