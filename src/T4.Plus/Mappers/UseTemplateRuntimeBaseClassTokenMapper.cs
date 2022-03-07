@@ -33,7 +33,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 yield return new BaseClassInheritsFromToken<TState>(context, typeof(T4PlusGeneratedTemplateBase).FullName);
                 yield return new NamespaceImportToken<TState>(context, "TextTemplateTransformationFramework.Runtime");
                 yield return new SkipInitializationCodeToken<TState>(context);
-                yield return new ReferenceToken<TState>(context, "TextTemplateTransformationFramework.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
+                if (model.AddReference)
+                {
+                    yield return new ReferenceToken<TState>(context, "TextTemplateTransformationFramework.Runtime, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
+                }
             }
         }
     }

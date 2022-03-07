@@ -3409,7 +3409,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
             if (!global::System.IO.File.Exists(fullPath))
             {
-                if (fullPath != null && fullPath.Contains(""*"") && !string.IsNullOrEmpty(basePath) && Directory.Exists(basePath))
+                if (fullPath != null && fullPath.Contains(""*"") && !string.IsNullOrEmpty(basePath) && global::System.IO.Directory.Exists(basePath))
                 {
                     foreach (var filename in global::System.IO.Directory.GetFiles(basePath, lastGeneratedFilesPath, global::System.IO.SearchOption.AllDirectories))
                     {
