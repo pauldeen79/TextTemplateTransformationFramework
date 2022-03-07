@@ -64,7 +64,11 @@ namespace TextTemplateTransformationFramework.T4
 
             var codeGeneratorResultBuilder = RunCodeGenerator(templateTokens).WithLanguage(codeDomLanguage);
 
-            var tempPath = templateTokens.GetTempPath();
+            var tempPathParameter = context.Parameters.FirstOrDefault(x => x.Name == "$T4.TempPath");
+            var templateTokensTempPath = templateTokens.GetTempPath();
+            var tempPath = tempPathParameter != null
+                ? tempPathParameter.Value.ToStringWithDefault(templateTokensTempPath)
+                : templateTokensTempPath;
 
             // Important: Store temp path in context for later use
             context["TempPath"] = tempPath;
