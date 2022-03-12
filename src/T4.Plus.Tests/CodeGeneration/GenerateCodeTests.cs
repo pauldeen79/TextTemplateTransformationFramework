@@ -34,8 +34,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
             GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(@"C:\", true, false), multipleContentBuilderMock.Object);
 
             // Assert
-            multipleContentBuilderMock.Verify(x => x.DeleteLastGeneratedFiles(@"\Generated.cs", false), Times.Once);
-            multipleContentBuilderMock.Verify(x => x.SaveLastGeneratedFiles(@"\Generated.cs"), Times.Once);
+            multipleContentBuilderMock.Verify(x => x.DeleteLastGeneratedFiles(@"/Generated.cs", false), Times.Once);
+            multipleContentBuilderMock.Verify(x => x.SaveLastGeneratedFiles(@"/Generated.cs"), Times.Once);
             multipleContentBuilderMock.Verify(x => x.SaveAll(), Times.Once);
         }
 

@@ -4,7 +4,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 {
     public class GenerateCode
     {
-        private const string Parent = "\\";
+        private const string Parent = "/";
 
         private GenerateCode(string basePath, IMultipleContentBuilder multipleContentBuilder = null)
         {
