@@ -307,11 +307,12 @@ Hello <#= Function() #>!
             var actual = sut.Process(new TextTemplate(Src));
 
             // Assert
-            actual.Output.Should().Be(@"Hello world!
-");
             actual.CompilerErrors.Should().HaveCount(1);
             actual.CompilerErrors[0].ErrorText.Should().Be("Kaboom");
             actual.CompilerErrors[0].IsWarning.Should().BeTrue();
+            actual.Exception.Should().BeNull();
+            actual.Output.Should().Be(@"Hello world!
+");
         }
 
         [Fact]
