@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
+using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
 using Xunit;
@@ -16,13 +18,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+        private readonly Mock<IUserInput> _userInputMock;
 
-        private RunTemplateCommand CreateSut() => new RunTemplateCommand(_processorMock.Object, _fileContentsProviderMock.Object);
+        private RunTemplateCommand CreateSut() => new RunTemplateCommand(_processorMock.Object,
+                                                                         _fileContentsProviderMock.Object,
+                                                                         _userInputMock.Object);
 
         public RunTemplateCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+            _userInputMock = new Mock<IUserInput>();
         }
 
         [Fact]
@@ -36,9 +42,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             // Arrange
             var app = new CommandLineApplication();
-            var textTemplateProcessorMock = new Mock<ITextTemplateProcessor>();
-            var fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            var sut = new RunTemplateCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object);
+            var sut = CreateSut();
 
             // Act
             sut.Initialize(app);
@@ -70,6 +74,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         [Fact]
         public void Execute_With_Compiler_Errors_Leads_To_Error()
         {
+            // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
             _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
             _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
@@ -85,10 +90,13 @@ existing.template(1,1): error CS1001: Kaboom
         [Fact]
         public void Execute_With_Exception_Leads_To_Error()
         {
+            // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
             _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
             _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "code", exception: new InvalidOperationException("kaboom")));
+
+            // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
 
             // Assert
@@ -100,10 +108,13 @@ System.InvalidOperationException: kaboom
         [Fact]
         public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output()
         {
+            // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
             _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
             _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
 
             // Assert
@@ -115,16 +126,54 @@ template output
         [Fact]
         public void Execute_With_Output_Option_Saves_Output_To_File()
         {
+            // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
             _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
             _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-o output.txt");
 
             // Assert
             actual.Should().Be(@"Written template output to file: output.txt
 ");
             _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.txt", "template output"), Times.Once);
+        }
+
+        [Fact]
+        public void Execute_With_Parameters_Processes_Parameters_Correctly()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            _ = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "param1:value1", "param2:value2");
+
+            // Assert
+            _processorMock.Verify(x => x.Process(It.IsAny<TextTemplate>(), It.Is<TemplateParameter[]>(x => x.Length == 2)));
+        }
+
+        [Fact]
+        public void Execute_Interactive_Gets_Parameters_Correctly()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<TextTemplate>()))
+                          .Returns(ExtractParametersResult.Create(Enumerable.Range(1, 2).Select(x => new TemplateParameter { Name = $"param{x}", Type = typeof(string) }).ToArray(), Array.Empty<CompilerError>(), "{}", string.Empty));
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            _ = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "--interactive");
+
+            // Assert
+            _userInputMock.Verify(x => x.GetValue(It.IsAny<TemplateParameter>()), Times.Exactly(2));
+            _processorMock.Verify(x => x.Process(It.IsAny<TextTemplate>(), It.Is<TemplateParameter[]>(x => x.Length == 2)));
         }
     }
 }
