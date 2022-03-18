@@ -88,7 +88,29 @@ existing.template(1,1): error CS1001: Kaboom
         }
 
         [Fact]
-        public void Execute_With_Exception_Leads_To_Error()
+        public void Execute_With_Exception_While_Extracting_Parameters_Leads_To_Error()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<TextTemplate>()))
+                          .Returns(ExtractParametersResult.Create(Array.Empty<TemplateParameter>(),
+                                                                  Array.Empty<CompilerError>(),
+                                                                  string.Empty,
+                                                                  string.Empty,
+                                                                  new InvalidOperationException("kaboom")));
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "--interactive");
+
+            // Assert
+            actual.Should().Be(@"Exception occured while extracting parameters from the template:
+System.InvalidOperationException: kaboom
+");
+        }
+
+        [Fact]
+        public void Execute_With_Exception_While_Processing_Template_Leads_To_Error()
         {
             // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
@@ -100,7 +122,7 @@ existing.template(1,1): error CS1001: Kaboom
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
 
             // Assert
-            actual.Should().Be(@"Exception occured:
+            actual.Should().Be(@"Exception occured while processing the template:
 System.InvalidOperationException: kaboom
 ");
         }
@@ -139,6 +161,26 @@ template output
             actual.Should().Be(@"Written template output to file: output.txt
 ");
             _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.txt", "template output"), Times.Once);
+        }
+
+        [Fact]
+        public void Execute_With_DiagnosticsOutput_Option_Saves_DiagnosticsOutput_To_File()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output", "source", "diagnostics output"));
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-diag diagnosticsoutput.txt");
+
+            // Assert
+            actual.Should().Be(@"Written diagnostic dump to file: diagnosticsoutput.txt
+Template output:
+template output
+");
+            _fileContentsProviderMock.Verify(x => x.WriteFileContents("diagnosticsoutput.txt", "diagnostics output"), Times.Once);
         }
 
         [Fact]

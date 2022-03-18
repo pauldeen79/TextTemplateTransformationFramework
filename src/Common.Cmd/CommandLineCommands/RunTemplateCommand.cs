@@ -62,6 +62,10 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     var contents = _fileContentsProvider.GetFileContents(filename);
                     var parameters = GetParameters(filename, contents, app, interactiveOption, parametersArgument);
+                    if (parameters == null)
+                    {
+                        return;
+                    }
                     var result = _processor.Process(new TextTemplate(contents, filename), parameters);
 
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
@@ -73,7 +77,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     if (!string.IsNullOrEmpty(result.Exception))
                     {
-                        app.Error.WriteLine("Exception occured:");
+                        app.Error.WriteLine("Exception occured while processing the template:");
                         app.Error.WriteLine(result.Exception);
                         return;
                     }
@@ -99,7 +103,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var parametersResult = _processor.ExtractParameters(contents, filename);
                 if (parametersResult.Exception != null)
                 {
-                    app.Error.WriteLine("Exception occured:");
+                    app.Error.WriteLine("Exception occured while extracting parameters from the template:");
                     app.Error.WriteLine(parametersResult.Exception);
 #pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
                     return null;
