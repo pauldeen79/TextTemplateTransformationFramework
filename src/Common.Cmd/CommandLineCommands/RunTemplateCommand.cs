@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using TextTemplateTransformationFramework.Common.Extensions;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -13,20 +14,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
     {
         private readonly ITextTemplateProcessor _processor;
         private readonly IFileContentsProvider _fileContentsProvider;
+        private readonly IUserInput _userInput;
 
-        public RunTemplateCommand(ITextTemplateProcessor processor, IFileContentsProvider fileContentsProvider)
+        public RunTemplateCommand(ITextTemplateProcessor processor,
+                                  IFileContentsProvider fileContentsProvider,
+                                  IUserInput userInput)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+            _userInput = userInput ?? throw new ArgumentNullException(nameof(userInput));
         }
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
             app.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
@@ -35,6 +35,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var outputOption = command.Option<string>("-o|--output <PATH>", "The output filename", CommandOptionType.SingleValue);
                 var diagnosticDumpOutputOption = command.Option<string>("-diag|--diagnosticoutput <PATH>", "The diagnostic output filename", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
+                var interactiveOption = command.Option<string>("-i|--interactive", "Fill parameters interactively", CommandOptionType.NoValue);
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
 #endif
@@ -46,7 +47,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
-                    var parameters = parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
 
                     if (string.IsNullOrEmpty(filename))
                     {
@@ -60,7 +60,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    var result = _processor.Process(new TextTemplate(_fileContentsProvider.GetFileContents(filename), filename), parameters);
+                    var contents = _fileContentsProvider.GetFileContents(filename);
+                    var parameters = GetParameters(filename, contents, app, interactiveOption, parametersArgument);
+                    if (parameters == null)
+                    {
+                        return;
+                    }
+                    var result = _processor.Process(new TextTemplate(contents, filename), parameters);
 
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {
@@ -71,7 +77,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     if (!string.IsNullOrEmpty(result.Exception))
                     {
-                        app.Error.WriteLine("Exception occured:");
+                        app.Error.WriteLine("Exception occured while processing the template:");
                         app.Error.WriteLine(result.Exception);
                         return;
                     }
@@ -83,6 +89,36 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput);
                 });
             });
+        }
+
+        private TemplateParameter[] GetParameters(string filename,
+                                                  string contents,
+                                                  CommandLineApplication app,
+                                                  CommandOption<string> interactiveOption,
+                                                  CommandArgument parametersArgument)
+        {
+            if (interactiveOption.HasValue())
+            {
+                var parameters = new List<TemplateParameter>();
+                var parametersResult = _processor.ExtractParameters(contents, filename);
+                if (parametersResult.Exception != null)
+                {
+                    app.Error.WriteLine("Exception occured while extracting parameters from the template:");
+                    app.Error.WriteLine(parametersResult.Exception);
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+                    return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
+                }
+                foreach (var parameter in parametersResult.Parameters)
+                {
+                    parameter.Value = _userInput.GetValue(parameter);
+                    parameters.Add(parameter);
+                }
+
+                return parameters.ToArray();
+            }
+
+            return parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
         }
 
         private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput)

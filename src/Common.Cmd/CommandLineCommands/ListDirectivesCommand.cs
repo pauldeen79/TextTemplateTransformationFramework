@@ -19,11 +19,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
             app.Command("list-directives", command =>
             {
                 command.Description = "Lists available directives";
