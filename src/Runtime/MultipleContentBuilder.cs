@@ -76,7 +76,7 @@ namespace TextTemplateTransformationFramework.Runtime
                     && !string.IsNullOrEmpty(basePath)
                     && Directory.Exists(basePath))
                 {
-                    foreach (var filename in Directory.GetFiles(basePath, lastGeneratedFilesPath, GetSearchOption(recurse)))
+                    foreach (var filename in GetFiles(basePath, lastGeneratedFilesPath, recurse))
                     {
                         File.Delete(filename);
                     }
@@ -95,6 +95,18 @@ namespace TextTemplateTransformationFramework.Runtime
                 {
                     File.Delete(fileFullPath);
                 }
+            }
+        }
+
+        private static string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
+        {
+            try
+            {
+                return Directory.GetFiles(basePath, lastGeneratedFilesPath, GetSearchOption(recurse));
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return Array.Empty<string>();
             }
         }
 
