@@ -78,7 +78,7 @@ namespace TextTemplateTransformationFramework.Common.Tests
                 .Select(x => x.Type)
                 .ToList();
 
-            types.ForEach(x => CrossCutting.Common.Testing.TestHelpers.ConstructorMustThrowArgumentNullException(x));
+            types.ForEach(x => CrossCutting.Common.Testing.TestHelpers.ConstructorMustThrowArgumentNullException(x, pi => pi.Name != nameof(CompilerError.FileName).ToPascalCase()));
         }
     }
 }

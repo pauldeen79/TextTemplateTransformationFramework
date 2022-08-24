@@ -9,7 +9,7 @@ namespace TextTemplateTransformationFramework.Common
             Column = column;
             ErrorNumber = errorNumber ?? throw new ArgumentNullException(nameof(errorNumber));
             ErrorText = errorText ?? throw new ArgumentNullException(nameof(errorText));
-            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            FileName = fileName ?? "unknown.tt";
             IsWarning = isWarning;
             Line = line;
         }
