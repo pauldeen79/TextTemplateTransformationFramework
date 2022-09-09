@@ -29,6 +29,11 @@ namespace TextTemplateTransformationFramework.Runtime
                     ? content.FileName
                     : Path.Combine(BasePath, content.FileName);
 
+                if (content.SkipWhenFileExists && File.Exists(path))
+                {
+                    continue;
+                }
+
                 var dir = Path.GetDirectoryName(path);
                 if (!Directory.Exists(dir))
                 {

@@ -391,6 +391,12 @@
                 {
                     path = filenameTransformFunc(path);
                 }
+
+                if (content.SkipWhenFileExists && global::System.IO.File.Exists(path))
+                {
+                    continue;
+                }
+
                 var contents = string.Join(Environment.NewLine, content.Lines);
                 if (contentTransformFunc != null)
                 {
