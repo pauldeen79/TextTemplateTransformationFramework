@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
         public void Can_Generate_Code()
         {
             // Act
-            var result = GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(null, false, true));
+            var result = GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(null, false, false, true));
 
             // Assert
             result.Should().NotBeNull();
@@ -31,7 +31,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
             var multipleContentBuilderMock = new Mock<IMultipleContentBuilder>();
 
             // Act
-            GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(@"C:\", true, false), multipleContentBuilderMock.Object);
+            GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(@"C:\", true, false, false), multipleContentBuilderMock.Object);
 
             // Assert
             multipleContentBuilderMock.Verify(x => x.DeleteLastGeneratedFiles(@"/Generated.cs", false), Times.Once);
@@ -43,6 +43,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
         private class T4PlusCSharp : ICodeGenerationProvider
         {
             public bool GenerateMultipleFiles { get; private set; }
+
+            public bool SkipWhenFileExists { get; private set; }
 
             public string BasePath { get; private set; }
 
@@ -71,9 +73,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
                 return new[] { new RenderCodeToken<TokenParserState>(SectionContext.FromCurrentMode(Mode.CodeRender, new TokenParserState()), "// hello world!") };
             }
 
-            public void Initialize(bool generateMultipleFiles, string basePath)
+            public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath)
             {
                 GenerateMultipleFiles = generateMultipleFiles;
+                SkipWhenFileExists = skipWhenFileExists;
                 BasePath = basePath;
             }
         }
