@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -225,7 +226,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
             }
             else
             {
-                propertyInfo.SetValue(instance, Convert.ChangeType(value, propertyInfo.PropertyType), null);
+                propertyInfo.SetValue(instance, Convert.ChangeType(value, propertyInfo.PropertyType, CultureInfo.InvariantCulture), null);
             }
         }
 
@@ -274,7 +275,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
             }
             else
             {
-                propertyInfo.SetValue(instance, Convert.ChangeType(value, propertyInfo.PropertyType), null);
+                propertyInfo.SetValue(instance, Convert.ChangeType(value, propertyInfo.PropertyType, CultureInfo.InvariantCulture), null);
             }
         }
 
@@ -293,7 +294,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
 
             var formattedValue = value.ToStringWithNullCheck().Replace("\"", "\\\"");
 
-            stringBuilder.AppendFormat("{0}=\"{1}\"", name, formattedValue);
+            stringBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0}=\"{1}\"", name, formattedValue);
         }
 
         private sealed class DirectiveAttribute

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -20,10 +21,21 @@ namespace Utilities.Extensions
         /// <returns>
         /// value.ToString() when the value is not null, string.Empty otherwise.
         /// </returns>
-        public static string ToStringWithNullCheck(this object value) =>
-            value == null
-                ? string.Empty
-                : value.ToString();
+        public static string ToStringWithNullCheck(this object value)
+        {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
+            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && x.GetParameters().All(y => y.Name == "provider")).ToArray();
+            if (toStringMethods.Length == 1)
+            {
+                return (string)toStringMethods[0].Invoke(value, new[] { CultureInfo.InvariantCulture });
+            }
+
+            return value.ToString();
+        }
 
         /// <summary>
         /// Converts an object value to string with default value if null.
@@ -33,10 +45,21 @@ namespace Utilities.Extensions
         /// <returns>
         /// value.ToString() when te value is not null, defaultValue otherwise.
         /// </returns>
-        public static string ToStringWithDefault(this object value, string defaultValue = null) =>
-            value == null
-                ? defaultValue
-                : value.ToString();
+        public static string ToStringWithDefault(this object value, string defaultValue = null)
+        {
+            if (value == null)
+            {
+                return defaultValue;
+            }
+
+            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && x.GetParameters().All(y => y.Name == "provider")).ToArray();
+            if (toStringMethods.Length == 1)
+            {
+                return (string)toStringMethods[0].Invoke(value, new[] { CultureInfo.InvariantCulture });
+            }
+
+            return value.ToString();
+        }
 
         /// <summary>
         /// Formats the value as a CSharp string.
@@ -62,6 +85,12 @@ namespace Utilities.Extensions
                 return (x2)
                     ? "true"
                     : "false";
+            }
+
+            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && x.GetParameters().All(y => y.Name == "provider")).ToArray();
+            if (toStringMethods.Length == 1)
+            {
+                return (string)toStringMethods[0].Invoke(value, new[] { CultureInfo.InvariantCulture });
             }
 
             return value.ToString();
