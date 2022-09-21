@@ -35,12 +35,12 @@ namespace TextTemplateTransformationFramework.Common.Default
             {
                 if (info.Property.CanWrite && info.Property.GetSetMethod() != null)
                 {
-                    info.Property.SetValue(context.TemplateCompilerOutput.Template, info.Attributes.First().Value);
+                    info.Property.SetValue(context.TemplateCompilerOutput.Template, info.Attributes.First().Value.ConvertValue(info.Property.PropertyType));
                 }
 
                 if (sessionPropertyValue?.ContainsKey(info.Property.Name) == false)
                 {
-                    sessionPropertyValue.Add(info.Property.Name, info.Attributes.First().Value);
+                    sessionPropertyValue.Add(info.Property.Name, info.Attributes.First().Value.ConvertValue(info.Property.PropertyType));
                 }
             }
 

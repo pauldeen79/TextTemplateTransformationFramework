@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 namespace TextTemplateTransformationFramework.Common.Extensions
 {
@@ -21,12 +20,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
 
             return property == null || parameter.Value == null || property.PropertyType.IsInstanceOfType(parameter.Value)
                 ? parameter.Value
-                : ConvertProperty(parameter, property);
+                : parameter.Value.ConvertValue(property.PropertyType);
         }
-
-        private static object ConvertProperty(TemplateParameter parameter, PropertyInfo property)
-            => parameter.Value is int && property.PropertyType.IsEnum
-                ? Enum.ToObject(property.PropertyType, parameter.Value)
-                : Convert.ChangeType(parameter.Value, property.PropertyType);
     }
 }

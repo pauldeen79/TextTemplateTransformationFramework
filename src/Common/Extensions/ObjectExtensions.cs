@@ -66,5 +66,25 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 templateCodeCompilerContainer.TemplateCodeCompiler = templateCodeCompiler;
             }
         }
+
+        public static object ConvertValue(this object instance, Type type)
+        {
+            if (instance == null)
+            {
+                return null;
+            }
+
+            if (type.IsInstanceOfType(instance))
+            {
+                return instance;
+            }
+
+            if (instance is int && type.IsEnum)
+            {
+                return Enum.ToObject(type, instance);
+            }
+
+            return Convert.ChangeType(instance, type);
+        }
     }
 }
