@@ -40,7 +40,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
         }
 
         [ExcludeFromCodeCoverage]
-        private class T4PlusCSharp : ICodeGenerationProvider
+        private sealed class T4PlusCSharp : ICodeGenerationProvider
         {
             public bool GenerateMultipleFiles { get; private set; }
 

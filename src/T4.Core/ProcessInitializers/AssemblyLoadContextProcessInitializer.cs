@@ -14,8 +14,7 @@ namespace TextTemplateTransformationFramework.T4.Core.ProcessInitializers
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var loadContext = new CustomAssemblyLoadContext("Generation context", true, () => new[] { (context.ContainsKey("TempPath")
-                ? context["TempPath"]?.ToString()
+            var loadContext = new CustomAssemblyLoadContext("Generation context", true, () => new[] { (context.TryGetValue("TempPath", out var value) ? value?.ToString()
                 : null) ?? Path.GetTempPath() } );
             context["CoreAssemblyLoadContext"] = loadContext;
         }

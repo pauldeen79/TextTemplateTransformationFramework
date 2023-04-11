@@ -242,17 +242,17 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             return mock;
         }
 
-        private class FloatSinglePropertyTypeModel
+        private sealed class FloatSinglePropertyTypeModel
         {
             public float MyFloatProperty { get; set; }
         }
 
-        private class FloatMultiplePropertyTypeModel
+        private sealed class FloatMultiplePropertyTypeModel
         {
             public List<float> MyFloatListProperty { get; set; }
         }
 
-        private class StringMultiplePropertyTypeModel
+        private sealed class StringMultiplePropertyTypeModel
         {
 #pragma warning disable S1144 // Unused private types or members should be removed
 #pragma warning disable S3459 // Unassigned members should be removed

@@ -222,7 +222,7 @@ Hello 4
         }
     }
 
-    internal class TemplateThatUsesSeparator : T4PlusGeneratedTemplateBase
+    internal sealed class TemplateThatUsesSeparator : T4PlusGeneratedTemplateBase
     {
         public void Initialize()
         {
@@ -242,12 +242,12 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    internal class FinalClass : BaseClass
+    internal sealed class FinalClass : BaseClass
     {
     }
 
     [ExcludeFromCodeCoverage]
-    internal class CompositeTemplate2 : T4PlusGeneratedTemplateBase
+    internal sealed class CompositeTemplate2 : T4PlusGeneratedTemplateBase
     {
         public string TransformText()
         {
@@ -259,7 +259,7 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    internal class T4PlusGeneratedTemplateBaseMock : T4PlusGeneratedTemplateBase
+    internal sealed class T4PlusGeneratedTemplateBaseMock : T4PlusGeneratedTemplateBase
     {
         public object GetChildTemplateByName(string templateName, bool silentlyContinueOnError = false)
         {
@@ -278,7 +278,7 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    internal class ChildTemplateWithWarning : T4PlusGeneratedTemplateBase
+    internal sealed class ChildTemplateWithWarning : T4PlusGeneratedTemplateBase
     {
         public ChildTemplateWithWarning()
         {
@@ -287,12 +287,12 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    internal class UnknownTemplate : T4PlusGeneratedTemplateBase
+    internal sealed class UnknownTemplate : T4PlusGeneratedTemplateBase
     {
     }
 
     [ExcludeFromCodeCoverage]
-    internal class WriteWithParamsTemplate : T4PlusGeneratedTemplateBase
+    internal sealed class WriteWithParamsTemplate : T4PlusGeneratedTemplateBase
     {
         public void Render(StringBuilder builder)
         {
@@ -302,7 +302,7 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    internal class WriteLineWithParamsTemplate : T4PlusGeneratedTemplateBase
+    internal sealed class WriteLineWithParamsTemplate : T4PlusGeneratedTemplateBase
     {
         public void Render(StringBuilder builder)
         {
@@ -312,7 +312,7 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    internal class ClearIndentationTemplate : T4PlusGeneratedTemplateBase
+    internal sealed class ClearIndentationTemplate : T4PlusGeneratedTemplateBase
     {
         public void Render(StringBuilder builder)
         {
@@ -327,14 +327,14 @@ Hello 4
     }
 
     [ExcludeFromCodeCoverage]
-    public class MyData
+    public sealed class MyData
     {
         public string Name { get; set; }
         public int Count { get; set; }
     }
 
     [ExcludeFromCodeCoverage]
-    public class SimpleTemplate
+    public sealed class SimpleTemplate
     {
         private readonly string _contents;
 

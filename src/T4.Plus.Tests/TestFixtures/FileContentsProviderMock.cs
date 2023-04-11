@@ -5,7 +5,7 @@ using TextTemplateTransformationFramework.Common.Contracts;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures
 {
     [ExcludeFromCodeCoverage]
-    internal class FileContentsProviderMock : IFileContentsProvider
+    internal sealed class FileContentsProviderMock : IFileContentsProvider
     {
         public Func<string, string> GetFileContentsDelegate { get; set; }
 

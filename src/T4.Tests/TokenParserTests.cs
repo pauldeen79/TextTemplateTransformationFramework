@@ -92,7 +92,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
             => _provider.Dispose();
 
         [DirectivePrefix("datatable")]
-        private class DataTableSectionProcessor : ITemplateSectionProcessor<TokenParserState>
+        private sealed class DataTableSectionProcessor : ITemplateSectionProcessor<TokenParserState>
         {
             public SectionProcessResult<TokenParserState> Process(SectionContext<TokenParserState> context)
             {

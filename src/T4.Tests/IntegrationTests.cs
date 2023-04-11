@@ -487,7 +487,6 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             // Arrange
             var context = SectionContext<TokenParserState>.Empty;
             var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
-            var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
 
             // Act
             var sut = TemplateRenderHelper.CreateNestedTemplate<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
@@ -508,7 +507,6 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             // Arrange
             var context = SectionContext<TokenParserState>.Empty;
             var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
-            var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
 
             // Act
             var ctx = TemplateRenderHelper.CreateNestedTemplateContext<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template>
@@ -530,7 +528,6 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             // Arrange
             var context = SectionContext<TokenParserState>.Empty;
             var model = new RenderCodeToken<TokenParserState>(context, "//Code goes here");
-            var rootModel = new[] { model }.Cast<ITemplateToken<TokenParserState>>();
 
             // Act
             var ctx = TemplateRenderHelper.CreateNestedTemplateContext<T4CSharpCodeGenerator, T4CSharpCodeGenerator_CodeToken_Template, TemplateInstanceContext>
@@ -574,14 +571,14 @@ Hello <#= ""world"" #><# Write(""!""); #>";
 
         [DirectivePrefix("SomeDirectiveThatGetsProcessedByUnknownTemplateTokenProcessor")]
         [ExcludeFromCodeCoverage]
-        private class UnknownTemplateTokenProcessor : ITemplateSectionProcessor<TokenParserState>
+        private sealed class UnknownTemplateTokenProcessor : ITemplateSectionProcessor<TokenParserState>
         {
             public SectionProcessResult<TokenParserState> Process(SectionContext<TokenParserState> context)
             {
                 return SectionProcessResult.Create(new UnknownTemplateToken { FileName = context.FileName, LineNumber = context.LineNumber, SectionContext = context });
             }
 
-            private class UnknownTemplateToken : IRenderToken<TokenParserState>
+            private sealed class UnknownTemplateToken : IRenderToken<TokenParserState>
             {
                 public SectionContext<TokenParserState> SectionContext { get; set; }
 
@@ -592,7 +589,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
         }
 
         [ExcludeFromCodeCoverage]
-        private class FileContentsProviderMock : IFileContentsProvider
+        private sealed class FileContentsProviderMock : IFileContentsProvider
         {
             public bool FileExists(string fileName)
             {

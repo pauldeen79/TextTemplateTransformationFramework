@@ -3,7 +3,7 @@
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures
 {
     [ExcludeFromCodeCoverage]
-    internal class CustomType
+    internal sealed class CustomType
     {
         public string OtherName { get; set; }
     }

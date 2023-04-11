@@ -65,24 +65,26 @@ namespace TextTemplateTransformationFramework.Common.Tests.SectionProcessors
             sut.Should().NotBeNull();
         }
 
-        private class MapperWithoutTokenMapperAttribute
+#pragma warning disable S2094 // Classes should not be empty
+        private sealed class MapperWithoutTokenMapperAttribute
+#pragma warning restore S2094 // Classes should not be empty
         {
         }
 
         [TokenMapper(typeof(object))]
-        private class MapperWithoutDirectivePrefixAttribute
+        private sealed class MapperWithoutDirectivePrefixAttribute
         {
         }
 
         [TokenMapper(typeof(object))]
         [DirectivePrefix("test")]
-        private class MapperWithoutMapMethod
+        private sealed class MapperWithoutMapMethod
         {
         }
 
         [TokenMapper(typeof(object))]
         [DirectivePrefix("test")]
-        private class CorrectMapper : ISingleTokenMapper<TokenMapperTemplateSectionProcessorTests, object>
+        private sealed class CorrectMapper : ISingleTokenMapper<TokenMapperTemplateSectionProcessorTests, object>
         {
             public ITemplateToken<TokenMapperTemplateSectionProcessorTests> Map(SectionContext<TokenMapperTemplateSectionProcessorTests> context, object model)
             {

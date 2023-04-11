@@ -4,7 +4,7 @@ using System.Text;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures
 {
     [ExcludeFromCodeCoverage]
-    internal class DynamicModelTemplateTest : Runtime.T4PlusGeneratedTemplateBase
+    internal sealed class DynamicModelTemplateTest : Runtime.T4PlusGeneratedTemplateBase
     {
         public dynamic Model { get; set; }
 

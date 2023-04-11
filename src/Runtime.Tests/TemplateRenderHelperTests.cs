@@ -527,7 +527,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
         }
 
         [ExcludeFromCodeCoverage]
-        private class MyPlainTemplate : T4PlusGeneratedTemplateBase
+        private sealed class MyPlainTemplate : T4PlusGeneratedTemplateBase
         {
 #pragma warning disable S1144 // Unused private types or members should be removed
             public void Render(StringBuilder builder)
@@ -538,7 +538,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
         }
 
         [ExcludeFromCodeCoverage]
-        private class MyModelTemplateWithPocoModelAndTransformText
+        private sealed class MyModelTemplateWithPocoModelAndTransformText
         {
 #pragma warning disable S3459 // Unassigned members should be removed
 #pragma warning disable S1144 // Unused private types or members should be removed
@@ -555,7 +555,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
         }
 
         [ExcludeFromCodeCoverage]
-        private class MyModelTemplateWithPocoModelAndToString
+        private sealed class MyModelTemplateWithPocoModelAndToString
         {
 #pragma warning disable S3459 // Unassigned members should be removed
 #pragma warning disable S1144 // Unused private types or members should be removed
@@ -570,7 +570,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
         }
 
         [ExcludeFromCodeCoverage]
-        private class MyModelTemplateWithPocoAdditionalPropertiesAndTransformText
+        private sealed class MyModelTemplateWithPocoAdditionalPropertiesAndTransformText
         {
 #pragma warning disable S1144 // Unused private types or members should be removed
 #pragma warning disable S3459 // Unassigned members should be removed
@@ -591,7 +591,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
 #pragma warning restore S1144 // Unused private types or members should be removed
         }
 
-        private class MyErrorTemplate : T4PlusGeneratedTemplateBase
+        private sealed class MyErrorTemplate : T4PlusGeneratedTemplateBase
         {
 #pragma warning disable S1144 // Unused private types or members should be removed
             public void Initialize()
@@ -609,7 +609,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
         }
 
         [ExcludeFromCodeCoverage]
-        private class MyModeledTemplate : T4PlusGeneratedTemplateBase
+        private sealed class MyModeledTemplate : T4PlusGeneratedTemplateBase
         {
             public string Model { get; set; }
 
@@ -632,7 +632,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
         }
 
         [ExcludeFromCodeCoverage]
-        private class MyTemplateWithAdditionalParameters : T4PlusGeneratedTemplateBase
+        private sealed class MyTemplateWithAdditionalParameters : T4PlusGeneratedTemplateBase
         {
             public string AdditionalParameter1 { get; set; }
             public string AdditionalParameter2 { get; set; }
@@ -660,7 +660,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests
 #pragma warning restore S1144 // Unused private types or members should be removed
         }
 
-        private class MyMultipleContentStringBuilderTemplate : T4PlusGeneratedTemplateBase
+        private sealed class MyMultipleContentStringBuilderTemplate : T4PlusGeneratedTemplateBase
         {
 #pragma warning disable S1144 // Unused private types or members should be removed
             public void Render(StringBuilder builder)

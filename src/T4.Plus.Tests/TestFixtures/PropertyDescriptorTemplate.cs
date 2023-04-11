@@ -5,7 +5,7 @@ using System.Text;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures
 {
     [ExcludeFromCodeCoverage]
-    internal class PropertyDescriptorTemplate : Runtime.T4PlusGeneratedTemplateBase
+    internal sealed class PropertyDescriptorTemplate : Runtime.T4PlusGeneratedTemplateBase
     {
         public object Model { get; set; }
 
