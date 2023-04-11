@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="2.7.22" />
+    <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="2.7.30" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
