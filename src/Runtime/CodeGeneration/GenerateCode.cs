@@ -23,9 +23,10 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
             => For<T>(settings, null);
 
         public static GenerateCode For<T>(CodeGenerationSettings settings, IMultipleContentBuilder multipleContentBuilder)
-            where T : ICodeGenerationProvider, new()
+            where T : ICodeGenerationProvider, new() => For(settings, multipleContentBuilder, new T());
+
+        public static GenerateCode For(CodeGenerationSettings settings, IMultipleContentBuilder multipleContentBuilder, ICodeGenerationProvider provider)
         {
-            var provider = new T();
             provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists, settings.BasePath);
             var result = new GenerateCode(provider.BasePath, multipleContentBuilder);
             var generator = provider.CreateGenerator();
@@ -50,7 +51,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
             {
                 if (shouldUseLastGeneratedFiles)
                 {
-                    var prefixedLastGeneratedFilesFileName = provider.Path + Parent + (settings.GenerateMultipleFiles ? provider.LastGeneratedFilesFileName : provider.DefaultFileName);
+                    var prefixedLastGeneratedFilesFileName = provider.Path + Parent + (provider.GenerateMultipleFiles ? provider.LastGeneratedFilesFileName : provider.DefaultFileName);
                     result.TemplateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFileName, provider.RecurseOnDeleteGeneratedFiles);
                     result.TemplateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFileName);
                 }

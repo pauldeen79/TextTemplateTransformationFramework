@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common;
@@ -18,7 +19,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
         public void Can_Generate_Code()
         {
             // Act
-            var result = GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(null, false, false, true));
+            var result = GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(null, true));
 
             // Assert
             result.Should().NotBeNull();
@@ -29,9 +30,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.CodeGeneration
         {
             // Arrange
             var multipleContentBuilderMock = new Mock<IMultipleContentBuilder>();
+            multipleContentBuilderMock.Setup(x => x.AddContent(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<StringBuilder>())).Returns(new Content());
 
             // Act
-            GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(@"C:\", true, false, false), multipleContentBuilderMock.Object);
+            GenerateCode.For<T4PlusCSharp>(new CodeGenerationSettings(@"C:\", false), multipleContentBuilderMock.Object);
 
             // Assert
             multipleContentBuilderMock.Verify(x => x.DeleteLastGeneratedFiles(@"/Generated.cs", false), Times.Once);
