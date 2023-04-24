@@ -30,9 +30,9 @@ jobs:
       - name: Restore
         run: dotnet restore TextTemplateTransformationFramework.sln
       - name: Build
-        run: dotnet build TextTemplateTransformationFramework.sln -c Release --no-restore
+        run: dotnet build --no-restore TextTemplateTransformationFramework.sln -c Release
       - name: Test
-        run: dotnet test TextTemplateTransformationFramework.sln -c Release
+        run: dotnet test --no-restore TextTemplateTransformationFramework.sln -c Release
   #    - name: Pack
   #      if: matrix.os == 'ubuntu-latest'
   #      run: dotnet pack TextTemplateTransformationFramework.sln -v normal -c Release -o ./artifacts --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID
