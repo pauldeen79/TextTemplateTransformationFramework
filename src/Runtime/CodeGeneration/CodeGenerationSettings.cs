@@ -6,6 +6,10 @@
         {
         }
 
+        public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool dryRun) : this(basePath, generateMultipleFiles, false, dryRun)
+        {
+        }
+
         public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool skipWhenFileExists, bool dryRun)
         {
             BasePath = basePath;
