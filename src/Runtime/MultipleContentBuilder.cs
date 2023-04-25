@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using TextTemplateTransformationFramework.Runtime.Extensions;
 
@@ -41,7 +42,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
 
                 var contents = content.Builder.ToString().NormalizeLineEndings();
-                File.WriteAllText(path, contents, Encoding.UTF8);
+                Retry(() => File.WriteAllText(path, contents, Encoding.UTF8));
             }
         }
 
@@ -206,5 +207,21 @@ namespace TextTemplateTransformationFramework.Runtime
             => recurse
                 ? SearchOption.AllDirectories
                 : SearchOption.TopDirectoryOnly;
+
+        private static void Retry(Action action)
+        {
+            for (int i = 1; i < 3; i++)
+            {
+                try
+                {
+                    action();
+                    return;
+                }
+                catch (IOException x) when (x.Message.Contains("because it is being used by another process"))
+                {
+                    Thread.Sleep(i * 500);
+                }
+            }
+        }
     }
 }
