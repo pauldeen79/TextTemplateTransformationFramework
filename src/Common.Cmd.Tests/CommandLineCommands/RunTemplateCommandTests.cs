@@ -164,6 +164,24 @@ template output
         }
 
         [Fact]
+        public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-c");
+
+            // Assert
+            actual.Should().Be(@"Copied template output to clipboard
+");
+            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.txt", "template output"), Times.Never);
+        }
+
+        [Fact]
         public void Execute_With_DiagnosticsOutput_Option_Saves_DiagnosticsOutput_To_File()
         {
             // Arrange

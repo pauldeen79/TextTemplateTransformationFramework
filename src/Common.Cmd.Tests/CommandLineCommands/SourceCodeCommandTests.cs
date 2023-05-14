@@ -111,5 +111,20 @@ CodeGoesHere();
 ");
             _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.cs", "CodeGoesHere();"), Times.Once);
         }
+
+        [Fact]
+        public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-c");
+
+            // Assert
+            actual.Should().Be(@"Copied source code to clipboard
+");
+            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.cs", "CodeGoesHere();"), Times.Never);
+        }
     }
 }

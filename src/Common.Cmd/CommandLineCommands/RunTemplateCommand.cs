@@ -160,7 +160,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             ClipboardService.SetText(templateOutput);
             if (!bareOption.HasValue())
             {
-                app.Out.WriteLine("Copied output to clipboard");
+                app.Out.WriteLine("Copied template output to clipboard");
             }
         }
 
