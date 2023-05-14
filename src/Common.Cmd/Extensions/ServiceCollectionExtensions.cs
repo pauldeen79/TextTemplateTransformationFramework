@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Default;
@@ -9,7 +10,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Extensions
     {
         public static IServiceCollection AddTextTemplateTransformationCommands<TState>(this IServiceCollection instance)
             where TState : class
-            => instance
+        {
+            instance.InjectClipboard();
+            return instance
                 .AddSingleton<ICommandLineProcessor, CommandLineProcessor>()
                 .AddSingleton<ICommandLineCommand, VersionCommand>()
                 .AddSingleton<ICommandLineCommand, GenerateDirectiveCommand<TState>>()
@@ -18,7 +21,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Extensions
                 .AddSingleton<ICommandLineCommand, ListParametersCommand>()
                 .AddSingleton<ICommandLineCommand, RunTemplateCommand>()
                 .AddSingleton<ICommandLineCommand, SourceCodeCommand>()
-                .AddSingleton<IUserInput, UserInput>()
-                .AddSingleton<IClipboardService, ClipboardService>();
+                .AddSingleton<IUserInput, UserInput>();
+        }
     }
 }

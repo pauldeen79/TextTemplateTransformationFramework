@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
+using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -15,17 +16,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         private readonly ITextTemplateProcessor _processor;
         private readonly IFileContentsProvider _fileContentsProvider;
         private readonly IUserInput _userInput;
-        private readonly IClipboardService _clipboardService;
+        private readonly IClipboard _clipboard;
 
         public RunTemplateCommand(ITextTemplateProcessor processor,
                                   IFileContentsProvider fileContentsProvider,
                                   IUserInput userInput,
-                                  IClipboardService clipboardService)
+                                  IClipboard clipboard)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
             _userInput = userInput ?? throw new ArgumentNullException(nameof(userInput));
-            _clipboardService = clipboardService ?? throw new ArgumentNullException(nameof(clipboardService));
+            _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         }
 
         public void Initialize(CommandLineApplication app)
@@ -159,7 +160,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         private void WriteOutputToClipboard(CommandLineApplication app, string templateOutput, CommandOption<string> bareOption)
         {
-            _clipboardService.SetValue(templateOutput);
+            _clipboard.SetText(templateOutput);
             if (!bareOption.HasValue())
             {
                 app.Out.WriteLine("Copied template output to clipboard");
