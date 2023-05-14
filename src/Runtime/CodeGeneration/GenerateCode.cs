@@ -27,7 +27,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 
         public static GenerateCode For(CodeGenerationSettings settings, IMultipleContentBuilder multipleContentBuilder, ICodeGenerationProvider provider)
         {
-            provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists, settings.BasePath);
+            provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists(), settings.BasePath);
             var result = new GenerateCode(provider.BasePath, multipleContentBuilder);
             var generator = provider.CreateGenerator();
             var shouldSave = !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun;
