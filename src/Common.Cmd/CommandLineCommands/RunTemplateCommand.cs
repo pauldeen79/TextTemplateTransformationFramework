@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
+using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -36,6 +37,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var diagnosticDumpOutputOption = command.Option<string>("-diag|--diagnosticoutput <PATH>", "The diagnostic output filename", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
                 var interactiveOption = command.Option<string>("-i|--interactive", "Fill parameters interactively", CommandOptionType.NoValue);
+                var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
+                var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
+
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
 #endif
@@ -86,7 +90,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var output = outputOption.Value();
                     var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
-                    WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput);
+                    WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
                 });
             });
         }
@@ -121,23 +125,60 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
         }
 
-        private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput)
+        private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption)
         {
             if (!string.IsNullOrEmpty(diagnosticDumpOutput))
             {
-                _fileContentsProvider.WriteFileContents(diagnosticDumpOutput, result.DiagnosticDump);
-                app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
+                WriteDiagnosticsDumpOutput(app, result, diagnosticDumpOutput, bareOption);
             }
 
             if (!string.IsNullOrEmpty(output))
             {
-                _fileContentsProvider.WriteFileContents(output, templateOutput);
-                app.Out.WriteLine($"Written template output to file: {output}");
+                WriteOutputToFile(app, templateOutput, output, bareOption);
+            }
+            else if (clipboardOption.HasValue())
+            {
+                WriteOutputToClipboard(app, templateOutput, bareOption);
             }
             else
             {
+                WriteOutputToHost(app, templateOutput, bareOption);
+            }
+        }
+
+        private void WriteDiagnosticsDumpOutput(CommandLineApplication app, ProcessResult result, string diagnosticDumpOutput, CommandOption<string> bareOption)
+        {
+            _fileContentsProvider.WriteFileContents(diagnosticDumpOutput, result.DiagnosticDump);
+            if (!bareOption.HasValue())
+            {
+                app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
+            }
+        }
+
+        private void WriteOutputToClipboard(CommandLineApplication app, string templateOutput, CommandOption<string> bareOption)
+        {
+            ClipboardService.SetText(templateOutput);
+            if (!bareOption.HasValue())
+            {
+                app.Out.WriteLine("Copied output to clipboard");
+            }
+        }
+
+        private static void WriteOutputToHost(CommandLineApplication app, string templateOutput, CommandOption<string> bareOption)
+        {
+            if (!bareOption.HasValue())
+            {
                 app.Out.WriteLine("Template output:");
-                app.Out.WriteLine(templateOutput);
+            }
+            app.Out.WriteLine(templateOutput);
+        }
+
+        private void WriteOutputToFile(CommandLineApplication app, string templateOutput, string output, CommandOption<string> bareOption)
+        {
+            _fileContentsProvider.WriteFileContents(output, templateOutput);
+            if (!bareOption.HasValue())
+            {
+                app.Out.WriteLine($"Written template output to file: {output}");
             }
         }
     }
