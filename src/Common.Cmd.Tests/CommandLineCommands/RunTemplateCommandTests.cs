@@ -19,16 +19,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
         private readonly Mock<IUserInput> _userInputMock;
+        private readonly Mock<IClipboardService> _clipboardServiceMock;
 
         private RunTemplateCommand CreateSut() => new RunTemplateCommand(_processorMock.Object,
                                                                          _fileContentsProviderMock.Object,
-                                                                         _userInputMock.Object);
+                                                                         _userInputMock.Object,
+                                                                         _clipboardServiceMock.Object);
 
         public RunTemplateCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
             _userInputMock = new Mock<IUserInput>();
+            _clipboardServiceMock = new Mock<IClipboardService>();
         }
 
         [Fact]
@@ -178,7 +181,7 @@ template output
             // Assert
             actual.Should().Be(@"Copied template output to clipboard
 ");
-            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.txt", "template output"), Times.Never);
+            _clipboardServiceMock.Verify(x => x.SetValue("template output"), Times.Once);
         }
 
         [Fact]

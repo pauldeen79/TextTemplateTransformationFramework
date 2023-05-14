@@ -18,6 +18,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Extensions
                 .AddSingleton<ICommandLineCommand, ListParametersCommand>()
                 .AddSingleton<ICommandLineCommand, RunTemplateCommand>()
                 .AddSingleton<ICommandLineCommand, SourceCodeCommand>()
-                .AddSingleton<IUserInput, UserInput>();
+                .AddSingleton<IUserInput, UserInput>()
+                .AddSingleton<IClipboardService, ClipboardService>();
     }
 }

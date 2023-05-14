@@ -5,6 +5,7 @@ using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
+using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
 using Xunit;
@@ -16,13 +17,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+        private readonly Mock<IClipboardService> _clipboardServiceMock;
 
-        private SourceCodeCommand CreateSut() => new SourceCodeCommand(_processorMock.Object, _fileContentsProviderMock.Object);
+        private SourceCodeCommand CreateSut() => new SourceCodeCommand(_processorMock.Object,
+                                                                       _fileContentsProviderMock.Object,
+                                                                       _clipboardServiceMock.Object);
 
         public SourceCodeCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+            _clipboardServiceMock = new Mock<IClipboardService>();
         }
 
         [Fact]
@@ -38,7 +43,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var app = new CommandLineApplication();
             var textTemplateProcessorMock = new Mock<ITextTemplateProcessor>();
             var fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            var sut = new SourceCodeCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object);
+            var sut = new SourceCodeCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object, _clipboardServiceMock.Object);
 
             // Act
             sut.Initialize(app);
@@ -124,7 +129,7 @@ CodeGoesHere();
             // Assert
             actual.Should().Be(@"Copied source code to clipboard
 ");
-            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.cs", "CodeGoesHere();"), Times.Never);
+            _clipboardServiceMock.Verify(x => x.SetValue("CodeGoesHere();"), Times.Once);
         }
     }
 }
