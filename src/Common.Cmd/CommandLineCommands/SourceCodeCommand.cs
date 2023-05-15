@@ -24,10 +24,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         }
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
         public void Initialize(CommandLineApplication app)
         {
             Guard.AgainstNull(app, nameof(app));
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app.Command("source", command =>
             {
                 command.Description = "Generates the template, and shows the template source code";
@@ -80,8 +81,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     WriteOutput(app, result, sourceCode, output, diagnosticDumpOutput, bareOption, clipboardOption);
                 });
             });
-#pragma warning restore CA1062 // Validate arguments of public methods
         }
+#pragma warning restore CA1062 // Validate arguments of public methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         private void WriteOutput(CommandLineApplication app, ProcessResult result, string sourceCode, string output, string diagnosticDumpOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption)
         {

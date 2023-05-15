@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
+using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
@@ -17,12 +19,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     public class RunCodeGenerationProviderAssemblyCommandTests
     {
         private readonly Mock<IClipboard> _clipboardMock;
+        private readonly Mock<IAssemblyService> _assemblyServiceMock;
 
-        private RunCodeGenerationProviderAssemblyCommand CreateSut() => new RunCodeGenerationProviderAssemblyCommand(_clipboardMock.Object);
+        private RunCodeGenerationProviderAssemblyCommand CreateSut() => new RunCodeGenerationProviderAssemblyCommand(_clipboardMock.Object, _assemblyServiceMock.Object);
 
         public RunCodeGenerationProviderAssemblyCommandTests()
         {
             _clipboardMock = new Mock<IClipboard>();
+            _assemblyServiceMock = new Mock<IAssemblyService>();
+            _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>())).Returns<string>(Assembly.Load);
         }
 
         [Fact]

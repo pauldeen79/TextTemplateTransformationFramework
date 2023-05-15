@@ -30,10 +30,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         }
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
         public void Initialize(CommandLineApplication app)
         {
             Guard.AgainstNull(app, nameof(app));
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app!.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
@@ -99,8 +100,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
                 });
             });
-#pragma warning restore CA1062 // Validate arguments of public methods
         }
+#pragma warning restore CA1062 // Validate arguments of public methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         private TemplateParameter[] GetParameters(string filename,
                                                   string contents,

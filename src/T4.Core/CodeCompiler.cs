@@ -7,7 +7,6 @@ using System.Runtime.Loader;
 using ScriptCompiler;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
-using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.T4.Core
 {

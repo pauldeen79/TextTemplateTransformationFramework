@@ -20,10 +20,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
         }
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
         public void Initialize(CommandLineApplication app)
         {
             Guard.AgainstNull(app, nameof(app));
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app.Command("list-parameters", command =>
             {
                 command.Description = "Lists template parameters";
@@ -73,7 +74,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     result.Parameters.Select(p => $"{p.Name} ({p.Type.FullName})").ForEach(app.Out.WriteLine);
                 });
             });
-#pragma warning restore CA1062 // Validate arguments of public methods
         }
+#pragma warning restore CA1062 // Validate arguments of public methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
     }
 }

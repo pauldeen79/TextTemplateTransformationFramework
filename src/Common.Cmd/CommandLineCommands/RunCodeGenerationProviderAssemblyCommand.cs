@@ -15,16 +15,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
     public class RunCodeGenerationProviderAssemblyCommand : ICommandLineCommand
     {
         private readonly IClipboard _clipboard;
+        private readonly IAssemblyService _assemblyService;
 
-        public RunCodeGenerationProviderAssemblyCommand(IClipboard clipboard)
+        public RunCodeGenerationProviderAssemblyCommand(IClipboard clipboard, IAssemblyService assemblyService)
         {
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
+            _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
         public void Initialize(CommandLineApplication app)
         {
             Guard.AgainstNull(app, nameof(app));
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app.Command("assembly", command =>
             {
                 command.Description = "Runs all code generation providers from the specified assembly";
@@ -35,6 +38,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var basePathOption = command.Option<string>("-p|--path", "Base path for code generation", CommandOptionType.SingleValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
+                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
 
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
@@ -53,15 +57,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    var assembly = Assembly.Load(assemblyName);
+                    if (currentDirectoryOption.HasValue())
+                    {
+                        _assemblyService.SetCustomPath(currentDirectoryOption.Value());
+                    }
+                    var assembly = _assemblyService.LoadAssembly(assemblyName);
                     var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
                     var templateOutput = GetOutputFromAssembly(assembly, settings);
 
                     WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
                 });
             });
-#pragma warning restore CA1062 // Validate arguments of public methods
         }
+#pragma warning restore CA1062 // Validate arguments of public methods
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         private static CodeGenerationSettings CreateCodeGenerationSettings(CommandOption<bool> generateMultipleFilesOption, CommandOption<bool> dryRunOption, CommandOption<string> basePathOption)
         {
@@ -90,7 +99,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 .Where(t => !t.IsAbstract
                     && !t.IsInterface
                     && typeof(ICodeGenerationProvider).IsAssignableFrom(t)
-                    && t.GetConstructors().Any(c => c.GetParameters().Length == 0)
                 )
                 .Select(t => (ICodeGenerationProvider)Activator.CreateInstance(t));
 

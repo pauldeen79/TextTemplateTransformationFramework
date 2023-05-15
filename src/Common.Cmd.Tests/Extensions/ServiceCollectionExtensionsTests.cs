@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ScriptCompiler;
+using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
@@ -25,6 +26,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.Extensions
                 .AddTransient(_ => new Mock<IFileContentsProvider>().Object)
                 .AddTransient(_ => new Mock<ITemplateOutputCreator<ServiceCollectionExtensionsTests>>().Object)
                 .AddTransient(_ => new Mock<ITextTemplateTokenParser<ServiceCollectionExtensionsTests>>().Object)
+                .AddTransient(_ => new Mock<IAssemblyService>().Object)
                 .AddTextTemplateTransformation<ServiceCollectionExtensionsTests>()
                 .AddTextTemplateTransformationCommands<ServiceCollectionExtensionsTests>()
                 .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true }));
