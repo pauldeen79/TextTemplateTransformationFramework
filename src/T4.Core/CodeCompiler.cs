@@ -41,13 +41,8 @@ namespace TextTemplateTransformationFramework.T4.Core
             return _scriptCompiler.LoadScriptToMemory
             (
                 codeOutput.SourceCode,
-#if NETCOREAPP3_1
-                referencedAssemblies.DistinctBy(s => s.ToUpper(CultureInfo.InvariantCulture)),
-                packageReferences.DistinctBy(x => x.ToUpper(CultureInfo.InvariantCulture)),
-#else
                 referencedAssemblies.GroupBy(s => s.ToUpper(CultureInfo.InvariantCulture)).Select(x => x.First()),
                 packageReferences.GroupBy(x => x.ToUpper(CultureInfo.InvariantCulture)).Select(x => x.First()),
-#endif
                 codeOutput.TempPath,
                 null,
                 loadContext

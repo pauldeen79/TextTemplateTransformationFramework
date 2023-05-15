@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using ScriptCompiler;
 using TextTemplateTransformationFramework.Common.Contracts;
+#if NET48
 using Utilities.Extensions;
+#endif
 
 namespace TextTemplateTransformationFramework.Common.Default
 {
