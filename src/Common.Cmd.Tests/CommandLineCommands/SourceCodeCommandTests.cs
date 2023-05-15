@@ -4,7 +4,9 @@ using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
+using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
+using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
 using Xunit;
@@ -16,13 +18,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+        private readonly Mock<IClipboard> _clipboardMock;
 
-        private SourceCodeCommand CreateSut() => new SourceCodeCommand(_processorMock.Object, _fileContentsProviderMock.Object);
+        private SourceCodeCommand CreateSut() => new SourceCodeCommand(_processorMock.Object,
+                                                                       _fileContentsProviderMock.Object,
+                                                                       _clipboardMock.Object);
 
         public SourceCodeCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+            _clipboardMock = new Mock<IClipboard>();
         }
 
         [Fact]
@@ -38,7 +44,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var app = new CommandLineApplication();
             var textTemplateProcessorMock = new Mock<ITextTemplateProcessor>();
             var fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            var sut = new SourceCodeCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object);
+            var sut = new SourceCodeCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object, _clipboardMock.Object);
 
             // Act
             sut.Initialize(app);
@@ -110,6 +116,21 @@ CodeGoesHere();
             actual.Should().Be(@"Written source code output to file: output.cs
 ");
             _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.cs", "CodeGoesHere();"), Times.Once);
+        }
+
+        [Fact]
+        public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-c");
+
+            // Assert
+            actual.Should().Be(@"Copied source code to clipboard
+");
+            _clipboardMock.Verify(x => x.SetText("CodeGoesHere();"), Times.Once);
         }
     }
 }

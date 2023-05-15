@@ -4,6 +4,7 @@ using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using Utilities;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -16,11 +17,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         public ListParametersCommand(ITextTemplateProcessor processor, IFileContentsProvider fileContentsProvider)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
-            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
         }
 
         public void Initialize(CommandLineApplication app)
         {
+            Guard.AgainstNull(app, nameof(app));
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app.Command("list-parameters", command =>
             {
                 command.Description = "Lists template parameters";
@@ -70,6 +73,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     result.Parameters.Select(p => $"{p.Name} ({p.Type.FullName})").ForEach(app.Out.WriteLine);
                 });
             });
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
     }
 }

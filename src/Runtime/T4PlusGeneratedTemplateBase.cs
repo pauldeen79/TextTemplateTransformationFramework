@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -38,9 +39,9 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public void ProcessPlaceholder(string placeholderName, object model = null)
         {
-            if (PlaceholderChildrenDictionary.ContainsKey(placeholderName))
+            if (PlaceholderChildrenDictionary.TryGetValue(placeholderName, out var result))
             {
-                foreach (var template in PlaceholderChildrenDictionary[placeholderName])
+                foreach (var template in result)
                 {
                     RenderTemplate(template, model);
                 }

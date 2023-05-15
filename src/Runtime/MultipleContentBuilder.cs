@@ -58,7 +58,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 Directory.CreateDirectory(dir);
             }
 
-            if (fullPath != null && !fullPath.Contains("*"))
+            if (fullPath != null && !fullPath.Contains('*'))
             {
                 File.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName));
             }
@@ -67,18 +67,18 @@ namespace TextTemplateTransformationFramework.Runtime
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
         {
             var basePath = BasePath;
-            if (lastGeneratedFilesPath?.Contains("\\") == true)
+            if (lastGeneratedFilesPath?.Contains('\\') == true)
             {
                 var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
 
-                basePath = basePath + "\\" + lastGeneratedFilesPath.Substring(0, lastSlash);
+                basePath = $"{basePath}\\{lastGeneratedFilesPath.Substring(0, lastSlash)}";
                 lastGeneratedFilesPath = lastGeneratedFilesPath.Substring(lastSlash + 1);
             }
             var fullPath = GetFullPath(lastGeneratedFilesPath, basePath);
 
             if (!File.Exists(fullPath))
             {
-                if (fullPath?.Contains("*") == true
+                if (fullPath?.Contains('*') == true
                     && !string.IsNullOrEmpty(basePath)
                     && Directory.Exists(basePath))
                 {

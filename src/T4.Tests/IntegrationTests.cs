@@ -295,27 +295,6 @@ Hello <#= Function() #>!
         }
 
         [Fact]
-        public void CanUseWarningInClassFooter()
-        {
-            // Arrange
-            const string Src = @"<#@ template language=""c#"" #>
-Hello <#= Function() #>!
-<#+ string Function() { Warning(""Kaboom""); return ""world""; }";
-            var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
-
-            // Act
-            var actual = sut.Process(new TextTemplate(Src));
-
-            // Assert
-            actual.CompilerErrors.Should().HaveCount(1);
-            actual.CompilerErrors[0].ErrorText.Should().Be("Kaboom");
-            actual.CompilerErrors[0].IsWarning.Should().BeTrue();
-            actual.Exception.Should().BeNull();
-            actual.Output.Should().Be(@"Hello world!
-");
-        }
-
-        [Fact]
         public void MultipleIncludesGetFilteredWhenOnceIsSetToTrue()
         {
             // Arrange

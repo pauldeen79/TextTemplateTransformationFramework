@@ -5,6 +5,7 @@ using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
+using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
@@ -19,16 +20,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
         private readonly Mock<IUserInput> _userInputMock;
+        private readonly Mock<IClipboard> _clipboardMock;
 
         private RunTemplateCommand CreateSut() => new RunTemplateCommand(_processorMock.Object,
                                                                          _fileContentsProviderMock.Object,
-                                                                         _userInputMock.Object);
+                                                                         _userInputMock.Object,
+                                                                         _clipboardMock.Object);
 
         public RunTemplateCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
             _userInputMock = new Mock<IUserInput>();
+            _clipboardMock = new Mock<IClipboard>();
         }
 
         [Fact]
@@ -161,6 +165,24 @@ template output
             actual.Should().Be(@"Written template output to file: output.txt
 ");
             _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.txt", "template output"), Times.Once);
+        }
+
+        [Fact]
+        public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-c");
+
+            // Assert
+            actual.Should().Be(@"Copied template output to clipboard
+");
+            _clipboardMock.Verify(x => x.SetText("template output"), Times.Once);
         }
 
         [Fact]

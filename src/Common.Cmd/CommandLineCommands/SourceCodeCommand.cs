@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
+using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using Utilities;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -11,15 +13,21 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
     {
         private readonly ITextTemplateProcessor _processor;
         private readonly IFileContentsProvider _fileContentsProvider;
+        private readonly IClipboard _clipboard;
 
-        public SourceCodeCommand(ITextTemplateProcessor processor, IFileContentsProvider fileContentsProvider)
+        public SourceCodeCommand(ITextTemplateProcessor processor,
+                                 IFileContentsProvider fileContentsProvider,
+                                 IClipboard clipboard)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
-            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
+            _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         }
 
         public void Initialize(CommandLineApplication app)
         {
+            Guard.AgainstNull(app, nameof(app));
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app.Command("source", command =>
             {
                 command.Description = "Generates the template, and shows the template source code";
@@ -28,6 +36,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var outputOption = command.Option<string>("-o|--output <PATH>", "The output filename", CommandOptionType.SingleValue);
                 var diagnosticDumpOutputOption = command.Option<string>("-diag|--diagnosticoutput <PATH>", "The diagnostic output filename", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
+                var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
+                var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
 
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
@@ -40,7 +50,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
-                    var parameters = parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+                    var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
 
                     if (string.IsNullOrEmpty(filename))
                     {
@@ -67,27 +77,36 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var output = outputOption.Value();
                     var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
-                    WriteOutput(app, result, sourceCode, output, diagnosticDumpOutput);
+                    WriteOutput(app, result, sourceCode, output, diagnosticDumpOutput, bareOption, clipboardOption);
                 });
             });
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
 
-        private void WriteOutput(CommandLineApplication app, ProcessResult result, string sourceCode, string output, string diagnosticDumpOutput)
+        private void WriteOutput(CommandLineApplication app, ProcessResult result, string sourceCode, string output, string diagnosticDumpOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption)
         {
             if (!string.IsNullOrEmpty(diagnosticDumpOutput))
             {
                 _fileContentsProvider.WriteFileContents(diagnosticDumpOutput, result.DiagnosticDump);
-                app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
+                if (!bareOption.HasValue())  app.Out.WriteLine($"Written diagnostic dump to file: {diagnosticDumpOutput}");
             }
 
             if (!string.IsNullOrEmpty(output))
             {
                 _fileContentsProvider.WriteFileContents(output, sourceCode);
-                app.Out.WriteLine($"Written source code output to file: {output}");
+                if (!bareOption.HasValue()) app.Out.WriteLine($"Written source code output to file: {output}");
+            }
+            else if (clipboardOption.HasValue())
+            {
+                _clipboard.SetText(sourceCode);
+                if (!bareOption.HasValue())
+                {
+                    app.Out.WriteLine("Copied source code to clipboard");
+                }
             }
             else
             {
-                app.Out.WriteLine("Source code output:");
+                if (!bareOption.HasValue()) app.Out.WriteLine("Source code output:");
                 app.Out.WriteLine(sourceCode);
             }
         }
