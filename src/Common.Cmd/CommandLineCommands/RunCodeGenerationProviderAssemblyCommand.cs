@@ -8,6 +8,7 @@ using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
+using Utilities;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -22,7 +23,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
+            Guard.AgainstNull(app, nameof(app));
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
             app.Command("assembly", command =>
             {
                 command.Description = "Runs all code generation providers from the specified assembly";
@@ -58,6 +60,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
                 });
             });
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
 
         private static CodeGenerationSettings CreateCodeGenerationSettings(CommandOption<bool> generateMultipleFilesOption, CommandOption<bool> dryRunOption, CommandOption<string> basePathOption)

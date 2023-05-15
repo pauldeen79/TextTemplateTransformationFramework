@@ -7,6 +7,7 @@ using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
+using Utilities;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -31,8 +32,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
-            app.Command("run", command =>
+            Guard.AgainstNull(app, nameof(app));
+#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
+            app!.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
 
@@ -97,6 +99,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
                 });
             });
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
 
         private TemplateParameter[] GetParameters(string filename,
