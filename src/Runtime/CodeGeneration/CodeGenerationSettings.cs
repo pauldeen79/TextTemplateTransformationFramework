@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 {
-    public class CodeGenerationSettings
+    public record CodeGenerationSettings
     {
         public CodeGenerationSettings(string basePath, bool dryRun) : this(basePath, false, false, dryRun)
         {
@@ -22,8 +22,5 @@
         public bool GenerateMultipleFiles { get; }
         public bool SkipWhenFileExists { get; }
         public bool DryRun { get; }
-
-        public CodeGenerationSettings ForGeneration() => new(BasePath, GenerateMultipleFiles, false, DryRun);
-        public CodeGenerationSettings ForScaffolding() => new(BasePath, GenerateMultipleFiles, true, DryRun);
     }
 }

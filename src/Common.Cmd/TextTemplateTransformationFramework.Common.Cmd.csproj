@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\TextTemplateTransformationFramework.Common.csproj" />
+    <ProjectReference Include="..\Runtime\TextTemplateTransformationFramework.Runtime.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 
