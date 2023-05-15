@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
             // Assert
             settings.BasePath.Should().Be("BasePath");
             settings.GenerateMultipleFiles.Should().BeFalse();
-            settings.SkipWhenFileExists().Should().BeFalse();
+            settings.SkipWhenFileExists.Should().BeFalse();
             settings.DryRun.Should().BeTrue();
         }
 
@@ -28,12 +28,12 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
             // Assert
             settings.BasePath.Should().Be("BasePath");
             settings.GenerateMultipleFiles.Should().BeTrue();
-            settings.SkipWhenFileExists().Should().BeFalse();
+            settings.SkipWhenFileExists.Should().BeFalse();
             settings.DryRun.Should().BeTrue();
         }
 
         [Fact]
-        public void Can_Generate_CodeGenerationSettings_With_BasePath_And_GenerateMultipleFiles_And_SkipWhenFileExists_Boolean_And_DryRun()
+        public void Can_Generate_CodeGenerationSettings_With_BasePath_And_GenerateMultipleFiles_And_SkipWhenFileExists_And_DryRun()
         {
             // Act
             var settings = new CodeGenerationSettings("BasePath", true, true, true);
@@ -41,20 +41,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
             // Assert
             settings.BasePath.Should().Be("BasePath");
             settings.GenerateMultipleFiles.Should().BeTrue();
-            settings.SkipWhenFileExists().Should().BeTrue();
-            settings.DryRun.Should().BeTrue();
-        }
-
-        [Fact]
-        public void Can_Generate_CodeGenerationSettings_With_BasePath_And_GenerateMultipleFiles_And_SkipWhenFileExists_Delegate_And_DryRun()
-        {
-            // Act
-            var settings = new CodeGenerationSettings("BasePath", true, () => true, true);
-
-            // Assert
-            settings.BasePath.Should().Be("BasePath");
-            settings.GenerateMultipleFiles.Should().BeTrue();
-            settings.SkipWhenFileExists().Should().BeTrue();
+            settings.SkipWhenFileExists.Should().BeTrue();
             settings.DryRun.Should().BeTrue();
         }
 
@@ -70,7 +57,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
             // Assert
             settings.BasePath.Should().Be("BasePath");
             settings.GenerateMultipleFiles.Should().BeTrue();
-            settings.SkipWhenFileExists().Should().BeFalse();
+            settings.SkipWhenFileExists.Should().BeFalse();
             settings.DryRun.Should().BeTrue();
         }
 
@@ -86,7 +73,7 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
             // Assert
             settings.BasePath.Should().Be("BasePath");
             settings.GenerateMultipleFiles.Should().BeTrue();
-            settings.SkipWhenFileExists().Should().BeTrue();
+            settings.SkipWhenFileExists.Should().BeTrue();
             settings.DryRun.Should().BeTrue();
         }
     }
