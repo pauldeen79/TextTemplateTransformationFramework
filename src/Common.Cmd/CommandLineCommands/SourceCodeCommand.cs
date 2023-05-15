@@ -25,6 +25,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command("source", command =>
             {
                 command.Description = "Generates the template, and shows the template source code";
@@ -47,7 +48,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
-                    var parameters = parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+                    var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
 
                     if (string.IsNullOrEmpty(filename))
                     {

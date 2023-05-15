@@ -31,6 +31,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
@@ -125,7 +126,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 return parameters.ToArray();
             }
 
-            return parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+            return parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
         }
 
         private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption)
