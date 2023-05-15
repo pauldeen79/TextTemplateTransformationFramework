@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
@@ -95,12 +96,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         }
 
         private static IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
-            => assembly.GetExportedTypes()
-                .Where(t => !t.IsAbstract
-                    && !t.IsInterface
-                    && typeof(ICodeGenerationProvider).IsAssignableFrom(t)
-                )
-                .Select(t => (ICodeGenerationProvider)Activator.CreateInstance(t));
+            => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && t.GetInterfaces().Any(i => i.FullName == "TextTemplateTransformationFramework.Runtime.CodeGeneration.ICodeGenerationProvider"))
+                .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)));
 
         private void WriteOutput(CommandLineApplication app, string templateOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption, string basePath, bool dryRun)
         {
@@ -137,6 +134,41 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 app.Out.WriteLine("Code generation output:");
             }
             app.Out.WriteLine(templateOutput);
+        }
+
+        [ExcludeFromCodeCoverage]
+        private sealed class CodeGenerationProviderWrapper : ICodeGenerationProvider
+        {
+            private readonly object _instance;
+
+            public CodeGenerationProviderWrapper(object instance)
+            {
+                _instance = instance;
+            }
+
+            public bool GenerateMultipleFiles => (bool)_instance.GetType().GetProperty(nameof(GenerateMultipleFiles)).GetValue(_instance);
+
+            public bool SkipWhenFileExists => (bool)_instance.GetType().GetProperty(nameof(SkipWhenFileExists)).GetValue(_instance);
+
+            public string BasePath => (string)_instance.GetType().GetProperty(nameof(BasePath)).GetValue(_instance);
+
+            public string Path => (string)_instance.GetType().GetProperty(nameof(Path)).GetValue(_instance);
+
+            public string DefaultFileName => (string)_instance.GetType().GetProperty(nameof(DefaultFileName)).GetValue(_instance);
+
+            public bool RecurseOnDeleteGeneratedFiles => (bool)_instance.GetType().GetProperty(nameof(RecurseOnDeleteGeneratedFiles)).GetValue(_instance);
+
+            public string LastGeneratedFilesFileName => (string)_instance.GetType().GetProperty(nameof(LastGeneratedFilesFileName)).GetValue(_instance);
+
+            public Action AdditionalActionDelegate => (Action)_instance.GetType().GetProperty(nameof(AdditionalActionDelegate)).GetValue(_instance);
+
+            public object CreateAdditionalParameters() => _instance.GetType().GetMethod(nameof(CreateAdditionalParameters)).Invoke(_instance, Array.Empty<object>());
+
+            public object CreateGenerator() => _instance.GetType().GetMethod(nameof(CreateGenerator)).Invoke(_instance, Array.Empty<object>());
+
+            public object CreateModel() => _instance.GetType().GetMethod(nameof(CreateModel)).Invoke(_instance, Array.Empty<object>());
+
+            public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath) => _instance.GetType().GetMethod(nameof(Initialize)).Invoke(_instance, new object[] { generateMultipleFiles, skipWhenFileExists, basePath });
         }
     }
 }
