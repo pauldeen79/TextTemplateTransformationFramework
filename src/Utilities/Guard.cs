@@ -6,7 +6,7 @@ namespace Utilities
     {
         public static void AgainstNull(object value, string argumentName)
         {
-            if (value == null) throw new ArgumentNullException(nameof(argumentName));
+            if (value == null) throw new ArgumentNullException(argumentName);
         }
     }
 }
