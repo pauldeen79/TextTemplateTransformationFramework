@@ -71,7 +71,7 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
 
-                basePath = basePath + "\\" + lastGeneratedFilesPath.Substring(0, lastSlash);
+                basePath = $"{basePath}\\{lastGeneratedFilesPath.Substring(0, lastSlash)}";
                 lastGeneratedFilesPath = lastGeneratedFilesPath.Substring(lastSlash + 1);
             }
             var fullPath = GetFullPath(lastGeneratedFilesPath, basePath);
