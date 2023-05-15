@@ -49,6 +49,7 @@ namespace Utilities.Extensions
                 .GroupBy(keySelector)
                 .Select(t => t.Key);
 
+#if NET48
         /// <summary>
         /// Gets distinct values by the specified expression.
         /// </summary>
@@ -63,6 +64,7 @@ namespace Utilities.Extensions
             => instance
                 .GroupBy(keySelector)
                 .Select(t => t.First());
+#endif
 
         /// <summary>
         /// Excludes the specified type on this enumerable.

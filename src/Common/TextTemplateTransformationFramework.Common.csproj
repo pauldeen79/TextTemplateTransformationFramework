@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
     <LangVersion>11.0</LangVersion>
     <IsPackable>false</IsPackable>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>
@@ -14,7 +14,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="pauldeen79.ScriptCompiler.ScriptCompiler" Version="1.1.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
 
   <ItemGroup>
