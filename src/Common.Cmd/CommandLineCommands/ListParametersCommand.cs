@@ -16,7 +16,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         public ListParametersCommand(ITextTemplateProcessor processor, IFileContentsProvider fileContentsProvider)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
-            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
         }
 
         public void Initialize(CommandLineApplication app)

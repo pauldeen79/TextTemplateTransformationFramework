@@ -24,7 +24,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                                   IClipboard clipboard)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
-            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(processor));
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
             _userInput = userInput ?? throw new ArgumentNullException(nameof(userInput));
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
         }
