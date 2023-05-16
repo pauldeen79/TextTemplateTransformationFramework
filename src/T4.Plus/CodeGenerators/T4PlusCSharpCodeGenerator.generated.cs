@@ -92,6 +92,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_Template(), typeof(IPlaceholderClassToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.TemplateContextToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_TemplateContextToken_Template(), typeof(ITemplateContextToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.TemplateFileManagerToken.Template", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_TemplateFileManagerToken_Template(), typeof(ITemplateFileManagerToken<TokenParserState>));
+            RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.RenderTokens.RenderGeneratorAssemblyTokenTemplate", () => new T4PlusCSharpCodeGenerator_RenderTokens_RenderGeneratorAssemblyTokenTemplate(), typeof(IRenderGeneratorAssemblyToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.RenderTokens.RenderRenderChildTemplateTokenTemplate", () => new T4PlusCSharpCodeGenerator_RenderTokens_RenderRenderChildTemplateTokenTemplate(), typeof(IRenderChildTemplateToken<TokenParserState>));
             RegisterChildTemplate(@"T4PlusCSharpCodeGenerator.ViewModelClassFooterTokens.TemplateContextViewModelFieldToken.Template", () => new T4PlusCSharpCodeGenerator_ViewModelClassFooterTokens_TemplateContextViewModelFieldToken_Template(), typeof(ITemplateContextViewModelFieldToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.MainClass.ViewModel", () => new T4PlusCSharpCodeGenerator_MainClass_ViewModel());
@@ -3720,6 +3721,51 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 
         public ITemplateFileManagerToken<TokenParserState> Model { get; set; }
+
+    }
+    [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
+    public class T4PlusCSharpCodeGenerator_RenderTokens_RenderGeneratorAssemblyTokenTemplate : T4CSharpCodeGeneratorBaseChild
+    {
+        public virtual void Render(global::System.Text.StringBuilder builder)
+        {
+            var backup = this.GenerationEnvironment;
+            if (builder != null) this.GenerationEnvironment = builder;
+            Write(this.ToStringHelper.ToStringWithCulture(@"            //TODO: Code goes here"));
+
+            if (builder != null) this.GenerationEnvironment = backup;
+        }
+
+
+        public virtual void Initialize(global::System.Action additionalActionDelegate = null)
+        {
+            this.Errors.Clear();
+            this.GenerationEnvironment.Clear();
+            if (Session == null)
+            {
+                Session = new global::System.Collections.Generic.Dictionary<string, object>();
+            }
+            if (RootTemplate != null)
+            {
+                ChildTemplates = RootTemplate.ChildTemplates;
+                ViewModels = RootTemplate.ViewModels;
+            }
+            else
+            {
+                ChildTemplates.Clear();
+                ViewModels.Clear();
+            }
+            if (RootTemplate != null)
+            {
+                PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
+            }
+            else
+            {
+                PlaceholderChildrenDictionary.Clear();
+            }
+
+        }
+
+        public IRenderGeneratorAssemblyToken<TokenParserState> Model { get; set; }
 
     }
     [System.CodeDom.Compiler.GeneratedCodeAttribute(@"T4PlusCSharpCodeGenerator", @"1.0.0.0")]
