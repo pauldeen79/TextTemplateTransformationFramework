@@ -3730,7 +3730,19 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             var backup = this.GenerationEnvironment;
             if (builder != null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            //TODO: Code goes here"));
+            Write(this.ToStringHelper.ToStringWithCulture(@"            TextTemplateTransformationFramework.Runtime.CodeGeneration codeGenerationAssembly = new TextTemplateTransformationFramework.Runtime.CodeGeneration("""));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.AssemblyName));
+            Write(this.ToStringHelper.ToStringWithCulture(@""", """));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.BasePath));
+            Write(this.ToStringHelper.ToStringWithCulture(@""", "));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.GenerateMultipleFiles ? "true" : "false"));
+            Write(this.ToStringHelper.ToStringWithCulture(@", "));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.DryRun ? "true" : "false"));
+            Write(this.ToStringHelper.ToStringWithCulture(@", """));
+            Write(this.ToStringHelper.ToStringWithCulture(Model.CurrentDirectory));
+            Write(this.ToStringHelper.ToStringWithCulture(@""");
+            WriteLine(codeGenerationAssembly.Generate());
+            codeGenerationAssembly.Dispose();"));
 
             if (builder != null) this.GenerationEnvironment = backup;
         }

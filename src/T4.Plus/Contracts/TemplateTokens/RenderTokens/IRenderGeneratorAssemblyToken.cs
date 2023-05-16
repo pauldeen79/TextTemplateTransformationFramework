@@ -6,5 +6,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.R
         where TState : class
     {
         string AssemblyName { get; }
+        string BasePath { get; }
+        bool GenerateMultipleFiles { get; }
+        bool DryRun { get; }
+        string CurrentDirectory { get; }
     }
 }

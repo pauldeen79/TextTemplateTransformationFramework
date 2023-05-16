@@ -20,7 +20,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return new RenderGeneratorAssemblyToken<TState>(context, model.AssemblyName);
+            return new RenderGeneratorAssemblyToken<TState>(context, model.AssemblyName, model.BasePath, model.GenerateMultipleFiles, model.DryRun, model.CurrentDirectory);
         }
     }
 }
