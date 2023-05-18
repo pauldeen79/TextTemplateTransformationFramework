@@ -93,7 +93,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.LanguageServices
             var actual = sut.GetKnownDirectives().ToArray();
 
             // Assert
-            actual.Should().HaveCount(50);
+            actual.Should().HaveCount(51);
         }
 
         public void Dispose()

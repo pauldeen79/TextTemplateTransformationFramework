@@ -1,0 +1,6 @@
+﻿<#@ template language="c#" #>
+<#@ templateName value="T4PlusCSharpCodeGenerator.RenderTokens.RenderGeneratorAssemblyTokenTemplate" #>
+<#@ model type="IRenderGeneratorAssemblyToken<TokenParserState>" #>
+            TextTemplateTransformationFramework.Runtime.CodeGeneration.CodeGenerationAssembly codeGenerationAssembly = new TextTemplateTransformationFramework.Runtime.CodeGeneration.CodeGenerationAssembly(<#= Model.AssemblyName.FormatLiteral(Model.AssemblyNameIsLiteral) #>, <#= Model.BasePath.FormatLiteral(Model.BasePathIsLiteral) #>, <#= Model.GenerateMultipleFiles ? "true" : "false" #>, <#= Model.DryRun ? "true" : "false" #>, <#= Model.CurrentDirectory.FormatLiteral(Model.CurrentDirectoryIsLiteral) #>);
+            WriteLine(codeGenerationAssembly.Generate());
+            codeGenerationAssembly.Dispose();

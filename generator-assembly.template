@@ -1,0 +1,3 @@
+<#@ template language="C#" #>
+<#@ UseTemplateRuntimeBaseClass #>
+<#@ Generators AssemblyName="C:\Git\QueryFramework\src\QueryFramework.CodeGeneration\bin\Debug\net7.0\QueryFramework.CodeGeneration.dll" BasePath="C:\Git\QueryFramework" GenerateMultipleFiles="true" DryRun="true" CurrentDirectory="C:\Git\QueryFramework\src\QueryFramework.CodeGeneration\bin\Debug\net7.0" #>
