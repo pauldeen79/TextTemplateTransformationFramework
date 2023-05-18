@@ -10,8 +10,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Models
         [Required]
         public string AssemblyName { get; set; }
 
+        [Description("Indicator whether the assembly name is a literal expression; true by default")]
+        [DefaultValue(true)]
+        public bool AssemblyNameIsLiteral { get; set; }
+
         [Description("Base path for output")]
         public string BasePath { get; set; }
+
+        [Description("Indicator whether the base path is a literal expression; true by default")]
+        [DefaultValue(true)]
+        public bool BasePathIsLiteral { get; set; }
 
         [Description("Indicator that defines whether multiple files should be generated")]
         public bool GenerateMultipleFiles { get; set; }
@@ -21,5 +29,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Models
 
         [Description("Optional directory to use for loading dependent assemblies")]
         public string CurrentDirectory { get; set; }
+
+        [Description("Indicator whether the current directory is a literal expression; true by default")]
+        [DefaultValue(true)]
+        public bool CurrentDirectoryIsLiteral { get; set; }
     }
 }
