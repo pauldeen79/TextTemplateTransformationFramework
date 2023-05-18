@@ -62,11 +62,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     {
                         _assemblyService.SetCustomPath(currentDirectoryOption.Value());
                     }
-                    var assembly = _assemblyService.LoadAssembly(assemblyName);
+#if NET48
+                    var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
+#else
+                    var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue() ? new[] { currentDirectoryOption.Value() } : Enumerable.Empty<string>());
+                    var assembly = _assemblyService.LoadAssembly(assemblyName, context);
+#endif
                     var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
                     var templateOutput = GetOutputFromAssembly(assembly, settings);
 
                     WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
+#if NET48
+#else
+                    context.Unload();
+#endif
                 });
             });
         }

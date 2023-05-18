@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.T4.Core;
+using Utilities;
 
 namespace TextTemplateTransformationFramework.T4.Plus.Cmd
 {
@@ -9,9 +11,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
     {
         private string _customPath = Directory.GetCurrentDirectory();
 
-        public Assembly LoadAssembly(string assemblyName)
+        public Assembly LoadAssembly(string assemblyName, AssemblyLoadContext context)
         {
-            var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => new[] { _customPath });
+            Guard.AgainstNull(context, nameof(context));
 
             try
             {

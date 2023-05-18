@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
@@ -27,7 +28,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             _clipboardMock = new Mock<IClipboard>();
             _assemblyServiceMock = new Mock<IAssemblyService>();
-            _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>())).Returns<string>(Assembly.Load);
+            _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
+                                .Returns<string, AssemblyLoadContext>((name, _) => Assembly.Load(name));
         }
 
         [Fact]
