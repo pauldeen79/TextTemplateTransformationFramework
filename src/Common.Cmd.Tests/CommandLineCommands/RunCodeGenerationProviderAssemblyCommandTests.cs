@@ -30,9 +30,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             _assemblyServiceMock = new Mock<IAssemblyService>();
 #pragma warning disable S3885 // "Assembly.Load" should be used
             _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
-                                .Returns<string, AssemblyLoadContext>((name, _) => name.EndsWith(".dll") ? Assembly.LoadFrom(name) : Assembly.Load(name));
+                                .Returns<string, AssemblyLoadContext>((name, ctx) => name.EndsWith(".dll") ? ctx.LoadFromAssemblyPath(FullyQualify(name)) : ctx.LoadFromAssemblyName(new AssemblyName(name)));
 #pragma warning restore S3885 // "Assembly.Load" should be used
         }
+
+        private static string FullyQualify(string name)
+            => Path.IsPathFullyQualified(name)
+                ? name
+                : Path.Combine(Directory.GetCurrentDirectory(), name);
 
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
@@ -80,6 +85,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, $"-a TextTemplateTransformationFramework.Common.Cmd.Tests.dll", $"-p {Directory.GetCurrentDirectory()}");
+
+            // Assert
+            actual.Should().Be($@"Written code generation output to path: {Directory.GetCurrentDirectory()}
+");
+        }
+
+        [Fact]
+        public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_Partial_AssemblyFileName_And_HintPath()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, $"-a TextTemplateTransformationFramework.Common.Cmd.Tests.dll", $"-p {Directory.GetCurrentDirectory()}", $"-u {Directory.GetCurrentDirectory()}");
 
             // Assert
             actual.Should().Be($@"Written code generation output to path: {Directory.GetCurrentDirectory()}
