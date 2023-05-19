@@ -32,7 +32,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
             {
                 return context.LoadFromAssemblyName(new AssemblyName(assemblyName));
             }
-            catch (FileLoadException fle) when (fle.Message.StartsWith("The given assembly name was invalid."))
+            catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
             {
                 if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathFullyQualified(assemblyName))
                 {
