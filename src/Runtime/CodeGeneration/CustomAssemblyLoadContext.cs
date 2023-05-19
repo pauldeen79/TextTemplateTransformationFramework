@@ -1,5 +1,4 @@
-﻿#if NET48
-#else
+﻿#if !NET48
 using System;
 using System.Collections.Generic;
 using System.IO;
