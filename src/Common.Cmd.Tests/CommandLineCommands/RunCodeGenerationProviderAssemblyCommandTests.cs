@@ -76,7 +76,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
-        public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_AssemblyFileName()
+        public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_Partial_AssemblyFileName()
         {
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, $"-a TextTemplateTransformationFramework.Common.Cmd.Tests.dll", $"-p {Directory.GetCurrentDirectory()}");
@@ -85,6 +85,18 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             actual.Should().Be($@"Written code generation output to path: {Directory.GetCurrentDirectory()}
 ");
         }
+
+        [Fact]
+        public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_Fully_Qualified_AssemblyFileName()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, $"-a {GetType().Assembly.Location}", $"-p {Directory.GetCurrentDirectory()}");
+
+            // Assert
+            actual.Should().Be($@"Written code generation output to path: {Directory.GetCurrentDirectory()}
+");
+        }
+
         [Fact]
         public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
         {
