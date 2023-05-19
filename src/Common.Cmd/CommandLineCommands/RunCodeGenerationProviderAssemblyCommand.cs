@@ -39,7 +39,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var basePathOption = command.Option<string>("-p|--path", "Base path for code generation", CommandOptionType.SingleValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
-#if !NET48
+#if !NETFRAMEWORK
                 var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
 #endif
 #if DEBUG
@@ -59,7 +59,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-#if NET48
+#if NETFRAMEWORK
                     var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
 #else
                     var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
@@ -71,7 +71,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var templateOutput = GetOutputFromAssembly(assembly, settings);
 
                     WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
-#if !NET48
+#if !NETFRAMEWORK
                     context.Unload();
 #endif
                 });

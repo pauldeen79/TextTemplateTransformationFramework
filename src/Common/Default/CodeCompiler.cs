@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using ScriptCompiler;
 using TextTemplateTransformationFramework.Common.Contracts;
-#if NET48
+#if NETFRAMEWORK
 using Utilities.Extensions;
 #endif
 
