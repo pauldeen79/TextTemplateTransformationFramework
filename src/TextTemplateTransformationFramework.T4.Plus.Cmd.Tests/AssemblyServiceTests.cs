@@ -1,4 +1,5 @@
-﻿namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
+﻿#if Windows
+namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
 {
     public class AssemblyServiceTests
     {
@@ -98,3 +99,4 @@
         }
     }
 }
+#endif

@@ -7,6 +7,10 @@ using Utilities;
 
 namespace TextTemplateTransformationFramework.T4.Plus.Cmd
 {
+#if Windows
+#else
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+#endif
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
     public class AssemblyService : IAssemblyService
