@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common", "src\Common\TextTemplateTransformationFramework.Common.csproj", "{7D16279E-F1D6-4CEA-B947-4FA62E755ABD}"
 EndProject
@@ -36,7 +36,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Common.Cmd.Tests", "src\Common.Cmd.Tests\TextTemplateTransformationFramework.Common.Cmd.Tests.csproj", "{DAEC2AE5-F423-4846-9EE2-8C8DE774498B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.Runtime.Tests", "src\Runtime.Tests\TextTemplateTransformationFramework.Runtime.Tests.csproj", "{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Runtime.Tests", "src\Runtime.Tests\TextTemplateTransformationFramework.Runtime.Tests.csproj", "{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Cmd.Tests", "src\TextTemplateTransformationFramework.T4.Plus.Cmd.Tests\TextTemplateTransformationFramework.T4.Plus.Cmd.Tests.csproj", "{128790B0-2959-4278-B7A1-CC8A7C7430D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,6 +106,10 @@ Global
 		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128790B0-2959-4278-B7A1-CC8A7C7430D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128790B0-2959-4278-B7A1-CC8A7C7430D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128790B0-2959-4278-B7A1-CC8A7C7430D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128790B0-2959-4278-B7A1-CC8A7C7430D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

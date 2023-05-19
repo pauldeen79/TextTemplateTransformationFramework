@@ -1,5 +1,4 @@
-﻿#if NET48
-#else
+﻿#if !NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.IO;

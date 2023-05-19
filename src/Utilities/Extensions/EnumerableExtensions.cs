@@ -49,7 +49,7 @@ namespace Utilities.Extensions
                 .GroupBy(keySelector)
                 .Select(t => t.Key);
 
-#if NET48
+#if NETFRAMEWORK
         /// <summary>
         /// Gets distinct values by the specified expression.
         /// </summary>

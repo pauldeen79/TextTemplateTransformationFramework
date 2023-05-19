@@ -39,8 +39,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var basePathOption = command.Option<string>("-p|--path", "Base path for code generation", CommandOptionType.SingleValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
+#if !NETFRAMEWORK
                 var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
-
+#endif
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
 #endif
@@ -58,22 +59,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    if (currentDirectoryOption.HasValue())
-                    {
-                        _assemblyService.SetCustomPath(currentDirectoryOption.Value());
-                    }
-#if NET48
+#if NETFRAMEWORK
                     var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
 #else
-                    var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue() ? new[] { currentDirectoryOption.Value() } : Enumerable.Empty<string>());
+                    var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
+                        ? new[] { currentDirectoryOption.Value() }
+                        : _assemblyService.GetCustomPaths(assemblyName));
                     var assembly = _assemblyService.LoadAssembly(assemblyName, context);
 #endif
                     var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
                     var templateOutput = GetOutputFromAssembly(assembly, settings);
 
                     WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
-#if NET48
-#else
+#if !NETFRAMEWORK
                     context.Unload();
 #endif
                 });
