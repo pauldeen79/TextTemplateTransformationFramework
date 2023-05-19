@@ -38,7 +38,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Runtime.Tests", "src\Runtime.Tests\TextTemplateTransformationFramework.Runtime.Tests.csproj", "{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.T4.Plus.Cmd.Tests", "src\TextTemplateTransformationFramework.T4.Plus.Cmd.Tests\TextTemplateTransformationFramework.T4.Plus.Cmd.Tests.csproj", "{128790B0-2959-4278-B7A1-CC8A7C7430D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.T4.Plus.Cmd.Tests", "src\TextTemplateTransformationFramework.T4.Plus.Cmd.Tests\TextTemplateTransformationFramework.T4.Plus.Cmd.Tests.csproj", "{128790B0-2959-4278-B7A1-CC8A7C7430D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
