@@ -58,14 +58,10 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    if (currentDirectoryOption.HasValue())
-                    {
-                        _assemblyService.SetCustomPath(currentDirectoryOption.Value());
-                    }
 #if NET48
                     var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
 #else
-                    var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue() ? new[] { currentDirectoryOption.Value() } : Enumerable.Empty<string>());
+                    var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue() ? new[] { currentDirectoryOption.Value() } : _assemblyService.GetCustomPaths(assemblyName));
                     var assembly = _assemblyService.LoadAssembly(assemblyName, context);
 #endif
                     var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);

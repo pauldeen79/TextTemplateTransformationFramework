@@ -28,8 +28,10 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             _clipboardMock = new Mock<IClipboard>();
             _assemblyServiceMock = new Mock<IAssemblyService>();
+#pragma warning disable S3885 // "Assembly.Load" should be used
             _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
-                                .Returns<string, AssemblyLoadContext>((name, _) => Assembly.Load(name));
+                                .Returns<string, AssemblyLoadContext>((name, _) => name.EndsWith(".dll") ? Assembly.LoadFrom(name) : Assembly.Load(name));
+#pragma warning restore S3885 // "Assembly.Load" should be used
         }
 
         [Fact]
@@ -73,6 +75,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 ");
         }
 
+        [Fact]
+        public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_AssemblyFileName()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, $"-a TextTemplateTransformationFramework.Common.Cmd.Tests.dll", $"-p {Directory.GetCurrentDirectory()}");
+
+            // Assert
+            actual.Should().Be($@"Written code generation output to path: {Directory.GetCurrentDirectory()}
+");
+        }
         [Fact]
         public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
         {
