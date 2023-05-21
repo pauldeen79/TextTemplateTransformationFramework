@@ -26,7 +26,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         }
 
         [Fact]
-        public void Parse_Adds_TemplateSection_When_Not_Present_In()
+        public void Parse_Adds_TemplateSection_When_Not_Present_In_Source_Template()
         {
             // Arrange
             _baseParser.Setup(x => x.Parse(It.IsAny<ITextTemplateProcessorContext<TokenParserState>>()))
