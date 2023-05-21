@@ -23,7 +23,20 @@ namespace TextTemplateTransformationFramework.Common.Default
             _state = new Dictionary<string, object>();
         }
 
+        public TextTemplateProcessorContext(AssemblyTemplate assemblyTemplate,
+                                            TemplateParameter[] parameters,
+                                            ILogger logger,
+                                            SectionContext<TState> parentContext)
+        {
+            AssemblyTemplate = assemblyTemplate ?? throw new ArgumentNullException(nameof(assemblyTemplate));
+            Parameters = parameters?.ToArray() ?? Array.Empty<TemplateParameter>();
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            ParentContext = parentContext;
+            _state = new Dictionary<string, object>();
+        }
+
         public TextTemplate TextTemplate { get; }
+        public AssemblyTemplate AssemblyTemplate { get; }
         public TemplateParameter[] Parameters { get; }
         public ILogger Logger { get; }
         public SectionContext<TState> ParentContext { get; }

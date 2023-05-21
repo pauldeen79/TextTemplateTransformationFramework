@@ -62,7 +62,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
 
             // Assert
-            actual.Should().Be("Error: Filename is required." + Environment.NewLine);
+            actual.Should().Be("Error: Either Filename or AssemblyName is required." + Environment.NewLine);
         }
 
         [Fact]

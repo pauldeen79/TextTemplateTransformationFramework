@@ -12,5 +12,6 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static ProcessResult Process(this ITextTemplateProcessor instance, string textTemplateText, string filename = "unknown.tt") => instance.Process(new TextTemplate(textTemplateText, filename), Array.Empty<TemplateParameter>());
         public static ProcessResult Process(this ITextTemplateProcessor instance, string textTemplateText, TemplateParameter[] parameters, string filename = "unknown.tt") => instance.Process(new TextTemplate(textTemplateText, filename), parameters);
         public static ExtractParametersResult ExtractParameters(this ITextTemplateProcessor instance, string textTemplateText, string filename = "unknown.tt") => instance.ExtractParameters(new TextTemplate(textTemplateText, filename));
+        public static ExtractParametersResult ExtractParameters(this ITextTemplateProcessor instance, string assemblyName, string className, string usePath) => instance.ExtractParameters(new AssemblyTemplate(assemblyName, className, usePath));
     }
 }

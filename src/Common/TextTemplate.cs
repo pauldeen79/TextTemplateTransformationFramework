@@ -1,8 +1,9 @@
 ﻿using System;
+using TextTemplateTransformationFramework.Common.Contracts;
 
 namespace TextTemplateTransformationFramework.Common
 {
-    public class TextTemplate
+    public class TextTemplate : ITemplate
     {
         public string Template { get; }
         public string FileName { get; }

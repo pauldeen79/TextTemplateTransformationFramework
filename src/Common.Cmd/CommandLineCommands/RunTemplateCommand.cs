@@ -46,6 +46,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var interactiveOption = command.Option<string>("-i|--interactive", "Fill parameters interactively", CommandOptionType.NoValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
+                var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
+                var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
 
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
@@ -58,10 +61,25 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
+                    var assemblyName = assemblyNameOption.Value();
+                    var className = classNameOption.Value();
+                    var currentDirectory = currentDirectoryOption.Value();
 
-                    if (string.IsNullOrEmpty(filename))
+                    if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
                     {
-                        app.Error.WriteLine("Error: Filename is required.");
+                        app.Error.WriteLine("Error: Either Filename or AssemblyName is required.");
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
+                    {
+                        app.Error.WriteLine("Error: When AssemblyName is filled, then ClassName is required.");
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
+                    {
+                        app.Error.WriteLine("Error: You can either use Filename or AssemblyName, not both.");
                         return;
                     }
 
@@ -70,20 +88,32 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         app.Error.WriteLine($"Error: File [{filename}] does not exist.");
                         return;
                     }
-
-                    var contents = _fileContentsProvider.GetFileContents(filename);
-                    var parameters = GetParameters(filename, contents, app, interactiveOption, parametersArgument);
-                    if (parameters == null)
+                    ProcessResult result;
+                    if (!string.IsNullOrEmpty(filename))
                     {
-                        return;
+                        var contents = _fileContentsProvider.GetFileContents(filename);
+                        var parameters = GetParameters(filename, contents, app, interactiveOption, parametersArgument);
+                        if (parameters == null)
+                        {
+                            return;
+                        }
+                        result = _processor.Process(new TextTemplate(contents, filename), parameters);
+
+                        if (result.CompilerErrors.Any(e => !e.IsWarning))
+                        {
+                            app.Error.WriteLine("Compiler errors:");
+                            result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
+                            return;
+                        }
                     }
-                    var result = _processor.Process(new TextTemplate(contents, filename), parameters);
-
-                    if (result.CompilerErrors.Any(e => !e.IsWarning))
+                    else
                     {
-                        app.Error.WriteLine("Compiler errors:");
-                        result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
-                        return;
+                        var parameters = GetParameters(assemblyName, className, currentDirectory, app, interactiveOption, parametersArgument);
+                        if (parameters == null)
+                        {
+                            return;
+                        }
+                        result = _processor.Process(new AssemblyTemplate(assemblyName, className, currentDirectory), parameters);
                     }
 
                     if (!string.IsNullOrEmpty(result.Exception))
@@ -114,21 +144,43 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             {
                 var parameters = new List<TemplateParameter>();
                 var parametersResult = _processor.ExtractParameters(contents, filename);
-                if (parametersResult.Exception != null)
-                {
-                    app.Error.WriteLine("Exception occured while extracting parameters from the template:");
-                    app.Error.WriteLine(parametersResult.Exception);
-#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-                    return null;
-#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
-                }
-                foreach (var parameter in parametersResult.Parameters)
-                {
-                    parameter.Value = _userInput.GetValue(parameter);
-                    parameters.Add(parameter);
-                }
+                return GetParameters(app, parameters, parametersResult);
+            }
 
-                return parameters.ToArray();
+            return parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+        }
+
+        private TemplateParameter[] GetParameters(CommandLineApplication app, List<TemplateParameter> parameters, ExtractParametersResult parametersResult)
+        {
+            if (parametersResult.Exception != null)
+            {
+                app.Error.WriteLine("Exception occured while extracting parameters from the template:");
+                app.Error.WriteLine(parametersResult.Exception);
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+                return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
+            }
+            foreach (var parameter in parametersResult.Parameters)
+            {
+                parameter.Value = _userInput.GetValue(parameter);
+                parameters.Add(parameter);
+            }
+
+            return parameters.ToArray();
+        }
+
+        private TemplateParameter[] GetParameters(string assemblyName,
+                                                  string className,
+                                                  string currentDirectory,
+                                                  CommandLineApplication app,
+                                                  CommandOption<string> interactiveOption,
+                                                  CommandArgument parametersArgument)
+        {
+            if (interactiveOption.HasValue())
+            {
+                var parameters = new List<TemplateParameter>();
+                var parametersResult = _processor.ExtractParameters(assemblyName, className, currentDirectory);
+                return GetParameters(app, parameters, parametersResult);
             }
 
             return parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
