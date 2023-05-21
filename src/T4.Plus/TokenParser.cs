@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
+using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens;
+using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.Interception;
 
@@ -33,6 +36,19 @@ namespace TextTemplateTransformationFramework.T4.Plus
             try
             {
                 var result = _baseParser.Parse(context);
+                if (!result.OfType<ISourceSectionToken<TokenParserState>>().Any(x => x.SourceSection.StartsWith("@ template")))
+                {
+                    result = _baseParser.Parse
+                    (
+                        new TextTemplateProcessorContext<TokenParserState>
+                        (
+                            new TextTemplate("<#@ template language=\"C#\" #>"),
+                            Array.Empty<TemplateParameter>(),
+                            context.Logger,
+                            null
+                        )
+                    ).Concat(result);
+                }
                 var callback = new Callback<TokenParserState, ITextTemplateTokenParser<TokenParserState>>(context, this);
                 foreach (var interceptorToken in result.GetTemplateTokensFromSections<TokenParserState, ITemplateParserInterceptorToken<TokenParserState>>()
                                                        .Reverse().ToArray())
