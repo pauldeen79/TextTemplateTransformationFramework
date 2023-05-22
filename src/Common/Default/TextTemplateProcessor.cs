@@ -67,7 +67,6 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new ExtractParametersFromTextTemplateRequest<TState>
                 (
-                    textTemplate,
                     CreateContext(textTemplate, Array.Empty<TemplateParameter>())
                 )
             );
@@ -77,7 +76,6 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new ExtractParametersFromAssemblyTemplateRequest<TState>
                 (
-                    assemblyTemplate,
                     CreateContext(assemblyTemplate, Array.Empty<TemplateParameter>())
                 )
             );

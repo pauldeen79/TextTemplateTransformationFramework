@@ -6,6 +6,7 @@ namespace TextTemplateTransformationFramework.Common.Contracts
         where TState : class
     {
         TextTemplate TextTemplate { get; }
+        AssemblyTemplate AssemblyTemplate { get; }
         TemplateParameter[] Parameters { get; }
         ILogger Logger { get; }
         SectionContext<TState> ParentContext { get; }

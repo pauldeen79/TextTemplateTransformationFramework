@@ -11,15 +11,12 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
         where TState : class
     {
         private readonly ITextTemplateParameterExtractor<TState> _templateParameterExtractor;
-        //private readonly ITemplateOutputCreator<TState> _templateOutputCreator;
         private readonly IAssemblyService _assemblyService;
 
-        public ExtractParametersFromAssemblyTemplateRequestProcessor(ITextTemplateParameterExtractor<TState> templateParameterExtractor/*,
-                                                                     ITemplateOutputCreator<TState> templateOutputCreator*/,
+        public ExtractParametersFromAssemblyTemplateRequestProcessor(ITextTemplateParameterExtractor<TState> templateParameterExtractor,
                                                                      IAssemblyService assemblyService)
         {
             _templateParameterExtractor = templateParameterExtractor ?? throw new ArgumentNullException(nameof(templateParameterExtractor));
-            //_templateOutputCreator = templateOutputCreator ?? throw new ArgumentNullException(nameof(templateOutputCreator));
             _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
         public ExtractParametersResult Process(ExtractParametersFromAssemblyTemplateRequest<TState> request)
@@ -34,8 +31,8 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
             
             try
             {
-                templateCodeOutput = GetTemplateCodeOutput(request.Context);
-                var templateCompilerOutput = GetTemplateCompilerOutput(request.AssemblyTemplate);
+                templateCodeOutput = GetTemplateCodeOutput();
+                var templateCompilerOutput = GetTemplateCompilerOutput(request.Context.AssemblyTemplate);
                 parameters = _templateParameterExtractor.Extract(request.Context, templateCompilerOutput);
 
                 return ExtractParametersResult.Create
@@ -59,9 +56,8 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
             }
         }
 
-        private TemplateCodeOutput<TState> GetTemplateCodeOutput(ITextTemplateProcessorContext<TState> context)
+        private TemplateCodeOutput<TState> GetTemplateCodeOutput()
             => new TemplateCodeOutput<TState>(Enumerable.Empty<ITemplateToken<TState>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty);
-            //=> _templateOutputCreator.Create(context);
 
         private TemplateCompilerOutput<TState> GetTemplateCompilerOutput(AssemblyTemplate template)
         {
