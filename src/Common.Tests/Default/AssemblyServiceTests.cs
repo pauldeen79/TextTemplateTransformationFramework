@@ -1,5 +1,12 @@
 ﻿#if Windows
-namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
+using System;
+using System.IO;
+using System.Runtime.Loader;
+using FluentAssertions;
+using TextTemplateTransformationFramework.Common.Default;
+using Xunit;
+
+namespace TextTemplateTransformationFramework.Common.Tests.Default
 {
     public class AssemblyServiceTests
     {

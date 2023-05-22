@@ -2,10 +2,10 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-using TextTemplateTransformationFramework.Common.Cmd.Contracts;
+using TextTemplateTransformationFramework.Common.Contracts;
 using Utilities;
 
-namespace TextTemplateTransformationFramework.T4.Plus.Cmd
+namespace TextTemplateTransformationFramework.Common.Default
 {
 #if Windows
 #else
@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
         {
             Guard.AgainstNull(assemblyName, nameof(assemblyName));
 
-            if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathFullyQualified(assemblyName))
+            if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
             {
                 return new[] { Path.GetDirectoryName(Path.Combine(Directory.GetCurrentDirectory(), assemblyName)) };
             }
@@ -38,7 +38,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
             }
             catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
             {
-                if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathFullyQualified(assemblyName))
+                if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
                 {
                     assemblyName = Path.Combine(Directory.GetCurrentDirectory(), assemblyName);
                 }

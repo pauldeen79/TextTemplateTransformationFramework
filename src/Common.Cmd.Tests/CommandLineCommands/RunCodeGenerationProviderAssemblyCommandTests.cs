@@ -9,8 +9,8 @@ using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
-using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
+using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 

@@ -19,6 +19,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
             => instance
                 .AddSingleton<ITemplateCompilerOutputValidator<TState>, TemplateCompilerOutputValidator<TState>>()
                 .AddSingleton<ITemplateInitializer<TState>, TemplateInitializer<TState>>()
+                .AddSingleton<IAssemblyService, AssemblyService>()
                 .AddSingleton<ILoggerFactory, LoggerFactory>()
                 .AddSingleton<ICodeCompiler<TState>, CodeCompiler<TState>>()
                 .AddSingleton<ITextTemplateProcessor, TextTemplateProcessor<TState>>()
@@ -47,6 +48,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 .AddSingleton<ITextTemplateProcessorPropertyProvider<TState>, TextTemplateProcessorPropertyProvider<TState>>()
                 .AddSingleton<ITemplateOutputCreator<TState>, TemplateOutputCreator<TState>>()
                 .AddSingleton<IRequestProcessor<ExtractParametersFromTextTemplateRequest<TState>, ExtractParametersResult>, ExtractParametersFromTextTemplateRequestProcessor<TState>>()
+                .AddSingleton<IRequestProcessor<ExtractParametersFromAssemblyTemplateRequest<TState>, ExtractParametersResult>, ExtractParametersFromAssemblyTemplateRequestProcessor<TState>>()
                 .AddSingleton<IRequestProcessor<PreProcessTextTemplateRequest<TState>, ProcessResult>, PreProcessTextTemplateRequestProcessor<TState>>()
                 .AddSingleton<IRequestProcessor<ProcessTextTemplateRequest<TState>, ProcessResult>, ProcessTextTemplateRequestProcessor<TState>>()
                 .AddSingleton<ExtractParametersFromTextTemplateRequestProcessor<TState>>()
