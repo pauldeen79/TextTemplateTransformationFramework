@@ -51,6 +51,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 .AddSingleton<IRequestProcessor<ExtractParametersFromAssemblyTemplateRequest<TState>, ExtractParametersResult>, ExtractParametersFromAssemblyTemplateRequestProcessor<TState>>()
                 .AddSingleton<IRequestProcessor<PreProcessTextTemplateRequest<TState>, ProcessResult>, PreProcessTextTemplateRequestProcessor<TState>>()
                 .AddSingleton<IRequestProcessor<ProcessTextTemplateRequest<TState>, ProcessResult>, ProcessTextTemplateRequestProcessor<TState>>()
+                .AddSingleton<IRequestProcessor<ProcessAssemblyTemplateRequest<TState>, ProcessResult>, ProcessAssemblyTemplateRequestProcessor<TState>>()
                 .AddSingleton<ExtractParametersFromTextTemplateRequestProcessor<TState>>()
                 .AddSingleton<IRequestProcessor<ExtractParametersFromTextTemplateRequest<TState>, ExtractParametersResult>>
                 (
