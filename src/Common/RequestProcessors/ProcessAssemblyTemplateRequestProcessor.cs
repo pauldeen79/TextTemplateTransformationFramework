@@ -10,12 +10,15 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
     public class ProcessAssemblyTemplateRequestProcessor<TState> : IRequestProcessor<ProcessAssemblyTemplateRequest<TState>, ProcessResult>
         where TState : class
     {
+        private readonly ITemplateOutputCreator<TState> _templateOutputCreator;
         private readonly ITemplateProcessor<TState> _templateProcessor;
         private readonly IAssemblyService _assemblyService;
 
-        public ProcessAssemblyTemplateRequestProcessor(ITemplateProcessor<TState> templateProcessor,
+        public ProcessAssemblyTemplateRequestProcessor(ITemplateOutputCreator<TState> templateOutputCreator, 
+                                                       ITemplateProcessor<TState> templateProcessor,
                                                        IAssemblyService assemblyService)
         {
+            _templateOutputCreator = templateOutputCreator ?? throw new ArgumentNullException(nameof(templateOutputCreator));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
             _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
@@ -32,7 +35,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
 
             try
             {
-                templateCodeOutput = GetTemplateCodeOutput();
+                templateCodeOutput = GetTemplateCodeOutput(request.Context);
                 templateCompilerOutput = GetTemplateCompilerOutput(request.AssemblyTemplate);
                 return RenderTemplate(request.Context, templateCompilerOutput);
             }
@@ -50,8 +53,8 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
             }
         }
 
-        private TemplateCodeOutput<TState> GetTemplateCodeOutput()
-            => new TemplateCodeOutput<TState>(Enumerable.Empty<ITemplateToken<TState>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty);
+        private TemplateCodeOutput<TState> GetTemplateCodeOutput(ITextTemplateProcessorContext<TState> context)
+            => _templateOutputCreator.Create(context);
 
         private TemplateCompilerOutput<TState> GetTemplateCompilerOutput(AssemblyTemplate template)
         {

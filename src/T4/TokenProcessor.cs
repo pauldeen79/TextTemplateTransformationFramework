@@ -43,6 +43,17 @@ namespace TextTemplateTransformationFramework.T4
                 throw new ArgumentNullException(nameof(context));
             }
 
+            if (tokens == null)
+            {
+                throw new ArgumentNullException(nameof(tokens));
+            }
+
+            if (context.AssemblyTemplate != null)
+            {
+                // Short-hand: Skip processing because there is no text template
+                return new TemplateCodeOutput<TState>(Enumerable.Empty<ITemplateToken<TState>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), context.AssemblyTemplate.ClassName, string.Empty);
+            }
+
             //First, flatten hierarchy from template sections into tokens
             var templateTokens = ConvertTokens
             (

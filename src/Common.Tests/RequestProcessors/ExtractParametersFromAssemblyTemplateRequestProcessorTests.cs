@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using CrossCutting.Common.Testing;
@@ -15,12 +16,15 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
 {
     public class ExtractParametersFromAssemblyTemplateRequestProcessorTests
     {
+        private readonly Mock<ITemplateOutputCreator<ExtractParametersFromAssemblyTemplateRequestProcessorTests>> _templateOutputCreatorMock = new();
         private readonly Mock<ITextTemplateParameterExtractor<ExtractParametersFromAssemblyTemplateRequestProcessorTests>> _templateParameterExtractorMock = new();
         private readonly Mock<IAssemblyService> _assemblyServiceMock = new();
         private readonly Mock<ILogger> _loggerMock = new();
 
         public ExtractParametersFromAssemblyTemplateRequestProcessorTests()
         {
+            _templateOutputCreatorMock.Setup(x => x.Create(It.IsAny<ITextTemplateProcessorContext<ExtractParametersFromAssemblyTemplateRequestProcessorTests>>()))
+                                      .Returns<ITextTemplateProcessorContext<ExtractParametersFromAssemblyTemplateRequestProcessorTests>>(context => new TemplateCodeOutput<ExtractParametersFromAssemblyTemplateRequestProcessorTests>(Enumerable.Empty<ITemplateToken<ExtractParametersFromAssemblyTemplateRequestProcessorTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty));
             _templateParameterExtractorMock.Setup(x => x.Extract(It.IsAny<ITextTemplateProcessorContext<ExtractParametersFromAssemblyTemplateRequestProcessorTests>>(), It.IsAny<TemplateCompilerOutput<ExtractParametersFromAssemblyTemplateRequestProcessorTests>>()))
                                            .Returns<ITextTemplateProcessorContext<ExtractParametersFromAssemblyTemplateRequestProcessorTests>, TemplateCompilerOutput<ExtractParametersFromAssemblyTemplateRequestProcessorTests>>((context, templateCompilerOutput) => new[] { new TemplateParameter() });
             _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
@@ -59,7 +63,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
         }
 
         private ExtractParametersFromAssemblyTemplateRequestProcessor<ExtractParametersFromAssemblyTemplateRequestProcessorTests> CreateSut()
-            => new(_templateParameterExtractorMock.Object, _assemblyServiceMock.Object);
+            => new(_templateOutputCreatorMock.Object, _templateParameterExtractorMock.Object, _assemblyServiceMock.Object);
     }
 
     [ExcludeFromCodeCoverage]
