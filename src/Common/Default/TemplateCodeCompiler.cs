@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Loader;
 using ScriptCompiler;
 using ScriptCompiler.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -13,18 +14,34 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         private readonly ICodeCompiler<TState> _codeCompiler;
         private readonly ITemplateFactory<TState> _templateFactory;
+        private readonly IAssemblyService _assemblyService;
 
-        public TemplateCodeCompiler(ICodeCompiler<TState> codeCompiler, ITemplateFactory<TState> templateFactory)
+        public TemplateCodeCompiler(
+            ICodeCompiler<TState> codeCompiler,
+            ITemplateFactory<TState> templateFactory,
+            IAssemblyService assemblyService)
         {
             _codeCompiler = codeCompiler ?? throw new ArgumentNullException(nameof(codeCompiler));
             _templateFactory = templateFactory ?? throw new ArgumentNullException(nameof(templateFactory));
+            _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
 
         public TemplateCompilerOutput<TState> Compile(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (codeOutput == null)
             {
                 throw new ArgumentNullException(nameof(codeOutput));
+            }
+
+            if (context.AssemblyTemplate != null)
+            {
+                var assembly = _assemblyService.LoadAssembly(context.AssemblyTemplate.AssemblyName, AssemblyLoadContext.Default);
+                return new TemplateCompilerOutput<TState>(assembly, assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == context.AssemblyTemplate.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
             }
 
             var result = DoCompile(context, codeOutput);

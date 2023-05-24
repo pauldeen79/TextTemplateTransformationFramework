@@ -57,7 +57,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
                 "C:\\Temp"
             ));
             var sut = CreateSut();
-            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(new TextTemplate("<# template language=\"c#\"", "template.tt"), Array.Empty<TemplateParameter>(), contextMock.Object);
+            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), contextMock.Object);
 
             // Act
             var actual = sut.Process(request);
@@ -76,7 +76,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
             var templateOutputCreatorMock = _fixture.Freeze<Mock<ITemplateOutputCreator<PreProcessTextTemplateRequestProcessorTests>>>();
             templateOutputCreatorMock.Setup(x => x.Create(contextMock.Object)).Throws<ApplicationException>();
             var sut = CreateSut();
-            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(new TextTemplate("<# template language=\"c#\"", "template.tt"), Array.Empty<TemplateParameter>(), contextMock.Object);
+            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), contextMock.Object);
 
             // Act
             var actual = sut.Process(request);

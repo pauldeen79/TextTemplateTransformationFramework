@@ -34,7 +34,6 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new ProcessTextTemplateRequest<TState>
                 (
-                    textTemplate,
                     parameters,
                     CreateContext(textTemplate, parameters)
                 )
@@ -45,7 +44,6 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new ProcessAssemblyTemplateRequest<TState>
                 (
-                    assemblyTemplate,
                     parameters,
                     CreateContext(assemblyTemplate, parameters)
                 )
@@ -56,7 +54,6 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new PreProcessTextTemplateRequest<TState>
                 (
-                    textTemplate,
                     parameters,
                     CreateContext(textTemplate, parameters)
                 )

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.Loader;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Requests;
@@ -10,17 +8,17 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
     public class ProcessAssemblyTemplateRequestProcessor<TState> : IRequestProcessor<ProcessAssemblyTemplateRequest<TState>, ProcessResult>
         where TState : class
     {
+        private readonly ITemplateCodeCompiler<TState> _templateCodeCompiler;
         private readonly ITemplateOutputCreator<TState> _templateOutputCreator;
         private readonly ITemplateProcessor<TState> _templateProcessor;
-        private readonly IAssemblyService _assemblyService;
 
-        public ProcessAssemblyTemplateRequestProcessor(ITemplateOutputCreator<TState> templateOutputCreator, 
-                                                       ITemplateProcessor<TState> templateProcessor,
-                                                       IAssemblyService assemblyService)
+        public ProcessAssemblyTemplateRequestProcessor(ITemplateCodeCompiler<TState> templateCodeCompiler,
+                                                       ITemplateOutputCreator<TState> templateOutputCreator, 
+                                                       ITemplateProcessor<TState> templateProcessor)
         {
+            _templateCodeCompiler = templateCodeCompiler ?? throw new ArgumentNullException(nameof(templateCodeCompiler));
             _templateOutputCreator = templateOutputCreator ?? throw new ArgumentNullException(nameof(templateOutputCreator));
             _templateProcessor = templateProcessor ?? throw new ArgumentNullException(nameof(templateProcessor));
-            _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
 
         public ProcessResult Process(ProcessAssemblyTemplateRequest<TState> request)
@@ -36,7 +34,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
             try
             {
                 templateCodeOutput = GetTemplateCodeOutput(request.Context);
-                templateCompilerOutput = GetTemplateCompilerOutput(request.AssemblyTemplate);
+                templateCompilerOutput = GetTemplateCompilerOutput(request.Context, templateCodeOutput);
                 return RenderTemplate(request.Context, templateCompilerOutput);
             }
             catch (Exception exception)
@@ -56,11 +54,8 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
         private TemplateCodeOutput<TState> GetTemplateCodeOutput(ITextTemplateProcessorContext<TState> context)
             => _templateOutputCreator.Create(context);
 
-        private TemplateCompilerOutput<TState> GetTemplateCompilerOutput(AssemblyTemplate template)
-        {
-            var assembly = _assemblyService.LoadAssembly(template.AssemblyName, AssemblyLoadContext.Default);
-            return new TemplateCompilerOutput<TState>(assembly, assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == template.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
-        }
+        private TemplateCompilerOutput<TState> GetTemplateCompilerOutput(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
+            => _templateCodeCompiler.Compile(context, codeOutput);
 
         private ProcessResult RenderTemplate(ITextTemplateProcessorContext<TState> context, TemplateCompilerOutput<TState> templateCompilerOutput)
             => _templateProcessor.Process(context, templateCompilerOutput);

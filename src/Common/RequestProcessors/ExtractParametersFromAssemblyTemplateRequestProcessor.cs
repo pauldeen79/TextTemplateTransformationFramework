@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Loader;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Requests;
@@ -10,18 +9,19 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
     public class ExtractParametersFromAssemblyTemplateRequestProcessor<TState> : IRequestProcessor<ExtractParametersFromAssemblyTemplateRequest<TState>, ExtractParametersResult>
         where TState : class
     {
+        private readonly ITemplateCodeCompiler<TState> _templateCodeCompiler;
         private readonly ITemplateOutputCreator<TState> _templateOutputCreator;
         private readonly ITextTemplateParameterExtractor<TState> _templateParameterExtractor;
-        private readonly IAssemblyService _assemblyService;
-
-        public ExtractParametersFromAssemblyTemplateRequestProcessor(ITemplateOutputCreator<TState> templateOutputCreator, 
-                                                                     ITextTemplateParameterExtractor<TState> templateParameterExtractor,
-                                                                     IAssemblyService assemblyService)
+        
+        public ExtractParametersFromAssemblyTemplateRequestProcessor(ITemplateCodeCompiler<TState> templateCodeCompiler, 
+                                                                     ITemplateOutputCreator<TState> templateOutputCreator, 
+                                                                     ITextTemplateParameterExtractor<TState> templateParameterExtractor)
         {
+            _templateCodeCompiler = templateCodeCompiler ?? throw new ArgumentNullException(nameof(templateCodeCompiler));
             _templateOutputCreator = templateOutputCreator ?? throw new ArgumentNullException(nameof(templateOutputCreator));
             _templateParameterExtractor = templateParameterExtractor ?? throw new ArgumentNullException(nameof(templateParameterExtractor));
-            _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
+
         public ExtractParametersResult Process(ExtractParametersFromAssemblyTemplateRequest<TState> request)
         {
             if (request == null)
@@ -35,7 +35,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
             try
             {
                 templateCodeOutput = GetTemplateCodeOutput(request.Context);
-                var templateCompilerOutput = GetTemplateCompilerOutput(request.Context.AssemblyTemplate);
+                var templateCompilerOutput = GetTemplateCompilerOutput(request.Context, templateCodeOutput);
                 parameters = _templateParameterExtractor.Extract(request.Context, templateCompilerOutput);
 
                 return ExtractParametersResult.Create
@@ -62,10 +62,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
         private TemplateCodeOutput<TState> GetTemplateCodeOutput(ITextTemplateProcessorContext<TState> context)
             => _templateOutputCreator.Create(context);
 
-        private TemplateCompilerOutput<TState> GetTemplateCompilerOutput(AssemblyTemplate template)
-        {
-            var assembly = _assemblyService.LoadAssembly(template.AssemblyName, AssemblyLoadContext.Default);
-            return new TemplateCompilerOutput<TState>(assembly, assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == template.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
-        }
+        private TemplateCompilerOutput<TState> GetTemplateCompilerOutput(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
+            => _templateCodeCompiler.Compile(context, codeOutput);
     }
 }
