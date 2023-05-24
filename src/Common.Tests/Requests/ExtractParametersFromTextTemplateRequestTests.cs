@@ -4,12 +4,12 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.Common.Tests.Requests
 {
-    public class ExtractParametersFromAssemblyTemplateRequestTests
+    public class ExtractParametersFromTextTemplateRequestTests
     {
         [Fact]
         public void Ctor_Throws_On_Null_Context()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(ExtractParametersFromAssemblyTemplateRequest<ExtractParametersFromAssemblyTemplateRequestTests>));
+            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(ExtractParametersFromTextTemplateRequest<ExtractParametersFromTextTemplateRequestTests>));
         }
     }
 }

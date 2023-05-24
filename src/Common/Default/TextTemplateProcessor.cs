@@ -9,24 +9,18 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly IRequestProcessor<ProcessTextTemplateRequest<TState>, ProcessResult> _processTextTemplateProcessor;
-        private readonly IRequestProcessor<ProcessAssemblyTemplateRequest<TState>, ProcessResult> _processAssemblyTemplateProcessor;
         private readonly IRequestProcessor<PreProcessTextTemplateRequest<TState>, ProcessResult> _preProcessTextTemplateProcessor;
         private readonly IRequestProcessor<ExtractParametersFromTextTemplateRequest<TState>, ExtractParametersResult> _extractParametersFromTextTemplateProcessor;
-        private readonly IRequestProcessor<ExtractParametersFromAssemblyTemplateRequest<TState>, ExtractParametersResult> _extractParametersFromAssemblyTemplateProcessor;
 
         public TextTemplateProcessor(ILoggerFactory loggerFactory,
                                      IRequestProcessor<ProcessTextTemplateRequest<TState>, ProcessResult> processTextTemplateProcessor,
-                                     IRequestProcessor<ProcessAssemblyTemplateRequest<TState>, ProcessResult> processAssemblyTemplateProcessor,
                                      IRequestProcessor<PreProcessTextTemplateRequest<TState>, ProcessResult> preProcessTextTemplateProcessor,
-                                     IRequestProcessor<ExtractParametersFromTextTemplateRequest<TState>, ExtractParametersResult> extractParametersFromTextTemplateProcessor,
-                                     IRequestProcessor<ExtractParametersFromAssemblyTemplateRequest<TState>, ExtractParametersResult> extractParametersFromAssemblyTemplateProcessor)
+                                     IRequestProcessor<ExtractParametersFromTextTemplateRequest<TState>, ExtractParametersResult> extractParametersFromTextTemplateProcessor)
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             _processTextTemplateProcessor = processTextTemplateProcessor ?? throw new ArgumentNullException(nameof(processTextTemplateProcessor));
-            _processAssemblyTemplateProcessor = processAssemblyTemplateProcessor ?? throw new ArgumentNullException(nameof(processAssemblyTemplateProcessor));
             _preProcessTextTemplateProcessor = preProcessTextTemplateProcessor ?? throw new ArgumentNullException(nameof(preProcessTextTemplateProcessor));
             _extractParametersFromTextTemplateProcessor = extractParametersFromTextTemplateProcessor ?? throw new ArgumentNullException(nameof(extractParametersFromTextTemplateProcessor));
-            _extractParametersFromAssemblyTemplateProcessor = extractParametersFromAssemblyTemplateProcessor ?? throw new ArgumentNullException(nameof(extractParametersFromAssemblyTemplateProcessor));
         }
 
         public ProcessResult Process(TextTemplate textTemplate, TemplateParameter[] parameters)
@@ -40,9 +34,9 @@ namespace TextTemplateTransformationFramework.Common.Default
             );
 
         public ProcessResult Process(AssemblyTemplate assemblyTemplate, TemplateParameter[] parameters)
-            => _processAssemblyTemplateProcessor.Process
+            => _processTextTemplateProcessor.Process
             (
-                new ProcessAssemblyTemplateRequest<TState>
+                new ProcessTextTemplateRequest<TState>
                 (
                     parameters,
                     CreateContext(assemblyTemplate, parameters)
@@ -69,9 +63,9 @@ namespace TextTemplateTransformationFramework.Common.Default
             );
 
         public ExtractParametersResult ExtractParameters(AssemblyTemplate assemblyTemplate)
-            => _extractParametersFromAssemblyTemplateProcessor.Process
+            => _extractParametersFromTextTemplateProcessor.Process
             (
-                new ExtractParametersFromAssemblyTemplateRequest<TState>
+                new ExtractParametersFromTextTemplateRequest<TState>
                 (
                     CreateContext(assemblyTemplate, Array.Empty<TemplateParameter>())
                 )

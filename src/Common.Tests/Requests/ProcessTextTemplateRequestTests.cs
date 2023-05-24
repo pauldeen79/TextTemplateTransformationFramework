@@ -7,19 +7,19 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.Common.Tests.Requests
 {
-    public class ProcessAssemblyTemplateRequestTests
+    public class ProcessTextTemplateRequestTests
     {
         [Fact]
         public void Ctor_Does_Not_Throw_On_Null_Parameters()
         {
-            this.Invoking(_ => new ProcessAssemblyTemplateRequest<ProcessAssemblyTemplateRequestTests>(null, new Mock<ITextTemplateProcessorContext<ProcessAssemblyTemplateRequestTests>>().Object))
+            this.Invoking(_ => new ProcessTextTemplateRequest<ProcessTextTemplateRequestTests>(null, new Mock<ITextTemplateProcessorContext<ProcessTextTemplateRequestTests>>().Object))
                 .Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]
         public void Ctor_Throws_On_Null_Context()
         {
-            this.Invoking(_ => new ProcessAssemblyTemplateRequest<ProcessAssemblyTemplateRequestTests>(Array.Empty<TemplateParameter>(), null))
+            this.Invoking(_ => new ProcessTextTemplateRequest<ProcessTextTemplateRequestTests>(Array.Empty<TemplateParameter>(), null))
                 .Should().Throw<ArgumentNullException>();
         }
     }
