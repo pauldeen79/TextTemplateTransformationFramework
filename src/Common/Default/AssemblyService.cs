@@ -11,13 +11,11 @@ namespace TextTemplateTransformationFramework.Common.Default
 #else
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 #endif
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
     public class AssemblyService : IAssemblyService
     {
         public string[] GetCustomPaths(string assemblyName)
         {
-            Guard.AgainstNull(assemblyName, nameof(assemblyName));
+            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
 
             if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
             {
@@ -29,8 +27,8 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public Assembly LoadAssembly(string assemblyName, AssemblyLoadContext context)
         {
-            Guard.AgainstNull(assemblyName, nameof(assemblyName));
-            Guard.AgainstNull(context, nameof(context));
+            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
+            if (context == null) throw new ArgumentNullException(nameof(context));
 
             try
             {
@@ -46,6 +44,4 @@ namespace TextTemplateTransformationFramework.Common.Default
             }
         }
     }
-#pragma warning restore CA1062 // Validate arguments of public methods
-#pragma warning restore IDE0079 // Remove unnecessary suppression
 }

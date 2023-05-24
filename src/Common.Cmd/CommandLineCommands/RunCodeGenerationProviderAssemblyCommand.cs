@@ -25,11 +25,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
 
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
         public void Initialize(CommandLineApplication app)
         {
-            Guard.AgainstNull(app, nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command("assembly", command =>
             {
                 command.Description = "Runs all code generation providers from the specified assembly";
@@ -78,8 +76,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 });
             });
         }
-#pragma warning restore CA1062 // Validate arguments of public methods
-#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         private static CodeGenerationSettings CreateCodeGenerationSettings(CommandOption<bool> generateMultipleFilesOption, CommandOption<bool> dryRunOption, CommandOption<string> basePathOption)
         {
