@@ -46,7 +46,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
-                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
 
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
@@ -61,7 +60,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var filename = filenameOption.Value();
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
-                    var currentDirectory = currentDirectoryOption.Value();
 
                     if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
                     {
@@ -69,15 +67,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
-                    {
-                        app.Error.WriteLine("Error: When AssemblyName is filled, then ClassName is required.");
-                        return;
-                    }
-
                     if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
                     {
                         app.Error.WriteLine("Error: You can either use Filename or AssemblyName, not both.");
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
+                    {
+                        app.Error.WriteLine("Error: When AssemblyName is filled, then ClassName is required.");
                         return;
                     }
 
@@ -107,12 +105,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     }
                     else
                     {
-                        var parameters = GetParameters(assemblyName, className, app, interactiveOption, parametersArgument);
+                        var template = new AssemblyTemplate(assemblyName, className);
+                        var parameters = GetParameters(template, app, interactiveOption, parametersArgument);
                         if (parameters == null)
                         {
                             return;
                         }
-                        result = _processor.Process(new AssemblyTemplate(assemblyName, className), parameters);
+                        result = _processor.Process(template, parameters);
                     }
 
                     if (!string.IsNullOrEmpty(result.Exception))
@@ -165,8 +164,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return parameters.ToArray();
         }
 
-        private TemplateParameter[] GetParameters(string assemblyName,
-                                                  string className,
+        private TemplateParameter[] GetParameters(AssemblyTemplate assemblyTemplate,
                                                   CommandLineApplication app,
                                                   CommandOption<string> interactiveOption,
                                                   CommandArgument parametersArgument)
@@ -174,7 +172,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (interactiveOption.HasValue())
             {
                 var parameters = new List<TemplateParameter>();
-                var parametersResult = _processor.ExtractParameters(new AssemblyTemplate(assemblyName, className));
+                var parametersResult = _processor.ExtractParameters(assemblyTemplate);
                 return GetParameters(app, parameters, parametersResult);
             }
 

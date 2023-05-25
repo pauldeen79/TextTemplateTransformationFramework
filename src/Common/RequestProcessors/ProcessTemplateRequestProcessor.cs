@@ -20,6 +20,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
             _templateRenderer = templateRenderer ?? throw new ArgumentNullException(nameof(templateRenderer));
             _templateCompilerOutputValidator = templateCompilerOutputValidator ?? throw new ArgumentNullException(nameof(templateCompilerOutputValidator));
         }
+
         public ProcessResult Process(ProcessTemplateRequest<TState> request)
         {
             if (request == null)

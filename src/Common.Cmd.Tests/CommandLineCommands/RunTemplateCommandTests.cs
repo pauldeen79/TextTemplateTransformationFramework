@@ -76,6 +76,26 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
+        public void Execute_With_Both_Filename_And_AssemblyName_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-a myassembly.dll");
+
+            // Assert
+            actual.Should().Be("Error: You can either use Filename or AssemblyName, not both." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_AssemblyName_Without_ClassName_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-a myassembly.dll");
+
+            // Assert
+            actual.Should().Be("Error: When AssemblyName is filled, then ClassName is required." + Environment.NewLine);
+        }
+
+        [Fact]
         public void Execute_With_Compiler_Errors_Leads_To_Error()
         {
             // Arrange
