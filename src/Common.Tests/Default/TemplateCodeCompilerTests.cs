@@ -47,7 +47,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             var sut = CreateSut();
 
             // Act & Assert
-            sut.Invoking(x => x.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, string.Empty), Array.Empty<TemplateParameter>(), new Mock<ILogger>().Object, SectionContext<TemplateCodeCompilerTests>.Empty), null))
+            sut.Invoking(x => x.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName), Array.Empty<TemplateParameter>(), new Mock<ILogger>().Object, SectionContext<TemplateCodeCompilerTests>.Empty), null))
                .Should().Throw<ArgumentNullException>();
         }
 
@@ -58,7 +58,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             var sut = CreateSut();
 
             // Act
-            var actual = sut.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, string.Empty), Array.Empty<TemplateParameter>(), new Mock<ILogger>().Object, SectionContext<TemplateCodeCompilerTests>.Empty), new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<TemplateToken<TemplateCodeCompilerTests>>(), string.Empty, new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<ITemplateToken<TemplateCodeCompilerTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty)));
+            var actual = sut.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName), Array.Empty<TemplateParameter>(), new Mock<ILogger>().Object, SectionContext<TemplateCodeCompilerTests>.Empty), new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<TemplateToken<TemplateCodeCompilerTests>>(), string.Empty, new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<ITemplateToken<TemplateCodeCompilerTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty)));
 
             // Assert
             actual.Should().NotBeNull();

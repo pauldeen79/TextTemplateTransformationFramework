@@ -107,12 +107,12 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     }
                     else
                     {
-                        var parameters = GetParameters(assemblyName, className, currentDirectory, app, interactiveOption, parametersArgument);
+                        var parameters = GetParameters(assemblyName, className, app, interactiveOption, parametersArgument);
                         if (parameters == null)
                         {
                             return;
                         }
-                        result = _processor.Process(new AssemblyTemplate(assemblyName, className, currentDirectory), parameters);
+                        result = _processor.Process(new AssemblyTemplate(assemblyName, className), parameters);
                     }
 
                     if (!string.IsNullOrEmpty(result.Exception))
@@ -167,7 +167,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         private TemplateParameter[] GetParameters(string assemblyName,
                                                   string className,
-                                                  string currentDirectory,
                                                   CommandLineApplication app,
                                                   CommandOption<string> interactiveOption,
                                                   CommandArgument parametersArgument)
@@ -175,7 +174,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (interactiveOption.HasValue())
             {
                 var parameters = new List<TemplateParameter>();
-                var parametersResult = _processor.ExtractParameters(new AssemblyTemplate(assemblyName, className, currentDirectory));
+                var parametersResult = _processor.ExtractParameters(new AssemblyTemplate(assemblyName, className));
                 return GetParameters(app, parameters, parametersResult);
             }
 

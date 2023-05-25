@@ -7,13 +7,11 @@ namespace TextTemplateTransformationFramework.Common
     {
         public string AssemblyName { get; }
         public string ClassName { get; }
-        public string UsePath { get; }
 
-        public AssemblyTemplate(string assemblyName, string className, string usePath)
+        public AssemblyTemplate(string assemblyName, string className)
         {
             AssemblyName = assemblyName ?? throw new ArgumentNullException(nameof(assemblyName));
             ClassName = className ?? throw new ArgumentNullException(nameof(className));
-            UsePath = usePath ?? throw new ArgumentNullException(nameof(usePath));
         }
     }
 }

@@ -37,7 +37,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
         {
             // Arrange
             var sut = _provider.GetRequiredService<ITokenProcessor<TokenParserState>>();
-            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, string.Empty), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
+            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
 
             // Act & Assert
             sut.Invoking(x => x.Process(context, null)).Should().Throw<ArgumentNullException>();
@@ -47,7 +47,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
         {
             // Arrange
             var sut = _provider.GetRequiredService<ITokenProcessor<TokenParserState>>();
-            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, string.Empty), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
+            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
 
             // Act
             var actual = sut.Process(context, Enumerable.Empty<ITemplateToken<TokenParserState>>());

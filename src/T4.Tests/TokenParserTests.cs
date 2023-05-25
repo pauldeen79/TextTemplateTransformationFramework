@@ -101,7 +101,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
         {
             // Arrange
             var sut = _provider.GetRequiredService<ITextTemplateTokenParser<TokenParserState>>();
-            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, string.Empty), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
+            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
 
             // Act
             var actual = sut.Parse(context);
