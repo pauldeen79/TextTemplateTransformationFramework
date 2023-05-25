@@ -18,7 +18,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         private readonly IFileContentsProvider _fileContentsProvider;
         private readonly IUserInput _userInput;
         private readonly IClipboard _clipboard;
+#pragma warning disable S4487 // Unread "private" fields should be removed
+#pragma warning disable IDE0052 // Remove unread private members
         private readonly IAssemblyService _assemblyService;
+#pragma warning restore IDE0052 // Remove unread private members
+#pragma warning restore S4487 // Unread "private" fields should be removed
 
         public RunTemplateCommand(ITextTemplateProcessor processor,
                                   IFileContentsProvider fileContentsProvider,
