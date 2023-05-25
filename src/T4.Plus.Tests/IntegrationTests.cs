@@ -32,7 +32,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
 Hello <#= ""world"" #><# Write(""!""); #>";
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!");
@@ -48,7 +48,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
 Hello <#= ""world"" #><# Write(""!""); #>";
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!");

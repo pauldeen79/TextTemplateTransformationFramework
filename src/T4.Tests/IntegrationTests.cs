@@ -42,7 +42,7 @@ Hello world!
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             const string expected = @"Hello world!
@@ -63,7 +63,7 @@ New line needed
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             const string expected = @"Hello world!
@@ -94,7 +94,7 @@ Third line";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             const string expected = @"Line 1
@@ -145,7 +145,7 @@ Line 19";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             const string expected = @"Line 1
@@ -179,7 +179,7 @@ Line 19";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             const string expected = @"Line 7
@@ -201,7 +201,7 @@ Hello world!";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             const string expected = "Hello world!";
@@ -218,7 +218,7 @@ Hello world!";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.CompilerErrors.Should().Contain(e => e.ErrorText == "The Extension field is required.");
@@ -234,7 +234,7 @@ Hello <#= Function() #>!
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be(@"Hello world!
@@ -251,7 +251,7 @@ Hello <#= Function() #>!
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.Output.Should().Be("ErrorGeneratingOutput");
@@ -270,7 +270,7 @@ Hello <#= Function() #>!
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be(@"Hello world!
@@ -287,7 +287,7 @@ Hello <#= Function() #>!
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be(@"Hello world!
@@ -303,7 +303,7 @@ Hello <#= Function() #>!
 Hello <#= ""world"" #><#@ include file=""file.ttinclude"" once=""true"" #><#@ include file=""file.ttinclude"" once=""true"" #>";
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!");
@@ -318,7 +318,7 @@ Hello <#= ""world"" #><#@ include file=""file.ttinclude"" #><#@ include file=""f
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!!");
@@ -333,7 +333,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!");
@@ -347,7 +347,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.Output.Should().Be("< Hello world");
@@ -361,7 +361,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.Output.Should().Be("> Hello world");
@@ -375,7 +375,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
             var sut = _provider.GetRequiredService<ITextTemplateProcessor>();
 
             // Act
-            var actual = sut.Process(new TextTemplate(Src));
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.Output.Should().Be("ErrorGeneratingOutput");

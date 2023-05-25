@@ -175,7 +175,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (interactiveOption.HasValue())
             {
                 var parameters = new List<TemplateParameter>();
-                var parametersResult = _processor.ExtractParameters(assemblyName, className, currentDirectory);
+                var parametersResult = _processor.ExtractParameters(new AssemblyTemplate(assemblyName, className, currentDirectory));
                 return GetParameters(app, parameters, parametersResult);
             }
 
