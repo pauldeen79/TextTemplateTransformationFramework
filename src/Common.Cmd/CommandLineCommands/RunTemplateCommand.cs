@@ -90,12 +90,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     if (!string.IsNullOrEmpty(filename))
                     {
                         var contents = _fileContentsProvider.GetFileContents(filename);
-                        var parameters = GetParameters(filename, contents, app, interactiveOption, parametersArgument);
+                        var template = new TextTemplate(contents, filename);
+                        var parameters = GetParameters(template, app, interactiveOption, parametersArgument);
                         if (parameters == null)
                         {
                             return;
                         }
-                        result = _processor.Process(new TextTemplate(contents, filename), parameters);
+                        result = _processor.Process(template, parameters);
 
                         if (result.CompilerErrors.Any(e => !e.IsWarning))
                         {
@@ -130,8 +131,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             });
         }
 
-        private TemplateParameter[] GetParameters(string filename,
-                                                  string contents,
+        private TemplateParameter[] GetParameters(TextTemplate textTemplate,
                                                   CommandLineApplication app,
                                                   CommandOption<string> interactiveOption,
                                                   CommandArgument parametersArgument)
@@ -139,7 +139,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (interactiveOption.HasValue())
             {
                 var parameters = new List<TemplateParameter>();
-                var parametersResult = _processor.ExtractParameters(contents, filename);
+                var parametersResult = _processor.ExtractParameters(textTemplate);
                 return GetParameters(app, parameters, parametersResult);
             }
 
