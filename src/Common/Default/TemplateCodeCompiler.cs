@@ -41,7 +41,7 @@ namespace TextTemplateTransformationFramework.Common.Default
             if (context.AssemblyTemplate != null)
             {
                 var assembly = _assemblyService.LoadAssembly(context.AssemblyTemplate.AssemblyName, AssemblyLoadContext.Default);
-                return new TemplateCompilerOutput<TState>(assembly, assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == context.AssemblyTemplate.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
+                return new TemplateCompilerOutput<TState>(assembly, Activator.CreateInstance(assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == context.AssemblyTemplate.ClassName)), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
             }
 
             var result = DoCompile(context, codeOutput);
