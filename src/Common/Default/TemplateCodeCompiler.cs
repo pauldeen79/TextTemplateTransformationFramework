@@ -40,8 +40,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
             if (context.AssemblyTemplate != null)
             {
-                //TODO: Allow to use custom assembly load context here, with a custom directory name
-                var assembly = _assemblyService.LoadAssembly(context.AssemblyTemplate.AssemblyName, AssemblyLoadContext.Default);
+                var assembly = _assemblyService.LoadAssembly(context.AssemblyTemplate.AssemblyName, context.AssemblyTemplate.AssemblyLoadContext);
                 return new TemplateCompilerOutput<TState>(assembly, Activator.CreateInstance(assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == context.AssemblyTemplate.ClassName)), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
             }
 

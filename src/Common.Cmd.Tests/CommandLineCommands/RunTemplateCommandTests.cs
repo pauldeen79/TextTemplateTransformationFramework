@@ -21,11 +21,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
         private readonly Mock<IUserInput> _userInputMock;
         private readonly Mock<IClipboard> _clipboardMock;
+        private readonly Mock<IAssemblyService> _assemblyServiceMock;
 
         private RunTemplateCommand CreateSut() => new RunTemplateCommand(_processorMock.Object,
                                                                          _fileContentsProviderMock.Object,
                                                                          _userInputMock.Object,
-                                                                         _clipboardMock.Object);
+                                                                         _clipboardMock.Object,
+                                                                         _assemblyServiceMock.Object);
 
         public RunTemplateCommandTests()
         {
@@ -33,6 +35,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
             _userInputMock = new Mock<IUserInput>();
             _clipboardMock = new Mock<IClipboard>();
+            _assemblyServiceMock = new Mock<IAssemblyService>();
         }
 
         [Fact]

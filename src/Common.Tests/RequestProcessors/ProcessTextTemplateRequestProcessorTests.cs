@@ -57,7 +57,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
             var sut = CreateSut();
 
             // Act
-            var TextTemplate = new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName);
+            var TextTemplate = new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default);
             var actual = sut.Process(new ProcessTextTemplateRequest<ProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), new TextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>(TextTemplate, Array.Empty<TemplateParameter>(), _loggerMock.Object, null)));
 
             // Assert

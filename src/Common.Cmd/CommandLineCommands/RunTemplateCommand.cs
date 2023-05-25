@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Common.Extensions;
-using Utilities;
+using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -18,16 +18,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         private readonly IFileContentsProvider _fileContentsProvider;
         private readonly IUserInput _userInput;
         private readonly IClipboard _clipboard;
+        private readonly IAssemblyService _assemblyService;
 
         public RunTemplateCommand(ITextTemplateProcessor processor,
                                   IFileContentsProvider fileContentsProvider,
                                   IUserInput userInput,
-                                  IClipboard clipboard)
+                                  IClipboard clipboard,
+                                  IAssemblyService assemblyService)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
             _userInput = userInput ?? throw new ArgumentNullException(nameof(userInput));
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
+            _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
 
         public void Initialize(CommandLineApplication app)
@@ -46,6 +49,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+#if !NETFRAMEWORK
+                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
+#endif
 
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
@@ -85,6 +91,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
                     ProcessResult result;
+                    AssemblyLoadContext assemblyLoadContext = null;
                     if (!string.IsNullOrEmpty(filename))
                     {
                         var contents = _fileContentsProvider.GetFileContents(filename);
@@ -105,7 +112,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     }
                     else
                     {
-                        var template = new AssemblyTemplate(assemblyName, className);
+#if NETFRAMEWORK
+                    assemblyLoadContext = System.Runtime.Loader.AssemblyLoadContext.Default;
+#else
+                    assemblyLoadContext = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
+                        ? new[] { currentDirectoryOption.Value() }
+                        : _assemblyService.GetCustomPaths(assemblyName));
+#endif
+                        var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
                         var parameters = GetParameters(template, app, interactiveOption, parametersArgument);
                         if (parameters == null)
                         {
@@ -126,6 +140,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
                     WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
+#if !NETFRAMEWORK
+                    assemblyLoadContext?.Unload();
+#endif
                 });
             });
         }

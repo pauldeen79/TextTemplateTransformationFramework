@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Loader;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using TextTemplateTransformationFramework.Common;
@@ -101,7 +102,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
         {
             // Arrange
             var sut = _provider.GetRequiredService<ITextTemplateTokenParser<TokenParserState>>();
-            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
+            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
 
             // Act
             var actual = sut.Parse(context);
