@@ -4,7 +4,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.T4.Plus.Core.Extensions;
 using Xunit;
