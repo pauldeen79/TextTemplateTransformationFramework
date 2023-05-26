@@ -7,7 +7,6 @@ using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -55,7 +54,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
-                var currentDirectoryOption = GetCurrentDirectoryOption(command);
+                var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
 #endif
@@ -69,10 +68,10 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
 
-                    var validationError = GetValidationError(filename, assemblyName, className);
-                    if (!string.IsNullOrEmpty(validationError))
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filename, assemblyName, className);
+                    if (!string.IsNullOrEmpty(validationResult))
                     {
-                        app.Out.WriteLine($"Error: {validationError}");
+                        app.Out.WriteLine($"Error: {validationResult}");
                         return;
                     }
 
@@ -101,15 +100,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             });
         }
 
-        private static CommandOption<string> GetCurrentDirectoryOption(CommandLineApplication command)
-        {
-#if !NETFRAMEWORK
-            return command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
-#else
-            return null;
-#endif
-        }
-
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable S1172 // Unused method parameters should be removed
         private (bool Success, ProcessResult ProcessResult, AssemblyLoadContext AssemblyLoadContext) ProcessTemplate(CommandLineApplication app, CommandArgument parametersArgument, CommandOption<string> interactiveOption, CommandOption<string> currentDirectoryOption, string filename, string assemblyName, string className)
@@ -124,7 +114,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             else
             {
 #if !NETFRAMEWORK
-                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption.HasValue(), currentDirectoryOption.HasValue() ? currentDirectoryOption.Value() : null);
+                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
 #else
                 var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
 #endif
@@ -163,7 +153,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 #pragma warning restore S1172 // Unused method parameters should be removed
 #pragma warning restore IDE0079 // Remove unnecessary suppression
         {
-            var assemblyLoadContext = CreateAssemblyLoadContext(assemblyName, currentDirectoryIsFilled, currentDirectory);
+            var assemblyLoadContext = CommandBase.CreateAssemblyLoadContext(_assemblyService, assemblyName, currentDirectoryIsFilled, currentDirectory);
             var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
             var parameters = GetParameters(template, app, interactive, parameterArguments);
             if (parameters == null)
@@ -172,44 +162,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
 
             return (true, _processor.Process(template, parameters), assemblyLoadContext);
-        }
-
-        private AssemblyLoadContext CreateAssemblyLoadContext(string assemblyName, bool currentDirectoryIsFilled, string currentDirectory)
-        {
-            AssemblyLoadContext assemblyLoadContext;
-#if NETFRAMEWORK
-            assemblyLoadContext = AssemblyLoadContext.Default;
-#else
-            assemblyLoadContext = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryIsFilled
-                ? new[] { currentDirectory }
-                : _assemblyService.GetCustomPaths(assemblyName));
-#endif
-            return assemblyLoadContext;
-        }
-
-        private string GetValidationError(string filename, string assemblyName, string className)
-        {
-            if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
-            {
-                return "Either Filename or AssemblyName is required.";
-            }
-
-            if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
-            {
-                return "You can either use Filename or AssemblyName, not both.";
-            }
-
-            if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
-            {
-                return "When AssemblyName is filled, then ClassName is required.";
-            }
-
-            if (!string.IsNullOrEmpty(filename) && !_fileContentsProvider.FileExists(filename))
-            {
-                return $"File [{filename}] does not exist.";
-            }
-
-            return null;
         }
 
         private TemplateParameter[] GetParameters(TextTemplate textTemplate,
