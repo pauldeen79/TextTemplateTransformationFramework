@@ -18,11 +18,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         private readonly IFileContentsProvider _fileContentsProvider;
         private readonly IUserInput _userInput;
         private readonly IClipboard _clipboard;
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable S4487 // Unread "private" fields should be removed
 #pragma warning disable IDE0052 // Remove unread private members
         private readonly IAssemblyService _assemblyService;
 #pragma warning restore IDE0052 // Remove unread private members
 #pragma warning restore S4487 // Unread "private" fields should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         public RunTemplateCommand(ITextTemplateProcessor processor,
                                   IFileContentsProvider fileContentsProvider,
@@ -53,8 +55,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                CommandOption<string> currentDirectoryOption;
 #if !NETFRAMEWORK
-                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
+                currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
+#else
+                currentDirectoryOption = null;
 #endif
 
 #if DEBUG
@@ -71,99 +76,138 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
 
-                    if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
+                    var validationError = GetValidationError(filename, assemblyName, className);
+                    if (!string.IsNullOrEmpty(validationError))
                     {
-                        app.Error.WriteLine("Error: Either Filename or AssemblyName is required.");
+                        app.Out.WriteLine($"Error: {validationError}");
                         return;
                     }
 
-                    if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
+                    var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, filename, assemblyName, className);
+                    if (!result.Success)
                     {
-                        app.Error.WriteLine("Error: You can either use Filename or AssemblyName, not both.");
                         return;
                     }
 
-                    if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
-                    {
-                        app.Error.WriteLine("Error: When AssemblyName is filled, then ClassName is required.");
-                        return;
-                    }
-
-                    if (!_fileContentsProvider.FileExists(filename))
-                    {
-                        app.Error.WriteLine($"Error: File [{filename}] does not exist.");
-                        return;
-                    }
-                    ProcessResult result;
-                    AssemblyLoadContext assemblyLoadContext = null;
-                    if (!string.IsNullOrEmpty(filename))
-                    {
-                        var contents = _fileContentsProvider.GetFileContents(filename);
-                        var template = new TextTemplate(contents, filename);
-                        var parameters = GetParameters(template, app, interactiveOption, parametersArgument);
-                        if (parameters == null)
-                        {
-                            return;
-                        }
-                        result = _processor.Process(template, parameters);
-
-                        if (result.CompilerErrors.Any(e => !e.IsWarning))
-                        {
-                            app.Error.WriteLine("Compiler errors:");
-                            result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
-                            return;
-                        }
-                    }
-                    else
-                    {
-#if NETFRAMEWORK
-                    assemblyLoadContext = System.Runtime.Loader.AssemblyLoadContext.Default;
-#else
-                    assemblyLoadContext = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
-                        ? new[] { currentDirectoryOption.Value() }
-                        : _assemblyService.GetCustomPaths(assemblyName));
-#endif
-                        var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
-                        var parameters = GetParameters(template, app, interactiveOption, parametersArgument);
-                        if (parameters == null)
-                        {
-                            return;
-                        }
-                        result = _processor.Process(template, parameters);
-                    }
-
-                    if (!string.IsNullOrEmpty(result.Exception))
+                    if (!string.IsNullOrEmpty(result.ProcessResult.Exception))
                     {
                         app.Error.WriteLine("Exception occured while processing the template:");
-                        app.Error.WriteLine(result.Exception);
+                        app.Error.WriteLine(result.ProcessResult.Exception);
                         return;
                     }
 
-                    var templateOutput = result.Output;
+                    var templateOutput = result.ProcessResult.Output;
                     var output = outputOption.Value();
                     var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
-                    WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
+                    WriteOutput(app, result.ProcessResult, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
 #if !NETFRAMEWORK
-                    assemblyLoadContext?.Unload();
+                    result.AssemblyLoadContext?.Unload();
 #endif
                 });
             });
         }
 
+        private (bool Success, ProcessResult ProcessResult, AssemblyLoadContext AssemblyLoadContext) ProcessTemplate(CommandLineApplication app, CommandArgument parametersArgument, CommandOption<string> interactiveOption, CommandOption<string> currentDirectoryOption, string filename, string assemblyName, string className)
+        {
+            if (!string.IsNullOrEmpty(filename))
+            {
+                var x = ProcessTextTemplate(filename, app, interactiveOption.HasValue(), parametersArgument.Values);
+                return (x.Success, x.Result, null);
+            }
+            else
+            {
+#if !NETFRAMEWORK
+                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption.HasValue(), currentDirectoryOption.HasValue() ? currentDirectoryOption.Value() : null);
+#else
+                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
+#endif
+#if !NETFRAMEWORK
+                return (x.Success, x.Result, x.AssemblyLoadContext);
+#else
+                return (x.Success, x.Result, null);
+#endif
+            }
+        }
+
+        private (bool Success, ProcessResult Result) ProcessTextTemplate(string filename, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments)
+        {
+            var contents = _fileContentsProvider.GetFileContents(filename);
+            var template = new TextTemplate(contents, filename);
+            var parameters = GetParameters(template, app, interactive, parameterArguments);
+            if (parameters == null)
+            {
+                return (false, null);
+            }
+            var result = _processor.Process(template, parameters);
+
+            if (result.CompilerErrors.Any(e => !e.IsWarning))
+            {
+                app.Error.WriteLine("Compiler errors:");
+                result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
+                return (false, result);
+            }
+
+            return (true, result);
+        }
+
+        private (bool Success, ProcessResult Result, AssemblyLoadContext AssemblyLoadContext) ProcessAssemblyTemplate(string assemblyName, string className, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments, bool currentDirectoryIsFilled, string currentDirectory)
+        {
+            AssemblyLoadContext assemblyLoadContext;
+#if NETFRAMEWORK
+            assemblyLoadContext = System.Runtime.Loader.AssemblyLoadContext.Default;
+#else
+                    assemblyLoadContext = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryIsFilled
+                        ? new[] { currentDirectory }
+                        : _assemblyService.GetCustomPaths(assemblyName));
+#endif
+            var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
+            var parameters = GetParameters(template, app, interactive, parameterArguments);
+            if (parameters == null)
+            {
+                return (false, null, assemblyLoadContext);
+            }
+            return (true, _processor.Process(template, parameters), assemblyLoadContext);
+        }
+
+        private string GetValidationError(string filename, string assemblyName, string className)
+        {
+            if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
+            {
+                return "Either Filename or AssemblyName is required.";
+            }
+
+            if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
+            {
+                return "You can either use Filename or AssemblyName, not both.";
+            }
+
+            if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
+            {
+                return "When AssemblyName is filled, then ClassName is required.";
+            }
+
+            if (!_fileContentsProvider.FileExists(filename))
+            {
+                return $"File [{filename}] does not exist.";
+            }
+
+            return null;
+        }
+
         private TemplateParameter[] GetParameters(TextTemplate textTemplate,
                                                   CommandLineApplication app,
-                                                  CommandOption<string> interactiveOption,
-                                                  CommandArgument parametersArgument)
+                                                  bool interactive,
+                                                  IEnumerable<string> parameterArguments)
         {
-            if (interactiveOption.HasValue())
+            if (interactive)
             {
                 var parameters = new List<TemplateParameter>();
                 var parametersResult = _processor.ExtractParameters(textTemplate);
                 return GetParameters(app, parameters, parametersResult);
             }
 
-            return parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+            return parameterArguments.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
         }
 
         private TemplateParameter[] GetParameters(CommandLineApplication app, List<TemplateParameter> parameters, ExtractParametersResult parametersResult)
@@ -187,17 +231,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         private TemplateParameter[] GetParameters(AssemblyTemplate assemblyTemplate,
                                                   CommandLineApplication app,
-                                                  CommandOption<string> interactiveOption,
-                                                  CommandArgument parametersArgument)
+                                                  bool interactive,
+                                                  IEnumerable<string> parameterArguments)
         {
-            if (interactiveOption.HasValue())
+            if (interactive)
             {
                 var parameters = new List<TemplateParameter>();
                 var parametersResult = _processor.ExtractParameters(assemblyTemplate);
                 return GetParameters(app, parameters, parametersResult);
             }
 
-            return parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+            return parameterArguments.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
         }
 
         private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption)
