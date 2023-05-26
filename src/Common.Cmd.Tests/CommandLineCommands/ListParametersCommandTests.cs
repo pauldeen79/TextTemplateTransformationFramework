@@ -17,13 +17,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+        private readonly Mock<IAssemblyService> _assemblyServiceMock;
 
-        private ListParametersCommand CreateSut() => new ListParametersCommand(_processorMock.Object, _fileContentsProviderMock.Object);
+        private ListParametersCommand CreateSut() => new ListParametersCommand(_processorMock.Object, _fileContentsProviderMock.Object, _assemblyServiceMock.Object);
 
         public ListParametersCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+            _assemblyServiceMock = new Mock<IAssemblyService>();
         }
 
         [Fact]
@@ -37,9 +39,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             // Arrange
             var app = new CommandLineApplication();
-            var textTemplateProcessorMock = new Mock<ITextTemplateProcessor>();
-            var fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            var sut = new ListParametersCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object);
+            var sut = CreateSut();
 
             // Act
             sut.Initialize(app);
@@ -65,7 +65,27 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
 
             // Assert
-            actual.Should().Be("Error: Filename is required." + Environment.NewLine);
+            actual.Should().Be("Error: Either Filename or AssemblyName is required." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_Both_Filename_And_AssemblyName_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-a myassembly.dll");
+
+            // Assert
+            actual.Should().Be("Error: You can either use Filename or AssemblyName, not both." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_AssemblyName_Without_ClassName_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-a myassembly.dll");
+
+            // Assert
+            actual.Should().Be("Error: When AssemblyName is filled, then ClassName is required." + Environment.NewLine);
         }
 
         [Fact]
@@ -109,13 +129,25 @@ System.InvalidOperationException: kaboom
         }
 
         [Fact]
-        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters()
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters_For_TextTemplate()
         {
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
             _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
             _processorMock.Setup(x => x.ExtractParameters(It.IsAny<TextTemplate>()))
                           .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = "MyParameter", Type = typeof(string) } }, Array.Empty<CompilerError>(), "code", string.Empty));
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
+
+            // Assert
+            actual.Should().Be(@"MyParameter (System.String)
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters_For_AssemblyTemplate()
+        {
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<AssemblyTemplate>()))
+                          .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = "MyParameter", Type = typeof(string) } }, Array.Empty<CompilerError>(), "code", string.Empty));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-a my.dll", "-n myclassname");
 
             // Assert
             actual.Should().Be(@"MyParameter (System.String)
