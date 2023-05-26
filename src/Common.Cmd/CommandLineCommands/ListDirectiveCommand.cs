@@ -19,6 +19,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command("list-directive-arguments", command =>
             {
                 command.Description = "Lists available directive arguments";
