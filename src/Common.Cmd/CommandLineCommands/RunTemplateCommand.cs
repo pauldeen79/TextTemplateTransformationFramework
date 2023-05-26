@@ -175,6 +175,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             {
                 return (false, null, assemblyLoadContext);
             }
+
             return (true, _processor.Process(template, parameters), assemblyLoadContext);
         }
 
@@ -195,7 +196,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 return "When AssemblyName is filled, then ClassName is required.";
             }
 
-            if (!_fileContentsProvider.FileExists(filename))
+            if (!string.IsNullOrEmpty(filename) && !_fileContentsProvider.FileExists(filename))
             {
                 return $"File [{filename}] does not exist.";
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
@@ -165,7 +166,7 @@ System.InvalidOperationException: kaboom
         }
 
         [Fact]
-        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output()
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output_For_TextTemplate()
         {
             // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
@@ -175,6 +176,22 @@ System.InvalidOperationException: kaboom
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
+
+            // Assert
+            actual.Should().Be(@"Template output:
+template output
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output_For_AssemblyTemplate()
+        {
+            // Arrange
+            _processorMock.Setup(x => x.Process(It.IsAny<AssemblyTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-a my.dll", "-n myclass");
 
             // Assert
             actual.Should().Be(@"Template output:
