@@ -108,7 +108,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             });
         }
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S1172 // Unused method parameters should be removed
         private (bool Success, ProcessResult ProcessResult, AssemblyLoadContext AssemblyLoadContext) ProcessTemplate(CommandLineApplication app, CommandArgument parametersArgument, CommandOption<string> interactiveOption, CommandOption<string> currentDirectoryOption, string filename, string assemblyName, string className)
+#pragma warning restore S1172 // Unused method parameters should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
         {
             if (!string.IsNullOrEmpty(filename))
             {
@@ -151,11 +155,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return (true, result);
         }
 
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S1172 // Unused method parameters should be removed
         private (bool Success, ProcessResult Result, AssemblyLoadContext AssemblyLoadContext) ProcessAssemblyTemplate(string assemblyName, string className, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments, bool currentDirectoryIsFilled, string currentDirectory)
+#pragma warning restore S1172 // Unused method parameters should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
         {
             AssemblyLoadContext assemblyLoadContext;
 #if NETFRAMEWORK
-            assemblyLoadContext = System.Runtime.Loader.AssemblyLoadContext.Default;
+            assemblyLoadContext = AssemblyLoadContext.Default;
 #else
                     assemblyLoadContext = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryIsFilled
                         ? new[] { currentDirectory }
