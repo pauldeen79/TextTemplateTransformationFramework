@@ -5,6 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -67,7 +68,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {
                         app.Error.WriteLine("Compiler errors:");
-                        result.CompilerErrors.Select(err => err.ToString()).ToList().ForEach(app.Error.WriteLine);
+                        result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
                         return;
                     }
 
