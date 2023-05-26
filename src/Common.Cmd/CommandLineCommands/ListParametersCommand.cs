@@ -50,19 +50,23 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 #if DEBUG
                     debuggerOption.LaunchDebuggerIfSet();
 #endif
-                    var filename = filenameOption.Value();
-                    var assemblyName = assemblyNameOption.Value();
-                    var className = classNameOption.Value();
-
-                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filename, assemblyName, className);
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filenameOption.Value(), assemblyNameOption.Value(), classNameOption.Value());
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         app.Error.WriteLine($"Error: {validationResult}");
                         return;
                     }
 
-                    var assemblyLoadContext = CommandBase.CreateAssemblyLoadContext(_assemblyService, assemblyName, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
-                    var result = ExtractParameters(filename, assemblyName, className, assemblyLoadContext);
+                    var assemblyLoadContext = CommandBase.CreateAssemblyLoadContext
+                    (
+                        _assemblyService,
+                        assemblyNameOption.Value(),
+                        currentDirectoryOption?.HasValue() == true,
+                        currentDirectoryOption?.HasValue() == true
+                            ? currentDirectoryOption!.Value()
+                            : null
+                    );
+                    var result = ExtractParameters(filenameOption.Value(), assemblyNameOption.Value(), classNameOption.Value(), assemblyLoadContext);
 
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {
