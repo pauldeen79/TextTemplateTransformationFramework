@@ -2,24 +2,22 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-using TextTemplateTransformationFramework.Common.Cmd.Contracts;
+using TextTemplateTransformationFramework.Common.Contracts;
 using Utilities;
 
-namespace TextTemplateTransformationFramework.T4.Plus.Cmd
+namespace TextTemplateTransformationFramework.Common.Default
 {
 #if Windows
 #else
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 #endif
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
     public class AssemblyService : IAssemblyService
     {
         public string[] GetCustomPaths(string assemblyName)
         {
-            Guard.AgainstNull(assemblyName, nameof(assemblyName));
+            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
 
-            if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathFullyQualified(assemblyName))
+            if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
             {
                 return new[] { Path.GetDirectoryName(Path.Combine(Directory.GetCurrentDirectory(), assemblyName)) };
             }
@@ -29,8 +27,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
 
         public Assembly LoadAssembly(string assemblyName, AssemblyLoadContext context)
         {
-            Guard.AgainstNull(assemblyName, nameof(assemblyName));
-            Guard.AgainstNull(context, nameof(context));
+            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
+            if (context == null) throw new ArgumentNullException(nameof(context));
 
             try
             {
@@ -38,7 +36,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
             }
             catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
             {
-                if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathFullyQualified(assemblyName))
+                if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
                 {
                     assemblyName = Path.Combine(Directory.GetCurrentDirectory(), assemblyName);
                 }
@@ -46,6 +44,4 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
             }
         }
     }
-#pragma warning restore CA1062 // Validate arguments of public methods
-#pragma warning restore IDE0079 // Remove unnecessary suppression
 }

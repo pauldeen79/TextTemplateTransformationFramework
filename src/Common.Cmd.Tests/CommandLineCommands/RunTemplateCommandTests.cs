@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
@@ -21,11 +22,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
         private readonly Mock<IUserInput> _userInputMock;
         private readonly Mock<IClipboard> _clipboardMock;
+        private readonly Mock<IAssemblyService> _assemblyServiceMock;
 
         private RunTemplateCommand CreateSut() => new RunTemplateCommand(_processorMock.Object,
                                                                          _fileContentsProviderMock.Object,
                                                                          _userInputMock.Object,
-                                                                         _clipboardMock.Object);
+                                                                         _clipboardMock.Object,
+                                                                         _assemblyServiceMock.Object);
 
         public RunTemplateCommandTests()
         {
@@ -33,6 +36,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
             _userInputMock = new Mock<IUserInput>();
             _clipboardMock = new Mock<IClipboard>();
+            _assemblyServiceMock = new Mock<IAssemblyService>();
         }
 
         [Fact]
@@ -56,13 +60,23 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
+        public void Initialize_Throws_On_Null_Argument()
+        {
+            // Arrange
+            var sut = CreateSut();
+
+            // Act & Assert
+            sut.Invoking(x => x.Initialize(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Execute_Without_Filename_Leads_To_Error()
         {
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
 
             // Assert
-            actual.Should().Be("Error: Filename is required." + Environment.NewLine);
+            actual.Should().Be("Error: Either Filename or AssemblyName is required." + Environment.NewLine);
         }
 
         [Fact]
@@ -73,6 +87,26 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 
             // Assert
             actual.Should().Be("Error: File [nonexisting.template] does not exist." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_Both_Filename_And_AssemblyName_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-a myassembly.dll");
+
+            // Assert
+            actual.Should().Be("Error: You can either use Filename or AssemblyName, not both." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_AssemblyName_Without_ClassName_Leads_To_Error()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-a myassembly.dll");
+
+            // Assert
+            actual.Should().Be("Error: When AssemblyName is filled, then ClassName is required." + Environment.NewLine);
         }
 
         [Fact]
@@ -132,7 +166,7 @@ System.InvalidOperationException: kaboom
         }
 
         [Fact]
-        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output()
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output_For_TextTemplate()
         {
             // Arrange
             _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
@@ -142,6 +176,22 @@ System.InvalidOperationException: kaboom
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
+
+            // Assert
+            actual.Should().Be(@"Template output:
+template output
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output_For_AssemblyTemplate()
+        {
+            // Arrange
+            _processorMock.Setup(x => x.Process(It.IsAny<AssemblyTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-a my.dll", "-n myclass");
 
             // Assert
             actual.Should().Be(@"Template output:

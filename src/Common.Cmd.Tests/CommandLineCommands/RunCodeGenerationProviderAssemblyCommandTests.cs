@@ -9,8 +9,8 @@ using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
-using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
+using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Runtime;
 using Xunit;
 
@@ -57,6 +57,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 
             // Assert
             app.Commands.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void Initialize_Throws_On_Null_Argument()
+        {
+            // Arrange
+            var sut = CreateSut();
+
+            // Act & Assert
+            sut.Invoking(x => x.Initialize(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]

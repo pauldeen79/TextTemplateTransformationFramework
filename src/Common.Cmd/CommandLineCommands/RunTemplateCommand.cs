@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Common.Extensions;
-using Utilities;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -18,23 +17,30 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         private readonly IFileContentsProvider _fileContentsProvider;
         private readonly IUserInput _userInput;
         private readonly IClipboard _clipboard;
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S4487 // Unread "private" fields should be removed
+#pragma warning disable IDE0052 // Remove unread private members
+        private readonly IAssemblyService _assemblyService;
+#pragma warning restore IDE0052 // Remove unread private members
+#pragma warning restore S4487 // Unread "private" fields should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         public RunTemplateCommand(ITextTemplateProcessor processor,
                                   IFileContentsProvider fileContentsProvider,
                                   IUserInput userInput,
-                                  IClipboard clipboard)
+                                  IClipboard clipboard,
+                                  IAssemblyService assemblyService)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
             _userInput = userInput ?? throw new ArgumentNullException(nameof(userInput));
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
+            _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
         }
 
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CA1062 // Validate arguments of public methods, false positive because we've handled it in the Guard.AgainstNull method above
         public void Initialize(CommandLineApplication app)
         {
-            Guard.AgainstNull(app, nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app!.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
@@ -46,11 +52,12 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var interactiveOption = command.Option<string>("-i|--interactive", "Fill parameters interactively", CommandOptionType.NoValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
-
+                var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
+                var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
 #if DEBUG
                 var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
 #endif
-
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
@@ -58,80 +65,152 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     debuggerOption.LaunchDebuggerIfSet();
 #endif
                     var filename = filenameOption.Value();
+                    var assemblyName = assemblyNameOption.Value();
+                    var className = classNameOption.Value();
 
-                    if (string.IsNullOrEmpty(filename))
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filename, assemblyName, className);
+                    if (!string.IsNullOrEmpty(validationResult))
                     {
-                        app.Error.WriteLine("Error: Filename is required.");
+                        app.Out.WriteLine($"Error: {validationResult}");
                         return;
                     }
 
-                    if (!_fileContentsProvider.FileExists(filename))
-                    {
-                        app.Error.WriteLine($"Error: File [{filename}] does not exist.");
-                        return;
-                    }
-
-                    var contents = _fileContentsProvider.GetFileContents(filename);
-                    var parameters = GetParameters(filename, contents, app, interactiveOption, parametersArgument);
-                    if (parameters == null)
+                    var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, filename, assemblyName, className);
+                    if (!result.Success)
                     {
                         return;
                     }
-                    var result = _processor.Process(new TextTemplate(contents, filename), parameters);
 
-                    if (result.CompilerErrors.Any(e => !e.IsWarning))
-                    {
-                        app.Error.WriteLine("Compiler errors:");
-                        result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
-                        return;
-                    }
-
-                    if (!string.IsNullOrEmpty(result.Exception))
+                    if (!string.IsNullOrEmpty(result.ProcessResult.Exception))
                     {
                         app.Error.WriteLine("Exception occured while processing the template:");
-                        app.Error.WriteLine(result.Exception);
+                        app.Error.WriteLine(result.ProcessResult.Exception);
                         return;
                     }
 
-                    var templateOutput = result.Output;
+                    var templateOutput = result.ProcessResult.Output;
                     var output = outputOption.Value();
                     var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
-                    WriteOutput(app, result, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
+                    WriteOutput(app, result.ProcessResult, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
+#if !NETFRAMEWORK
+                    result.AssemblyLoadContext?.Unload();
+#endif
                 });
             });
         }
-#pragma warning restore CA1062 // Validate arguments of public methods
+
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S1172 // Unused method parameters should be removed
+        private (bool Success, ProcessResult ProcessResult, AssemblyLoadContext AssemblyLoadContext) ProcessTemplate(CommandLineApplication app, CommandArgument parametersArgument, CommandOption<string> interactiveOption, CommandOption<string> currentDirectoryOption, string filename, string assemblyName, string className)
+#pragma warning restore S1172 // Unused method parameters should be removed
 #pragma warning restore IDE0079 // Remove unnecessary suppression
-
-        private TemplateParameter[] GetParameters(string filename,
-                                                  string contents,
-                                                  CommandLineApplication app,
-                                                  CommandOption<string> interactiveOption,
-                                                  CommandArgument parametersArgument)
         {
-            if (interactiveOption.HasValue())
+            if (!string.IsNullOrEmpty(filename))
             {
-                var parameters = new List<TemplateParameter>();
-                var parametersResult = _processor.ExtractParameters(contents, filename);
-                if (parametersResult.Exception != null)
-                {
-                    app.Error.WriteLine("Exception occured while extracting parameters from the template:");
-                    app.Error.WriteLine(parametersResult.Exception);
-#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
-                    return null;
-#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
-                }
-                foreach (var parameter in parametersResult.Parameters)
-                {
-                    parameter.Value = _userInput.GetValue(parameter);
-                    parameters.Add(parameter);
-                }
+                var x = ProcessTextTemplate(filename, app, interactiveOption.HasValue(), parametersArgument.Values);
+                return (x.Success, x.Result, null);
+            }
+            else
+            {
+#if !NETFRAMEWORK
+                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
+#else
+                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
+#endif
+#if !NETFRAMEWORK
+                return (x.Success, x.Result, x.AssemblyLoadContext);
+#else
+                return (x.Success, x.Result, null);
+#endif
+            }
+        }
 
-                return parameters.ToArray();
+        private (bool Success, ProcessResult Result) ProcessTextTemplate(string filename, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments)
+        {
+            var contents = _fileContentsProvider.GetFileContents(filename);
+            var template = new TextTemplate(contents, filename);
+            var parameters = GetParameters(template, app, interactive, parameterArguments);
+            if (parameters == null)
+            {
+                return (false, null);
+            }
+            var result = _processor.Process(template, parameters);
+
+            if (result.CompilerErrors.Any(e => !e.IsWarning))
+            {
+                app.Error.WriteLine("Compiler errors:");
+                result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
+                return (false, result);
             }
 
-            return parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+            return (true, result);
+        }
+
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S1172 // Unused method parameters should be removed
+        private (bool Success, ProcessResult Result, AssemblyLoadContext AssemblyLoadContext) ProcessAssemblyTemplate(string assemblyName, string className, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments, bool currentDirectoryIsFilled, string currentDirectory)
+#pragma warning restore S1172 // Unused method parameters should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
+        {
+            var assemblyLoadContext = CommandBase.CreateAssemblyLoadContext(_assemblyService, assemblyName, currentDirectoryIsFilled, currentDirectory);
+            var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
+            var parameters = GetParameters(template, app, interactive, parameterArguments);
+            if (parameters == null)
+            {
+                return (false, null, assemblyLoadContext);
+            }
+
+            return (true, _processor.Process(template, parameters), assemblyLoadContext);
+        }
+
+        private TemplateParameter[] GetParameters(TextTemplate textTemplate,
+                                                  CommandLineApplication app,
+                                                  bool interactive,
+                                                  IEnumerable<string> parameterArguments)
+        {
+            if (interactive)
+            {
+                var parameters = new List<TemplateParameter>();
+                var parametersResult = _processor.ExtractParameters(textTemplate);
+                return GetParameters(app, parameters, parametersResult);
+            }
+
+            return parameterArguments.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+        }
+
+        private TemplateParameter[] GetParameters(CommandLineApplication app, List<TemplateParameter> parameters, ExtractParametersResult parametersResult)
+        {
+            if (parametersResult.Exception != null)
+            {
+                app.Error.WriteLine("Exception occured while extracting parameters from the template:");
+                app.Error.WriteLine(parametersResult.Exception);
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+                return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
+            }
+            foreach (var parameter in parametersResult.Parameters)
+            {
+                parameter.Value = _userInput.GetValue(parameter);
+                parameters.Add(parameter);
+            }
+
+            return parameters.ToArray();
+        }
+
+        private TemplateParameter[] GetParameters(AssemblyTemplate assemblyTemplate,
+                                                  CommandLineApplication app,
+                                                  bool interactive,
+                                                  IEnumerable<string> parameterArguments)
+        {
+            if (interactive)
+            {
+                var parameters = new List<TemplateParameter>();
+                var parametersResult = _processor.ExtractParameters(assemblyTemplate);
+                return GetParameters(app, parameters, parametersResult);
+            }
+
+            return parameterArguments.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
         }
 
         private void WriteOutput(CommandLineApplication app, ProcessResult result, string templateOutput, string output, string diagnosticDumpOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption)

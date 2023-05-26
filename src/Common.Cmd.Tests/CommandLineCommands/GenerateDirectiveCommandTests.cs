@@ -45,6 +45,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
+        public void Initialize_Throws_On_Null_Argument()
+        {
+            // Arrange
+            var sut = CreateSut();
+
+            // Act & Assert
+            sut.Invoking(x => x.Initialize(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Execute_With_Missing_Directive_Leads_To_Error()
         {
             // Act

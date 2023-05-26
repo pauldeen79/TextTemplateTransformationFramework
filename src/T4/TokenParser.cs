@@ -46,6 +46,12 @@ namespace TextTemplateTransformationFramework.T4
                 throw new ArgumentNullException(nameof(context));
             }
 
+            if (context.AssemblyTemplate != null)
+            {
+                // Short-hand: Skip parsing because there is no text template
+                return Enumerable.Empty<ITemplateToken<TokenParserState>>();
+            }
+
             return Enumerable
                 .Range(0, context.TextTemplate.Template?.Length ?? 0)
                 .Aggregate

@@ -2,8 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.T4.Plus.Core.Extensions;
 using Xunit;
@@ -31,7 +31,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
 Hello <#= ""world"" #><# Write(""!""); #>";
 
             // Act
-            var actual = sut.Process(Src);
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!");
@@ -47,7 +47,7 @@ Hello <#= ""world"" #><# Write(""!""); #>";
 Hello <#= ""world"" #><# Write(""!""); #>";
 
             // Act
-            var actual = sut.Process(Src);
+            var actual = sut.Process(new TextTemplate(Src), Array.Empty<TemplateParameter>());
 
             // Assert
             actual.ToString().Should().Be("Hello world!");

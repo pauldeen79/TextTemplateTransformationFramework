@@ -28,9 +28,18 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new ProcessTextTemplateRequest<TState>
                 (
-                    textTemplate,
                     parameters,
                     CreateContext(textTemplate, parameters)
+                )
+            );
+
+        public ProcessResult Process(AssemblyTemplate assemblyTemplate, TemplateParameter[] parameters)
+            => _processTextTemplateProcessor.Process
+            (
+                new ProcessTextTemplateRequest<TState>
+                (
+                    parameters,
+                    CreateContext(assemblyTemplate, parameters)
                 )
             );
 
@@ -39,7 +48,6 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new PreProcessTextTemplateRequest<TState>
                 (
-                    textTemplate,
                     parameters,
                     CreateContext(textTemplate, parameters)
                 )
@@ -50,8 +58,16 @@ namespace TextTemplateTransformationFramework.Common.Default
             (
                 new ExtractParametersFromTextTemplateRequest<TState>
                 (
-                    textTemplate,
                     CreateContext(textTemplate, Array.Empty<TemplateParameter>())
+                )
+            );
+
+        public ExtractParametersResult ExtractParameters(AssemblyTemplate assemblyTemplate)
+            => _extractParametersFromTextTemplateProcessor.Process
+            (
+                new ExtractParametersFromTextTemplateRequest<TState>
+                (
+                    CreateContext(assemblyTemplate, Array.Empty<TemplateParameter>())
                 )
             );
 
@@ -59,6 +75,15 @@ namespace TextTemplateTransformationFramework.Common.Default
             => new TextTemplateProcessorContext<TState>
             (
                 textTemplate,
+                parameters,
+                _loggerFactory.Create(),
+                null
+            );
+
+        private ITextTemplateProcessorContext<TState> CreateContext(AssemblyTemplate assemblyTemplate, TemplateParameter[] parameters)
+            => new TextTemplateProcessorContext<TState>
+            (
+                assemblyTemplate,
                 parameters,
                 _loggerFactory.Create(),
                 null

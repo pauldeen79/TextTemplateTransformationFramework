@@ -19,6 +19,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
             => instance
                 .AddSingleton<ITemplateCompilerOutputValidator<TState>, TemplateCompilerOutputValidator<TState>>()
                 .AddSingleton<ITemplateInitializer<TState>, TemplateInitializer<TState>>()
+                .AddSingleton<IAssemblyService, AssemblyService>()
                 .AddSingleton<ILoggerFactory, LoggerFactory>()
                 .AddSingleton<ICodeCompiler<TState>, CodeCompiler<TState>>()
                 .AddSingleton<ITextTemplateProcessor, TextTemplateProcessor<TState>>()

@@ -19,7 +19,6 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd
             app.HelpOption();
 
             var serviceCollection = new ServiceCollection()
-                .AddSingleton<IAssemblyService, AssemblyService>()
                 .AddTextTemplateTransformationT4PlusNetCore()
                 .AddTextTemplateTransformationCommands<TokenParserState>();
             using var provider = serviceCollection.BuildServiceProvider();

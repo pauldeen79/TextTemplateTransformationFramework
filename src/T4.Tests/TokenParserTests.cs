@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Loader;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using TextTemplateTransformationFramework.Common;
@@ -62,8 +63,6 @@ namespace TextTemplateTransformationFramework.T4.Tests
 | Name        | Type           |
 | Property1   | System.String  |
 | Property2   | System.Boolean |"" #>";
-
-            // Act
             var sut = _provider.GetRequiredService<ITextTemplateTokenParser<TokenParserState>>();
 
             // Act
@@ -88,8 +87,31 @@ namespace TextTemplateTransformationFramework.T4.Tests
 | Property2   | System.Boolean |");
         }
 
-        public void Dispose()
-            => _provider.Dispose();
+        [Fact]
+        public void Parse_Throws_On_Null_Argument()
+        {
+            // Arrange
+            var sut = _provider.GetRequiredService<ITextTemplateTokenParser<TokenParserState>>();
+
+            // Act & Assert
+            sut.Invoking(x => x.Parse(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Parse_Returns_No_Tokens_When_AssemblyTemplate_Is_Present_In_Context()
+        {
+            // Arrange
+            var sut = _provider.GetRequiredService<ITextTemplateTokenParser<TokenParserState>>();
+            var context = new TextTemplateProcessorContext<TokenParserState>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), Array.Empty<TemplateParameter>(), _provider.GetRequiredService<ILoggerFactory>().Create(), SectionContext<TokenParserState>.Empty);
+
+            // Act
+            var actual = sut.Parse(context);
+
+            // Assert
+            actual.Should().BeEmpty();
+        }
+
+        public void Dispose() => _provider.Dispose();
 
         [DirectivePrefix("datatable")]
         private sealed class DataTableSectionProcessor : ITemplateSectionProcessor<TokenParserState>
@@ -100,5 +122,10 @@ namespace TextTemplateTransformationFramework.T4.Tests
                 return SectionProcessResult.Create(new RenderTextToken<TokenParserState>(context, table.FirstOrDefault()));
             }
         }
+    }
+
+    [ExcludeFromCodeCoverage]
+    public class MyAssemblyTemplate
+    {
     }
 }

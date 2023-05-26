@@ -1,5 +1,12 @@
 ﻿#if Windows
-namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
+using System;
+using System.IO;
+using System.Runtime.Loader;
+using FluentAssertions;
+using TextTemplateTransformationFramework.Common.Default;
+using Xunit;
+
+namespace TextTemplateTransformationFramework.Common.Tests.Default
 {
     public class AssemblyServiceTests
     {
@@ -33,7 +40,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
             var sut = new AssemblyService();
 
             // Act
-            var actual = sut.GetCustomPaths("TextTemplateTransformationFramework.T4.Plus.Cmd.Tests.dll");
+            var actual = sut.GetCustomPaths("TextTemplateTransformationFramework.Common.Tests.dll");
 
             // Assert
             actual.Should().BeEquivalentTo(Directory.GetCurrentDirectory());
@@ -56,7 +63,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
             var sut = new AssemblyService();
 
             // Act & Assert
-            sut.Invoking(x => x.LoadAssembly("TextTemplateTransformationFramework.T4.Plus.Cmd.Tests.dll", null)).Should().Throw<ArgumentNullException>();
+            sut.Invoking(x => x.LoadAssembly("TextTemplateTransformationFramework.Common.Tests.dll", null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -92,7 +99,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Cmd.Tests
             var sut = new AssemblyService();
 
             // Act
-            var assembly = sut.LoadAssembly("TextTemplateTransformationFramework.T4.Plus.Cmd.Tests.dll", AssemblyLoadContext.Default);
+            var assembly = sut.LoadAssembly("TextTemplateTransformationFramework.Common.Tests.dll", AssemblyLoadContext.Default);
 
             // Assert
             assembly.Should().BeSameAs(GetType().Assembly);

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
@@ -28,6 +29,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 
             // Assert
             app.Commands.Should().HaveCount(0); // aparently, this does not add a command that is publicly visible...
+        }
+
+        [Fact]
+        public void Initialize_Throws_On_Null_Argument()
+        {
+            // Arrange
+            var sut = new VersionCommand();
+
+            // Act & Assert
+            sut.Invoking(x => x.Initialize(null)).Should().Throw<ArgumentNullException>();
         }
     }
 }
