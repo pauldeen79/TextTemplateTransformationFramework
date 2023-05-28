@@ -1,8 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
+using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -75,6 +78,25 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             // This method is left empty intentionally.
             // When not built for Debug build configuration, debuggerOption is null and there is no way we can launch the debugger.
 #endif
+        }
+
+        internal static (bool IsSuccessful, string ErrorMessage, ITemplateSectionProcessor<TState> Directive) GetDirectiveAndModel<TState>(
+            CommandOption<string> directiveNameOption,
+            IScriptBuilder<TState> scriptBuilder) where TState : class
+        {
+            var directiveName = directiveNameOption.Value();
+            if (string.IsNullOrEmpty(directiveName))
+            {
+                return (false, "Directive name is required.", null);
+            }
+
+            var directive = scriptBuilder.GetKnownDirectives().FirstOrDefault(d => d.GetDirectiveName() == directiveName);
+            if (directive == null)
+            {
+                return (false, $"Could not find directive with name [{directiveName}]", null);
+            }
+
+            return (true, null, directive);
         }
     }
 }

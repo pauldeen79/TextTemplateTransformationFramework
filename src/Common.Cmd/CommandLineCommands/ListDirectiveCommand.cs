@@ -30,21 +30,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
                     CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var directiveName = directiveNameOption.Value();
-                    if (string.IsNullOrEmpty(directiveName))
+                    var result = CommandBase.GetDirectiveAndModel(directiveNameOption, _scriptBuilder);
+                    if (!result.IsSuccessful)
                     {
-                        app.Error.WriteLine("Error: Directive name is required.");
+                        app.Error.WriteLine($"Error: {result.ErrorMessage}");
                         return;
                     }
 
-                    var directive = _scriptBuilder.GetKnownDirectives().FirstOrDefault(d => d.GetDirectiveName() == directiveName);
-                    if (directive == null)
-                    {
-                        app.Error.WriteLine($"Error: Could not find directive with name [{directiveName}]");
-                        return;
-                    }
-
-                    var directiveModel = directive.GetModel();
+                    var directiveModel = result.Directive.GetModel();
                     var results = directiveModel
                         .GetType()
                         .GetProperties()

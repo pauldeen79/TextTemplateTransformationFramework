@@ -29,21 +29,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
                     CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var directiveName = directiveNameOption.Value();
-                    if (string.IsNullOrEmpty(directiveName))
+                    var result = CommandBase.GetDirectiveAndModel(directiveNameOption, _scriptBuilder);
+                    if (!result.IsSuccessful)
                     {
-                        app.Error.WriteLine("Error: Directive name is required.");
+                        app.Error.WriteLine($"Error: {result.ErrorMessage}");
                         return;
                     }
 
-                    var directive = _scriptBuilder.GetKnownDirectives().FirstOrDefault(d => d.GetDirectiveName() == directiveName);
-                    if (directive == null)
-                    {
-                        app.Error.WriteLine($"Error: Could not find directive with name [{directiveName}]");
-                        return;
-                    }
-
-                    var directiveModel = directive.GetModel();
+                    var directiveModel = result.Directive.GetModel();
                     var directiveModelType = directiveModel.GetType();
                     var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
                     foreach (var parameter in parameters)
@@ -52,7 +45,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         property?.SetValue(directiveModel, parameter.ConvertType(directiveModelType));
                     }
 
-                    app.Out.WriteLine(_scriptBuilder.Build(directive, directiveModel));
+                    app.Out.WriteLine(_scriptBuilder.Build(result.Directive, directiveModel));
                 });
             });
         }
