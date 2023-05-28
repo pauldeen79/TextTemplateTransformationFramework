@@ -31,6 +31,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.Description = "Runs all code generation providers from the specified assembly";
 
                 var assemblyOption = command.Option<string>("-a|--assembly <PATH>", "The assembly name", CommandOptionType.SingleValue);
+                var watchOption = command.Option<string>("-w|--watch", "Watches for file changes", CommandOptionType.NoValue);
                 var generateMultipleFilesOption = command.Option<bool>("-m|--multiple", "Indicator whether multiple files should be generated", CommandOptionType.SingleValue);
                 var dryRunOption = command.Option<bool>("-r|--dryrun", "Indicator whether a dry run should be performed", CommandOptionType.SingleValue);
                 var basePathOption = command.Option<string>("-p|--path", "Base path for code generation", CommandOptionType.SingleValue);
@@ -54,21 +55,24 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
+                    CommandBase.Watch(app, watchOption, assemblyName, () =>
+                    {
 #if NETFRAMEWORK
-                    var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
+                        var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
 #else
-                    var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
-                        ? new[] { currentDirectoryOption.Value() }
-                        : _assemblyService.GetCustomPaths(assemblyName));
-                    var assembly = _assemblyService.LoadAssembly(assemblyName, context);
+                        var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
+                            ? new[] { currentDirectoryOption.Value() }
+                            : _assemblyService.GetCustomPaths(assemblyName));
+                        var assembly = _assemblyService.LoadAssembly(assemblyName, context);
 #endif
-                    var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
-                    var templateOutput = GetOutputFromAssembly(assembly, settings, filterClassNameOption.Values);
+                        var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
+                        var templateOutput = GetOutputFromAssembly(assembly, settings, filterClassNameOption.Values);
 
-                    WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
+                        WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
 #if !NETFRAMEWORK
-                    context.Unload();
+                        context.Unload();
 #endif
+                    });
                 });
             });
         }

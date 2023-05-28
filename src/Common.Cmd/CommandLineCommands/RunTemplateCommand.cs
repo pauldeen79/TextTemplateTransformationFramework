@@ -53,6 +53,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                var watchOption = command.Option<string>("-w|--watch", "Watches for file changes", CommandOptionType.NoValue);
                 var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
                 var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
@@ -70,27 +71,30 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
-                    var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, filename, assemblyName, className);
-                    if (!result.Success)
+                    CommandBase.Watch(app, watchOption, !string.IsNullOrEmpty(filename) ? filename : assemblyName, () =>
                     {
-                        return;
-                    }
+                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, filename, assemblyName, className);
+                        if (!result.Success)
+                        {
+                            return;
+                        }
 
-                    if (!string.IsNullOrEmpty(result.ProcessResult.Exception))
-                    {
-                        app.Error.WriteLine("Exception occured while processing the template:");
-                        app.Error.WriteLine(result.ProcessResult.Exception);
-                        return;
-                    }
+                        if (!string.IsNullOrEmpty(result.ProcessResult.Exception))
+                        {
+                            app.Error.WriteLine("Exception occured while processing the template:");
+                            app.Error.WriteLine(result.ProcessResult.Exception);
+                            return;
+                        }
 
-                    var templateOutput = result.ProcessResult.Output;
-                    var output = outputOption.Value();
-                    var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
+                        var templateOutput = result.ProcessResult.Output;
+                        var output = outputOption.Value();
+                        var diagnosticDumpOutput = diagnosticDumpOutputOption.Value();
 
-                    WriteOutput(app, result.ProcessResult, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
+                        WriteOutput(app, result.ProcessResult, templateOutput, output, diagnosticDumpOutput, bareOption, clipboardOption);
 #if !NETFRAMEWORK
-                    result.AssemblyLoadContext?.Unload();
+                        result.AssemblyLoadContext?.Unload();
 #endif
+                    });
                 });
             });
         }
