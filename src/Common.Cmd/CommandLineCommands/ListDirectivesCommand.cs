@@ -2,7 +2,6 @@
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
 using Utilities.Extensions;
@@ -23,17 +22,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             app.Command("list-directives", command =>
             {
                 command.Description = "Lists available directives";
-
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
-
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
                     _scriptBuilder.GetKnownDirectives().Select(p => p.GetDirectiveName())
                                                        .OrderBy(s => s)
                                                        .ForEach(app.Out.WriteLine);

@@ -2,7 +2,6 @@
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
 
@@ -25,17 +24,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                 var directiveNameOption = command.Option<string>("-n|--name <NAME>", "The directive name to generate", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
-
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
-
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
                     var directiveName = directiveNameOption.Value();
                     if (string.IsNullOrEmpty(directiveName))
                     {
@@ -52,7 +45,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     var directiveModel = directive.GetModel();
                     var directiveModelType = directiveModel.GetType();
-                    var parameters = parametersArgument.Values.Where(p => p.Contains(":")).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+                    var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
                     foreach (var parameter in parameters)
                     {
                         var property = directiveModelType.GetProperty(parameter.Name);

@@ -1,5 +1,7 @@
-﻿using System.Runtime.Loader;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
+using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 
@@ -7,10 +9,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
     internal static class CommandBase
     {
-        internal static CommandOption<string> GetCurrentDirectoryOption(CommandLineApplication command)
+        internal static CommandOption<string> GetCurrentDirectoryOption(CommandLineApplication app)
         {
 #if !NETFRAMEWORK
-            return command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
+            return app.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
+#else
+            return null;
+#endif
+        }
+
+        [ExcludeFromCodeCoverage]
+        internal static CommandOption<string> GetDebuggerOption(CommandLineApplication app)
+        {
+#if DEBUG
+            return app.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
 #else
             return null;
 #endif
@@ -52,6 +64,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
 
             return null;
+        }
+
+        [ExcludeFromCodeCoverage]
+        internal static void LaunchDebuggerIfSet(CommandOption<string> debuggerOption)
+        {
+#if DEBUG
+            debuggerOption.LaunchDebuggerIfSet();
+#else
+            // This method is left empty intentionally.
+            // When not built for Debug build configuration, debuggerOption is null and there is no way we can launch the debugger.
+#endif
         }
     }
 }

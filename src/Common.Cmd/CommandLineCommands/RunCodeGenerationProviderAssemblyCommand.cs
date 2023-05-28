@@ -6,11 +6,9 @@ using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
-using Utilities;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -38,19 +36,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var basePathOption = command.Option<string>("-p|--path", "Base path for code generation", CommandOptionType.SingleValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
-#if !NETFRAMEWORK
-                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
-#endif
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
-
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S1481 // Unused local variables should be removed
+                var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
+#pragma warning restore S1481 // Unused local variables should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
                     var assemblyName = assemblyOption.Value();
                     if (string.IsNullOrEmpty(assemblyName))
                     {

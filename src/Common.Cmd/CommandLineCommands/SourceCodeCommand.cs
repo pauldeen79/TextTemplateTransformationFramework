@@ -3,9 +3,7 @@ using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
-using Utilities;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -37,17 +35,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
-
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
-
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
                     var filename = filenameOption.Value();
                     var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
 
