@@ -5,7 +5,6 @@ using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using Utilities.Extensions;
 
@@ -55,15 +54,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
                 var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
                     var filename = filenameOption.Value();
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();

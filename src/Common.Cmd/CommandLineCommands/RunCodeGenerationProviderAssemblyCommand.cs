@@ -6,11 +6,9 @@ using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
-using Utilities;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 {
@@ -38,19 +36,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var basePathOption = command.Option<string>("-p|--path", "Base path for code generation", CommandOptionType.SingleValue);
                 var bareOption = command.Option<string>("-b|--bare", "Bare output (only template output)", CommandOptionType.NoValue);
                 var clipboardOption = command.Option<string>("-c|--clipboard", "Copy output to clipboard", CommandOptionType.NoValue);
-#if !NETFRAMEWORK
-                var currentDirectoryOption = command.Option<string>("-u|--use", "Use different current directory", CommandOptionType.SingleValue);
-#endif
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
-
+                var filterClassNameOption = command.Option<string>("-f|--filter <CLASSNAME>", "Filter code generation provider by class name", CommandOptionType.MultipleValue);
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S1481 // Unused local variables should be removed
+                var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
+#pragma warning restore S1481 // Unused local variables should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
                     var assemblyName = assemblyOption.Value();
                     if (string.IsNullOrEmpty(assemblyName))
                     {
@@ -67,7 +63,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var assembly = _assemblyService.LoadAssembly(assemblyName, context);
 #endif
                     var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
-                    var templateOutput = GetOutputFromAssembly(assembly, settings);
+                    var templateOutput = GetOutputFromAssembly(assembly, settings, filterClassNameOption.Values);
 
                     WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
 #if !NETFRAMEWORK
@@ -88,16 +84,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return new CodeGenerationSettings(basePath, generateMultipleFiles, dryRun);
         }
 
-        private static string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings)
+        private static string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings, IReadOnlyList<string> filterClassNames)
         {
             var multipleContentBuilder = new MultipleContentBuilder { BasePath = settings.BasePath };
-            foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly))
+            foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly).Where(x => FilterIsValid(x, filterClassNames)))
             {
                 GenerateCode.For(settings, multipleContentBuilder, codeGenerationProvider);
             }
 
             return multipleContentBuilder.ToString();
         }
+
+        private static bool FilterIsValid(ICodeGenerationProvider provider, IReadOnlyList<string> filterClassNames)
+            => !filterClassNames.Any() || filterClassNames.Any(x => x == provider.GetType().FullName);
 
         private static IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
             => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && t.GetInterfaces().Any(i => i.FullName == "TextTemplateTransformationFramework.Runtime.CodeGeneration.ICodeGenerationProvider"))

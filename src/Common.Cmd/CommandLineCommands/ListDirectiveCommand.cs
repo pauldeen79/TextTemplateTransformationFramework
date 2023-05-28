@@ -2,7 +2,6 @@
 using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
-using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
 using Utilities.Extensions;
@@ -25,32 +24,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.Description = "Lists available directive arguments";
 
                 var directiveNameOption = command.Option<string>("-n|--name <NAME>", "The directive name to list arguments for", CommandOptionType.SingleValue);
-
-#if DEBUG
-                var debuggerOption = command.Option<string>("-d|--launchdebugger", "Launches debugger", CommandOptionType.NoValue);
-#endif
+                var debuggerOption = CommandBase.GetDebuggerOption(command);
 
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
-#if DEBUG
-                    debuggerOption.LaunchDebuggerIfSet();
-#endif
-                    var directiveName = directiveNameOption.Value();
-                    if (string.IsNullOrEmpty(directiveName))
+                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
+                    var result = CommandBase.GetDirectiveAndModel(directiveNameOption, _scriptBuilder);
+                    if (!result.IsSuccessful)
                     {
-                        app.Error.WriteLine("Error: Directive name is required.");
+                        app.Error.WriteLine($"Error: {result.ErrorMessage}");
                         return;
                     }
 
-                    var directive = _scriptBuilder.GetKnownDirectives().FirstOrDefault(d => d.GetDirectiveName() == directiveName);
-                    if (directive == null)
-                    {
-                        app.Error.WriteLine($"Error: Could not find directive with name [{directiveName}]");
-                        return;
-                    }
-
-                    var directiveModel = directive.GetModel();
+                    var directiveModel = result.Directive.GetModel();
                     var results = directiveModel
                         .GetType()
                         .GetProperties()
