@@ -147,5 +147,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 {new MultipleContentBuilder()}
 ");
         }
+
+        [Fact]
+        public void Execute_With_Filter_Filters_CodeGenerationProviders_Correctly()
+        {
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, $"-a {GetType().Assembly.FullName}", "--filter SomeName");
+
+            // Assert
+            actual.Should().Be(@$"Code generation output:
+{new MultipleContentBuilder()}
+");
+        }
     }
 }
