@@ -90,6 +90,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
 ");
         }
 
+#if WINDOWS
         [Fact]
         public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_Partial_AssemblyFileName()
         {
@@ -100,6 +101,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             actual.Should().Be($@"Written code generation output to path: {Directory.GetCurrentDirectory()}
 ");
         }
+#endif
 
         [Fact]
         public void Execute_With_Path_Option_Saves_Output_From_TemplateFileManager_Partial_AssemblyFileName_And_HintPath()
