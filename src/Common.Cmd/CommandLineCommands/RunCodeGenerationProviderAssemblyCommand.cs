@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts;
-using TextTemplateTransformationFramework.Runtime;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 
 namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
@@ -55,56 +51,29 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         return;
                     }
 
+                    var basePath = basePathOption.HasValue()
+                        ? basePathOption.Value()
+                        : null;
+                    var dryRun = dryRunOption.HasValue() && dryRunOption.ParsedValue;
                     CommandBase.Watch(app, watchOption, assemblyName, () =>
                     {
-#if NETFRAMEWORK
-                        var assembly = _assemblyService.LoadAssembly(assemblyName, System.Runtime.Loader.AssemblyLoadContext.Default);
-#else
-                        var context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryOption.HasValue()
-                            ? new[] { currentDirectoryOption.Value() }
-                            : _assemblyService.GetCustomPaths(assemblyName));
-                        var assembly = _assemblyService.LoadAssembly(assemblyName, context);
-#endif
-                        var settings = CreateCodeGenerationSettings(generateMultipleFilesOption, dryRunOption, basePathOption);
-                        var templateOutput = GetOutputFromAssembly(assembly, settings, filterClassNameOption.Values);
-
-                        WriteOutput(app, templateOutput, bareOption, clipboardOption, settings.BasePath, settings.DryRun);
-#if !NETFRAMEWORK
-                        context.Unload();
-#endif
+                        using var codeGenerationAssembly = new CodeGenerationAssembly
+                        (
+                            assemblyName,
+                            basePath,
+                            generateMultipleFilesOption.HasValue() && generateMultipleFilesOption.ParsedValue,
+                            dryRun,
+                            currentDirectoryOption.HasValue()
+                                ? currentDirectoryOption.Value()
+                                : _assemblyService.GetCustomPaths(assemblyName).FirstOrDefault(),
+                            filterClassNameOption.Values
+                        );
+                        var templateOutput = codeGenerationAssembly.Generate();
+                        WriteOutput(app, templateOutput, bareOption, clipboardOption, basePath, dryRun);
                     });
                 });
             });
         }
-
-        private static CodeGenerationSettings CreateCodeGenerationSettings(CommandOption<bool> generateMultipleFilesOption, CommandOption<bool> dryRunOption, CommandOption<string> basePathOption)
-        {
-            var generateMultipleFiles = generateMultipleFilesOption.HasValue() && generateMultipleFilesOption.ParsedValue;
-            var dryRun = dryRunOption.HasValue() && dryRunOption.ParsedValue;
-            var basePath = basePathOption.HasValue()
-                ? basePathOption.Value()
-                : null;
-
-            return new CodeGenerationSettings(basePath, generateMultipleFiles, dryRun);
-        }
-
-        private static string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings, IReadOnlyList<string> filterClassNames)
-        {
-            var multipleContentBuilder = new MultipleContentBuilder { BasePath = settings.BasePath };
-            foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly).Where(x => FilterIsValid(x, filterClassNames)))
-            {
-                GenerateCode.For(settings, multipleContentBuilder, codeGenerationProvider);
-            }
-
-            return multipleContentBuilder.ToString();
-        }
-
-        private static bool FilterIsValid(ICodeGenerationProvider provider, IReadOnlyList<string> filterClassNames)
-            => !filterClassNames.Any() || filterClassNames.Any(x => x == provider.GetType().FullName);
-
-        private static IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
-            => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && t.GetInterfaces().Any(i => i.FullName == "TextTemplateTransformationFramework.Runtime.CodeGeneration.ICodeGenerationProvider"))
-                .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)));
 
         private void WriteOutput(CommandLineApplication app, string templateOutput, CommandOption<string> bareOption, CommandOption<string> clipboardOption, string basePath, bool dryRun)
         {
@@ -141,41 +110,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 app.Out.WriteLine("Code generation output:");
             }
             app.Out.WriteLine(templateOutput);
-        }
-
-        [ExcludeFromCodeCoverage]
-        private sealed class CodeGenerationProviderWrapper : ICodeGenerationProvider
-        {
-            private readonly object _instance;
-
-            public CodeGenerationProviderWrapper(object instance)
-            {
-                _instance = instance;
-            }
-
-            public bool GenerateMultipleFiles => (bool)_instance.GetType().GetProperty(nameof(GenerateMultipleFiles)).GetValue(_instance);
-
-            public bool SkipWhenFileExists => (bool)_instance.GetType().GetProperty(nameof(SkipWhenFileExists)).GetValue(_instance);
-
-            public string BasePath => (string)_instance.GetType().GetProperty(nameof(BasePath)).GetValue(_instance);
-
-            public string Path => (string)_instance.GetType().GetProperty(nameof(Path)).GetValue(_instance);
-
-            public string DefaultFileName => (string)_instance.GetType().GetProperty(nameof(DefaultFileName)).GetValue(_instance);
-
-            public bool RecurseOnDeleteGeneratedFiles => (bool)_instance.GetType().GetProperty(nameof(RecurseOnDeleteGeneratedFiles)).GetValue(_instance);
-
-            public string LastGeneratedFilesFileName => (string)_instance.GetType().GetProperty(nameof(LastGeneratedFilesFileName)).GetValue(_instance);
-
-            public Action AdditionalActionDelegate => (Action)_instance.GetType().GetProperty(nameof(AdditionalActionDelegate)).GetValue(_instance);
-
-            public object CreateAdditionalParameters() => _instance.GetType().GetMethod(nameof(CreateAdditionalParameters)).Invoke(_instance, Array.Empty<object>());
-
-            public object CreateGenerator() => _instance.GetType().GetMethod(nameof(CreateGenerator)).Invoke(_instance, Array.Empty<object>());
-
-            public object CreateModel() => _instance.GetType().GetMethod(nameof(CreateModel)).Invoke(_instance, Array.Empty<object>());
-
-            public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath) => _instance.GetType().GetMethod(nameof(Initialize)).Invoke(_instance, new object[] { generateMultipleFiles, skipWhenFileExists, basePath });
         }
     }
 }

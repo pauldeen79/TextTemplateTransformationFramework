@@ -1,56 +1,86 @@
-﻿#if !NETFRAMEWORK
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 
 namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 {
-    public sealed class CodeGenerationAssembly : IDisposable
+    public sealed class CodeGenerationAssembly : ICodeGenerationAssembly, IDisposable
     {
         private readonly string _assemblyName;
         private readonly string _basePath;
         private readonly bool _generateMultipleFiles;
         private readonly bool _dryRun;
-        private readonly CustomAssemblyLoadContext _context;
+        private readonly IEnumerable<string> _classNameFilter;
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S3459 // Unassigned members should be removed
+#pragma warning disable CS0649
+        private readonly AssemblyLoadContext _context;
+        private readonly string _currentDirectory;
+#pragma warning restore CS0649
+#pragma warning restore S3459 // Unassigned members should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
-        public void Dispose() => _context.Unload();
-
-        public CodeGenerationAssembly(string assemblyName, string basePath, bool generateMultipleFiles, bool dryRun, string currentDirectory = null)
+        public CodeGenerationAssembly(string assemblyName,
+                                      string basePath,
+                                      bool generateMultipleFiles,
+                                      bool dryRun,
+                                      string currentDirectory = null,
+                                      IEnumerable<string> classNameFilter = null)
         {
+            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
             _assemblyName = assemblyName;
             _basePath = basePath;
             _generateMultipleFiles = generateMultipleFiles;
             _dryRun = dryRun;
+            _classNameFilter = classNameFilter ?? Enumerable.Empty<string>();
+#if !NETFRAMEWORK
             if (string.IsNullOrEmpty(currentDirectory))
             {
-                currentDirectory = Directory.GetCurrentDirectory();
+                _currentDirectory = Directory.GetCurrentDirectory();
             }
-            _context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => new[] { currentDirectory });
+            else
+            {
+                _currentDirectory = currentDirectory;
+            }
+            _context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => new[] { _currentDirectory });
+#endif
         }
 
         public string Generate()
         {
-            var assembly = LoadAssembly(_assemblyName);
+            var assembly = LoadAssembly(_context ?? AssemblyLoadContext.Default);
             var settings = new CodeGenerationSettings(_basePath, _generateMultipleFiles, _dryRun);
             return GetOutputFromAssembly(assembly, settings);
         }
 
-        private Assembly LoadAssembly(string assemblyName)
+        public void Dispose()
+        {
+#if !NETFRAMEWORK
+            _context?.Unload();
+#endif
+        }
+
+        private Assembly LoadAssembly(AssemblyLoadContext context)
         {
             try
             {
-                return _context.LoadFromAssemblyName(new AssemblyName(assemblyName));
+                return context.LoadFromAssemblyName(new AssemblyName(_assemblyName));
             }
-            catch (FileLoadException fle) when (fle.Message.StartsWith("The given assembly name was invalid."))
+            catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
             {
-                return _context.LoadFromAssemblyPath(assemblyName);
+                var assemblyName = _assemblyName;
+                if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
+                {
+                    assemblyName = Path.Combine(!string.IsNullOrEmpty(_currentDirectory) ? _currentDirectory : Directory.GetCurrentDirectory(), assemblyName);
+                }
+                return context.LoadFromAssemblyPath(assemblyName);
             }
         }
 
-        private static string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings)
+        private string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings)
         {
             var multipleContentBuilder = new MultipleContentBuilder { BasePath = settings.BasePath };
             foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly))
@@ -61,44 +91,12 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
             return multipleContentBuilder.ToString();
         }
 
-        private static IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
+        private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
             => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && t.GetInterfaces().Any(i => i.FullName == "TextTemplateTransformationFramework.Runtime.CodeGeneration.ICodeGenerationProvider"))
+                .Where(FilterIsValid)
                 .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)));
 
-        [ExcludeFromCodeCoverage]
-        private sealed class CodeGenerationProviderWrapper : ICodeGenerationProvider
-        {
-            private readonly object _instance;
-
-            public CodeGenerationProviderWrapper(object instance)
-            {
-                _instance = instance;
-            }
-
-            public bool GenerateMultipleFiles => (bool)_instance.GetType().GetProperty(nameof(GenerateMultipleFiles)).GetValue(_instance);
-
-            public bool SkipWhenFileExists => (bool)_instance.GetType().GetProperty(nameof(SkipWhenFileExists)).GetValue(_instance);
-
-            public string BasePath => (string)_instance.GetType().GetProperty(nameof(BasePath)).GetValue(_instance);
-
-            public string Path => (string)_instance.GetType().GetProperty(nameof(Path)).GetValue(_instance);
-
-            public string DefaultFileName => (string)_instance.GetType().GetProperty(nameof(DefaultFileName)).GetValue(_instance);
-
-            public bool RecurseOnDeleteGeneratedFiles => (bool)_instance.GetType().GetProperty(nameof(RecurseOnDeleteGeneratedFiles)).GetValue(_instance);
-
-            public string LastGeneratedFilesFileName => (string)_instance.GetType().GetProperty(nameof(LastGeneratedFilesFileName)).GetValue(_instance);
-
-            public Action AdditionalActionDelegate => (Action)_instance.GetType().GetProperty(nameof(AdditionalActionDelegate)).GetValue(_instance);
-
-            public object CreateAdditionalParameters() => _instance.GetType().GetMethod(nameof(CreateAdditionalParameters)).Invoke(_instance, Array.Empty<object>());
-
-            public object CreateGenerator() => _instance.GetType().GetMethod(nameof(CreateGenerator)).Invoke(_instance, Array.Empty<object>());
-
-            public object CreateModel() => _instance.GetType().GetMethod(nameof(CreateModel)).Invoke(_instance, Array.Empty<object>());
-
-            public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath) => _instance.GetType().GetMethod(nameof(Initialize)).Invoke(_instance, new object[] { generateMultipleFiles, skipWhenFileExists, basePath });
-        }
+        private bool FilterIsValid(Type type)
+            => !_classNameFilter.Any() || _classNameFilter.Any(x => x == type.FullName);
     }
 }
-#endif
