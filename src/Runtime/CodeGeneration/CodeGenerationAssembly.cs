@@ -14,8 +14,12 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
         private readonly bool _generateMultipleFiles;
         private readonly bool _dryRun;
         private readonly IEnumerable<string> _classNameFilter;
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable S3459 // Unassigned members should be removed
         private readonly AssemblyLoadContext _context;
         private readonly string _currentDirectory;
+#pragma warning restore S3459 // Unassigned members should be removed
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 
         public CodeGenerationAssembly(string assemblyName,
                                       string basePath,
