@@ -28,10 +28,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             _clipboardMock = new Mock<IClipboard>();
             _assemblyServiceMock = new Mock<IAssemblyService>();
-#pragma warning disable S3885 // "Assembly.Load" should be used
             _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
                                 .Returns<string, AssemblyLoadContext>((name, ctx) => name.EndsWith(".dll") ? ctx.LoadFromAssemblyPath(FullyQualify(name)) : ctx.LoadFromAssemblyName(new AssemblyName(name)));
-#pragma warning restore S3885 // "Assembly.Load" should be used
         }
 
         private static string FullyQualify(string name)
