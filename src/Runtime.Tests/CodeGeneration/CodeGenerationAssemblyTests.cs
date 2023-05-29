@@ -17,14 +17,6 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
         }
 
         [Fact]
-        public void Generate_Throws_On_Null_BasePath()
-        {
-            // Act & Assert
-            this.Invoking(_ => new CodeGenerationAssembly(GetType().Assembly.FullName, null, true, true))
-                .Should().Throw<ArgumentNullException>();
-        }
-
-        [Fact]
         public void Generate_Runs_All_CodeGenerators_In_Specified_Assembly()
         {
             // Arrange

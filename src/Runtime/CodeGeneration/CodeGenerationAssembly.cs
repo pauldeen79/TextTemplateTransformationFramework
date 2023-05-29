@@ -15,6 +15,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
         private readonly bool _dryRun;
         private readonly IEnumerable<string> _classNameFilter;
         private readonly AssemblyLoadContext _context;
+        private readonly string _currentDirectory;
 
         public CodeGenerationAssembly(string assemblyName,
                                       string basePath,
@@ -24,7 +25,6 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
                                       IEnumerable<string> classNameFilter = null)
         {
             if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
-            if (basePath == null) throw new ArgumentNullException(nameof(basePath));
             _assemblyName = assemblyName;
             _basePath = basePath;
             _generateMultipleFiles = generateMultipleFiles;
@@ -33,15 +33,18 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 #if !NETFRAMEWORK
             if (string.IsNullOrEmpty(currentDirectory))
             {
-                currentDirectory = Directory.GetCurrentDirectory();
+                _currentDirectory = Directory.GetCurrentDirectory();
             }
-            _context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => new[] { currentDirectory });
+            else
+            {
+                _currentDirectory = currentDirectory;
+            }
+            _context = new CustomAssemblyLoadContext("T4PlusCmd", true, () => new[] { _currentDirectory });
 #endif
         }
 
         public string Generate()
         {
-
             var assembly = LoadAssembly(_context ?? AssemblyLoadContext.Default);
             var settings = new CodeGenerationSettings(_basePath, _generateMultipleFiles, _dryRun);
             return GetOutputFromAssembly(assembly, settings);
@@ -60,9 +63,14 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
             {
                 return context.LoadFromAssemblyName(new AssemblyName(_assemblyName));
             }
-            catch (FileLoadException fle) when (fle.Message.StartsWith("The given assembly name was invalid."))
+            catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
             {
-                return context.LoadFromAssemblyPath(_assemblyName);
+                var assemblyName = _assemblyName;
+                if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
+                {
+                    assemblyName = Path.Combine(!string.IsNullOrEmpty(_currentDirectory) ? _currentDirectory : Directory.GetCurrentDirectory(), assemblyName);
+                }
+                return context.LoadFromAssemblyPath(assemblyName);
             }
         }
 
@@ -79,7 +87,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 
         private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
             => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && t.GetInterfaces().Any(i => i.FullName == "TextTemplateTransformationFramework.Runtime.CodeGeneration.ICodeGenerationProvider"))
-                .Where(t => FilterIsValid(t))
+                .Where(FilterIsValid)
                 .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)));
 
         private bool FilterIsValid(Type type)
