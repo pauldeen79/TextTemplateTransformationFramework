@@ -16,8 +16,10 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
         private readonly IEnumerable<string> _classNameFilter;
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable S3459 // Unassigned members should be removed
+#pragma warning disable CS0649
         private readonly AssemblyLoadContext _context;
         private readonly string _currentDirectory;
+#pragma warning restore CS0649
 #pragma warning restore S3459 // Unassigned members should be removed
 #pragma warning restore IDE0079 // Remove unnecessary suppression
 
