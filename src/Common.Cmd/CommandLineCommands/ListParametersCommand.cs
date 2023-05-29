@@ -36,7 +36,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             {
                 command.Description = "Lists template parameters";
 
-                var filenameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
+                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
                 var currentDirectoryOption = CommandBase.GetCurrentDirectoryOption(command);
@@ -45,7 +45,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
                     CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filenameOption.Value(), assemblyNameOption.Value(), classNameOption.Value());
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, fileNameOption.Value(), assemblyNameOption.Value(), classNameOption.Value());
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         app.Error.WriteLine($"Error: {validationResult}");
@@ -61,7 +61,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                             ? currentDirectoryOption!.Value()
                             : null
                     );
-                    var result = ExtractParameters(filenameOption.Value(), assemblyNameOption.Value(), classNameOption.Value(), assemblyLoadContext);
+                    var result = ExtractParameters(fileNameOption.Value(), assemblyNameOption.Value(), classNameOption.Value(), assemblyLoadContext);
 
                     if (result.CompilerErrors.Any(e => !e.IsWarning))
                     {
@@ -84,12 +84,12 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             });
         }
 
-        private ExtractParametersResult ExtractParameters(string filename,
+        private ExtractParametersResult ExtractParameters(string fileName,
                                                           string assemblyName,
                                                           string className,
                                                           AssemblyLoadContext assemblyLoadContext)
-            => !string.IsNullOrEmpty(filename)
-                ? _processor.ExtractParameters(new TextTemplate(_fileContentsProvider.GetFileContents(filename), filename))
+            => !string.IsNullOrEmpty(fileName)
+                ? _processor.ExtractParameters(new TextTemplate(_fileContentsProvider.GetFileContents(fileName), fileName))
                 : _processor.ExtractParameters(new AssemblyTemplate(assemblyName, className, assemblyLoadContext));
     }
 }

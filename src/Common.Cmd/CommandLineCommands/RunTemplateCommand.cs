@@ -44,7 +44,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             {
                 command.Description = "Runs the template, and shows the template output";
 
-                var filenameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
+                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
                 var outputOption = command.Option<string>("-o|--output <PATH>", "The output filename", CommandOptionType.SingleValue);
                 var diagnosticDumpOutputOption = command.Option<string>("-diag|--diagnosticoutput <PATH>", "The diagnostic output filename", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
@@ -60,20 +60,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
                     CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var filename = filenameOption.Value();
+                    var fileName = fileNameOption.Value();
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
 
-                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filename, assemblyName, className);
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, fileName, assemblyName, className);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         app.Out.WriteLine($"Error: {validationResult}");
                         return;
                     }
 
-                    CommandBase.Watch(app, watchOption, !string.IsNullOrEmpty(filename) ? filename : assemblyName, () =>
+                    CommandBase.Watch(app, watchOption, !string.IsNullOrEmpty(fileName) ? fileName : assemblyName, () =>
                     {
-                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, filename, assemblyName, className);
+                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, fileName, assemblyName, className);
                         if (!result.Success)
                         {
                             return;

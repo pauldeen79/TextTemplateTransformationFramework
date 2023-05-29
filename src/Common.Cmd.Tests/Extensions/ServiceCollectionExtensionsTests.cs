@@ -4,7 +4,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using ScriptCompiler;
-using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Cmd.Extensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;

@@ -46,14 +46,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return assemblyLoadContext;
         }
 
-        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string filename, string assemblyName, string className)
+        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className)
         {
-            if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
+            if (string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(assemblyName))
             {
                 return "Either Filename or AssemblyName is required.";
             }
 
-            if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
+            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(assemblyName))
             {
                 return "You can either use Filename or AssemblyName, not both.";
             }
@@ -63,9 +63,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 return "When AssemblyName is filled, then ClassName is required.";
             }
 
-            if (!string.IsNullOrEmpty(filename) && !fileContentsProvider.FileExists(filename))
+            if (!string.IsNullOrEmpty(fileName) && !fileContentsProvider.FileExists(fileName))
             {
-                return $"File [{filename}] does not exist.";
+                return $"File [{fileName}] does not exist.";
             }
 
             return null;

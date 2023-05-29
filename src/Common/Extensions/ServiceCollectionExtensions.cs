@@ -84,7 +84,8 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 .AddSingleton<IProcessFinalizer<ITextTemplateProcessorContext<TState>>, EmptyProcessFinalizer<ITextTemplateProcessorContext<TState>>>()
                 .AddSingleton<ITemplateProxy, TemplateProxy>()
                 .AddSingleton<ITokenMapperTypeProvider, TokenMapperTypeProvider>()
-                .AddSingleton<IGroupedTokenMapperTypeProvider, GroupedTokenMapperTypeProvider>();
+                .AddSingleton<IGroupedTokenMapperTypeProvider, GroupedTokenMapperTypeProvider>()
+                .AddSingleton<ITemplateInfoRepository, TemplateInfoRepository>();
 
         public static IServiceCollection AddTemplateSectionProcessors<TState>(this IServiceCollection instance, Assembly assembly, params Type[] templateSectionProcessorTypesToSkip)
             where TState : class
