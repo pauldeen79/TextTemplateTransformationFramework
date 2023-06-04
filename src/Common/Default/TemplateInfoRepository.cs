@@ -10,7 +10,11 @@ namespace TextTemplateTransformationFramework.Common.Default
 {
     public class TemplateInfoRepository : ITemplateInfoRepository
     {
-        private static readonly JsonSerializerSettings _settings = new() { Converters = new[] { new StringEnumConverter() } };
+        private static readonly JsonSerializerSettings _settings = new()
+        {
+            Converters = new[] { new StringEnumConverter() },
+            TypeNameHandling = TypeNameHandling.Auto
+        };
 
         public void Add(TemplateInfo templateInfo)
         {

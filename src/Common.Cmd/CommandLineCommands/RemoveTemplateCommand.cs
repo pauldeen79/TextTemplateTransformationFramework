@@ -53,7 +53,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         ? TemplateType.TextTemplate
                         : TemplateType.AssemblyTemplate;
 
-                    _templateInfoRepository.Remove(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type));
+                    _templateInfoRepository.Remove(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type, Array.Empty<TemplateParameter>()));
                     app.Out.WriteLine("Template has been removed successfully.");
                 });
             });

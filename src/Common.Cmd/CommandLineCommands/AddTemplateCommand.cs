@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using McMaster.Extensions.CommandLineUtils;
 using TextTemplateTransformationFramework.Common.Cmd.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -27,6 +28,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
                 var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
                 var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
                 command.HelpOption();
                 command.OnExecute(() =>
                 {
@@ -53,7 +55,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         ? TemplateType.TextTemplate
                         : TemplateType.AssemblyTemplate;
 
-                    _templateInfoRepository.Add(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type));
+                    var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
+                    
+                    _templateInfoRepository.Add(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type, parameters));
                     app.Out.WriteLine("Template has been added successfully.");
                 });
             });
