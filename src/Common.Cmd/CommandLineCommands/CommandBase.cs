@@ -46,6 +46,22 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return assemblyLoadContext;
         }
 
+        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className, string shortName)
+        {
+            var result = GetValidationResult(fileContentsProvider, fileName, assemblyName, className);
+            if (!string.IsNullOrEmpty(result))
+            {
+                return result;
+            }
+
+            if (string.IsNullOrEmpty(shortName))
+            {
+                return "Shortname is required.";
+            }
+
+            return string.Empty;
+        }
+
         internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className)
         {
             if (string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(assemblyName))
@@ -70,6 +86,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
             return null;
         }
+
+        internal static TemplateType GetTemplateType(string assemblyName)
+            => string.IsNullOrEmpty(assemblyName)
+                ? TemplateType.TextTemplate
+                : TemplateType.AssemblyTemplate;
 
         [ExcludeFromCodeCoverage]
         internal static void LaunchDebuggerIfSet(CommandOption<string> debuggerOption)

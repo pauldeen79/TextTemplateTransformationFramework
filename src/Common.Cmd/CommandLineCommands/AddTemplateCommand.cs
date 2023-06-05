@@ -38,25 +38,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
 
-                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, fileName, assemblyName, className);
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, fileName, assemblyName, className, shortName);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         app.Out.WriteLine($"Error: {validationResult}");
                         return;
                     }
 
-                    if (string.IsNullOrEmpty(shortName))
-                    {
-                        app.Out.WriteLine("Error: Shortname is required.");
-                        return;
-                    }
-
-                    var type = string.IsNullOrEmpty(assemblyName)
-                        ? TemplateType.TextTemplate
-                        : TemplateType.AssemblyTemplate;
-
+                    var type = CommandBase.GetTemplateType(assemblyName);
                     var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
-                    
+
                     _templateInfoRepository.Add(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type, parameters));
                     app.Out.WriteLine("Template has been added successfully.");
                 });
