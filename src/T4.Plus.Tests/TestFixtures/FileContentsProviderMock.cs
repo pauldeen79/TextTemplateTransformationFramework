@@ -9,6 +9,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures
     {
         public Func<string, string> GetFileContentsDelegate { get; set; }
 
+        public void CreateDirectory(string directory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DirectoryExists(string directory)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool FileExists(string fileName)
         {
             throw new NotImplementedException();

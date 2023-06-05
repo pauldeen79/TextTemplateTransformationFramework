@@ -15,6 +15,13 @@ namespace TextTemplateTransformationFramework.Common.Default
             Converters = new[] { new StringEnumConverter() },
             TypeNameHandling = TypeNameHandling.Auto
         };
+        
+        private readonly IFileContentsProvider _fileContentsProvider;
+
+        public TemplateInfoRepository(IFileContentsProvider fileContentsProvider)
+        {
+            _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
+        }
 
         public void Add(TemplateInfo templateInfo)
         {
@@ -33,12 +40,12 @@ namespace TextTemplateTransformationFramework.Common.Default
         public IEnumerable<TemplateInfo> GetTemplates()
         {
             var fileName = GetFileName();
-            if (!File.Exists(fileName))
+            if (!_fileContentsProvider.FileExists(fileName))
             {
                 return Enumerable.Empty<TemplateInfo>();
             }
 
-            return JsonConvert.DeserializeObject<TemplateInfoConfig>(File.ReadAllText(fileName), _settings).Templates;
+            return JsonConvert.DeserializeObject<TemplateInfoConfig>(_fileContentsProvider.GetFileContents(fileName), _settings).Templates;
         }
 
         public void Remove(TemplateInfo templateInfo)
@@ -53,6 +60,7 @@ namespace TextTemplateTransformationFramework.Common.Default
             templates.Remove(templateToRemove);
             Save(templates);
         }
+
         private static string GetFileName() => Path.Combine(GetDirectory(), "templates.config");
 
         private static string GetDirectory() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "T4Plus");
@@ -64,14 +72,14 @@ namespace TextTemplateTransformationFramework.Common.Default
             && x.FileName?.Equals(templateInfo.FileName, StringComparison.OrdinalIgnoreCase) == true
             && x.Type == templateInfo.Type);
 
-        private static void Save(List<TemplateInfo> templates)
+        private void Save(List<TemplateInfo> templates)
         {
             var directory = GetDirectory();
-            if (!Directory.Exists(directory))
+            if (!_fileContentsProvider.DirectoryExists(directory))
             {
-                Directory.CreateDirectory(directory);
+                _fileContentsProvider.CreateDirectory(directory);
             }
-            File.WriteAllText(GetFileName(), JsonConvert.SerializeObject(new TemplateInfoConfig { Templates = templates }, _settings));
+            _fileContentsProvider.WriteFileContents(GetFileName(), JsonConvert.SerializeObject(new TemplateInfoConfig { Templates = templates }, _settings));
         }
     }
 
