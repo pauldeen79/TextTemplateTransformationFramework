@@ -6,6 +6,7 @@ namespace TextTemplateTransformationFramework.Common.Contracts
     {
         IEnumerable<TemplateInfo> GetTemplates();
         void Add(TemplateInfo templateInfo);
+        void Update(TemplateInfo templateInfo);
         void Remove(TemplateInfo templateInfo);
     }
 }

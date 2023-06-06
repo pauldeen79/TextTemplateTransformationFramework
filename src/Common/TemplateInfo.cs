@@ -21,6 +21,9 @@ namespace TextTemplateTransformationFramework.Common
             Parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
         }
 
+        public TemplateInfo Update(string shortName, TemplateParameter[] parameters)
+            => new TemplateInfo(shortName, FileName, AssemblyName, ClassName, Type, parameters);
+
         public static TemplateInfo Text(string shortName, string fileName, TemplateParameter[] parameters)
             => new TemplateInfo(shortName, fileName, null, null, TemplateType.TextTemplate, parameters);
 

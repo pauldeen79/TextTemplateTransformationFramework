@@ -39,6 +39,16 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         }
 
         [Fact]
+        public void Update_Throws_On_Null_Template()
+        {
+            // Arrange
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+
+            // Act
+            sut.Invoking(x => x.Update(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Remove_Throws_On_Null_Template()
         {
             // Arrange
@@ -47,7 +57,6 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             // Act
             sut.Invoking(x => x.Remove(null)).Should().Throw<ArgumentNullException>();
         }
-
         [Fact]
         public void Add_Throws_On_Duplicate_Template()
         {
@@ -58,6 +67,17 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
 
             // Act & Assert
             sut.Invoking(x => x.Add(templateInfo)).Should().Throw<ArgumentOutOfRangeException>().WithMessage("Template already exists (Parameter 'templateInfo')");
+        }
+
+        [Fact]
+        public void Update_Throws_On_Non_Existing_Template()
+        {
+            // Arrange
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+
+            // Act
+            sut.Invoking(x => x.Update(new TemplateInfo("", "", "", "", TemplateType.TextTemplate, Array.Empty<TemplateParameter>())))
+               .Should().Throw<ArgumentOutOfRangeException>().WithMessage("Template was not found (Parameter 'templateInfo')");
         }
 
         [Fact]
@@ -85,6 +105,20 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             _contents.Should().StartWith(@"{""Templates"":[{""ShortName"":""MyTemplate"",""FileName"":""my.template"",""AssemblyName"":"""",""ClassName"":"""",""Type"":""TextTemplate"",""Parameters"":[{""Name"":""MyParameter"",""Type"":null,""EditorAttributeEditorTypeName"":null,""EditorAttributeEditorBaseTypeName"":null,""TypeConverterTypeName"":null,""Value"":""123"",""OmitValueAssignment"":false,""Description"":null,""DisplayName"":null,""Browsable"":false,""ReadOnly"":false,""PossibleValues"":null}]}]}");
         }
 
+        [Fact]
+        public void Update_Updates_The_Specified_Template_Correctly()
+        {
+            // Arrange
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            sut.Add(templateInfo);
+
+            // Act
+            sut.Update(templateInfo.Update("updated", Array.Empty<TemplateParameter>()));
+
+            // Assert
+            _contents.Should().StartWith(@"{""Templates"":[{""ShortName"":""updated"",""FileName"":""my.template"",""AssemblyName"":"""",""ClassName"":"""",""Type"":""TextTemplate"",""Parameters"":[]}]}");
+        }
         [Fact]
         public void Remove_Removes_The_Specified_Template_Correctly()
         {

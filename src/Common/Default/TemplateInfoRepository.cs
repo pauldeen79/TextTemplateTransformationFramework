@@ -53,6 +53,30 @@ namespace TextTemplateTransformationFramework.Common.Default
             return JsonConvert.DeserializeObject<TemplateInfoConfig>(_fileContentsProvider.GetFileContents(fileName), _settings).Templates;
         }
 
+        public void Update(TemplateInfo templateInfo)
+        {
+            if (templateInfo == null)
+            {
+                throw new ArgumentNullException(nameof(templateInfo));
+            }
+
+            var templates = GetTemplates().ToList();
+            var index = templates.FindIndex(x =>
+                x.AssemblyName?.Equals(templateInfo.AssemblyName, StringComparison.OrdinalIgnoreCase) == true
+                && x.ClassName?.Equals(templateInfo.ClassName, StringComparison.OrdinalIgnoreCase) == true
+                && x.FileName?.Equals(templateInfo.FileName, StringComparison.OrdinalIgnoreCase) == true
+                && x.Type == templateInfo.Type);
+            if (index == -1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(templateInfo), "Template was not found");
+            }
+
+            templates.RemoveAt(index);
+            templates.Insert(index, templateInfo);
+
+            Save(templates);
+        }
+
         public void Remove(TemplateInfo templateInfo)
         {
             if (templateInfo == null)
