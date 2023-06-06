@@ -156,5 +156,54 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 Thread.Sleep(1000);
             }
         }
+
+        internal static void ModifyGlobalTemplate(
+            CommandLineApplication app,
+            IFileContentsProvider fileContentsProvider,
+            Action<TemplateInfo> modifyAction,
+            string commandName,
+            string commandDescription,
+            string resultText,
+            bool allowParameters)
+        {
+            if (app == null) throw new ArgumentNullException(nameof(app));
+            app.Command(commandName, command =>
+            {
+                command.Description = commandDescription;
+                var debuggerOption = GetDebuggerOption(command);
+                var shortNameOption = command.Option<string>("-s|--shortname <NAME>", "The unique name of the template", CommandOptionType.SingleValue);
+                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
+                var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
+                var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                var parametersArgument = allowParameters
+                    ? command.Argument("Parameters", "Optional parameters to use (name:value)", true)
+                    : null;
+                command.HelpOption();
+                command.OnExecute(() =>
+                {
+                    LaunchDebuggerIfSet(debuggerOption);
+                    var shortName = shortNameOption.Value();
+                    var fileName = fileNameOption.Value();
+                    var assemblyName = assemblyNameOption.Value();
+                    var className = classNameOption.Value();
+
+                    var validationResult = GetValidationResult(fileContentsProvider, fileName, assemblyName, className, shortName);
+                    if (!string.IsNullOrEmpty(validationResult))
+                    {
+                        app.Out.WriteLine($"Error: {validationResult}");
+                        return;
+                    }
+
+                    var type = GetTemplateType(assemblyName);
+                    var parameters = allowParameters
+                        ? parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray()
+                        : Array.Empty<TemplateParameter>();
+                    
+                    modifyAction(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type, parameters));
+                    
+                    app.Out.WriteLine(resultText);
+                });
+            });
+        }
     }
 }

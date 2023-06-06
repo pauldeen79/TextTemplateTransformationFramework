@@ -17,38 +17,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
         }
 
         public void Initialize(CommandLineApplication app)
-        {
-            if (app == null) throw new ArgumentNullException(nameof(app));
-            app.Command("remove-template", command =>
-            {
-                command.Description = "Removes template from the templates list";
-                var debuggerOption = CommandBase.GetDebuggerOption(command);
-                var shortNameOption = command.Option<string>("-s|--shortname <NAME>", "The unique name of the template", CommandOptionType.SingleValue);
-                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
-                var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
-                var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
-                command.HelpOption();
-                command.OnExecute(() =>
-                {
-                    CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var shortName = shortNameOption.Value();
-                    var fileName = fileNameOption.Value();
-                    var assemblyName = assemblyNameOption.Value();
-                    var className = classNameOption.Value();
-
-                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, fileName, assemblyName, className, shortName);
-                    if (!string.IsNullOrEmpty(validationResult))
-                    {
-                        app.Out.WriteLine($"Error: {validationResult}");
-                        return;
-                    }
-
-                    var type = CommandBase.GetTemplateType(assemblyName);
-
-                    _templateInfoRepository.Remove(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type, Array.Empty<TemplateParameter>()));
-                    app.Out.WriteLine("Template has been removed successfully.");
-                });
-            });
-        }
+            => CommandBase.ModifyGlobalTemplate
+            (
+                app,
+                _fileContentsProvider,
+                _templateInfoRepository.Remove,
+                "remove-template",
+                "Removes the specified template from the templates list",
+                "Template has been removed successfully.",
+                false
+            );
     }
 }
