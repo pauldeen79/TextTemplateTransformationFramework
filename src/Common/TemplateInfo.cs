@@ -23,11 +23,5 @@ namespace TextTemplateTransformationFramework.Common
 
         public TemplateInfo Update(string shortName, TemplateParameter[] parameters)
             => new TemplateInfo(shortName, FileName, AssemblyName, ClassName, Type, parameters);
-
-        public static TemplateInfo Text(string shortName, string fileName, TemplateParameter[] parameters)
-            => new TemplateInfo(shortName, fileName, null, null, TemplateType.TextTemplate, parameters);
-
-        public static TemplateInfo Assembly(string shortName, string assemblyName, string className, TemplateParameter[] parameters)
-            => new TemplateInfo(shortName, null, assemblyName, className, TemplateType.AssemblyTemplate, parameters);
     }
 }
