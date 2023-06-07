@@ -46,12 +46,26 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return assemblyLoadContext;
         }
 
-        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className, string shortName)
+        internal static string GetValidationResultWithRequiredShortName(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className, string shortName)
         {
-            var result = GetValidationResult(fileContentsProvider, fileName, assemblyName, className);
-            if (!string.IsNullOrEmpty(result))
+            if (string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(assemblyName))
             {
-                return result;
+                return "Either Filename or AssemblyName is required.";
+            }
+
+            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(assemblyName))
+            {
+                return "You can either use Filename or AssemblyName, not both.";
+            }
+
+            if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
+            {
+                return "When AssemblyName is filled, then ClassName is required.";
+            }
+
+            if (!string.IsNullOrEmpty(fileName) && !fileContentsProvider.FileExists(fileName))
+            {
+                return $"File [{fileName}] does not exist.";
             }
 
             if (string.IsNullOrEmpty(shortName))
@@ -62,16 +76,21 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return string.Empty;
         }
 
-        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className)
+        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className, string shortName)
         {
-            if (string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(assemblyName))
+            int typeIndicatorCounter = 0;
+            if (!string.IsNullOrEmpty(fileName)) typeIndicatorCounter++;
+            if (!string.IsNullOrEmpty(assemblyName)) typeIndicatorCounter++;
+            if (!string.IsNullOrEmpty(shortName)) typeIndicatorCounter++;
+
+            if (typeIndicatorCounter == 0)
             {
-                return "Either Filename or AssemblyName is required.";
+                return "Either Filename, AssemblyName or ShortName is required.";
             }
 
-            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(assemblyName))
+            if (typeIndicatorCounter > 1)
             {
-                return "You can either use Filename or AssemblyName, not both.";
+                return "You can either use Filename, AssemblyName or ShortName, not a combination of these.";
             }
 
             if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
@@ -187,7 +206,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
 
-                    var validationResult = GetValidationResult(fileContentsProvider, fileName, assemblyName, className, shortName);
+                    var validationResult = GetValidationResultWithRequiredShortName(fileContentsProvider, fileName, assemblyName, className, shortName);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         app.Out.WriteLine($"Error: {validationResult}");

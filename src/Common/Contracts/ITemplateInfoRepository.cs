@@ -8,5 +8,6 @@ namespace TextTemplateTransformationFramework.Common.Contracts
         void Add(TemplateInfo templateInfo);
         void Update(TemplateInfo templateInfo);
         void Remove(TemplateInfo templateInfo);
+        TemplateInfo FindByShortName(string shortName);
     }
 }

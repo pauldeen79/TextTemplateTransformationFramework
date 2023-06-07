@@ -95,6 +95,9 @@ namespace TextTemplateTransformationFramework.Common.Default
             Save(templates);
         }
 
+        public TemplateInfo FindByShortName(string shortName)
+            => GetTemplates().FirstOrDefault(x => x.ShortName.Equals(shortName, StringComparison.InvariantCultureIgnoreCase));
+
         private static string GetFileName() => Path.Combine(GetDirectory(), "templates.config");
 
         private static string GetDirectory() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "T4Plus");

@@ -17,14 +17,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+        private readonly Mock<ITemplateInfoRepository> _templateInfoRepositoryMock;
         private readonly Mock<IAssemblyService> _assemblyServiceMock;
 
-        private ListParametersCommand CreateSut() => new ListParametersCommand(_processorMock.Object, _fileContentsProviderMock.Object, _assemblyServiceMock.Object);
+        private ListParametersCommand CreateSut() => new ListParametersCommand(
+            _processorMock.Object,
+            _fileContentsProviderMock.Object,
+            _templateInfoRepositoryMock.Object,
+            _assemblyServiceMock.Object);
 
         public ListParametersCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+            _templateInfoRepositoryMock = new Mock<ITemplateInfoRepository>();
             _assemblyServiceMock = new Mock<IAssemblyService>();
         }
 
@@ -65,7 +71,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
 
             // Assert
-            actual.Should().Be("Error: Either Filename or AssemblyName is required." + Environment.NewLine);
+            actual.Should().Be("Error: Either Filename, AssemblyName or ShortName is required." + Environment.NewLine);
         }
 
         [Fact]
@@ -75,7 +81,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-a myassembly.dll");
 
             // Assert
-            actual.Should().Be("Error: You can either use Filename or AssemblyName, not both." + Environment.NewLine);
+            actual.Should().Be("Error: You can either use Filename, AssemblyName or ShortName, not a combination of these." + Environment.NewLine);
         }
 
         [Fact]
