@@ -96,7 +96,14 @@ namespace TextTemplateTransformationFramework.Common.Default
         }
 
         public TemplateInfo FindByShortName(string shortName)
-            => GetTemplates().FirstOrDefault(x => x.ShortName.Equals(shortName, StringComparison.InvariantCultureIgnoreCase));
+        {
+            if (string.IsNullOrEmpty(shortName))
+            {
+                throw new ArgumentOutOfRangeException(nameof(shortName), "Short name is required");
+            }
+
+            return GetTemplates().FirstOrDefault(x => x.ShortName.Equals(shortName, StringComparison.InvariantCultureIgnoreCase));
+        }
 
         private static string GetFileName() => Path.Combine(GetDirectory(), "templates.config");
 

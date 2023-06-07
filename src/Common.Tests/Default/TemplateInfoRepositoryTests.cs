@@ -57,6 +57,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             // Act
             sut.Invoking(x => x.Remove(null)).Should().Throw<ArgumentNullException>();
         }
+
         [Fact]
         public void Add_Throws_On_Duplicate_Template()
         {
@@ -119,6 +120,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             // Assert
             _contents.Should().StartWith(@"{""Templates"":[{""ShortName"":""updated"",""FileName"":""my.template"",""AssemblyName"":"""",""ClassName"":"""",""Type"":""TextTemplate"",""Parameters"":[]}]}");
         }
+
         [Fact]
         public void Remove_Removes_The_Specified_Template_Correctly()
         {
@@ -160,6 +162,46 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
 
             // Assert
             actual.Should().BeEquivalentTo(new[] { templateInfo });
+        }
+
+        [Fact]
+        public void FindByShortName_Throws_On_Empty_ShortName()
+        {
+            // Arrange
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+
+            // Act & Assert
+            sut.Invoking(x => x.FindByShortName(null)).Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Fact]
+        public void FindByShortName_Returns_Null_When_Not_Found()
+        {
+            // Arrange
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            sut.Add(templateInfo);
+
+            // Act
+            var actual = sut.FindByShortName("nonexisting");
+
+            // Assert
+            actual.Should().BeNull();
+        }
+
+        [Fact]
+        public void FindByShortName_Returns_TemplateInfo_When_Found()
+        {
+            // Arrange
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            sut.Add(templateInfo);
+
+            // Act
+            var actual = sut.FindByShortName("MyTemplate");
+
+            // Assert
+            actual.Should().NotBeNull();
         }
     }
 }
