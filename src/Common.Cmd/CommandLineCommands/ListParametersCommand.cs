@@ -63,7 +63,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     );
                     var result = ExtractParameters(fileNameOption.Value(), assemblyNameOption.Value(), classNameOption.Value(), assemblyLoadContext);
 
-                    if (result.CompilerErrors.Any(e => !e.IsWarning))
+                    if (Array.Exists(result.CompilerErrors, e => !e.IsWarning))
                     {
                         app.Error.WriteLine("Compiler errors:");
                         result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);

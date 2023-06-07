@@ -90,12 +90,12 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static IServiceCollection AddTemplateSectionProcessors<TState>(this IServiceCollection instance, Assembly assembly, params Type[] templateSectionProcessorTypesToSkip)
             where TState : class
         {
-            foreach (var type in assembly.GetTemplateSectionProcessorTypes<TState>().Where(t => !templateSectionProcessorTypesToSkip.Any(x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
+            foreach (var type in assembly.GetTemplateSectionProcessorTypes<TState>().Where(t => !Array.Exists(templateSectionProcessorTypesToSkip, x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
             {
                 instance.AddSingleton(typeof(ITemplateSectionProcessor<TState>), type);
             }
 
-            foreach (var type in assembly.GetTokenMapperTypes().Where(t => !templateSectionProcessorTypesToSkip.Any(x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
+            foreach (var type in assembly.GetTokenMapperTypes().Where(t => !Array.Exists(templateSectionProcessorTypesToSkip, x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
             {
                 instance.AddSingleton(typeof(ITokenMapperTypeContainer), new TokenMapperTypeContainer(type));
             }

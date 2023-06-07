@@ -136,7 +136,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
             var result = _processor.Process(template, parameters);
 
-            if (result.CompilerErrors.Any(e => !e.IsWarning))
+            if (Array.Exists(result.CompilerErrors, e => !e.IsWarning))
             {
                 app.Error.WriteLine("Compiler errors:");
                 result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);
