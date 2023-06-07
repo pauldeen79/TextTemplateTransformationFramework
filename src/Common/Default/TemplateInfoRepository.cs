@@ -102,7 +102,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                 throw new ArgumentOutOfRangeException(nameof(shortName), "Short name is required");
             }
 
-            return GetTemplates().FirstOrDefault(x => x.ShortName.Equals(shortName, StringComparison.InvariantCultureIgnoreCase));
+            return GetTemplates().FirstOrDefault(x => x.ShortName.Equals(shortName, StringComparison.OrdinalIgnoreCase));
         }
 
         private static string GetFileName() => Path.Combine(GetDirectory(), "templates.config");
