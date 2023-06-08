@@ -239,6 +239,17 @@ template output
         }
 
         [Fact]
+        public void Execute_With_Non_Existing_Short_Name_Gives_Exception()
+        {
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"Exception occured while processing the template:
+System.InvalidOperationException: Could not find template with short name myshortname
+");
+        }
+
+        [Fact]
         public void Execute_With_Output_Option_Saves_Output_To_File()
         {
             // Arrange

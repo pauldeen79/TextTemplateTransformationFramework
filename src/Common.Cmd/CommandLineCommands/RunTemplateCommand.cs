@@ -81,6 +81,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, fileName, assemblyName, className, shortName);
                         if (!result.Success)
                         {
+                            app.Error.WriteLine("Exception occured while processing the template:");
+                            app.Error.WriteLine(result.ProcessResult.Exception);
                             return;
                         }
 

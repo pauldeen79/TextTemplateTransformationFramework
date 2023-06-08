@@ -159,5 +159,44 @@ System.InvalidOperationException: kaboom
             actual.Should().Be(@"MyParameter (System.String)
 ");
         }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters_For_TextTemplate_Using_ShortName()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _templateInfoRepositoryMock.Setup(x => x.FindByShortName(It.IsAny<string>())).Returns(new TemplateInfo("myshortname", "existing.template", "", "", TemplateType.TextTemplate, Array.Empty<TemplateParameter>()));
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<TextTemplate>()))
+                          .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = "MyParameter", Type = typeof(string) } }, Array.Empty<CompilerError>(), "code", string.Empty));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"MyParameter (System.String)
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters_For_AssemblyTemplate_Using_ShortName()
+        {
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<AssemblyTemplate>()))
+                          .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = "MyParameter", Type = typeof(string) } }, Array.Empty<CompilerError>(), "code", string.Empty));
+            _templateInfoRepositoryMock.Setup(x => x.FindByShortName(It.IsAny<string>())).Returns(new TemplateInfo("myshortname", "", "my.dll", "myclassname", TemplateType.AssemblyTemplate, Array.Empty<TemplateParameter>()));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"MyParameter (System.String)
+");
+        }
+
+        [Fact]
+        public void Execute_With_Non_Existing_Short_Name_Gives_Exception()
+        {
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"Exception occured:
+System.InvalidOperationException: Could not find template with short name myshortname
+");
+        }
     }
 }
