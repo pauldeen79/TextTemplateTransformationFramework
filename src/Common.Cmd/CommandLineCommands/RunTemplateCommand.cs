@@ -78,7 +78,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
                     CommandBase.Watch(app, watchOption, !string.IsNullOrEmpty(fileName) ? fileName : assemblyName, () =>
                     {
-                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, fileName, assemblyName, className, shortName);
+                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, (fileName, assemblyName, className, shortName));
                         if (!result.Success)
                         {
                             app.Error.WriteLine("Exception occured while processing the template:");
@@ -112,43 +112,43 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                                                                                                                      CommandArgument parametersArgument,
                                                                                                                      CommandOption<string> interactiveOption,
                                                                                                                      CommandOption<string> currentDirectoryOption,
-                                                                                                                     string filename,
+                                                                                                                     (string filename,
                                                                                                                      string assemblyName,
                                                                                                                      string className,
-                                                                                                                     string shortName)
+                                                                                                                     string shortName) names)
 #pragma warning restore S1172 // Unused method parameters should be removed
 #pragma warning restore IDE0079 // Remove unnecessary suppression
         {
-            if (!string.IsNullOrEmpty(shortName))
+            if (!string.IsNullOrEmpty(names.shortName))
             {
-                var info = _templateInfoRepository.FindByShortName(shortName);
+                var info = _templateInfoRepository.FindByShortName(names.shortName);
                 if (info == null)
                 {
-                    return (false, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {shortName}")), null);
+                    return (false, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {names.shortName}")), null);
                 }
 
                 if (info.Type == TemplateType.TextTemplate)
                 {
-                    filename = info.FileName;
+                    names.filename = info.FileName;
                 }
                 else
                 {
-                    assemblyName = info.AssemblyName;
-                    className = info.ClassName;
+                    names.assemblyName = info.AssemblyName;
+                    names.className = info.ClassName;
                 }
             }
 
-            if (!string.IsNullOrEmpty(filename))
+            if (!string.IsNullOrEmpty(names.filename))
             {
-                var x = ProcessTextTemplate(filename, app, interactiveOption.HasValue(), parametersArgument.Values);
+                var x = ProcessTextTemplate(names.filename, app, interactiveOption.HasValue(), parametersArgument.Values);
                 return (x.Success, x.Result, null);
             }
             else
             {
 #if !NETFRAMEWORK
-                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
+                var x = ProcessAssemblyTemplate(names.assemblyName, names.className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
 #else
-                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
+                var x = ProcessAssemblyTemplate(names.assemblyName, names.className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
 #endif
 #if !NETFRAMEWORK
                 return (x.Success, x.Result, x.AssemblyLoadContext);
