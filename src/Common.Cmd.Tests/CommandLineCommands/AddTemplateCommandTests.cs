@@ -61,6 +61,58 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         }
 
         [Fact]
+        public void Execute_Without_FileName_And_AssemblyName_Leads_To_Error()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s MyShortName");
+
+            // Assert
+            actual.Should().Be("Error: Either Filename or AssemblyName is required." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_Both_FileName_And_AssemblyName_Leads_To_Error()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s MyShortName", "-f my.template", "-a my.dll", "-n myclass");
+
+            // Assert
+            actual.Should().Be("Error: You can either use Filename or AssemblyName, not both." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_AssemblyName_But_Without_ClassName_Leads_To_Error()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s MyShortName", "-a my.dll");
+
+            // Assert
+            actual.Should().Be("Error: When AssemblyName is filled, then ClassName is required." + Environment.NewLine);
+        }
+
+        [Fact]
+        public void Execute_With_ShortName_And_Filename_Gives_Error_When_File_Does_Not_Exist()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+
+            // Act
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f my.template", "-s mytemplate");
+
+            // Assert
+            actual.Should().Be("Error: File [my.template] does not exist." + Environment.NewLine);
+        }
+
+        [Fact]
         public void Execute_With_ShortName_And_Filename_Adds_Template_To_Repository()
         {
             // Arrange
