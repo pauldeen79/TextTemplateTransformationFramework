@@ -81,8 +81,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                         var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, (fileName, assemblyName, className, shortName));
                         if (!result.Success)
                         {
-                            app.Error.WriteLine("Exception occured while processing the template:");
-                            app.Error.WriteLine(result.ProcessResult.Exception);
                             return;
                         }
 
@@ -124,7 +122,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 var info = _templateInfoRepository.FindByShortName(names.shortName);
                 if (info == null)
                 {
-                    return (false, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {names.shortName}")), null);
+                    return (true, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {names.shortName}")), null);
                 }
 
                 if (info.Type == TemplateType.TextTemplate)
