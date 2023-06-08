@@ -117,6 +117,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 #pragma warning restore S1172 // Unused method parameters should be removed
 #pragma warning restore IDE0079 // Remove unnecessary suppression
         {
+            var parameters = parametersArgument.Values;
             if (!string.IsNullOrEmpty(names.shortName))
             {
                 var info = _templateInfoRepository.FindByShortName(names.shortName);
@@ -134,11 +135,12 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                     names.assemblyName = info.AssemblyName;
                     names.className = info.ClassName;
                 }
+                parameters = MergeParameters(parameters, info.Parameters);
             }
 
             if (!string.IsNullOrEmpty(names.filename))
             {
-                var x = ProcessTextTemplate(names.filename, app, interactiveOption.HasValue(), parametersArgument.Values);
+                var x = ProcessTextTemplate(names.filename, app, interactiveOption.HasValue(), parameters);
                 return (x.Success, x.Result, null);
             }
             else
@@ -155,6 +157,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 #endif
             }
         }
+
+        private IReadOnlyList<string> MergeParameters(IReadOnlyList<string> commandLineArgumentParameters, TemplateParameter[] globalTemplateParameters)
+            => commandLineArgumentParameters
+                .Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) })
+                .Concat(globalTemplateParameters)
+                .GroupBy(t => t.Name)
+                .Select(x => $"{x.Key}:{x.First().Value}")
+                .ToList()
+                .AsReadOnly();
 
         private (bool Success, ProcessResult Result) ProcessTextTemplate(string filename, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments)
         {

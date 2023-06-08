@@ -322,6 +322,23 @@ template output
         }
 
         [Fact]
+        public void Execute_Global_Template_With_Parameters_Merges_Parameters_Correctly()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _templateInfoRepositoryMock.Setup(x => x.FindByShortName(It.IsAny<string>())).Returns(new TemplateInfo("myshortname", "existing.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "param1", Value = "defaultValue" } }));
+            _processorMock.Setup(x => x.Process(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+                          .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
+
+            // Act
+            _ = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname", "param1:value1", "param2:value2");
+
+            // Assert
+            _processorMock.Verify(x => x.Process(It.IsAny<TextTemplate>(), It.Is<TemplateParameter[]>(x => x.Length == 2 && x.First().Name == "param1" && x.First().Value.ToString() == "value1" && x.Last().Name == "param2" && x.Last().Value.ToString() == "value2")));
+        }
+
+        [Fact]
         public void Execute_Interactive_Gets_Parameters_Correctly()
         {
             // Arrange
