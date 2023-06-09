@@ -84,17 +84,18 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 .AddSingleton<IProcessFinalizer<ITextTemplateProcessorContext<TState>>, EmptyProcessFinalizer<ITextTemplateProcessorContext<TState>>>()
                 .AddSingleton<ITemplateProxy, TemplateProxy>()
                 .AddSingleton<ITokenMapperTypeProvider, TokenMapperTypeProvider>()
-                .AddSingleton<IGroupedTokenMapperTypeProvider, GroupedTokenMapperTypeProvider>();
+                .AddSingleton<IGroupedTokenMapperTypeProvider, GroupedTokenMapperTypeProvider>()
+                .AddSingleton<ITemplateInfoRepository, TemplateInfoRepository>();
 
         public static IServiceCollection AddTemplateSectionProcessors<TState>(this IServiceCollection instance, Assembly assembly, params Type[] templateSectionProcessorTypesToSkip)
             where TState : class
         {
-            foreach (var type in assembly.GetTemplateSectionProcessorTypes<TState>().Where(t => !templateSectionProcessorTypesToSkip.Any(x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
+            foreach (var type in assembly.GetTemplateSectionProcessorTypes<TState>().Where(t => !Array.Exists(templateSectionProcessorTypesToSkip, x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
             {
                 instance.AddSingleton(typeof(ITemplateSectionProcessor<TState>), type);
             }
 
-            foreach (var type in assembly.GetTokenMapperTypes().Where(t => !templateSectionProcessorTypesToSkip.Any(x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
+            foreach (var type in assembly.GetTokenMapperTypes().Where(t => !Array.Exists(templateSectionProcessorTypesToSkip, x => x.FullName.WithoutGenerics() == t.FullName.WithoutGenerics())))
             {
                 instance.AddSingleton(typeof(ITokenMapperTypeContainer), new TokenMapperTypeContainer(type));
             }

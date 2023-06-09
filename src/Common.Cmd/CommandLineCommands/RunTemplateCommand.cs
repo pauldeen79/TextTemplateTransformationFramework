@@ -14,6 +14,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
     {
         private readonly ITextTemplateProcessor _processor;
         private readonly IFileContentsProvider _fileContentsProvider;
+        private readonly ITemplateInfoRepository _templateInfoRepository;
         private readonly IUserInput _userInput;
         private readonly IClipboard _clipboard;
 #pragma warning disable IDE0079 // Remove unnecessary suppression
@@ -26,12 +27,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public RunTemplateCommand(ITextTemplateProcessor processor,
                                   IFileContentsProvider fileContentsProvider,
+                                  ITemplateInfoRepository templateInfoRepository,
                                   IUserInput userInput,
                                   IClipboard clipboard,
                                   IAssemblyService assemblyService)
         {
             _processor = processor ?? throw new ArgumentNullException(nameof(processor));
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
+            _templateInfoRepository = templateInfoRepository ?? throw new ArgumentNullException(nameof(templateInfoRepository));
             _userInput = userInput ?? throw new ArgumentNullException(nameof(userInput));
             _clipboard = clipboard ?? throw new ArgumentNullException(nameof(clipboard));
             _assemblyService = assemblyService ?? throw new ArgumentNullException(nameof(assemblyService));
@@ -44,7 +47,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             {
                 command.Description = "Runs the template, and shows the template output";
 
-                var filenameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
+                var shortNameOption = command.Option<string>("-s|--shortname <NAME>", "The unique name of the template", CommandOptionType.SingleValue);
+                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
                 var outputOption = command.Option<string>("-o|--output <PATH>", "The output filename", CommandOptionType.SingleValue);
                 var diagnosticDumpOutputOption = command.Option<string>("-diag|--diagnosticoutput <PATH>", "The diagnostic output filename", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
@@ -60,20 +64,21 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
                     CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var filename = filenameOption.Value();
+                    var fileName = fileNameOption.Value();
                     var assemblyName = assemblyNameOption.Value();
                     var className = classNameOption.Value();
+                    var shortName = shortNameOption.Value();
 
-                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, filename, assemblyName, className);
+                    var validationResult = CommandBase.GetValidationResult(_fileContentsProvider, fileName, assemblyName, className, shortName);
                     if (!string.IsNullOrEmpty(validationResult))
                     {
                         app.Out.WriteLine($"Error: {validationResult}");
                         return;
                     }
 
-                    CommandBase.Watch(app, watchOption, !string.IsNullOrEmpty(filename) ? filename : assemblyName, () =>
+                    CommandBase.Watch(app, watchOption, !string.IsNullOrEmpty(fileName) ? fileName : assemblyName, () =>
                     {
-                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, filename, assemblyName, className);
+                        var result = ProcessTemplate(app, parametersArgument, interactiveOption, currentDirectoryOption, (fileName, assemblyName, className, shortName));
                         if (!result.Success)
                         {
                             return;
@@ -101,21 +106,49 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
 #pragma warning disable IDE0079 // Remove unnecessary suppression
 #pragma warning disable S1172 // Unused method parameters should be removed
-        private (bool Success, ProcessResult ProcessResult, AssemblyLoadContext AssemblyLoadContext) ProcessTemplate(CommandLineApplication app, CommandArgument parametersArgument, CommandOption<string> interactiveOption, CommandOption<string> currentDirectoryOption, string filename, string assemblyName, string className)
+        private (bool Success, ProcessResult ProcessResult, AssemblyLoadContext AssemblyLoadContext) ProcessTemplate(CommandLineApplication app,
+                                                                                                                     CommandArgument parametersArgument,
+                                                                                                                     CommandOption<string> interactiveOption,
+                                                                                                                     CommandOption<string> currentDirectoryOption,
+                                                                                                                     (string filename,
+                                                                                                                     string assemblyName,
+                                                                                                                     string className,
+                                                                                                                     string shortName) names)
 #pragma warning restore S1172 // Unused method parameters should be removed
 #pragma warning restore IDE0079 // Remove unnecessary suppression
         {
-            if (!string.IsNullOrEmpty(filename))
+            var parameters = parametersArgument.Values;
+            if (!string.IsNullOrEmpty(names.shortName))
             {
-                var x = ProcessTextTemplate(filename, app, interactiveOption.HasValue(), parametersArgument.Values);
+                var info = _templateInfoRepository.FindByShortName(names.shortName);
+                if (info == null)
+                {
+                    return (true, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {names.shortName}")), null);
+                }
+
+                if (info.Type == TemplateType.TextTemplate)
+                {
+                    names.filename = info.FileName;
+                }
+                else
+                {
+                    names.assemblyName = info.AssemblyName;
+                    names.className = info.ClassName;
+                }
+                parameters = MergeParameters(parameters, info.Parameters);
+            }
+
+            if (!string.IsNullOrEmpty(names.filename))
+            {
+                var x = ProcessTextTemplate(names.filename, app, interactiveOption.HasValue(), parameters);
                 return (x.Success, x.Result, null);
             }
             else
             {
 #if !NETFRAMEWORK
-                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
+                var x = ProcessAssemblyTemplate(names.assemblyName, names.className, app, interactiveOption.HasValue(), parametersArgument.Values, currentDirectoryOption?.HasValue() == true, currentDirectoryOption?.HasValue() == true ? currentDirectoryOption!.Value() : null);
 #else
-                var x = ProcessAssemblyTemplate(assemblyName, className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
+                var x = ProcessAssemblyTemplate(names.assemblyName, names.className, app, interactiveOption.HasValue(), parametersArgument.Values, false, null);
 #endif
 #if !NETFRAMEWORK
                 return (x.Success, x.Result, x.AssemblyLoadContext);
@@ -124,6 +157,15 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 #endif
             }
         }
+
+        private IReadOnlyList<string> MergeParameters(IReadOnlyList<string> commandLineArgumentParameters, TemplateParameter[] globalTemplateParameters)
+            => commandLineArgumentParameters
+                .Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) })
+                .Concat(globalTemplateParameters)
+                .GroupBy(t => t.Name)
+                .Select(x => $"{x.Key}:{x.First().Value}")
+                .ToList()
+                .AsReadOnly();
 
         private (bool Success, ProcessResult Result) ProcessTextTemplate(string filename, CommandLineApplication app, bool interactive, IEnumerable<string> parameterArguments)
         {
@@ -136,7 +178,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
             var result = _processor.Process(template, parameters);
 
-            if (result.CompilerErrors.Any(e => !e.IsWarning))
+            if (Array.Exists(result.CompilerErrors, e => !e.IsWarning))
             {
                 app.Error.WriteLine("Compiler errors:");
                 result.CompilerErrors.Select(err => err.ToString()).ForEach(app.Error.WriteLine);

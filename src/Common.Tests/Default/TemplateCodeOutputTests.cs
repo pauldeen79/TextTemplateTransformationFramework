@@ -20,5 +20,15 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             // Act
             action.Should().Throw<ArgumentNullException>().WithParameterName("codeGeneratorResult");
         }
+
+        [Fact]
+        public void Ctor_Throws_On_Null_PreviousResult()
+        {
+            // Arrange
+            var action = new Action(() => _ = new TemplateCodeOutput<TemplateCodeOutputTests>(Enumerable.Empty<ITemplateToken<TemplateCodeOutputTests>>(), string.Empty, null));
+
+            // Act
+            action.Should().Throw<ArgumentNullException>().WithParameterName("previousResult");
+        }
     }
 }

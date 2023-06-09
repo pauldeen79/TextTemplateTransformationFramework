@@ -17,14 +17,20 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
+        private readonly Mock<ITemplateInfoRepository> _templateInfoRepositoryMock;
         private readonly Mock<IAssemblyService> _assemblyServiceMock;
 
-        private ListParametersCommand CreateSut() => new ListParametersCommand(_processorMock.Object, _fileContentsProviderMock.Object, _assemblyServiceMock.Object);
+        private ListParametersCommand CreateSut() => new ListParametersCommand(
+            _processorMock.Object,
+            _fileContentsProviderMock.Object,
+            _templateInfoRepositoryMock.Object,
+            _assemblyServiceMock.Object);
 
         public ListParametersCommandTests()
         {
             _processorMock = new Mock<ITextTemplateProcessor>();
             _fileContentsProviderMock = new Mock<IFileContentsProvider>();
+            _templateInfoRepositoryMock = new Mock<ITemplateInfoRepository>();
             _assemblyServiceMock = new Mock<IAssemblyService>();
         }
 
@@ -65,7 +71,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
 
             // Assert
-            actual.Should().Be("Error: Either Filename or AssemblyName is required." + Environment.NewLine);
+            actual.Should().Be("Error: Either Filename, AssemblyName or ShortName is required." + Environment.NewLine);
         }
 
         [Fact]
@@ -75,7 +81,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-a myassembly.dll");
 
             // Assert
-            actual.Should().Be("Error: You can either use Filename or AssemblyName, not both." + Environment.NewLine);
+            actual.Should().Be("Error: You can either use Filename, AssemblyName or ShortName, not a combination of these." + Environment.NewLine);
         }
 
         [Fact]
@@ -151,6 +157,45 @@ System.InvalidOperationException: kaboom
 
             // Assert
             actual.Should().Be(@"MyParameter (System.String)
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters_For_TextTemplate_Using_ShortName()
+        {
+            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
+            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
+            _templateInfoRepositoryMock.Setup(x => x.FindByShortName(It.IsAny<string>())).Returns(new TemplateInfo("myshortname", "existing.template", "", "", TemplateType.TextTemplate, Array.Empty<TemplateParameter>()));
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<TextTemplate>()))
+                          .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = "MyParameter", Type = typeof(string) } }, Array.Empty<CompilerError>(), "code", string.Empty));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"MyParameter (System.String)
+");
+        }
+
+        [Fact]
+        public void Execute_Without_Errors_And_Exception_Produces_Correct_List_Of_Parameters_For_AssemblyTemplate_Using_ShortName()
+        {
+            _processorMock.Setup(x => x.ExtractParameters(It.IsAny<AssemblyTemplate>()))
+                          .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = "MyParameter", Type = typeof(string) } }, Array.Empty<CompilerError>(), "code", string.Empty));
+            _templateInfoRepositoryMock.Setup(x => x.FindByShortName(It.IsAny<string>())).Returns(new TemplateInfo("myshortname", "", "my.dll", "myclassname", TemplateType.AssemblyTemplate, Array.Empty<TemplateParameter>()));
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"MyParameter (System.String)
+");
+        }
+
+        [Fact]
+        public void Execute_With_Non_Existing_Short_Name_Gives_Exception()
+        {
+            var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname");
+
+            // Assert
+            actual.Should().Be(@"Exception occured:
+System.InvalidOperationException: Could not find template with short name myshortname
 ");
         }
     }

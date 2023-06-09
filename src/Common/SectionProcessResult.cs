@@ -93,6 +93,11 @@ namespace TextTemplateTransformationFramework.Common
         public static SectionProcessResult<TState> Create<TState>(SectionProcessResultData<TState> data)
             where TState : class
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             data.Validate();
 
             //First validate the model...

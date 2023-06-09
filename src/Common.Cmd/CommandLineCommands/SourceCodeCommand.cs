@@ -29,7 +29,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             {
                 command.Description = "Generates the template, and shows the template source code";
 
-                var filenameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
+                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
                 var outputOption = command.Option<string>("-o|--output <PATH>", "The output filename", CommandOptionType.SingleValue);
                 var diagnosticDumpOutputOption = command.Option<string>("-diag|--diagnosticoutput <PATH>", "The diagnostic output filename", CommandOptionType.SingleValue);
                 var parametersArgument = command.Argument("Parameters", "Optional parameters to use (name:value)", true);
@@ -40,22 +40,22 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 command.OnExecute(() =>
                 {
                     CommandBase.LaunchDebuggerIfSet(debuggerOption);
-                    var filename = filenameOption.Value();
+                    var fileName = fileNameOption.Value();
                     var parameters = parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray();
 
-                    if (string.IsNullOrEmpty(filename))
+                    if (string.IsNullOrEmpty(fileName))
                     {
                         app.Error.WriteLine("Error: Filename is required.");
                         return;
                     }
 
-                    if (!_fileContentsProvider.FileExists(filename))
+                    if (!_fileContentsProvider.FileExists(fileName))
                     {
-                        app.Error.WriteLine($"Error: File [{filename}] does not exist.");
+                        app.Error.WriteLine($"Error: File [{fileName}] does not exist.");
                         return;
                     }
 
-                    var result = _processor.PreProcess(new TextTemplate(_fileContentsProvider.GetFileContents(filename), filename), parameters);
+                    var result = _processor.PreProcess(new TextTemplate(_fileContentsProvider.GetFileContents(fileName), fileName), parameters);
 
                     if (!string.IsNullOrEmpty(result.Exception))
                     {

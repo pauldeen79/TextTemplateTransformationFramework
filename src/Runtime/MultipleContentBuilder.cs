@@ -67,7 +67,7 @@ namespace TextTemplateTransformationFramework.Runtime
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
         {
             var basePath = BasePath;
-            if (lastGeneratedFilesPath?.Contains('\\') == true)
+            if (lastGeneratedFilesPath != null && lastGeneratedFilesPath.Contains('\\'))
             {
                 var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
 

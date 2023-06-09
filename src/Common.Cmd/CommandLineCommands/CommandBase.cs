@@ -46,14 +46,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             return assemblyLoadContext;
         }
 
-        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string filename, string assemblyName, string className)
+        internal static string GetValidationResultWithRequiredShortName(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className, string shortName)
         {
-            if (string.IsNullOrEmpty(filename) && string.IsNullOrEmpty(assemblyName))
+            if (string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(assemblyName))
             {
                 return "Either Filename or AssemblyName is required.";
             }
 
-            if (!string.IsNullOrEmpty(filename) && !string.IsNullOrEmpty(assemblyName))
+            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(assemblyName))
             {
                 return "You can either use Filename or AssemblyName, not both.";
             }
@@ -63,13 +63,53 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 return "When AssemblyName is filled, then ClassName is required.";
             }
 
-            if (!string.IsNullOrEmpty(filename) && !fileContentsProvider.FileExists(filename))
+            if (!string.IsNullOrEmpty(fileName) && !fileContentsProvider.FileExists(fileName))
             {
-                return $"File [{filename}] does not exist.";
+                return $"File [{fileName}] does not exist.";
+            }
+
+            if (string.IsNullOrEmpty(shortName))
+            {
+                return "Shortname is required.";
+            }
+
+            return string.Empty;
+        }
+
+        internal static string GetValidationResult(IFileContentsProvider fileContentsProvider, string fileName, string assemblyName, string className, string shortName)
+        {
+            int typeIndicatorCounter = 0;
+            if (!string.IsNullOrEmpty(fileName)) typeIndicatorCounter++;
+            if (!string.IsNullOrEmpty(assemblyName)) typeIndicatorCounter++;
+            if (!string.IsNullOrEmpty(shortName)) typeIndicatorCounter++;
+
+            if (typeIndicatorCounter == 0)
+            {
+                return "Either Filename, AssemblyName or ShortName is required.";
+            }
+
+            if (typeIndicatorCounter > 1)
+            {
+                return "You can either use Filename, AssemblyName or ShortName, not a combination of these.";
+            }
+
+            if (!string.IsNullOrEmpty(assemblyName) && string.IsNullOrEmpty(className))
+            {
+                return "When AssemblyName is filled, then ClassName is required.";
+            }
+
+            if (!string.IsNullOrEmpty(fileName) && !fileContentsProvider.FileExists(fileName))
+            {
+                return $"File [{fileName}] does not exist.";
             }
 
             return null;
         }
+
+        internal static TemplateType GetTemplateType(string assemblyName)
+            => string.IsNullOrEmpty(assemblyName)
+                ? TemplateType.TextTemplate
+                : TemplateType.AssemblyTemplate;
 
         [ExcludeFromCodeCoverage]
         internal static void LaunchDebuggerIfSet(CommandOption<string> debuggerOption)
@@ -134,6 +174,55 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
                 }
                 Thread.Sleep(1000);
             }
+        }
+
+        internal static void ModifyGlobalTemplate(
+            CommandLineApplication app,
+            IFileContentsProvider fileContentsProvider,
+            Action<TemplateInfo> modifyAction,
+            string commandName,
+            string commandDescription,
+            string resultText,
+            bool allowParameters)
+        {
+            if (app == null) throw new ArgumentNullException(nameof(app));
+            app.Command(commandName, command =>
+            {
+                command.Description = commandDescription;
+                var debuggerOption = GetDebuggerOption(command);
+                var shortNameOption = command.Option<string>("-s|--shortname <NAME>", "The unique name of the template", CommandOptionType.SingleValue);
+                var fileNameOption = command.Option<string>("-f|--filename <PATH>", "The template filename", CommandOptionType.SingleValue);
+                var assemblyNameOption = command.Option<string>("-a|--assembly <ASSEMBLY>", "The template assembly", CommandOptionType.SingleValue);
+                var classNameOption = command.Option<string>("-n|--classname <CLASS>", "The template class name", CommandOptionType.SingleValue);
+                var parametersArgument = allowParameters
+                    ? command.Argument("Parameters", "Optional parameters to use (name:value)", true)
+                    : null;
+                command.HelpOption();
+                command.OnExecute(() =>
+                {
+                    LaunchDebuggerIfSet(debuggerOption);
+                    var shortName = shortNameOption.Value();
+                    var fileName = fileNameOption.Value();
+                    var assemblyName = assemblyNameOption.Value();
+                    var className = classNameOption.Value();
+
+                    var validationResult = GetValidationResultWithRequiredShortName(fileContentsProvider, fileName, assemblyName, className, shortName);
+                    if (!string.IsNullOrEmpty(validationResult))
+                    {
+                        app.Out.WriteLine($"Error: {validationResult}");
+                        return;
+                    }
+
+                    var type = GetTemplateType(assemblyName);
+                    var parameters = allowParameters
+                        ? parametersArgument.Values.Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) }).ToArray()
+                        : Array.Empty<TemplateParameter>();
+                    
+                    modifyAction(new TemplateInfo(shortName, fileName ?? string.Empty, assemblyName ?? string.Empty, className ?? string.Empty, type, parameters));
+                    
+                    app.Out.WriteLine(resultText);
+                });
+            });
         }
     }
 }
