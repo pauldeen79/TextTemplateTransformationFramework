@@ -38,7 +38,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                     info.Property.SetValue(context.TemplateCompilerOutput.Template, info.Attributes.First().Value.ConvertValue(info.Property.PropertyType));
                 }
 
-                if (sessionPropertyValue?.ContainsKey(info.Property.Name) == false)
+                if (sessionPropertyValue != null && !sessionPropertyValue.ContainsKey(info.Property.Name))
                 {
                     sessionPropertyValue.Add(info.Property.Name, info.Attributes.First().Value.ConvertValue(info.Property.PropertyType));
                 }
