@@ -107,7 +107,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         private static string GetFileName() => Path.Combine(GetDirectory(), "templates.config");
 
-        private static string GetDirectory() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "T4Plus");
+        private static string GetDirectory() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".t4plus");
 
         private static TemplateInfo FindTemplate(TemplateInfo templateInfo, List<TemplateInfo> templates)
             => templates.Find(x =>
