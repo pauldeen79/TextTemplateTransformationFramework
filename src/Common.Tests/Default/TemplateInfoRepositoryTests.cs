@@ -107,6 +107,21 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         }
 
         [Fact]
+        public void Add_Creates_Directory_When_It_Does_Not_Exist_Yet()
+        {
+            // Arrange
+            _fileContentsProviderMock.Setup(x => x.DirectoryExists(It.IsAny<string>())).Returns(false);
+            var sut = new TemplateInfoRepository(_fileContentsProviderMock.Object);
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+
+            // Act
+            sut.Add(templateInfo);
+
+            // Assert
+            _fileContentsProviderMock.Verify(x => x.CreateDirectory(It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
         public void Update_Updates_The_Specified_Template_Correctly()
         {
             // Arrange
