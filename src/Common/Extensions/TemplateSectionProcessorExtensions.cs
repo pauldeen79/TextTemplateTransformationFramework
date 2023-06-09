@@ -32,7 +32,11 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                         Clause.Create<Type, bool>(() => type.GetCustomAttribute<AllowAllSectionsAttribute>(true) != null, () => true),
                         Clause.Create<Type, bool>
                         (
+#if NETFRAMEWORK
                             () => context.Section.StartsWith("@"),
+#else
+                            () => context.Section.StartsWith('@'),
+#endif
                             () => ScopedMember.Evaluate
                                 (
                                     type.GetCustomAttribute<DirectivePrefixAttribute>(true),

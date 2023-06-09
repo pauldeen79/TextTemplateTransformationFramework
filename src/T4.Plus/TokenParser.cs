@@ -36,7 +36,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
             try
             {
                 var result = _baseParser.Parse(context);
-                if (!result.OfType<ISourceSectionToken<TokenParserState>>().Any(x => x.SourceSection.StartsWith("@ template")))
+                if (!result.OfType<ISourceSectionToken<TokenParserState>>().Any(x => x.SourceSection.StartsWith("@ template", StringComparison.OrdinalIgnoreCase)))
                 {
                     result = _baseParser.Parse
                     (

@@ -18,8 +18,8 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 (
                     t => !t.IsInterface
                     && !t.IsAbstract
-                    && t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition().Equals(typeof(ITemplateSectionProcessor<>)))
-                    && t.GetConstructors().Any(c => c.GetParameters().Length == 0)
+                    && Array.Exists(t.GetInterfaces(), i => i.IsGenericType && i.GetGenericTypeDefinition().Equals(typeof(ITemplateSectionProcessor<>)))
+                    && Array.Exists(t.GetConstructors(), c => c.GetParameters().Length == 0)
                 )
                 .Select(t => t.GetModelType(typeof(TState)))
                 .Where(t => !typeof(INonDiscoverableTemplateSectionProcessor<TState>).IsAssignableFrom(t));
