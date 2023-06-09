@@ -103,5 +103,13 @@ namespace TextTemplateTransformationFramework.Common.Tests
             // Assert
             actual.PassThrough.Should().BeFalse();
         }
+
+        [Fact]
+        public void Create_Throws_On_Null_Data_Argument()
+        {
+            // Act & Assert
+            this.Invoking(_ => SectionProcessResult.Create<SectionProcessResultTests>(null))
+                .Should().Throw<ArgumentNullException>().WithParameterName("data");
+        }
     }
 }
