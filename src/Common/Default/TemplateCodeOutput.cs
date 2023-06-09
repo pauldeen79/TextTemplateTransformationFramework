@@ -35,13 +35,17 @@ namespace TextTemplateTransformationFramework.Common.Default
                                   string sourceCode,
                                   TemplateCodeOutput<TState> previousResult)
             : this(sourceTokens,
-                   new CodeGeneratorResult(sourceCode, previousResult.Language, previousResult.Errors ?? Enumerable.Empty<CompilerError>()),
-                   previousResult.OutputExtension,
-                   previousResult.ReferencedAssemblies,
-                   previousResult.PackageReferences,
-                   previousResult.ClassName,
-                   previousResult.TempPath)
+                   new CodeGeneratorResult(sourceCode, previousResult?.Language ?? "C#", previousResult?.Errors ?? Enumerable.Empty<CompilerError>()),
+                   previousResult?.OutputExtension,
+                   previousResult?.ReferencedAssemblies,
+                   previousResult?.PackageReferences,
+                   previousResult?.ClassName,
+                   previousResult?.TempPath)
         {
+            if (previousResult == null)
+            {
+                throw new ArgumentNullException(nameof(previousResult));
+            }
         }
 
         public string Language { get; }
