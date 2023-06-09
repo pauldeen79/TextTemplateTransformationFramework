@@ -85,12 +85,7 @@ namespace TextTemplateTransformationFramework.Common.Default
             }
 
             var templates = GetTemplates().ToList();
-            var templateToRemove = FindTemplate(templateInfo, templates);
-            if (templateToRemove == null)
-            {
-                throw new ArgumentOutOfRangeException(nameof(templateInfo), "Template was not found");
-            }
-
+            var templateToRemove = FindTemplate(templateInfo, templates) ?? throw new ArgumentOutOfRangeException(nameof(templateInfo), "Template was not found");
             templates.Remove(templateToRemove);
             Save(templates);
         }
