@@ -1,4 +1,5 @@
-﻿using TextTemplateTransformationFramework.Common;
+﻿using System;
+using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.RenderTokens;
 
@@ -21,6 +22,41 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
             ValueSpecifier customTemplateNameDelegate)
             : base(context)
         {
+            if (childTemplate == null)
+            {
+                throw new ArgumentNullException(nameof(childTemplate));
+            }
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (separatorTemplate == null)
+            {
+                throw new ArgumentNullException(nameof(separatorTemplate));
+            }
+
+            if (customResolverDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(customResolverDelegate));
+            }
+
+            if (customRenderChildTemplateDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(customRenderChildTemplateDelegate));
+            }
+
+            if (resolverDelegateModel == null)
+            {
+                throw new ArgumentNullException(nameof(resolverDelegateModel));
+            }
+
+            if (customTemplateNameDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(customTemplateNameDelegate));
+            }
+
             ChildTemplateName = childTemplate.Value;
             ChildTemplateNameIsLiteral = childTemplate.ValueIsLiteral;
             Model = model.Value;
