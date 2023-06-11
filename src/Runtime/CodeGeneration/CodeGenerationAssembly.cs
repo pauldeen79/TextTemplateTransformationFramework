@@ -92,7 +92,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
         }
 
         private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
-            => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && Array.Exists(t.GetInterfaces(), i => i.FullName == "TextTemplateTransformationFramework.Runtime.CodeGeneration.ICodeGenerationProvider"))
+            => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && Array.Exists(t.GetInterfaces(), i => i.FullName == typeof(ICodeGenerationProvider).FullName))
                 .Where(FilterIsValid)
                 .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)));
 

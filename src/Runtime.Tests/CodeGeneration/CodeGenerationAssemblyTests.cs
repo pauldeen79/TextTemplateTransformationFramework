@@ -65,6 +65,23 @@ namespace TextTemplateTransformationFramework.Runtime.Tests.CodeGeneration
   </Contents>
 </MultipleContents>");
         }
+
+        [Fact]
+        public void Generate_Runs_Filtered_CodeGenerators_In_Specified_Assembly_No_Matches()
+        {
+            // Arrange
+            using var sut = new CodeGenerationAssembly(GetType().Assembly.FullName, @"C:\", true, true, classNameFilter: new[] { "WrongName" });
+
+            // Act
+            var actual = sut.Generate();
+
+            // Assert
+            actual.Should().Be(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">
+  <BasePath>C:\</BasePath>
+  <Contents />
+</MultipleContents>");
+        }
     }
 
     [ExcludeFromCodeCoverage]
