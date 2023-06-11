@@ -27,6 +27,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Chi
                 throw new ArgumentNullException(nameof(customResolverDelegate));
             }
 
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (resolverDelegateModel == null)
+            {
+                throw new ArgumentNullException(nameof(resolverDelegateModel));
+            }
+
             ViewModelName = viewModel.Value;
             ViewModelNameIsLiteral = viewModel.ValueIsLiteral;
             Model = model.Value;

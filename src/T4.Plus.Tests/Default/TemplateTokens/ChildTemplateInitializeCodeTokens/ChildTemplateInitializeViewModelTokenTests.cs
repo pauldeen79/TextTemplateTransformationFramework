@@ -79,6 +79,70 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
         }
 
         [Fact]
+        public void Ctor_Throws_On_Null_Model()
+        {
+            // Arrange
+            var loggerMock = new Mock<ILogger>();
+            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var context = SectionContext.FromSection
+            (
+                new Section("test.template", 1, "contents"),
+                Mode.CodeCompositionRootFeature,
+                Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
+                tokenParserCallbackMock.Object,
+                this,
+                loggerMock.Object,
+                Array.Empty<TemplateParameter>()
+            );
+            var viewModel = new ValueSpecifier("viewModel", true);
+            var silentlyContinueOnError = true;
+            var customResolverDelegate = new ValueSpecifier("customResolverDelegate", true);
+            var resolverDelegateModel = new ValueSpecifier("resolverDelegate", true);
+
+            // Act & Assert
+            this.Invoking(_ => new ChildTemplateInitializeViewModelToken<ChildTemplateInitializeViewModelTokenTests>(
+                context,
+                viewModel,
+                null,
+                silentlyContinueOnError,
+                customResolverDelegate,
+                resolverDelegateModel))
+                .Should().Throw<ArgumentNullException>().WithParameterName("model");
+        }
+
+        [Fact]
+        public void Ctor_Throws_On_Null_ResolverDelegateModel()
+        {
+            // Arrange
+            var loggerMock = new Mock<ILogger>();
+            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var context = SectionContext.FromSection
+            (
+                new Section("test.template", 1, "contents"),
+                Mode.CodeCompositionRootFeature,
+                Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
+                tokenParserCallbackMock.Object,
+                this,
+                loggerMock.Object,
+                Array.Empty<TemplateParameter>()
+            );
+            var viewModel = new ValueSpecifier("viewModel", true);
+            var model = new ValueSpecifier("model", true);
+            var silentlyContinueOnError = true;
+            var customResolverDelegate = new ValueSpecifier("customResolverDelegate", true);
+
+            // Act & Assert
+            this.Invoking(_ => new ChildTemplateInitializeViewModelToken<ChildTemplateInitializeViewModelTokenTests>(
+                context,
+                viewModel,
+                model,
+                silentlyContinueOnError,
+                customResolverDelegate,
+                null))
+                .Should().Throw<ArgumentNullException>().WithParameterName("resolverDelegateModel");
+        }
+
+        [Fact]
         public void Can_Construct()
         {
             // Arrange
