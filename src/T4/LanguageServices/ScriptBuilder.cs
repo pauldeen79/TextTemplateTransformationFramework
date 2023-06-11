@@ -49,7 +49,7 @@ namespace TextTemplateTransformationFramework.T4.LanguageServices
             {
                 var serializerType = typeof(DirectiveSerializer<,>).MakeGenericType(typeof(TokenParserState), model.GetType());
                 var context = SectionContext<TokenParserState>.Empty;
-                var serializer = Activator.CreateInstance(serializerType, new object[] { context, _fileNameProvider, _fileContentsProvider, _templateCodeCompiler });
+                var serializer = Activator.CreateInstance(serializerType, context, _fileNameProvider, _fileContentsProvider, _templateCodeCompiler);
                 var serializerOutput = model is SectionModel sm
                     ? sm.Code ?? string.Empty
                     : serializerType
