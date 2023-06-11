@@ -46,7 +46,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
         private static void SetViewModelDefaultValues(PropertyInfo viewModelProperty, object viewModelValue, IDictionary<string, object> sessionPropertyValue)
         {
             foreach (var info in viewModelProperty.PropertyType.GetProperties()
-                .Where(p => sessionPropertyValue.ContainsKey(p.Name) != true)
+                .Where(p => !sessionPropertyValue.ContainsKey(p.Name))
                 .Select(p => new
                 {
                     Property = p,
