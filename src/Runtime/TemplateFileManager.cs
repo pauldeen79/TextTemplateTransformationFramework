@@ -53,7 +53,7 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 foreach (var item in MultipleContentBuilder.Contents)
                 {
-                    _originalStringBuilder.Append(item.Builder.ToString());
+                    _originalStringBuilder.Append(item.Builder);
                 }
             }
         }

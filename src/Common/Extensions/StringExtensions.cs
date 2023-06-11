@@ -57,7 +57,11 @@ namespace TextTemplateTransformationFramework.Common.Extensions
 
         public static string GetAssemblyName(this string instance)
             => instance.IndexOf(", ") > -1
+#if NETFRAMEWORK
                 ? instance.Substring(0, instance.IndexOf(", ")) + ".dll"
+#else
+                ? string.Concat(instance.AsSpan(0, instance.IndexOf(", ")), ".dll")
+#endif
                 : instance;
 
         public static bool IsFullyQualifiedAssemblyName(this string instance)

@@ -26,7 +26,11 @@ namespace Utilities.Extensions
                 return value;
             }
 
+#if NETFRAMEWORK
             return value.Substring(0, 1).ToUpper(CultureInfo.InvariantCulture) + value.Substring(1);
+#else
+            return string.Concat(value.Substring(0, 1).ToUpper(CultureInfo.InvariantCulture), value.AsSpan(1));
+#endif
         }
 
         /// <summary>
@@ -43,7 +47,11 @@ namespace Utilities.Extensions
                 return value;
             }
 
+#if NETFRAMEWORK
             return value.Substring(0, 1).ToLower(CultureInfo.InvariantCulture) + value.Substring(1);
+#else
+            return string.Concat(value.Substring(0, 1).ToLower(CultureInfo.InvariantCulture), value.AsSpan(1));
+#endif
         }
 
         /// <summary>
@@ -124,7 +132,11 @@ namespace Utilities.Extensions
                     break;
                 }
 
+#if NETFRAMEWORK
                 instance = instance.Substring(0, startIndex) + instance.Substring(secondIndex + 1);
+#else
+                instance = string.Concat(instance.AsSpan(0, startIndex), instance.AsSpan(secondIndex + 1));
+#endif
             }
 
             while (true)
@@ -135,7 +147,11 @@ namespace Utilities.Extensions
                     break;
                 }
 
+#if NETFRAMEWORK
                 instance = instance.Substring(0, startIndex) + instance.Substring(startIndex + 2);
+#else
+                instance = string.Concat(instance.AsSpan(0, startIndex), instance.AsSpan(startIndex + 2));
+#endif
             }
 
             //remove assebmly name from type, e.g. System.String, mscorlib bla bla bla -> System.String

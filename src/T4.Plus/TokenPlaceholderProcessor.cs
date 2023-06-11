@@ -42,6 +42,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                                                 .Select(p => p.Value.ToStringWithDefault())
                                                 .LastOrDefault()
             );
+#if NETFRAMEWORK
             value = value.IndexOf("$(NuGetDir)", StringComparison.OrdinalIgnoreCase) == -1
                 ? value
                 : value.Replace("$(NuGetDir)", Environment.GetEnvironmentVariable("UserProfile") + @"\.nuget\packages\", StringComparison.OrdinalIgnoreCase);
@@ -53,8 +54,21 @@ namespace TextTemplateTransformationFramework.T4.Plus
             value = value.IndexOf("$(TempPath)", StringComparison.OrdinalIgnoreCase) == -1
                 ? value
                 : value.Replace("$(TempPath)", Path.GetTempPath(), StringComparison.OrdinalIgnoreCase);
-
             if (value.IndexOf("$(TemplateParameter.", StringComparison.OrdinalIgnoreCase) > -1)
+#else
+            value = !value.Contains("$(NuGetDir)", StringComparison.OrdinalIgnoreCase)
+                ? value
+                : value.Replace("$(NuGetDir)", Environment.GetEnvironmentVariable("UserProfile") + @"\.nuget\packages\", StringComparison.OrdinalIgnoreCase);
+
+            value = !value.Contains("$(NETCoreAppDir)", StringComparison.OrdinalIgnoreCase)
+                ? value
+                : value.Replace("$(NETCoreAppDir)", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\dotnet\shared\Microsoft.NETCore.App\{Environment.Version}\", StringComparison.OrdinalIgnoreCase);
+
+            value = !value.Contains("$(TempPath)", StringComparison.OrdinalIgnoreCase)
+                ? value
+                : value.Replace("$(TempPath)", Path.GetTempPath(), StringComparison.OrdinalIgnoreCase);
+            if (value.Contains("$(TemplateParameter.", StringComparison.OrdinalIgnoreCase))
+#endif
             {
                 value = existingTokens
                     .GetTemplateTokensFromSections<TState, ITemplateParameterToken<TState>>()
@@ -113,7 +127,11 @@ namespace TextTemplateTransformationFramework.T4.Plus
             Func<TValue, string> getValueDelegate,
             Func<string> defaultValueFunc = null
         ) where TValue : ITemplateToken<TState>
+#if NETFRAMEWORK
             => value.IndexOf(variable) == -1
+#else
+            => !value.Contains(variable, StringComparison.CurrentCulture)
+#endif
                 ? value
                 : value.Replace
                     (
