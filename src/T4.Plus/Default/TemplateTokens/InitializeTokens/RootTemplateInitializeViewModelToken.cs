@@ -1,4 +1,5 @@
-﻿using TextTemplateTransformationFramework.Common;
+﻿using System;
+using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.InitializeTokens;
 
@@ -12,9 +13,29 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ini
                                                     ValueSpecifier model,
                                                     bool silentlyContinueOnError,
                                                     ValueSpecifier customResolverDelegate,
-                                                    ValueSpecifier resolverDelegate)
+                                                    ValueSpecifier customResolverDelegateModel)
             : base(context)
         {
+            if (viewModel == null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (customResolverDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(customResolverDelegate));
+            }
+
+            if (customResolverDelegateModel == null)
+            {
+                throw new ArgumentNullException(nameof(customResolverDelegateModel));
+            }
+
             ViewModelName = viewModel.Value;
             ViewModelNameIsLiteral = viewModel.ValueIsLiteral;
             Model = model.Value;
@@ -22,8 +43,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ini
             SilentlyContinueOnError = silentlyContinueOnError;
             CustomResolverDelegateExpression = customResolverDelegate.Value;
             CustomResolverDelegateExpressionIsLiteral = customResolverDelegate.ValueIsLiteral;
-            ResolverDelegateModel = resolverDelegate.Value;
-            ResolverDelegateModelIsLiteral = resolverDelegate.ValueIsLiteral;
+            ResolverDelegateModel = customResolverDelegateModel.Value;
+            ResolverDelegateModelIsLiteral = customResolverDelegateModel.ValueIsLiteral;
         }
 
         public string ViewModelName { get; }
