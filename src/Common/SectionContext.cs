@@ -37,7 +37,7 @@ namespace TextTemplateTransformationFramework.Common
             (
                 section ?? throw new ArgumentNullException(nameof(section)),
                 existingTokens,
-                tokenParserCallback ?? throw new ArgumentNullException(nameof(tokenParserCallback)),
+                tokenParserCallback,
                 currentMode,
                 state,
                 logger,
