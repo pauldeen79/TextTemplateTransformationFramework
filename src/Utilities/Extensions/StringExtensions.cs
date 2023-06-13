@@ -325,10 +325,10 @@ namespace Utilities.Extensions
             }
 
             // Replace all invalid chars by underscores 
-            token = Regex.Replace(token, @"[\W\b]", "_", RegexOptions.IgnoreCase);
+            token = Regex.Replace(token, @"[\W\b]", "_", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(200));
 
             // If it starts with a digit, prefix it with an underscore 
-            token = Regex.Replace(token, @"^\d", "_$0");
+            token = Regex.Replace(token, @"^\d", "_$0", RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
             return token;
         }
