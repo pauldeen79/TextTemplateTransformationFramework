@@ -345,7 +345,7 @@ namespace TextTemplateTransformationFramework.Runtime
             }
 
             var errors = enumerableErrors.OfType<object>().Select(CreateCompilerError).ToArray();
-            if (errors.All(e => e.IsWarning))
+            if (Array.TrueForAll(errors, e => e.IsWarning))
             {
                 hasErrors = false;
                 return Enumerable.Empty<CompilerError>();

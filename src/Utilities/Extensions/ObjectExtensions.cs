@@ -28,7 +28,7 @@ namespace Utilities.Extensions
                 return string.Empty;
             }
 
-            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && x.GetParameters().All(y => y.Name == "provider")).ToArray();
+            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && Array.TrueForAll(x.GetParameters(), y => y.Name == "provider")).ToArray();
             if (toStringMethods.Length == 1)
             {
                 return (string)toStringMethods[0].Invoke(value, new[] { CultureInfo.InvariantCulture });
@@ -52,7 +52,7 @@ namespace Utilities.Extensions
                 return defaultValue;
             }
 
-            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && x.GetParameters().All(y => y.Name == "provider")).ToArray();
+            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && Array.TrueForAll(x.GetParameters(), y => y.Name == "provider")).ToArray();
             if (toStringMethods.Length == 1)
             {
                 return (string)toStringMethods[0].Invoke(value, new[] { CultureInfo.InvariantCulture });
@@ -87,7 +87,7 @@ namespace Utilities.Extensions
                     : "false";
             }
 
-            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && x.GetParameters().All(y => y.Name == "provider")).ToArray();
+            var toStringMethods = value.GetType().GetMethods().Where(x => x.Name == "ToString" && x.GetParameters().Length > 0 && Array.TrueForAll(x.GetParameters(), y => y.Name == "provider")).ToArray();
             if (toStringMethods.Length == 1)
             {
                 return (string)toStringMethods[0].Invoke(value, new[] { CultureInfo.InvariantCulture });

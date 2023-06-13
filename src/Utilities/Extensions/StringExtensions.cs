@@ -196,7 +196,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsTrue(this string instance)
         {
-            return instance != null && _trueKeywords.Any(s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance != null && Array.Exists(_trueKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsFalse(this string instance)
         {
-            return instance != null && _falseKeywords.Any(s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance != null && Array.Exists(_falseKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Utilities.Extensions
         /// </returns>
         public static bool In(this string value, StringComparison stringComparison, params string[] values)
         {
-            return values.Any(i => i.Equals(value, stringComparison));
+            return Array.Exists(values, i => i.Equals(value, stringComparison));
         }
 
         /// <summary>
