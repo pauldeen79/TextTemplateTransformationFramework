@@ -89,7 +89,7 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
                     .GetMethod(nameof(DirectiveSerializer<TState, object>.Deserialize))
                     .Invoke
                     (
-                        Activator.CreateInstance(_directiveSerializerType, new object[] { context, _fileNameProvider, _fileContentsProvider, _templateCodeCompiler }),
+                        Activator.CreateInstance(_directiveSerializerType, context, _fileNameProvider, _fileContentsProvider, _templateCodeCompiler),
                         Array.Empty<object>()
                     ),
                 model => SectionProcessResult.Create

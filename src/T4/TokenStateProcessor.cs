@@ -94,7 +94,11 @@ namespace TextTemplateTransformationFramework.T4
                     directiveProcessResult => directiveProcessResult
                         .Either
                         (
+#if NETFRAMEWORK
                             _ => sectionContext.Section.StartsWith("@"), _ => ProcessSectionResult.Unrecognized(sectionContext),
+#else
+                            _ => sectionContext.Section.StartsWith('@'), _ => ProcessSectionResult.Unrecognized(sectionContext),
+#endif
                             _ => ProcessStateUsingProcessor(sectionContext, _codeSectionProcessor)
                         )
                 );

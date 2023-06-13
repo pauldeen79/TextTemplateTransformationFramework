@@ -8,8 +8,8 @@ namespace TextTemplateTransformationFramework.Common.Extensions
     {
         public static IEnumerable<ITemplateSectionProcessor<TState>> GetCustomSectionProcessors<TState>(this ITextTemplateProcessorContext<TState> instance)
             where TState : class
-            => instance.ContainsKey("Common.CustomSectionProcessors")
-                ? (IEnumerable<ITemplateSectionProcessor<TState>>)instance["Common.CustomSectionProcessors"]
+            => instance.TryGetValue("Common.CustomSectionProcessors", out var result)
+                ? (IEnumerable<ITemplateSectionProcessor<TState>>)result
                 : Enumerable.Empty<ITemplateSectionProcessor<TState>>();
 
         public static ITextTemplateProcessorContext<TState> SetCustomSectionProcessors<TState>(this ITextTemplateProcessorContext<TState> instance, IEnumerable<ITemplateSectionProcessor<TState>> customSectionProcessors)

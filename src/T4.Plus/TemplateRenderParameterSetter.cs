@@ -46,7 +46,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
         private static void SetViewModelDefaultValues(PropertyInfo viewModelProperty, object viewModelValue, IDictionary<string, object> sessionPropertyValue)
         {
             foreach (var info in viewModelProperty.PropertyType.GetProperties()
-                .Where(p => sessionPropertyValue?.ContainsKey(p.Name) != true)
+                .Where(p => !sessionPropertyValue.ContainsKey(p.Name))
                 .Select(p => new
                 {
                     Property = p,
@@ -59,7 +59,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     info.Property.SetValue(viewModelValue, new TemplateParameter { Name = info.Property.Name, Value = info.Attributes.First().Value }.ConvertType(viewModelValue.GetType()));
                 }
 
-                if (sessionPropertyValue != null && !sessionPropertyValue.ContainsKey(info.Property.Name))
+                if (!sessionPropertyValue.ContainsKey(info.Property.Name))
                 {
                     sessionPropertyValue.Add(info.Property.Name, info.Attributes.First().Value);
                 }
@@ -86,7 +86,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
 
         private static IDictionary<string, object> GetSessionPropertyValue(ITemplateProcessorContext<TState> context, PropertyInfo sessionProperty)
             => sessionProperty == null
-                ? null
+                ? new Dictionary<string, object>()
                 : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
 
         private static object GetViewModelValue(ITemplateProcessorContext<TState> context, PropertyInfo viewModelProperty)

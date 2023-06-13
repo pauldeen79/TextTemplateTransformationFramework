@@ -153,6 +153,9 @@ dotnet_diagnostic.CA1508.severity = none
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = none
 
+# SYSLIB1045 Use 'GeneratedRegexAttribute' to generate the regular expression implementation at compile-time.
+dotnet_diagnostic.SYSLIB1045.severity = none
+
 ###############################
 # VB Coding Conventions       #
 ###############################

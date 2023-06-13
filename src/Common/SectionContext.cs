@@ -35,7 +35,7 @@ namespace TextTemplateTransformationFramework.Common
         ) where TState : class
             => new SectionContext<TState>
             (
-                section,
+                section ?? throw new ArgumentNullException(nameof(section)),
                 existingTokens,
                 tokenParserCallback,
                 currentMode,

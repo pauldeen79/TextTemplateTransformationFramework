@@ -1,4 +1,5 @@
-﻿using TextTemplateTransformationFramework.Common;
+﻿using System;
+using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens;
 using TextTemplateTransformationFramework.T4.Plus.Contracts.TemplateTokens.InitializeTokens;
@@ -16,6 +17,26 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Chi
                                                      ValueSpecifier resolverDelegateModel)
             : base(context)
         {
+            if (viewModel == null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
+            if (customResolverDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(customResolverDelegate));
+            }
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (resolverDelegateModel == null)
+            {
+                throw new ArgumentNullException(nameof(resolverDelegateModel));
+            }
+
             ViewModelName = viewModel.Value;
             ViewModelNameIsLiteral = viewModel.ValueIsLiteral;
             Model = model.Value;

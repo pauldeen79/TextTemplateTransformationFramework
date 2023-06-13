@@ -13,14 +13,14 @@ namespace TextTemplateTransformationFramework.Runtime
                                    string basePath = null,
                                    IMultipleContentBuilder multipleContentBuilder = null)
         {
-            if (getStringBuilderDelegate == null)
-            {
-                throw new ArgumentNullException(nameof(getStringBuilderDelegate));
-            }
-
             if (setStringBuilderDelegate == null)
             {
                 throw new ArgumentNullException(nameof(setStringBuilderDelegate));
+            }
+
+            if (getStringBuilderDelegate == null)
+            {
+                throw new ArgumentNullException(nameof(getStringBuilderDelegate));
             }
 
             _setStringBuilderDelegate = setStringBuilderDelegate;
@@ -53,7 +53,7 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 foreach (var item in MultipleContentBuilder.Contents)
                 {
-                    _originalStringBuilder.Append(item.Builder.ToString());
+                    _originalStringBuilder.Append(item.Builder);
                 }
             }
         }

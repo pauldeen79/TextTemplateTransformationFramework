@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,6 +14,12 @@ namespace TextTemplateTransformationFramework.Runtime
         public Func<object, string> TemplateNameDelegate { get; set; }
     }
 
+    public class EnumerableItem
+    {
+        public int IterationCount { get; set; }
+        public int IterationNumber { get; set; }
+        public object Model { get; set; }
+    }
     public class T4PlusGeneratedTemplateBase : T4GeneratedTemplateBase
     {
         #region Child templates
@@ -194,7 +199,7 @@ namespace TextTemplateTransformationFramework.Runtime
                     {
                         RenderTemplate(template, item, iterationNumber, iterationCount, templateName);
                     }
-                    RenderSeparator(model, renderAsEnumerable, silentlyContinueOnError, separatorTemplateName, resolverDelegateModel, iterationCount, iterationNumber, item, customDelegates);
+                    RenderSeparator(model, renderAsEnumerable, silentlyContinueOnError, separatorTemplateName, resolverDelegateModel, new EnumerableItem { IterationCount = iterationCount, IterationNumber = iterationNumber, Model = item }, customDelegates);
                     iterationNumber++;
                 }
             }
@@ -237,12 +242,10 @@ namespace TextTemplateTransformationFramework.Runtime
                                      bool silentlyContinueOnError,
                                      string separatorTemplateName,
                                      object resolverDelegateModel,
-                                     int iterationCount,
-                                     int iterationNumber,
-                                     object item,
+                                     EnumerableItem item,
                                      CustomDelegates customDelegates)
         {
-            if (iterationNumber + 1 >= iterationCount || string.IsNullOrEmpty(separatorTemplateName))
+            if (item.IterationNumber + 1 >= item.IterationCount || string.IsNullOrEmpty(separatorTemplateName))
             {
                 return;
             }
@@ -255,11 +258,11 @@ namespace TextTemplateTransformationFramework.Runtime
 
             if (customDelegates?.RenderChildTemplateDelegate != null)
             {
-                customDelegates?.RenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
+                customDelegates?.RenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item.Model, renderAsEnumerable.Value, silentlyContinueOnError, item.IterationNumber, item.IterationCount);
             }
             else
             {
-                RenderTemplate(separatorTemplate, item, iterationNumber, iterationCount, separatorTemplateName);
+                RenderTemplate(separatorTemplate,item.Model, item.IterationNumber, item.IterationCount, separatorTemplateName);
             }
         }
 
