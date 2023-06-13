@@ -20,7 +20,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return new RenderGeneratorAssemblyToken<TState>(context, model.AssemblyName, model.AssemblyNameIsLiteral, model.BasePath, model.BasePathIsLiteral, model.GenerateMultipleFiles, model.DryRun, model.CurrentDirectory, model.CurrentDirectoryIsLiteral);
+            return new RenderGeneratorAssemblyToken<TState>(
+                context,
+                new ValueSpecifier(model.AssemblyName, model.AssemblyNameIsLiteral),
+                new ValueSpecifier(model.BasePath, model.BasePathIsLiteral),
+                new ValueSpecifier(model.CurrentDirectory, model.CurrentDirectoryIsLiteral),
+                model.GenerateMultipleFiles,
+                model.DryRun);
         }
     }
 }
