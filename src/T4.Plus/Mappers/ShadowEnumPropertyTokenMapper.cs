@@ -31,17 +31,17 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 true,
                 model.DefaultValue,
                 true,
-                model.Browsable,
-                model.ReadOnly,
-                model.Required,
-                model.DisplayName,
-                model.Description,
                 model.OmitValueAssignment,
                 model.AddPropertySetter,
-                null,
-                null,
-                typeof(FormatStringConverter).FullName,
-                GetCategory(model)
+                omitInitialization: false,
+                componentModelData: new(
+                    browsable: model.Browsable,
+                    readOnly: model.ReadOnly,
+                    required: model.Required,
+                    displayName: model.DisplayName,
+                    description: model.Description,
+                    typeNameData: new(typeConverterTypeName: typeof(FormatStringConverter).FullName),
+                    category: GetCategory(model))
             );
         }
 

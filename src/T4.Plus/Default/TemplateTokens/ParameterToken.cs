@@ -12,33 +12,25 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens
                               bool netCoreCompatible = true,
                               string defaultValue = null,
                               bool defaultValueIsLiteral = true,
-                              bool browsable = true,
-                              bool readOnly = false,
-                              bool required = false,
-                              string displayName = null,
-                              string description = null,
                               bool omitValueAssignment = false,
                               bool addPropertySetter = false,
-                              string editorAttributeEditorTypeName = null,
-                              string editorAttributeEditorBaseType = null,
-                              string typeConverterTypeName= null,
-                              string category = null,
-                              bool omitInitialization = false)
+                              bool omitInitialization = false,
+                              ComponentModelData componentModelData = null)
             : base(context, name, typeName, netCoreCompatible)
         {
             DefaultValue = defaultValue;
             DefaultValueIsLiteral = defaultValueIsLiteral;
-            Browsable = browsable;
-            ReadOnly = readOnly;
-            Required = required;
-            DisplayName = displayName;
-            Description = description;
+            Browsable = componentModelData?.Browsable ?? true;
+            ReadOnly = componentModelData?.ReadOnly ?? false;
+            Required = componentModelData?.Required ?? false;
+            DisplayName = componentModelData?.DisplayName;
+            Description = componentModelData?.Description;
             OmitValueAssignment = omitValueAssignment;
             AddPropertySetter = addPropertySetter;
-            EditorAttributeEditorTypeName = editorAttributeEditorTypeName;
-            EditorAttributeEditorBaseType = editorAttributeEditorBaseType;
-            TypeConverterTypeName = typeConverterTypeName;
-            Category = category;
+            EditorAttributeEditorTypeName = componentModelData?.EditorAttributeEditorTypeName;
+            EditorAttributeEditorBaseType = componentModelData?.EditorAttributeEditorBaseType;
+            TypeConverterTypeName = componentModelData?.TypeConverterTypeName;
+            Category = componentModelData?.Category;
             OmitInitialization = omitInitialization;
         }
 

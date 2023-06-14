@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Attributes;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -29,18 +30,19 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                 model.NetCoreCompatible,
                 model.DefaultValue,
                 model.DefaultValueIsLiteral,
-                model.Browsable,
-                model.ReadOnly,
-                model.Required,
-                model.DisplayName,
-                model.Description,
                 model.OmitValueAssignment,
                 model.AddPropertySetter,
-                model.EditorAttributeEditorTypeName,
-                model.EditorAttributeEditorBaseType,
-                model.TypeConverterTypeName,
-                model.Category,
-                model.OmitInitialization
+                model.OmitInitialization,
+                componentModelData: new (browsable: model.Browsable,
+                    readOnly: model.ReadOnly,
+                    required: model.Required,
+                    displayName: model.DisplayName,
+                    description: model.Description,
+                    typeNameData: new(
+                        editorAttributeEditorTypeName: model.EditorAttributeEditorTypeName,
+                        editorAttributeEditorBaseType: model.EditorAttributeEditorBaseType,
+                        typeConverterTypeName: model.TypeConverterTypeName),
+                    category: model.Category)
             );
         }
     }

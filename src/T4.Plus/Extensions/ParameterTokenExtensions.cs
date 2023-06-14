@@ -15,17 +15,19 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                 instance.NetCoreCompatible,
                 instance.DefaultValue,
                 instance.DefaultValueIsLiteral,
-                false /*instance.Browsable*/,
-                instance.ReadOnly,
-                instance.Required,
-                instance.DisplayName,
-                instance.Description,
                 instance.OmitValueAssignment,
-                true,
-                instance.EditorAttributeEditorTypeName,
-                instance.EditorAttributeEditorBaseType,
-                instance.TypeConverterTypeName,
-                instance.Category
+                addPropertySetter: true,
+                componentModelData: new(
+                    browsable: false /*instance.Browsable*/,
+                    readOnly: instance.ReadOnly,
+                    required: instance.Required,
+                    displayName:  instance.DisplayName,
+                    description: instance.Description,
+                    typeNameData: new(
+                        editorAttributeEditorTypeName: instance.EditorAttributeEditorTypeName,
+                        editorAttributeEditorBaseType: instance.EditorAttributeEditorBaseType,
+                        typeConverterTypeName: instance.TypeConverterTypeName),
+                    category: instance.Category)
             );
 
         public static TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TState> WithPropertySetter<TState>(this TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.IParameterToken<TState> instance)
@@ -37,7 +39,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                 instance.TypeName,
                 instance.NetCoreCompatible,
                 addPropertySetter: true,
-                browsable: false
+                componentModelData: new(browsable: false)
             );
     }
 }
