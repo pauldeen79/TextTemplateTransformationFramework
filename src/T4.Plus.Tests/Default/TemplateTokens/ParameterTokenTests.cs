@@ -17,7 +17,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
         [Fact]
         public void Should_Construct_With_Non_Default_Values()
         {
-            this.Invoking(_ => new ParameterToken<ParameterTokenTests>(SectionContext.FromCurrentMode(1, this), "", "", componentModelData: new())).Should().NotThrow();
+            this.Invoking(_ => new ParameterToken<ParameterTokenTests>(SectionContext.FromCurrentMode(1, this), "", "", defaultValue: new("", true), componentModelData: new())).Should().NotThrow();
         }
 
         [Fact]

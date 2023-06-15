@@ -10,16 +10,15 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens
                               string name,
                               string typeName,
                               bool netCoreCompatible = true,
-                              string defaultValue = null,
-                              bool defaultValueIsLiteral = true,
+                              ValueSpecifier defaultValue = null,
                               bool omitValueAssignment = false,
                               bool addPropertySetter = false,
                               bool omitInitialization = false,
                               ComponentModelData componentModelData = null)
             : base(context, name, typeName, netCoreCompatible)
         {
-            DefaultValue = defaultValue;
-            DefaultValueIsLiteral = defaultValueIsLiteral;
+            DefaultValue = defaultValue?.Value;
+            DefaultValueIsLiteral = defaultValue?.ValueIsLiteral ?? true;
             Browsable = componentModelData?.Browsable ?? true;
             ReadOnly = componentModelData?.ReadOnly ?? false;
             Required = componentModelData?.Required ?? false;
@@ -27,9 +26,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens
             Description = componentModelData?.Description;
             OmitValueAssignment = omitValueAssignment;
             AddPropertySetter = addPropertySetter;
-            EditorAttributeEditorTypeName = componentModelData?.EditorAttributeEditorTypeName;
-            EditorAttributeEditorBaseType = componentModelData?.EditorAttributeEditorBaseType;
-            TypeConverterTypeName = componentModelData?.TypeConverterTypeName;
+            EditorAttributeEditorTypeName = componentModelData?.TypeNameData.EditorAttributeEditorTypeName;
+            EditorAttributeEditorBaseType = componentModelData?.TypeNameData.EditorAttributeEditorBaseType;
+            TypeConverterTypeName = componentModelData?.TypeNameData.TypeConverterTypeName;
             Category = componentModelData?.Category;
             OmitInitialization = omitInitialization;
         }

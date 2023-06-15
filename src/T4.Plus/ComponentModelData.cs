@@ -15,9 +15,7 @@
             Required = required;
             DisplayName = displayName;
             Description = description;
-            EditorAttributeEditorTypeName = typeNameData?.EditorAttributeEditorTypeName;
-            EditorAttributeEditorBaseType = typeNameData?.EditorAttributeEditorBaseType;
-            TypeConverterTypeName = typeNameData?.TypeConverterTypeName;
+            TypeNameData = typeNameData ?? new();
             Category = category;
         }
 
@@ -26,9 +24,7 @@
         public bool Required { get; }
         public string DisplayName { get; }
         public string Description { get; }
-        public string EditorAttributeEditorTypeName { get; }
-        public string EditorAttributeEditorBaseType { get; }
-        public string TypeConverterTypeName { get; }
+        public TypeNameData TypeNameData { get; }
         public string Category { get; }
     }
 }
