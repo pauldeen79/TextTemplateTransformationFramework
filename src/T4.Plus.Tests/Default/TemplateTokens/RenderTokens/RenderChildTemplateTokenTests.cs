@@ -21,10 +21,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
                 false,
                 false,
                 new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true)))
+                new(
+                    new(string.Empty, true),
+                    new(string.Empty, true),
+                    new(string.Empty, true),
+                    new(string.Empty, true)
+                    )))
                 .Should().Throw<ArgumentNullException>().WithParameterName("childTemplate");
         }
 
@@ -39,10 +41,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
                 false,
                 false,
                 new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true)))
+                new(
+                    new(string.Empty, true),
+                    new(string.Empty, true),
+                    new(string.Empty, true),
+                    new(string.Empty, true)
+                    )))
                 .Should().Throw<ArgumentNullException>().WithParameterName("model");
         }
 
@@ -57,15 +61,17 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
                 false,
                 false,
                 null,
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true)))
+                new(
+                    new(string.Empty, true),
+                    new(string.Empty, true),
+                    new(string.Empty, true),
+                    new(string.Empty, true)
+                    )))
                 .Should().Throw<ArgumentNullException>().WithParameterName("separatorTemplate");
         }
 
         [Fact]
-        public void Ctor_Throws_On_Null_CustomResolverDelegate()
+        public void Ctor_Throws_On_Null_CustomRenderData()
         {
             // Act & Assert
             this.Invoking(_ => new RenderChildTemplateToken<RenderChildTemplateTokenTests>(
@@ -74,66 +80,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
                 new(string.Empty, true),
                 false,
                 false,
-                new(string.Empty, true),
-                null,
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true)))
-                .Should().Throw<ArgumentNullException>().WithParameterName("customResolverDelegate");
-        }
-
-        [Fact]
-        public void Ctor_Throws_On_Null_ResolverDelegateModel()
-        {
-            // Act & Assert
-            this.Invoking(_ => new RenderChildTemplateToken<RenderChildTemplateTokenTests>(
-                SectionContext.FromCurrentMode(1, this),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                false,
-                false,
-                new(string.Empty, true),
-                new(string.Empty, true),
-                null,
-                new(string.Empty, true),
-                new(string.Empty, true)))
-                .Should().Throw<ArgumentNullException>().WithParameterName("resolverDelegateModel");
-        }
-
-        [Fact]
-        public void Ctor_Throws_On_Null_CustomRenderChildTemplateDelegate()
-        {
-            // Act & Assert
-            this.Invoking(_ => new RenderChildTemplateToken<RenderChildTemplateTokenTests>(
-                SectionContext.FromCurrentMode(1, this),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                false,
-                false,
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                null,
-                new(string.Empty, true)))
-                .Should().Throw<ArgumentNullException>().WithParameterName("customRenderChildTemplateDelegate");
-        }
-
-        [Fact]
-        public void Ctor_Throws_On_Null_CustomTemplateNameDelegate()
-        {
-            // Act & Assert
-            this.Invoking(_ => new RenderChildTemplateToken<RenderChildTemplateTokenTests>(
-                SectionContext.FromCurrentMode(1, this),
-                new(string.Empty, true),
-                new(string.Empty, true),
-                false,
-                false,
-                new(string.Empty, true),
-                new(string.Empty, true),
-                new(string.Empty, true),
                 new(string.Empty, true),
                 null))
-                .Should().Throw<ArgumentNullException>().WithParameterName("customTemplateNameDelegate");
+                .Should().Throw<ArgumentNullException>().WithParameterName("customRenderData");
         }
     }
 }

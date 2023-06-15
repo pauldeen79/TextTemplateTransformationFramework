@@ -59,7 +59,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         {
             // Arrange
             var types = typeof(TokenParser).Assembly.GetExportedTypes()
-                .Where(t => t.Name != nameof(ValueSpecifier) && t.Name != nameof(ComponentModelData) && t.Name != nameof(TypeNameData) && !t.IsInterface && !t.IsAbstract && !t.FullName.Contains("CodeGenerators"))
+                .Where(t =>
+                    t.Name != nameof(ValueSpecifier)
+                    && t.Name != nameof(ComponentModelData)
+                    && t.Name != nameof(TypeNameData)
+                    && t.Name != nameof(CustomRenderData)
+                    && !t.IsInterface && !t.IsAbstract && !t.FullName.Contains("CodeGenerators"))
                 .Select(t => new
                 {
                     Type = t,
