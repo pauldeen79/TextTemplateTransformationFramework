@@ -196,7 +196,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsTrue(this string instance)
         {
-            return instance != null && _trueKeywords.Any(s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance != null && Array.Exists(_trueKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsFalse(this string instance)
         {
-            return instance != null && _falseKeywords.Any(s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance != null && Array.Exists(_falseKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Utilities.Extensions
         /// </returns>
         public static bool In(this string value, StringComparison stringComparison, params string[] values)
         {
-            return values.Any(i => i.Equals(value, stringComparison));
+            return Array.Exists(values, i => i.Equals(value, stringComparison));
         }
 
         /// <summary>
@@ -325,10 +325,10 @@ namespace Utilities.Extensions
             }
 
             // Replace all invalid chars by underscores 
-            token = Regex.Replace(token, @"[\W\b]", "_", RegexOptions.IgnoreCase);
+            token = Regex.Replace(token, @"[\W\b]", "_", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(200));
 
             // If it starts with a digit, prefix it with an underscore 
-            token = Regex.Replace(token, @"^\d", "_$0");
+            token = Regex.Replace(token, @"^\d", "_$0", RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
             return token;
         }

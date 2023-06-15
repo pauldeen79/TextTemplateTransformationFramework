@@ -49,7 +49,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                     context,
                     "Model",
                     model.TypeName.FixTypeName().MakeGenericTypeName(model.GenericParameterTypeName.FixTypeName()),
-                    browsable: false,
+                    componentModelData: new(browsable: false),
                     omitValueAssignment: true,
                     addPropertySetter: model.AddPropertySetter
                 );

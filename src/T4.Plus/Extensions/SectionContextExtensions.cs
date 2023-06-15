@@ -30,10 +30,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                         model.Enumerable,
                         model.SilentlyContinueOnError,
                         new ValueSpecifier(model.SeparatorTemplateName, model.SeparatorTemplateNameIsLiteral),
-                        new ValueSpecifier(model.CustomResolverDelegate, model.CustomResolverDelegateIsLiteral),
-                        new ValueSpecifier(model.ResolverDelegateModel, model.ResolverDelegateModelIsLiteral),
-                        new ValueSpecifier(model.CustomRenderChildTemplateDelegate, model.CustomRenderChildTemplateDelegateIsLiteral),
-                        new ValueSpecifier(model.CustomTemplateNameDelegate, model.CustomTemplateNameDelegateIsLiteral)
+                        new(
+                            new ValueSpecifier(model.CustomResolverDelegate, model.CustomResolverDelegateIsLiteral),
+                            new ValueSpecifier(model.ResolverDelegateModel, model.ResolverDelegateModelIsLiteral),
+                            new ValueSpecifier(model.CustomRenderChildTemplateDelegate, model.CustomRenderChildTemplateDelegateIsLiteral),
+                            new ValueSpecifier(model.CustomTemplateNameDelegate, model.CustomTemplateNameDelegateIsLiteral)
+                        )
                     )
                 )
             )
