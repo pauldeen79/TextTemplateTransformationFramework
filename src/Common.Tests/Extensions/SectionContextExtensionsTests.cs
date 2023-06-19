@@ -30,6 +30,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
 
             // Assert
             result.Should().BeOfType(expectedType);
+            result.Message.Should().Be("Kaboom");
         }
     }
 }
