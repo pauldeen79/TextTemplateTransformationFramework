@@ -2,8 +2,8 @@
 {
     public static class LazyEnumParser
     {
-        public static EnumParseResult<T> Parse<T>(string value, bool ignoreCase)
+        public static LazyEnumParseResult<T> Parse<T>(string value, bool ignoreCase)
             where T : struct
-            => new EnumParseResult<T>(value, ignoreCase);
+            => new LazyEnumParseResult<T>(value, ignoreCase);
     }
 }

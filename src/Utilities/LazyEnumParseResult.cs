@@ -2,7 +2,7 @@
 
 namespace Utilities
 {
-    public class EnumParseResult<T>
+    public class LazyEnumParseResult<T>
         where T : struct
     {
         public bool Success
@@ -39,7 +39,7 @@ namespace Utilities
         private T? _result;
         private bool _parseSuccess;
 
-        public EnumParseResult(string value, bool ignoreCase)
+        public LazyEnumParseResult(string value, bool ignoreCase)
         {
             _value = value;
             _ignoreCase = ignoreCase;
