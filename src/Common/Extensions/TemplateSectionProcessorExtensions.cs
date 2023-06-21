@@ -23,42 +23,30 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         /// </returns>
         public static bool IsProcessorForSection<TState>(this ITemplateSectionProcessor<TState> instance, SectionContext<TState> context)
             where TState : class
-            => ScopedMember.Evaluate
-            (
-                instance.GetType().GetModelType(typeof(TState)),
-                type =>
-                    Pattern.Match
-                    (
-                        Clause.Create<Type, bool>(() => type.GetCustomAttribute<AllowAllSectionsAttribute>(true) != null, () => true),
-                        Clause.Create<Type, bool>
-                        (
-#if NETFRAMEWORK
-                            () => context.Section.StartsWith("@"),
-#else
-                            () => context.Section.StartsWith('@'),
+            => instance.GetType().GetModelType(typeof(TState)) switch
+            {
+                var type when type.GetCustomAttribute<AllowAllSectionsAttribute>(true) != null => true,
+                #if NETFRAMEWORK
+                    var type when (context ?? throw new ArgumentNullException(nameof(context))).Section.StartsWith("@") =>
+                #else
+                    var type when (context ?? throw new ArgumentNullException(nameof(context))).Section.StartsWith('@') =>
 #endif
-                            () => ScopedMember.Evaluate
-                                (
-                                    type.GetCustomAttribute<DirectivePrefixAttribute>(true),
-                                    directivePrefixAttribute =>
-                                        directivePrefixAttribute == null
-                                            ? typeof(ITemplateCustomDirectiveName).IsAssignableFrom(type)
-                                                && context.TokenParserCallback.SectionIsDirectiveWithName(context, ((ITemplateCustomDirectiveName)instance).TemplateCustomDirectiveName)
-                                            : context.TokenParserCallback.SectionIsDirectiveWithName(context, directivePrefixAttribute.Name)
-                                )
-                        )
-                    )
-                    .Default
-                    (
-                        () => ScopedMember.Evaluate
-                            (
-                                type.GetCustomAttribute<SectionPrefixAttribute>(true),
-                                sectionPrefixAttribute => sectionPrefixAttribute != null
-                                    && context.TokenParserCallback.SectionStartsWithPrefix(context, sectionPrefixAttribute.Prefix)
-                            )
-                    )
-                    .Evaluate()
-            );
+                ScopedMember.Evaluate
+                (
+                    type.GetCustomAttribute<DirectivePrefixAttribute>(true),
+                    directivePrefixAttribute =>
+                        directivePrefixAttribute == null
+                            ? typeof(ITemplateCustomDirectiveName).IsAssignableFrom(type)
+                                && context.TokenParserCallback.SectionIsDirectiveWithName(context, ((ITemplateCustomDirectiveName)instance).TemplateCustomDirectiveName)
+                            : context.TokenParserCallback.SectionIsDirectiveWithName(context, directivePrefixAttribute.Name)
+                ),
+                var type => ScopedMember.Evaluate
+                (
+                    type.GetCustomAttribute<SectionPrefixAttribute>(true),
+                    sectionPrefixAttribute => sectionPrefixAttribute != null
+                        && context.TokenParserCallback.SectionStartsWithPrefix(context, sectionPrefixAttribute.Prefix)
+                )
+            };
 
         public static string GetDirectiveName<TState>(this ITemplateSectionProcessor<TState> instance)
             where TState : class

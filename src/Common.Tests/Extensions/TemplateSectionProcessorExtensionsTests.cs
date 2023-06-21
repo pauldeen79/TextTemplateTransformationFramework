@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -71,6 +72,17 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
 
             // Assert
             actual.Should().Be("import");
+        }
+
+        [Fact]
+        public void IsProcessorForSection_Throws_On_Null_Context()
+        {
+            // Arrange
+            var sut = new Mock<ITemplateSectionProcessor<TemplateSectionProcessorExtensionsTests>>().Object;
+
+            // Act & Assert
+            sut.Invoking(x => x.IsProcessorForSection(null))
+               .Should().Throw<ArgumentNullException>().WithParameterName("context");
         }
     }
 }

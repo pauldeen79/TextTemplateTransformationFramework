@@ -7,7 +7,6 @@ using TextTemplateTransformationFramework.Common.Default.TemplateTokens.ClassFoo
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.InitializeTokens;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.NamespaceFooterTokens;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.RenderTokens;
-using Utilities;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Extensions
@@ -16,44 +15,41 @@ namespace TextTemplateTransformationFramework.Common.Extensions
     {
         public static IErrorToken<TState> CreateErrorToken<TState>(this SectionContext<TState> context, string errorMessage)
             where TState : class
-            => Pattern.Match
-            (
-                Clause.Create<int, IErrorToken<TState>>(i => i == ModePosition.Render, _ => new RenderErrorToken<TState>(context, errorMessage)),
-                Clause.Create<int, IErrorToken<TState>>(i => i == ModePosition.ClassFooter, _ => new ClassFooterErrorToken<TState>(context, errorMessage)),
-                Clause.Create<int, IErrorToken<TState>>(i => i == ModePosition.BaseClassFooter, _ => new BaseClassFooterErrorToken<TState>(context, errorMessage)),
-                Clause.Create<int, IErrorToken<TState>>(i => i == ModePosition.NamespaceFooter, _ => new NamespaceFooterErrorToken<TState>(context, errorMessage)),
-                Clause.Create<int, IErrorToken<TState>>(i => i == ModePosition.Initialize, _ => new InitializeErrorToken<TState>(context, errorMessage))
-            )
-            .Default(() => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode))
-            .Evaluate(context.GetModePosition());
+            => context.GetModePosition() switch
+            {
+                ModePosition.Render => new RenderErrorToken<TState>(context, errorMessage),
+                ModePosition.ClassFooter => new ClassFooterErrorToken<TState>(context, errorMessage),
+                ModePosition.BaseClassFooter => new BaseClassFooterErrorToken<TState>(context, errorMessage),
+                ModePosition.NamespaceFooter => new NamespaceFooterErrorToken<TState>(context, errorMessage),
+                ModePosition.Initialize => new InitializeErrorToken<TState>(context, errorMessage),
+                _ => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode)
+            };
 
         public static IWarningToken<TState> CreateWarningToken<TState>(this SectionContext<TState> context, string errorMessage)
             where TState : class
-            => Pattern.Match
-            (
-                Clause.Create<int, IWarningToken<TState>>(i => i == ModePosition.Render, _ => new RenderWarningToken<TState>(context, errorMessage)),
-                Clause.Create<int, IWarningToken<TState>>(i => i == ModePosition.ClassFooter, _ => new ClassFooterWarningToken<TState>(context, errorMessage)),
-                Clause.Create<int, IWarningToken<TState>>(i => i == ModePosition.BaseClassFooter, _ => new BaseClassFooterWarningToken<TState>(context, errorMessage)),
-                Clause.Create<int, IWarningToken<TState>>(i => i == ModePosition.NamespaceFooter, _ => new NamespaceFooterWarningToken<TState>(context, errorMessage)),
-                Clause.Create<int, IWarningToken<TState>>(i => i == ModePosition.Initialize, _ => new InitializeWarningToken<TState>(context, errorMessage))
-            )
-            .Default(() => new RenderWarningToken<TState>(context, "Unsupported mode: " + context.CurrentMode))
-            .Evaluate(context.GetModePosition());
+            => context.GetModePosition() switch
+            {
+                ModePosition.Render => new RenderWarningToken<TState>(context, errorMessage),
+                ModePosition.ClassFooter => new ClassFooterWarningToken<TState>(context, errorMessage),
+                ModePosition.BaseClassFooter => new BaseClassFooterWarningToken<TState>(context, errorMessage),
+                ModePosition.NamespaceFooter => new NamespaceFooterWarningToken<TState>(context, errorMessage),
+                ModePosition.Initialize => new InitializeWarningToken<TState>(context, errorMessage),
+                _ => new RenderWarningToken<TState>(context, "Unsupported mode: " + context.CurrentMode)
+            };
 
         public static ITemplateToken<TState> CreateTextToken<TState>(this SectionContext<TState> context, string contents, bool force = true)
             where TState : class
             => !force && !context.CurrentMode.IsTextRange()
                 ? null
-                : Pattern.Match
-                    (
-                        Clause.Create<int, ITemplateToken<TState>>(i => i == ModePosition.Render, _ => new RenderTextToken<TState>(context, contents)),
-                        Clause.Create<int, ITemplateToken<TState>>(i => i == ModePosition.ClassFooter, _ => new ClassFooterTextToken<TState>(context, contents)),
-                        Clause.Create<int, ITemplateToken<TState>>(i => i == ModePosition.BaseClassFooter, _ => new BaseClassFooterTextToken<TState>(context, contents)),
-                        Clause.Create<int, ITemplateToken<TState>>(i => i == ModePosition.NamespaceFooter, _ => new NamespaceFooterTextToken<TState>(context, contents)),
-                        Clause.Create<int, ITemplateToken<TState>>(i => i == ModePosition.Initialize, _ => new InitializeTextToken<TState>(context, contents))
-                    )
-                    .Default(() => GetDefaultRenderErrorToken<TState>(context, force))
-                    .Evaluate(context.GetModePosition());
+                : context.GetModePosition() switch
+                    {
+                        ModePosition.Render => new RenderTextToken<TState>(context, contents),
+                        ModePosition.ClassFooter => new ClassFooterTextToken<TState>(context, contents),
+                        ModePosition.BaseClassFooter => new BaseClassFooterTextToken<TState>(context, contents),
+                        ModePosition.NamespaceFooter => new NamespaceFooterTextToken<TState>(context, contents),
+                        ModePosition.Initialize => new InitializeTextToken<TState>(context, contents),
+                        _ => GetDefaultRenderErrorToken<TState>(context, force)
+                    };
 
         private static RenderErrorToken<TState> GetDefaultRenderErrorToken<TState>(SectionContext<TState> context, bool force)
             where TState : class
@@ -65,16 +61,15 @@ namespace TextTemplateTransformationFramework.Common.Extensions
             where TState : class
             => !context.CurrentMode.IsExpressionRange()
                 ? null
-                : Pattern.Match
-                    (
-                        Clause.Create<int, IExpressionToken<TState>>(i => i == ModePosition.Render, _ => new RenderExpressionToken<TState>(context, expression)),
-                        Clause.Create<int, IExpressionToken<TState>>(i => i == ModePosition.ClassFooter, _ => new ClassFooterExpressionToken<TState>(context, expression)),
-                        Clause.Create<int, IExpressionToken<TState>>(i => i == ModePosition.BaseClassFooter, _ => new BaseClassFooterExpressionToken<TState>(context, expression)),
-                        Clause.Create<int, IExpressionToken<TState>>(i => i == ModePosition.NamespaceFooter, _ => new NamespaceFooterExpressionToken<TState>(context, expression)),
-                        Clause.Create<int, IExpressionToken<TState>>(i => i == ModePosition.Initialize, _ => new InitializeExpressionToken<TState>(context, expression))
-                    )
-                    .Default(() => null)
-                    .Evaluate(context.GetModePosition());
+                : context.GetModePosition() switch
+                    {
+                        ModePosition.Render => new RenderExpressionToken<TState>(context, expression),
+                        ModePosition.ClassFooter => new ClassFooterExpressionToken<TState>(context, expression),
+                        ModePosition.BaseClassFooter => new BaseClassFooterExpressionToken<TState>(context, expression),
+                        ModePosition.NamespaceFooter => new NamespaceFooterExpressionToken<TState>(context, expression),
+                        ModePosition.Initialize => new InitializeExpressionToken<TState>(context, expression),
+                        _ => null
+                    };
 
         public static int GetModePosition<TState>(this SectionContext<TState> context)
             where TState : class

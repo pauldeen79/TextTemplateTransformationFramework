@@ -6,7 +6,6 @@ using TextTemplateTransformationFramework.T4.Contracts;
 using TextTemplateTransformationFramework.T4.Extensions;
 using Utilities;
 using Utilities.Extensions;
-using StatePattern = Utilities.Pattern<TextTemplateTransformationFramework.T4.TokenParserState, TextTemplateTransformationFramework.T4.TokenParserState>;
 
 namespace TextTemplateTransformationFramework.T4
 {
@@ -57,7 +56,7 @@ namespace TextTemplateTransformationFramework.T4
                 .Aggregate
                 (
                     TokenParserState.Initial(context), (s, position) =>
-                        MatchStatePattern.Evaluate
+                        Match
                         (
                             s.SetPosition
                             (
@@ -72,28 +71,18 @@ namespace TextTemplateTransformationFramework.T4
                 .Apply(Modify);
         }
 
-        private StatePattern MatchStatePattern
-            => Pattern.Match
-            (
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSkip())
-                      .Then(state => state.ProcessSkip()),
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSwitchToNewLine())
-                      .Then(state => state.NewLine()),
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSwitchToStartSection())
-                      .Then(state => state.StartSection(ProcessState)),
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSwitchToEndSection())
-                      .Then(state => state.EndSection(ProcessState)),
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSwitchToExpressionSection())
-                      .Then(state => state.ExpressionSection()),
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSwitchToDirective())
-                      .Then(state => state.Directive()),
-                Clause.When<TokenParserState, TokenParserState>(state => state.ShouldSwitchToStartCodeBlock())
-                      .Then(state => state.StartCodeBlock())
-            )
-            .Default
-            (
-                state => state.AddToCurrentSection(ProcessState)
-            );
+        private TokenParserState Match(TokenParserState state)
+            => state switch
+            {
+                _ when state.ShouldSkip() => state.ProcessSkip(),
+                _ when state.ShouldSwitchToNewLine() => state.NewLine(),
+                _ when state.ShouldSwitchToStartSection() => state.StartSection(ProcessState),
+                _ when state.ShouldSwitchToEndSection() => state.EndSection(ProcessState),
+                _ when state.ShouldSwitchToExpressionSection() => state.ExpressionSection(),
+                _ when state.ShouldSwitchToDirective() => state.Directive(),
+                _ when state.ShouldSwitchToStartCodeBlock() => state.StartCodeBlock(),
+                _ => state.AddToCurrentSection(ProcessState)
+            };
 
         private ProcessSectionResult<TokenParserState> ProcessState(TokenParserState state)
             => _tokenStateProcessor.Process(state, GetTokenParserCallback(), state.Context.Logger, state.Context.Parameters);

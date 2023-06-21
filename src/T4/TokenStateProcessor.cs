@@ -6,9 +6,7 @@ using TextTemplateTransformationFramework.Common.Contracts.TemplateSectionProces
 using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.T4.Contracts;
 using TextTemplateTransformationFramework.T4.Extensions;
-using Utilities;
 using Utilities.Extensions;
-using ContextPattern = Utilities.Pattern<TextTemplateTransformationFramework.T4.TokenParserContext, TextTemplateTransformationFramework.T4.ProcessSectionResult<TextTemplateTransformationFramework.T4.TokenParserState>>;
 
 namespace TextTemplateTransformationFramework.T4
 {
@@ -37,21 +35,14 @@ namespace TextTemplateTransformationFramework.T4
                 throw new ArgumentNullException(nameof(state));
             }
 
-            return MatchContextPattern.Evaluate(new TokenParserContext(state, CreateSectionContext(state, tokenParserCallback, logger, parameters)));
-        }
-
-        private ContextPattern MatchContextPattern
-            => Pattern.Match
-            (
-                Clause.When<TokenParserContext, ProcessSectionResult<TokenParserState>>(context => context.SectionContext.IsText())
-                      .Then(context => ProcessStateUsingProcessor(context.SectionContext, _textSectionProcessor)),
-                Clause.When<TokenParserContext, ProcessSectionResult<TokenParserState>>(context => context.SectionContext.IsValidForProcessors())
-                      .Then(context => ProcessStateUsingProcessors(context.SectionContext, context.State))
-            )
-            .Default
-            (
+            var context = new TokenParserContext(state, CreateSectionContext(state, tokenParserCallback, logger, parameters));
+            return context.SectionContext switch
+            {
+                var sectionContext when sectionContext.IsText() => ProcessStateUsingProcessor(sectionContext, _textSectionProcessor),
+                var sectionContext when sectionContext.IsValidForProcessors() => ProcessStateUsingProcessors(sectionContext, context.State),
                 _ => ProcessSectionResult<TokenParserState>.Empty
-            );
+            };
+        }
 
         private SectionContext<TokenParserState> CreateSectionContext(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger, TemplateParameter[] parameters)
             => state.ToSectionContext

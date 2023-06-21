@@ -5,16 +5,12 @@ using System.Linq;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens;
 using TextTemplateTransformationFramework.Common.Default.TemplateTokens.InitializeTokens;
-using Utilities;
 using Utilities.Extensions;
 
 namespace TextTemplateTransformationFramework.Common.Extensions
 {
     public static class StringExtensions
     {
-        private static readonly string[] CSharpLanguageAlternativeNames = new[] { "c#", "cs", "csharp" };
-        private static readonly string[] VbNetLanguageAlternativeNames = new[] { "vb", "vbs", "visualbasic", "vb.net", "vbscript" };
-
         /// <summary>
         /// Determines whether the specified section is a directive.
         /// </summary>
@@ -40,20 +36,13 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         /// </returns>
         public static ITemplateToken<TState> GetLanguageToken<TState>(this string instance, SectionContext<TState> context)
             where TState : class
-            => ScopedMember.Evaluate
-            (
-                LazyEnumParser.Parse<Language>(instance, true),
-                parseResult =>
-                    Pattern.Match
-                    (
-                        Clause.Create<string, ITemplateToken<TState>>(() => string.IsNullOrEmpty(instance), () => null),
-                        Clause.Create<string, ITemplateToken<TState>>(() => instance.In(StringComparison.OrdinalIgnoreCase, CSharpLanguageAlternativeNames), () => new LanguageToken<TState>(context, Language.CSharp, instance)),
-                        Clause.Create<string, ITemplateToken<TState>>(() => instance.In(StringComparison.OrdinalIgnoreCase, VbNetLanguageAlternativeNames), () => new LanguageToken<TState>(context, Language.VbNet, instance)),
-                        Clause.Create<string, ITemplateToken<TState>>(() => !parseResult.Success, () => new InitializeErrorToken<TState>(context, "Unsupported language: " + instance))
-                    )
-                    .Default(() => new LanguageToken<TState>(context, parseResult.Result, instance))
-                    .Evaluate()
-            );
+            => instance switch
+            {
+                var x when string.IsNullOrEmpty(x) => null,
+                var x when x.Equals("c#", StringComparison.OrdinalIgnoreCase) => new LanguageToken<TState>(context, Language.CSharp, instance),
+                var x when x.Equals("vb", StringComparison.OrdinalIgnoreCase) => new LanguageToken<TState>(context, Language.VbNet, instance),
+                _ => new InitializeErrorToken<TState>(context, "Unsupported language: " + instance)
+            };
 
         public static string GetAssemblyName(this string instance)
             => instance.IndexOf(", ") > -1

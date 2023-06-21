@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Loader;
+using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using TextTemplateTransformationFramework.Common;
@@ -27,6 +28,12 @@ namespace TextTemplateTransformationFramework.T4.Tests
                 .AddTextTemplateTransformationT4NetCore()
                 .AddSingleton<ITemplateSectionProcessor<TokenParserState>, DataTableSectionProcessor>();
             _provider = serviceCollection.BuildServiceProvider();
+        }
+
+        [Fact]
+        public void Ctor_Throws_On_Null_Arguments()
+        {
+            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(TokenParser));
         }
 
         [Fact]

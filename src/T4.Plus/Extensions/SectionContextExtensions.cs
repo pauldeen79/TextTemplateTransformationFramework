@@ -17,15 +17,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
         public static ITemplateToken<TState> CreateRenderChildTemplateToken<TState>(this SectionContext<TState> context,
                                                                                     RenderChildTemplateDirectiveModel model)
             where TState : class
-            => Utilities.Pattern.Match
-            (
-                Utilities.Clause.Create<int, IRenderToken<TState>>
-                (
-                    i => i == ModePosition.Render,
-                    _ => new RenderChildTemplateToken<TState>
+            => (context ?? throw new ArgumentNullException(nameof(context))).GetModePosition() switch
+            {
+                var i when i == ModePosition.Render => new RenderChildTemplateToken<TState>
                     (
                         context,
-                        new ValueSpecifier(model.Name, model.NameIsLiteral),
+                        new ValueSpecifier((model ?? throw new ArgumentNullException(nameof(model))).Name, model.NameIsLiteral),
                         new ValueSpecifier(model.Model, model.ModelIsLiteral),
                         model.Enumerable,
                         model.SilentlyContinueOnError,
@@ -36,17 +33,18 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                             new ValueSpecifier(model.CustomRenderChildTemplateDelegate, model.CustomRenderChildTemplateDelegateIsLiteral),
                             new ValueSpecifier(model.CustomTemplateNameDelegate, model.CustomTemplateNameDelegateIsLiteral)
                         )
-                    )
-                )
-            )
-            .Default(() => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode))
-            .Evaluate(context.GetModePosition());
+                    ),
+                _ => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode)
+            };
 
         public static ChildTemplateTokenInfo<TState> GetChildTemplateTokens<TState>(this SectionContext<TState> context,
                                                                                     IFileContentsProvider fileContentsProvider,
                                                                                     string childTemplateFileName)
             where TState : class
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (fileContentsProvider == null) throw new ArgumentNullException(nameof(fileContentsProvider));
+
             var childTemplateTokens = new List<ITemplateToken<TState>>();
             var rootTemplateTokens = new List<ITemplateToken<TState>>();
 
@@ -94,21 +92,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
 
         public static string GetRootClassName<TState>(this SectionContext<TState> context)
             where TState : class
-            => context.ExistingTokens.GetTemplateTokensFromSections().GetRootClassName();
+            => (context ?? throw new ArgumentNullException(nameof(context))).ExistingTokens.GetTemplateTokensFromSections().GetRootClassName();
 
         public static string GetClassName<TState>(this SectionContext<TState> context)
             where TState : class
-            => context.ExistingTokens.GetTemplateTokensFromSections().GetClassName();
-
-        public static ITextTemplateProcessorContext<TState> GetTextTemplateProcessorContext<TState>(this SectionContext<TState> context)
-            where TState : class
-        {
-            if (context is SectionContext<TokenParserState> tokenParserStateSectionContext)
-            {
-                return (ITextTemplateProcessorContext<TState>)tokenParserStateSectionContext.State.Context;
-            }
-
-            throw new InvalidOperationException($"Could not obtain TextTemplateProcessorContext of type [{typeof(TState).FullName}]");
-        }
+            => (context ?? throw new ArgumentNullException(nameof(context))).ExistingTokens.GetTemplateTokensFromSections().GetClassName();
     }
 }
