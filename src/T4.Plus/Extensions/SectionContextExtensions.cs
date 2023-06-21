@@ -17,12 +17,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
         public static ITemplateToken<TState> CreateRenderChildTemplateToken<TState>(this SectionContext<TState> context,
                                                                                     RenderChildTemplateDirectiveModel model)
             where TState : class
-            => Utilities.Pattern.Match
-            (
-                Utilities.Clause.Create<int, IRenderToken<TState>>
-                (
-                    i => i == ModePosition.Render,
-                    _ => new RenderChildTemplateToken<TState>
+            => context.GetModePosition() switch
+            {
+                var i when i == ModePosition.Render => new RenderChildTemplateToken<TState>
                     (
                         context,
                         new ValueSpecifier(model.Name, model.NameIsLiteral),
@@ -36,11 +33,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                             new ValueSpecifier(model.CustomRenderChildTemplateDelegate, model.CustomRenderChildTemplateDelegateIsLiteral),
                             new ValueSpecifier(model.CustomTemplateNameDelegate, model.CustomTemplateNameDelegateIsLiteral)
                         )
-                    )
-                )
-            )
-            .Default(() => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode))
-            .Evaluate(context.GetModePosition());
+                    ),
+                _ => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode)
+            };
 
         public static ChildTemplateTokenInfo<TState> GetChildTemplateTokens<TState>(this SectionContext<TState> context,
                                                                                     IFileContentsProvider fileContentsProvider,
