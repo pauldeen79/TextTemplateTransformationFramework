@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TextTemplateTransformationFramework.Common.Default
 {
-    public abstract class ContextBase : IEnumerable
+    public abstract class ContextBase : IDictionary<string, object>
     {
         private readonly IDictionary<string, object> _state = new Dictionary<string, object>();
 
@@ -42,13 +42,6 @@ namespace TextTemplateTransformationFramework.Common.Default
         }
 
         /// <summary>
-        /// Adds an element with the provided key and value to the generic dictionary.
-        /// </summary>
-        /// <param name="key">The object to use as the key of the element to add.</param>
-        /// <param name="value">The object to use as the value of the element to add.</param>
-        public void Add(string key, object value) => _state.Add(key, value);
-
-        /// <summary>
         /// Determines whether the generic dictionary contains an element with the specified key.
         /// </summary>
         /// <param name="key">The key to locate in the generic dictionary.</param>
@@ -56,15 +49,6 @@ namespace TextTemplateTransformationFramework.Common.Default
         /// true if the generic dictionary contains an element with the key; otherwise, false.
         /// </returns>
         public bool ContainsKey(string key) => _state.ContainsKey(key);
-
-        /// <summary>
-        /// Removes the element with the specified key from the generic dictionary.
-        /// </summary>
-        /// <param name="key">The key of the element to remove.</param>
-        /// <returns>
-        /// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key">key</paramref> was not found in the original generic dictionary.
-        /// </returns>
-        public bool Remove(string key) => _state.Remove(key);
 
         /// <summary>
         /// Gets the value associated with the specified key.
@@ -75,6 +59,13 @@ namespace TextTemplateTransformationFramework.Common.Default
         /// true if the object that implements generic dictionary contains an element with the specified key; otherwise, false.
         /// </returns>
         public bool TryGetValue(string key, out object value) => _state.TryGetValue(key, out value);
+
+        /// <summary>
+        /// Adds an element with the provided key and value to the generic dictionary.
+        /// </summary>
+        /// <param name="key">The object to use as the key of the element to add.</param>
+        /// <param name="value">The object to use as the value of the element to add.</param>
+        public void Add(string key, object value) => _state.Add(key, value);
 
         /// <summary>
         /// Adds an item to the generic collection.
@@ -111,6 +102,15 @@ namespace TextTemplateTransformationFramework.Common.Default
         /// true if <paramref name="item">item</paramref> was successfully removed from the generic collection; otherwise, false. This method also returns false if <paramref name="item">item</paramref> is not found in the original generic collection.
         /// </returns>
         public bool Remove(KeyValuePair<string, object> item) => _state.Remove(item);
+
+        /// <summary>
+        /// Removes the element with the specified key from the generic dictionary.
+        /// </summary>
+        /// <param name="key">The key of the element to remove.</param>
+        /// <returns>
+        /// true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key">key</paramref> was not found in the original generic dictionary.
+        /// </returns>
+        public bool Remove(string key) => _state.Remove(key);
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
