@@ -94,16 +94,5 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
         public static string GetClassName<TState>(this SectionContext<TState> context)
             where TState : class
             => context.ExistingTokens.GetTemplateTokensFromSections().GetClassName();
-
-        public static ITextTemplateProcessorContext<TState> GetTextTemplateProcessorContext<TState>(this SectionContext<TState> context)
-            where TState : class
-        {
-            if (context is SectionContext<TokenParserState> tokenParserStateSectionContext)
-            {
-                return (ITextTemplateProcessorContext<TState>)tokenParserStateSectionContext.State.Context;
-            }
-
-            throw new InvalidOperationException($"Could not obtain TextTemplateProcessorContext of type [{typeof(TState).FullName}]");
-        }
     }
 }
