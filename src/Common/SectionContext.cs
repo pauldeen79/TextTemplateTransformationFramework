@@ -33,9 +33,15 @@ namespace TextTemplateTransformationFramework.Common
             ILogger logger,
             TemplateParameter[] parameters
         ) where TState : class
-            => new SectionContext<TState>
+        {
+            if (section == null)
+            {
+                throw new ArgumentNullException(nameof(section));
+            }
+
+            return new SectionContext<TState>
             (
-                section ?? throw new ArgumentNullException(nameof(section)),
+                section,
                 existingTokens,
                 tokenParserCallback,
                 currentMode,
@@ -43,6 +49,7 @@ namespace TextTemplateTransformationFramework.Common
                 logger,
                 parameters
             );
+        }
 
         public static SectionContext<TState> FromToken<TState>(ITemplateToken<TState> token, TState state) where TState : class
         {

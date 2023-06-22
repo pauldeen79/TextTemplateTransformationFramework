@@ -17,12 +17,23 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
         public static ITemplateToken<TState> CreateRenderChildTemplateToken<TState>(this SectionContext<TState> context,
                                                                                     RenderChildTemplateDirectiveModel model)
             where TState : class
-            => (context ?? throw new ArgumentNullException(nameof(context))).GetModePosition() switch
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            return context.GetModePosition() switch
             {
                 var i when i == ModePosition.Render => new RenderChildTemplateToken<TState>
                     (
                         context,
-                        new ValueSpecifier((model ?? throw new ArgumentNullException(nameof(model))).Name, model.NameIsLiteral),
+                        new ValueSpecifier(model.Name, model.NameIsLiteral),
                         new ValueSpecifier(model.Model, model.ModelIsLiteral),
                         model.Enumerable,
                         model.SilentlyContinueOnError,
@@ -36,6 +47,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                     ),
                 _ => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode)
             };
+        }
 
         public static ChildTemplateTokenInfo<TState> GetChildTemplateTokens<TState>(this SectionContext<TState> context,
                                                                                     IFileContentsProvider fileContentsProvider,
@@ -92,10 +104,24 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
 
         public static string GetRootClassName<TState>(this SectionContext<TState> context)
             where TState : class
-            => (context ?? throw new ArgumentNullException(nameof(context))).ExistingTokens.GetTemplateTokensFromSections().GetRootClassName();
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return context.ExistingTokens.GetTemplateTokensFromSections().GetRootClassName();
+        }
 
         public static string GetClassName<TState>(this SectionContext<TState> context)
             where TState : class
-            => (context ?? throw new ArgumentNullException(nameof(context))).ExistingTokens.GetTemplateTokensFromSections().GetClassName();
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return context.ExistingTokens.GetTemplateTokensFromSections().GetClassName();
+        }
     }
 }

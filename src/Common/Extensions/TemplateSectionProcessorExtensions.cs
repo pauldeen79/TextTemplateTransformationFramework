@@ -23,13 +23,19 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         /// </returns>
         public static bool IsProcessorForSection<TState>(this ITemplateSectionProcessor<TState> instance, SectionContext<TState> context)
             where TState : class
-            => instance.GetType().GetModelType(typeof(TState)) switch
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            return instance.GetType().GetModelType(typeof(TState)) switch
             {
                 var type when type.GetCustomAttribute<AllowAllSectionsAttribute>(true) != null => true,
-                #if NETFRAMEWORK
-                    var type when (context ?? throw new ArgumentNullException(nameof(context))).Section.StartsWith("@") =>
-                #else
-                    var type when (context ?? throw new ArgumentNullException(nameof(context))).Section.StartsWith('@') =>
+#if NETFRAMEWORK
+                    var type when context.Section.StartsWith("@") =>
+#else
+                    var type when context.Section.StartsWith('@') =>
 #endif
                 ScopedMember.Evaluate
                 (
@@ -47,6 +53,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                         && context.TokenParserCallback.SectionStartsWithPrefix(context, sectionPrefixAttribute.Prefix)
                 )
             };
+        }
 
         public static string GetDirectiveName<TState>(this ITemplateSectionProcessor<TState> instance)
             where TState : class
