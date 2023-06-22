@@ -74,7 +74,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
                 var assemblyName = _assemblyName;
                 if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
                 {
-                    assemblyName = Path.Combine(!string.IsNullOrEmpty(_currentDirectory) ? _currentDirectory : Directory.GetCurrentDirectory(), assemblyName);
+                    assemblyName = Path.Combine(_currentDirectory, Path.GetFileName(assemblyName));
                 }
                 return context.LoadFromAssemblyPath(assemblyName);
             }
