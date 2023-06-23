@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>pauldeen79.TextTemplateTransformationFramework.Abstractions</PackageId>
+    <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
+    <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\.sonarlint\pauldeen79_texttemplatetransformationframework\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
+
+</Project>
