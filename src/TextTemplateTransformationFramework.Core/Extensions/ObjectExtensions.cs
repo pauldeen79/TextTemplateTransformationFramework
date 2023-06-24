@@ -8,7 +8,7 @@ namespace TextTemplateTransformationFramework.Core.Extensions
         {
             var result = new Dictionary<string, object?>();
 
-            if (instance != null)
+            if (instance is not null)
             {
                 if (instance is IEnumerable<KeyValuePair<string, object?>> kvpEnum)
                 {

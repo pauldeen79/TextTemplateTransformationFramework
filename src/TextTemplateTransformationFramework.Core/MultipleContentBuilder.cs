@@ -6,6 +6,8 @@ using TextTemplateTransformationFramework.Core.Extensions;
 
 namespace TextTemplateTransformationFramework.Core
 {
+    //TODO: Extract file operations to IFileSystem
+    //TODO: Extract serialization operations to ISerializer
     public class MultipleContentBuilder : IMultipleContentBuilder
     {
         private readonly List<IContent> _contentList;
@@ -53,6 +55,11 @@ namespace TextTemplateTransformationFramework.Core
                 ? lastGeneratedFilesPath
                 : Path.Combine(BasePath, lastGeneratedFilesPath);
 
+            if (fullPath is null)
+            {
+                throw new InvalidOperationException("Full path could not be determined");
+            }
+
             var dir = Path.GetDirectoryName(fullPath);
             if (string.IsNullOrEmpty(dir))
             {
@@ -64,7 +71,7 @@ namespace TextTemplateTransformationFramework.Core
                 Directory.CreateDirectory(dir);
             }
 
-            if (fullPath != null && !fullPath.Contains('*'))
+            if (!fullPath.Contains('*'))
             {
                 File.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName));
             }
@@ -72,7 +79,7 @@ namespace TextTemplateTransformationFramework.Core
 
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
         {
-            if (lastGeneratedFilesPath == null)
+            if (lastGeneratedFilesPath is null)
             {
                 throw new ArgumentNullException(nameof(lastGeneratedFilesPath));
             }
@@ -89,7 +96,7 @@ namespace TextTemplateTransformationFramework.Core
 
             if (!File.Exists(fullPath))
             {
-                if (fullPath?.Contains('*') == true
+                if (fullPath.Contains('*')
                     && !string.IsNullOrEmpty(basePath)
                     && Directory.Exists(basePath))
                 {
@@ -115,40 +122,62 @@ namespace TextTemplateTransformationFramework.Core
             }
         }
 
-        private static string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
-        {
-            try
-            {
-                return Directory.GetFiles(basePath, lastGeneratedFilesPath, GetSearchOption(recurse));
-            }
-            catch (DirectoryNotFoundException)
-            {
-                return Array.Empty<string>();
-            }
-        }
-
-        private static string? GetFullPath(string lastGeneratedFilesPath, string basePath)
-        {
-            return string.IsNullOrEmpty(basePath) || Path.IsPathRooted(lastGeneratedFilesPath)
-                ? lastGeneratedFilesPath
-                : Path.Combine(basePath, lastGeneratedFilesPath);
-        }
-
         public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
         {
-            var content = builder == null
-            ? new Content
-            {
-                FileName = fileName,
-                SkipWhenFileExists = skipWhenFileExists
-            }
-            : new Content(builder)
-            {
-                FileName = fileName,
-                SkipWhenFileExists = skipWhenFileExists
-            };
+            var content = builder is null
+                ? new Content()
+                : new Content(builder);
+
+            content.FileName = fileName;
+            content.SkipWhenFileExists = skipWhenFileExists;
+
             _contentList.Add(content);
+
             return content;
+        }
+
+        public IEnumerable<IContent> Contents { get { return _contentList.AsReadOnly(); } }
+
+        public static MultipleContentBuilder FromString(string xml)
+        {
+            var result = new MultipleContentBuilder();
+
+            MultipleContents? mc;
+
+            // Cope with CA2202 analysis warning by using this unusual statement with try.finally instead of nested usings
+            var stringReader = new StringReader(xml);
+            try
+            {
+                using (var reader = XmlReader.Create(stringReader))
+                {
+                    // Set reference to null because the reader will destroy it
+                    stringReader = null;
+
+                    var serializer = new DataContractSerializer(typeof(MultipleContents));
+                    mc = serializer.ReadObject(reader) as MultipleContents;
+                }
+            }
+            finally
+            {
+                stringReader?.Dispose();
+            }
+
+            if (mc is null)
+            {
+                throw new InvalidOperationException("Xml could not be parsed to MultipleContents");
+            }
+
+            result.BasePath = mc.BasePath;
+            foreach (var item in mc.Contents)
+            {
+                var c = result.AddContent(item.FileName, item.SkipWhenFileExists);
+                foreach (var line in item.Lines)
+                {
+                    c.Builder.AppendLine(line);
+                }
+            }
+
+            return result;
         }
 
         public override string ToString()
@@ -175,50 +204,6 @@ namespace TextTemplateTransformationFramework.Core
             return sb.ToString();
         }
 
-        public static MultipleContentBuilder FromString(string xml)
-        {
-            var result = new MultipleContentBuilder();
-
-            MultipleContents? mc;
-
-            // Cope with CA2202 analysis warning by using this unusual statement with try.finally instead of nested usings
-            var stringReader = new StringReader(xml);
-            try
-            {
-                using (var reader = XmlReader.Create(stringReader))
-                {
-                    // Set reference to null because the reader will destroy it
-                    stringReader = null;
-
-                    var serializer = new DataContractSerializer(typeof(MultipleContents));
-                    mc = serializer.ReadObject(reader) as MultipleContents;
-                }
-            }
-            finally
-            {
-                stringReader?.Dispose();
-            }
-
-            if (mc == null)
-            {
-                throw new InvalidOperationException("Xml could not be parsed to MultipleContents");
-            }
-
-            result.BasePath = mc.BasePath;
-            foreach (var item in mc.Contents)
-            {
-                var c = result.AddContent(item.FileName, item.SkipWhenFileExists);
-                foreach (var line in item.Lines)
-                {
-                    c.Builder.AppendLine(line);
-                }
-            }
-
-            return result;
-        }
-
-        public IEnumerable<IContent> Contents { get { return _contentList.AsReadOnly(); } }
-
         private static SearchOption GetSearchOption(bool recurse)
             => recurse
                 ? SearchOption.AllDirectories
@@ -239,5 +224,22 @@ namespace TextTemplateTransformationFramework.Core
                 }
             }
         }
+
+        private static string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
+        {
+            try
+            {
+                return Directory.GetFiles(basePath, lastGeneratedFilesPath, GetSearchOption(recurse));
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return Array.Empty<string>();
+            }
+        }
+
+        private static string GetFullPath(string lastGeneratedFilesPath, string basePath)
+            => string.IsNullOrEmpty(basePath) || Path.IsPathRooted(lastGeneratedFilesPath)
+                ? lastGeneratedFilesPath
+                : Path.Combine(basePath, lastGeneratedFilesPath);
     }
 }

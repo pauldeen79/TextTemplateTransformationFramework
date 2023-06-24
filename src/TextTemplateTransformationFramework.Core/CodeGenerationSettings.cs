@@ -1,12 +1,16 @@
-﻿namespace TextTemplateTransformationFramework.Core
+﻿using TextTemplateTransformationFramework.Abstractions;
+
+namespace TextTemplateTransformationFramework.Core
 {
-    public record CodeGenerationSettings
+    public record CodeGenerationSettings : ICodeGenerationSettings
     {
-        public CodeGenerationSettings(string basePath, bool dryRun) : this(basePath, false, false, dryRun)
+        public CodeGenerationSettings(string basePath, bool dryRun)
+            : this(basePath, false, false, dryRun)
         {
         }
 
-        public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool dryRun) : this(basePath, generateMultipleFiles, false, dryRun)
+        public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool dryRun)
+            : this(basePath, generateMultipleFiles, false, dryRun)
         {
         }
 

@@ -5,13 +5,15 @@ namespace TextTemplateTransformationFramework.Core
 {
     public class Content : IContent
     {
-        public Content()
-        {
-            Builder = new StringBuilder();
-        }
+        public Content() => Builder = new StringBuilder();
 
         public Content(StringBuilder builder)
         {
+            if (builder is null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
             Builder = builder;
         }
 
