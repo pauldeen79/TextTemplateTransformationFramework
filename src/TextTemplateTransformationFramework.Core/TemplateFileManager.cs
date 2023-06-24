@@ -8,7 +8,6 @@ namespace TextTemplateTransformationFramework.Core
     {
         private readonly StringBuilder _originalStringBuilder;
 
-        //TODO: Review if we need a default c'tor, or refactor to use DI
         public TemplateFileManager(StringBuilder stringBuilder, string basePath = "")
             : this (new MultipleContentBuilder(basePath), stringBuilder)
         {

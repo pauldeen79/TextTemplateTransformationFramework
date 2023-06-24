@@ -8,7 +8,6 @@ namespace TextTemplateTransformationFramework.Core
     {
         private const string Parent = "/";
 
-        //TODO: Review if we need a default c'tor, or refactor to use DI
         public CodeGenerationEngine(string basePath = "")
             : this(new TemplateRenderer(), new TemplateFileManager(new StringBuilder(), basePath))
         {
