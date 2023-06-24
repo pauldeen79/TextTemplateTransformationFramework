@@ -6,8 +6,6 @@ namespace TextTemplateTransformationFramework.Core
 {
     public class CodeGenerationEngine : ICodeGenerationEngine
     {
-        private const string Parent = "/";
-
         public CodeGenerationEngine(string basePath = "")
             : this(new TemplateRenderer(), new TemplateFileManager(new StringBuilder(), basePath))
         {
@@ -34,27 +32,23 @@ namespace TextTemplateTransformationFramework.Core
 
             var generator = provider.CreateGenerator();
             var shouldSave = !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun;
-            var shouldUseLastGeneratedFiles = !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName);
+            var shouldUseLastGeneratedFiles = provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName);
             var additionalParameters = provider.CreateAdditionalParameters();
 
             if (provider.GenerateMultipleFiles)
             {
                 _templateRenderer.Render(template: generator,
-                                         generationEnvironment: _templateFileManager,
+                                         generationEnvironment: _templateFileManager.MultipleContentBuilder,
                                          model: provider.CreateModel(),
-                                         defaultFileName: provider.GenerateMultipleFiles
-                                              ? provider.DefaultFileName
-                                              : string.Empty,
+                                         defaultFileName: provider.DefaultFileName,
                                          additionalParameters: additionalParameters);
             }
             else
             {
                 _templateRenderer.Render(template: generator,
-                                         generationEnvironment: _templateFileManager.StartNewFile($"{provider.Path}{Parent}{provider.DefaultFileName}"),
+                                         generationEnvironment: _templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFileName)),
                                          model: provider.CreateModel(),
-                                         defaultFileName: provider.GenerateMultipleFiles
-                                              ? provider.DefaultFileName
-                                              : string.Empty,
+                                         defaultFileName: string.Empty,
                                          additionalParameters: additionalParameters);
             }
 
@@ -64,8 +58,7 @@ namespace TextTemplateTransformationFramework.Core
             {
                 if (shouldUseLastGeneratedFiles)
                 {
-                    var filename = provider.GenerateMultipleFiles ? provider.LastGeneratedFilesFileName : provider.DefaultFileName;
-                    var prefixedLastGeneratedFilesFileName = $"{provider.Path}{Parent}{filename}";
+                    var prefixedLastGeneratedFilesFileName = Path.Combine(provider.Path, provider.LastGeneratedFilesFileName);
                     _templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFileName, provider.RecurseOnDeleteGeneratedFiles);
                     _templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFileName);
                 }

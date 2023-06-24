@@ -7,14 +7,28 @@ using TextTemplateTransformationFramework.Core.Extensions;
 
 namespace TextTemplateTransformationFramework.Core
 {
-    //TODO: Extract file operations to IFileSystem
-    //TODO: Extract serialization operations to ISerializer
     public class MultipleContentBuilder : IMultipleContentBuilder
     {
+        private readonly IFileSystem _fileSystem;
+        private readonly Encoding _encoding;
         private readonly List<IContent> _contentList;
 
-        public MultipleContentBuilder(string basePath = "")
+        public MultipleContentBuilder(string basePath = "") : this(new FileSystem(), Encoding.UTF8, basePath)
         {
+        }
+
+        public MultipleContentBuilder(Encoding encoding, string basePath = "") : this(new FileSystem(), encoding, basePath)
+        {
+        }
+
+        public MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath = "")
+        {
+            Guard.IsNotNull(fileSystem);
+            Guard.IsNotNull(encoding);
+            Guard.IsNotNull(basePath);
+            
+            _fileSystem = fileSystem;
+            _encoding = encoding;
             _contentList = new List<IContent>();
             BasePath = basePath;
         }
@@ -29,7 +43,12 @@ namespace TextTemplateTransformationFramework.Core
                     ? content.FileName
                     : Path.Combine(BasePath, content.FileName);
 
-                if (content.SkipWhenFileExists && File.Exists(path))
+                if (string.IsNullOrEmpty(path))
+                {
+                    throw new InvalidOperationException("Path could not be determined");
+                }
+
+                if (content.SkipWhenFileExists && _fileSystem.FileExists(path))
                 {
                     continue;
                 }
@@ -40,13 +59,13 @@ namespace TextTemplateTransformationFramework.Core
                     throw new InvalidOperationException("Directory could not be determined");
                 }
 
-                if (!Directory.Exists(dir))
+                if (!_fileSystem.DirectoryExists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _fileSystem.CreateDirectory(dir);
                 }
 
                 var contents = content.Builder.ToString().NormalizeLineEndings();
-                Retry(() => File.WriteAllText(path, contents, Encoding.UTF8));
+                Retry(() => _fileSystem.WriteAllText(path, contents, _encoding));
             }
         }
 
@@ -56,7 +75,7 @@ namespace TextTemplateTransformationFramework.Core
                 ? lastGeneratedFilesPath
                 : Path.Combine(BasePath, lastGeneratedFilesPath);
 
-            if (fullPath is null)
+            if (string.IsNullOrEmpty(fullPath))
             {
                 throw new InvalidOperationException("Full path could not be determined");
             }
@@ -67,14 +86,14 @@ namespace TextTemplateTransformationFramework.Core
                 throw new InvalidOperationException("Directory could not be determined");
             }
 
-            if (!Directory.Exists(dir))
+            if (!_fileSystem.DirectoryExists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _fileSystem.CreateDirectory(dir);
             }
 
             if (!fullPath.Contains('*'))
             {
-                File.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName));
+                _fileSystem.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName), _encoding);
             }
         }
 
@@ -92,30 +111,30 @@ namespace TextTemplateTransformationFramework.Core
             }
             var fullPath = GetFullPath(lastGeneratedFilesPath, basePath);
 
-            if (!File.Exists(fullPath))
+            if (!_fileSystem.FileExists(fullPath))
             {
                 if (fullPath.Contains('*')
                     && !string.IsNullOrEmpty(basePath)
-                    && Directory.Exists(basePath))
+                    && _fileSystem.DirectoryExists(basePath))
                 {
                     foreach (var filename in GetFiles(basePath, lastGeneratedFilesPath, recurse))
                     {
-                        File.Delete(filename);
+                        _fileSystem.FileDelete(filename);
                     }
                 }
                 // No previously generated files to delete
                 return;
             }
 
-            foreach (var fileName in File.ReadAllLines(fullPath))
+            foreach (var fileName in _fileSystem.ReadAllLines(fullPath, _encoding))
             {
                 var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(fileName)
                     ? fileName
                     : Path.Combine(basePath, fileName);
 
-                if (File.Exists(fileFullPath))
+                if (_fileSystem.FileExists(fileFullPath))
                 {
-                    File.Delete(fileFullPath);
+                    _fileSystem.FileDelete(fileFullPath);
                 }
             }
         }
@@ -206,11 +225,6 @@ namespace TextTemplateTransformationFramework.Core
             return sb.ToString();
         }
 
-        private static SearchOption GetSearchOption(bool recurse)
-            => recurse
-                ? SearchOption.AllDirectories
-                : SearchOption.TopDirectoryOnly;
-
         private static void Retry(Action action)
         {
             for (int i = 1; i < 3; i++)
@@ -227,16 +241,14 @@ namespace TextTemplateTransformationFramework.Core
             }
         }
 
-        private static string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
+        private string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
         {
-            try
-            {
-                return Directory.GetFiles(basePath, lastGeneratedFilesPath, GetSearchOption(recurse));
-            }
-            catch (DirectoryNotFoundException)
+            if (!_fileSystem.DirectoryExists(basePath))
             {
                 return Array.Empty<string>();
             }
+
+            return _fileSystem.GetFiles(basePath, lastGeneratedFilesPath, recurse);
         }
 
         private static string GetFullPath(string lastGeneratedFilesPath, string basePath)
