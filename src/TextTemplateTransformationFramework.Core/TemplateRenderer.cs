@@ -8,10 +8,32 @@ namespace TextTemplateTransformationFramework.Core
     public class TemplateRenderer : ITemplateRenderer
     {
         public void Render(object template,
-                           object generationEnvironment,
+                           StringBuilder generationEnvironment,
                            string defaultFileName = "",
                            object? model = null,
                            object? additionalParameters = null)
+            => DoRender(template, generationEnvironment, defaultFileName, model, additionalParameters);
+
+        public void Render(object template,
+                           IMultipleContentBuilder generationEnvironment,
+                           string defaultFileName = "",
+                           object? model = null,
+                           object? additionalParameters = null)
+            => DoRender(template, generationEnvironment, defaultFileName, model, additionalParameters);
+
+        public void Render(object template,
+                           IMultipleContentBuilderContainer generationEnvironment,
+                           string defaultFileName = "",
+                           object? model = null,
+                           object? additionalParameters = null)
+            => DoRender(template, generationEnvironment, defaultFileName, model, additionalParameters);
+
+
+        private void DoRender(object template,
+                              object generationEnvironment,
+                              string defaultFileName = "",
+                              object? model = null,
+                              object? additionalParameters = null)
         {
             Guard.IsNotNull(template);
             Guard.IsNotNull(generationEnvironment);

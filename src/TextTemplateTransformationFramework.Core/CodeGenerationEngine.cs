@@ -38,15 +38,26 @@ namespace TextTemplateTransformationFramework.Core
             var shouldUseLastGeneratedFiles = !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName);
             var additionalParameters = provider.CreateAdditionalParameters();
 
-            _templateRenderer.Render(template: generator,
-                                     generationEnvironment: provider.GenerateMultipleFiles
-                                          ? _templateFileManager
-                                          : _templateFileManager.StartNewFile($"{provider.Path}{Parent}{provider.DefaultFileName}"),
-                                     model: provider.CreateModel(),
-                                     defaultFileName: provider.GenerateMultipleFiles
-                                          ? provider.DefaultFileName
-                                          : string.Empty,
-                                     additionalParameters: additionalParameters);
+            if (provider.GenerateMultipleFiles)
+            {
+                _templateRenderer.Render(template: generator,
+                                         generationEnvironment: _templateFileManager,
+                                         model: provider.CreateModel(),
+                                         defaultFileName: provider.GenerateMultipleFiles
+                                              ? provider.DefaultFileName
+                                              : string.Empty,
+                                         additionalParameters: additionalParameters);
+            }
+            else
+            {
+                _templateRenderer.Render(template: generator,
+                                         generationEnvironment: _templateFileManager.StartNewFile($"{provider.Path}{Parent}{provider.DefaultFileName}"),
+                                         model: provider.CreateModel(),
+                                         defaultFileName: provider.GenerateMultipleFiles
+                                              ? provider.DefaultFileName
+                                              : string.Empty,
+                                         additionalParameters: additionalParameters);
+            }
 
             _templateFileManager.Process(true, shouldSave);
 

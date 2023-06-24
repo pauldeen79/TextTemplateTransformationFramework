@@ -2,9 +2,8 @@
 
 namespace TextTemplateTransformationFramework.Abstractions
 {
-    public interface ITemplateFileManager
+    public interface ITemplateFileManager : IMultipleContentBuilderContainer
     {
-        IMultipleContentBuilder MultipleContentBuilder { get; }
         StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false);
         void ResetToDefaultOutput();
         void Process(bool split = true, bool silentOutput = false);
