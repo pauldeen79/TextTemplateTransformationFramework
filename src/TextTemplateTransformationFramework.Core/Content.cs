@@ -6,7 +6,9 @@ namespace TextTemplateTransformationFramework.Core
 {
     public class Content : IContent
     {
-        public Content() => Builder = new StringBuilder();
+        public Content() : this(new StringBuilder())
+        {
+        }
 
         public Content(StringBuilder builder)
         {
