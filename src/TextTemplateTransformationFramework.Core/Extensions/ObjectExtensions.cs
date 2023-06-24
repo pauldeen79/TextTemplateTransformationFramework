@@ -8,22 +8,24 @@ namespace TextTemplateTransformationFramework.Core.Extensions
         {
             var result = new Dictionary<string, object?>();
 
-            if (instance is not null)
+            if (instance is null)
             {
-                if (instance is IEnumerable<KeyValuePair<string, object?>> kvpEnum)
+                return result;
+            }
+
+            if (instance is IEnumerable<KeyValuePair<string, object?>> kvpEnum)
+            {
+                foreach (var kvp in kvpEnum)
                 {
-                    foreach (var kvp in kvpEnum)
-                    {
-                        result.Add(kvp.Key, kvp.Value);
-                    }
+                    result.Add(kvp.Key, kvp.Value);
                 }
-                else
+            }
+            else
+            {
+                var properties = TypeDescriptor.GetProperties(instance).Cast<PropertyDescriptor>();
+                foreach (var prop in properties.OrderBy(p => p.Name))
                 {
-                    var properties = TypeDescriptor.GetProperties(instance).Cast<PropertyDescriptor>();
-                    foreach (var prop in properties.OrderBy(p => p.Name))
-                    {
-                        result.Add(prop.Name, prop.GetValue(instance));
-                    }
+                    result.Add(prop.Name, prop.GetValue(instance));
                 }
             }
 

@@ -19,10 +19,10 @@ namespace TextTemplateTransformationFramework.Core
             IterationCount = iterationCount;
         }
 
-        public object Template { get; private set; }
-        public object? Model { get; set; }
-        public object? ViewModel { get; set; }
-        public ITemplateContext? ParentContext { get; private set; }
+        public object Template { get; }
+        public object? Model { get; }
+        public object? ViewModel { get; }
+        public ITemplateContext? ParentContext { get; }
 
         public ITemplateContext RootContext
         {
@@ -100,14 +100,10 @@ namespace TextTemplateTransformationFramework.Core
                 iterationCount: iterationCount
             );
 
-        public static ITemplateContext CreateRootContext(object template)
-            => new TemplateContext
-            (
-                template: template
-            );
-
         public int? IterationNumber { get; set; }
         public int? IterationCount { get; set; }
+
+        public bool HasIterations => IterationNumber is not null && IterationCount is not null;
 
         public bool? IsFirstIteration
         {
@@ -134,5 +130,11 @@ namespace TextTemplateTransformationFramework.Core
                 return IterationNumber + 1 == IterationCount;
             }
         }
+
+        public static ITemplateContext CreateRootContext(object template)
+            => new TemplateContext
+            (
+                template: template
+            );
     }
 }

@@ -84,10 +84,7 @@ namespace TextTemplateTransformationFramework.Core
                     ?? throw new InvalidOperationException("MultipleContentBuilder property is null");
             }
 
-            if (multipleContentBuilder is not IMultipleContentBuilder builder)
-            {
-                throw new ArgumentOutOfRangeException(nameof(multipleContentBuilder), "MultipleContentBuilder is not of type IMultipleContentBuilder or ITemplateFileManager");
-            }
+            var builder = (IMultipleContentBuilder)multipleContentBuilder;
 
             if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
             {

@@ -3,11 +3,12 @@
     public interface ITemplateContext
     {
         object Template { get; }
-        object? Model { get; set; }
-        object? ViewModel { get; set; }
+        object? Model { get; }
+        object? ViewModel { get; }
         ITemplateContext? ParentContext { get; }
         ITemplateContext RootContext { get; }
         bool IsRootContext { get; }
+        bool HasIterations { get; }
         int? IterationNumber { get; set; }
         int? IterationCount { get; set; }
         bool? IsFirstIteration { get; }
