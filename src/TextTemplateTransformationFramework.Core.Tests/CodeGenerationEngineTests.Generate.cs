@@ -48,7 +48,7 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
                 CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(false);
 
@@ -64,7 +64,7 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
 
                 // Act
@@ -79,8 +79,8 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(@"C:\");
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
 
@@ -96,8 +96,8 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(@"C:\");
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(true);
 
@@ -114,7 +114,7 @@
                 // Arrange
                 var sut = CreateSut();
                 CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(string.Empty);
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
 
@@ -130,8 +130,8 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(@"C:\");
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
                 CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFileName).Returns("GeneratedFiles.txt");
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
@@ -140,7 +140,7 @@
                 sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
 
                 // Assert
-                TemplateFileManagerMock.Verify(x => x.DeleteLastGeneratedFiles(@"C:\GeneratedFiles.txt", false), Times.Once);
+                TemplateFileManagerMock.Verify(x => x.DeleteLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt"), false), Times.Once);
             }
 
             [Fact]
@@ -148,8 +148,8 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(@"C:\");
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
                 CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFileName).Returns(string.Empty);
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
@@ -158,7 +158,7 @@
                 sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
 
                 // Assert
-                TemplateFileManagerMock.Verify(x => x.DeleteLastGeneratedFiles(@"C:\GeneratedFiles.txt", false), Times.Never);
+                TemplateFileManagerMock.Verify(x => x.DeleteLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt"), false), Times.Never);
             }
 
             [Fact]
@@ -166,8 +166,8 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(@"C:\");
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
                 CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFileName).Returns("GeneratedFiles.txt");
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
@@ -176,7 +176,7 @@
                 sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
 
                 // Assert
-                TemplateFileManagerMock.Verify(x => x.SaveLastGeneratedFiles(@"C:\GeneratedFiles.txt"), Times.Once);
+                TemplateFileManagerMock.Verify(x => x.SaveLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt")), Times.Once);
             }
 
             [Fact]
@@ -184,8 +184,8 @@
             {
                 // Arrange
                 var sut = CreateSut();
-                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(@"C:\");
-                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(@"C:\");
+                CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+                CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
                 CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
                 CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFileName).Returns(string.Empty);
                 CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
@@ -194,7 +194,7 @@
                 sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
 
                 // Assert
-                TemplateFileManagerMock.Verify(x => x.SaveLastGeneratedFiles(@"C:\GeneratedFiles.txt"), Times.Never);
+                TemplateFileManagerMock.Verify(x => x.SaveLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt")), Times.Never);
             }
         }
     }

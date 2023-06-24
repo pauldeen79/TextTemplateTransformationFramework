@@ -17,7 +17,7 @@ namespace TextTemplateTransformationFramework.Core
 
         public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool skipWhenFileExists, bool dryRun)
         {
-            Guard.IsNotNull(BasePath);
+            Guard.IsNotNull(basePath);
 
             BasePath = basePath;
             GenerateMultipleFiles = generateMultipleFiles;
