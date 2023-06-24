@@ -1,8 +1,9 @@
-﻿using TextTemplateTransformationFramework.Abstractions;
+﻿using CommunityToolkit.Diagnostics;
+using TextTemplateTransformationFramework.Abstractions;
 
 namespace TextTemplateTransformationFramework.Core
 {
-    public record CodeGenerationSettings : ICodeGenerationSettings
+    public class CodeGenerationSettings : ICodeGenerationSettings
     {
         public CodeGenerationSettings(string basePath, bool dryRun)
             : this(basePath, false, false, dryRun)
@@ -16,6 +17,8 @@ namespace TextTemplateTransformationFramework.Core
 
         public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool skipWhenFileExists, bool dryRun)
         {
+            Guard.IsNotNull(BasePath);
+
             BasePath = basePath;
             GenerateMultipleFiles = generateMultipleFiles;
             SkipWhenFileExists = skipWhenFileExists;

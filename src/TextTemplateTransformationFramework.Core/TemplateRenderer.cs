@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CommunityToolkit.Diagnostics;
 using TextTemplateTransformationFramework.Abstractions;
 using TextTemplateTransformationFramework.Core.Extensions;
 
@@ -12,26 +13,15 @@ namespace TextTemplateTransformationFramework.Core
                            object? model = null,
                            object? additionalParameters = null)
         {
-            if (template is null)
-            {
-                throw new ArgumentNullException(nameof(template));
-            }
+            Guard.IsNotNull(template);
+            Guard.IsNotNull(generationEnvironment);
 
-            if (generationEnvironment is null)
-            {
-                throw new ArgumentNullException(nameof(generationEnvironment));
-            }
-
-            SetAdditionalParametersOnTemplate(template, model, additionalParameters);
-
-            //TODO: Review if we want to support ViewModel on templates
-            //var templateType = template.GetType();
-            //var session = CreateSession(model);
-            //SetViewModelOnTemplate(templateType, template, session, additionalParameters);
+            TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
+            TrySetViewModelOnTemplate(template, CreateSession(model), additionalParameters);
 
             if (generationEnvironment is StringBuilder stringBuilder)
             {
-                RenderTemplate(template, stringBuilder, template.GetType());
+                RenderTemplate(template, stringBuilder);
             }
             else
             {
@@ -39,29 +29,15 @@ namespace TextTemplateTransformationFramework.Core
             }
         }
 
-        private static void RenderTemplate(object template, StringBuilder builder, Type templateType)
+        private static void RenderTemplate(object template, StringBuilder builder)
         {
-            var renderMethod = templateType.GetMethod("Render");
-            var transformTextMethod = templateType.GetMethod("TransformText");
-
-            if (renderMethod is not null)
+            if (template is ITemplate typedTemplate)
             {
-                renderMethod.Invoke(template, new object[] { builder });
-            }
-            else if (transformTextMethod is not null)
-            {
-                var output = transformTextMethod.Invoke(template, Array.Empty<object>()) as string;
-                
-                if (!string.IsNullOrEmpty(output))
-                {
-                    builder.Append(output);
-                }
+                typedTemplate.Render(builder);
             }
             else
             {
-                var toStringMethod = templateType.GetMethod(nameof(ToString))!;
-                var output = toStringMethod.Invoke(template, Array.Empty<object>()) as string;
-                
+                var output = template.ToString();
                 if (!string.IsNullOrEmpty(output))
                 {
                     builder.Append(output);
@@ -76,23 +52,19 @@ namespace TextTemplateTransformationFramework.Core
                                                    bool defaultSkipWhenFileExists = false)
         {
             var stringBuilder = new StringBuilder();
-            RenderTemplate(template, stringBuilder, template.GetType());
+            RenderTemplate(template, stringBuilder);
             var builderResult = stringBuilder.ToString();
-            var multipleContentBuilderType = multipleContentBuilder.GetType();
-            var multipleContentBuilderProperty = multipleContentBuilderType.GetProperty(nameof(MultipleContentBuilder), Constants.BindingFlags);
-            
-            if (multipleContentBuilderProperty is not null)
+
+            if (multipleContentBuilder is IMultipleContentBuilderContainer container)
             {
                 // Use TemplateFileManager
-                multipleContentBuilder = multipleContentBuilderProperty.GetValue(multipleContentBuilder)
+                multipleContentBuilder = container.MultipleContentBuilder
                     ?? throw new InvalidOperationException("MultipleContentBuilder property is null");
-                multipleContentBuilderType = multipleContentBuilder.GetType();
             }
 
-            var addContentMethod = multipleContentBuilderType.GetMethod(nameof(IMultipleContentBuilder.AddContent));
-            if (addContentMethod is null)
+            if (multipleContentBuilder is not IMultipleContentBuilder builder)
             {
-                throw new ArgumentException("Parameter does not have an AddContent method, and cannot be used as multiple content builder", nameof(multipleContentBuilder));
+                throw new ArgumentOutOfRangeException(nameof(multipleContentBuilder), "MultipleContentBuilder is not of type IMultipleContentBuilder or ITemplateFileManager");
             }
 
             if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
@@ -100,48 +72,31 @@ namespace TextTemplateTransformationFramework.Core
                 var multipleContents = MultipleContentBuilder.FromString(builderResult);
                 foreach (var c in multipleContents.Contents)
                 {
-                    addContentMethod.Invoke(multipleContentBuilder, new object[] { fileNamePrefix + c.FileName, c.SkipWhenFileExists, c.Builder });
+                    builder.AddContent(fileNamePrefix + c.FileName, c.SkipWhenFileExists, c.Builder);
                 }
             }
             else
             {
-                addContentMethod.Invoke(multipleContentBuilder, new object[] { defaultFileName, defaultSkipWhenFileExists, new StringBuilder(builderResult) });
+                builder.AddContent(defaultFileName, defaultSkipWhenFileExists, new StringBuilder(builderResult));
             }
         }
 
-        private static void SetAdditionalParametersOnTemplate(object template,
-                                                              object? model,
-                                                              object? additionalParameters)
+        private static void TrySetAdditionalParametersOnTemplate(object template,
+                                                                 object? model,
+                                                                 object? additionalParameters)
         {
-            var templateType = template.GetType();
-            var sessionProperty = templateType.GetProperty("Session", Constants.BindingFlags);
-            
-            if (sessionProperty is not null)
+            var props = template.GetType().GetProperties(Constants.BindingFlags);
+
+            var modelProperty = model is null
+                ? null
+                : Array.Find(props, p => p.Name == Constants.ModelKey);
+
+            modelProperty?.SetValue(template, model);
+
+            foreach (var item in additionalParameters.ToKeyValuePairs())
             {
-                var session = CreateSession(model);
-
-                foreach (var item in additionalParameters.ToKeyValuePairs())
-                {
-                    session.Add(item.Key, item.Value);
-                }
-
-                sessionProperty.SetValue(template, session, null);
-            }
-            else
-            {
-                var props = template.GetType().GetProperties(Constants.BindingFlags);
-
-                var modelProperty = model is null
-                    ? null
-                    : Array.Find(props, p => p.Name == "Model");
-
-                modelProperty?.SetValue(template, model);
-
-                foreach (var item in additionalParameters.ToKeyValuePairs())
-                {
-                    var additionalProperty = Array.Find(props, p => p.Name == item.Key);
-                    additionalProperty?.SetValue(template, item.Value);
-                }
+                var additionalProperty = Array.Find(props, p => p.Name == item.Key);
+                additionalProperty?.SetValue(template, item.Value);
             }
         }
 
@@ -151,87 +106,96 @@ namespace TextTemplateTransformationFramework.Core
 
             if (model is not null)
             {
-                session.Add("Model", model);
+                session.Add(Constants.ModelKey, model);
             }
 
             return session;
         }
 
-        //TODO: Review if we want to support ViewModel on templates
-        //private static void SetViewModelOnTemplate(Type templateType,
-        //                                           object template,
-        //                                           IEnumerable<KeyValuePair<string, object?>> session,
-        //                                           object? additionalParameters)
-        //{
-        //    var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
-        //    if (viewModelProperty is not null && viewModelProperty.PropertyType != typeof(object))
-        //    {
-        //        var viewModelValue = viewModelProperty.GetValue(template);
-        //        if (viewModelValue is null)
-        //        {
-        //            viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
-        //            viewModelProperty.SetValue(template, viewModelValue);
-        //        }
+        private static void TrySetViewModelOnTemplate(object template,
+                                                      IEnumerable<KeyValuePair<string, object?>> session,
+                                                      object? additionalParameters)
+        {
+            if (template is IViewModelContainer viewModelContainer)
+            {
+                viewModelContainer.ViewModel.Initialize();
+                var viewModelValue = viewModelContainer.ViewModel.Get();
 
-        //        CopySessionVariablesToViewModel(viewModelValue!, CombineSession(session, additionalParameters.ToKeyValuePairs()));
-        //        CopyTemplateContextToViewModel(viewModelValue!, template);
-        //    }
-        //}
+                CopySessionVariablesToViewModel(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
+                CopyTemplateContextToViewModel(viewModelValue, template);
+            }
+        }
 
-        //private static void CopySessionVariablesToViewModel(object viewModelValue,
-        //                                                    IEnumerable<KeyValuePair<string, object?>> session)
-        //{
-        //    var viewModelValueType = viewModelValue.GetType();
-        //    foreach (var kvp in session.Where(kvp => kvp.Key != "Model"))
-        //    {
-        //        var prop = viewModelValueType.GetProperty(kvp.Key, Constants.BindingFlags);
-        //        if (prop is not null && prop.GetSetMethod() is null) { continue; }
-        //        prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
-        //    }
+        private static void CopySessionVariablesToViewModel(object? viewModelValue,
+                                                            IEnumerable<KeyValuePair<string, object?>> session)
+        {
+            if (viewModelValue is null)
+            {
+                return;
+            }
 
-        //    var modelProperty = viewModelValueType.GetProperty("Model", Constants.BindingFlags);
-        //    if (modelProperty is not null
-        //        && modelProperty.GetValue(viewModelValue) is null
-        //        && session.Any(kvp => kvp.Key == "Model"))
-        //    {
-        //        modelProperty.SetValue(viewModelValue, session.First(kvp => kvp.Key == "Model").Value);
-        //    }
-        //}
+            var viewModelValueType = viewModelValue.GetType();
+            foreach (var kvp in session.Where(kvp => kvp.Key != Constants.ModelKey))
+            {
+                var prop = viewModelValueType.GetProperty(kvp.Key, Constants.BindingFlags);
+                if (prop is not null && prop.GetSetMethod() is null)
+                {
+                    continue;
+                }
 
-        //private static void CopyTemplateContextToViewModel(object viewModelValue, object template)
-        //{
-        //    var templateContextProperty = template.GetType().GetProperty("TemplateContext", Constants.BindingFlags);
-        //    var templateContextValue = templateContextProperty?.GetValue(template);
-        //    if (templateContextValue is null)
-        //    {
-        //        return;
-        //    }
+                prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
+            }
 
-        //    var viewModelTemplateContextProperty = viewModelValue.GetType().GetProperty("TemplateContext", Constants.BindingFlags);
-        //    viewModelTemplateContextProperty?.SetValue(viewModelValue, templateContextValue);
-        //}
+            if (viewModelValue is IModelContainer modelContainer
+                && modelContainer.Model.Get() is null
+                && session.Any(kvp => kvp.Key == Constants.ModelKey))
+            {
+                modelContainer.Model.Set(session.First(kvp => kvp.Key == Constants.ModelKey).Value);
+            }
+        }
 
-        //private static object? ConvertType(KeyValuePair<string, object?> parameter, Type parentContainerType)
-        //{
-        //    var property = parentContainerType.GetProperty(parameter.Key, Constants.BindingFlags);
-        //    if (property is null)
-        //    {
-        //        return parameter.Value;
-        //    }
+        private static void CopyTemplateContextToViewModel(object? viewModelValue, object template)
+        {
+            if (viewModelValue is null)
+            {
+                return;
+            }
 
-        //    if (parameter.Value is int && property.PropertyType.IsEnum)
-        //    {
-        //        return Enum.ToObject(property.PropertyType, parameter.Value);
-        //    }
+            if (template is not ITemplateContextContainer templateContextContainer)
+            {
+                return;
+            }
 
-        //    return Convert.ChangeType(parameter.Value, property.PropertyType);
-        //}
 
-        //private static IEnumerable<KeyValuePair<string, object?>> CombineSession(IEnumerable<KeyValuePair<string, object?>> session,
-        //                                                                         IEnumerable<KeyValuePair<string, object?>> additionalParameters)
-        //    => session
-        //        .Where(kvp => !additionalParameters.Any(kvp2 => kvp2.Key == kvp.Key))
-        //        .Concat(additionalParameters)
-        //        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            if (viewModelValue is not ITemplateContextContainer viewModelTemplateContextContainer)
+            {
+                return;
+            }
+
+            viewModelTemplateContextContainer.Context = templateContextContainer.Context;
+        }
+
+        private static object? ConvertType(KeyValuePair<string, object?> parameter, Type parentContainerType)
+        {
+            var property = parentContainerType.GetProperty(parameter.Key, Constants.BindingFlags);
+            if (property is null)
+            {
+                return parameter.Value;
+            }
+
+            if (parameter.Value is int && property.PropertyType.IsEnum)
+            {
+                return Enum.ToObject(property.PropertyType, parameter.Value);
+            }
+
+            return Convert.ChangeType(parameter.Value, property.PropertyType);
+        }
+
+        private static IEnumerable<KeyValuePair<string, object?>> CombineSession(IEnumerable<KeyValuePair<string, object?>> session,
+                                                                                 IEnumerable<KeyValuePair<string, object?>> additionalParameters)
+            => session
+                .Where(x => !additionalParameters.Any(y => y.Key == x.Key))
+                .Concat(additionalParameters)
+                .ToDictionary(x => x.Key, x => x.Value);
     }
 }

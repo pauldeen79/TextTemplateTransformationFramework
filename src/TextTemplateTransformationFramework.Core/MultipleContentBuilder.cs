@@ -1,6 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
+using CommunityToolkit.Diagnostics;
 using TextTemplateTransformationFramework.Abstractions;
 using TextTemplateTransformationFramework.Core.Extensions;
 
@@ -79,10 +80,7 @@ namespace TextTemplateTransformationFramework.Core
 
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
         {
-            if (lastGeneratedFilesPath is null)
-            {
-                throw new ArgumentNullException(nameof(lastGeneratedFilesPath));
-            }
+            Guard.IsNotNull(lastGeneratedFilesPath);
 
             var basePath = BasePath;
             if (lastGeneratedFilesPath.Contains('\\'))
@@ -124,6 +122,8 @@ namespace TextTemplateTransformationFramework.Core
 
         public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
         {
+            Guard.IsNotNull(fileName);
+
             var content = builder is null
                 ? new Content()
                 : new Content(builder);
@@ -136,10 +136,12 @@ namespace TextTemplateTransformationFramework.Core
             return content;
         }
 
-        public IEnumerable<IContent> Contents { get { return _contentList.AsReadOnly(); } }
+        public IEnumerable<IContent> Contents => _contentList.AsReadOnly();
 
         public static MultipleContentBuilder FromString(string xml)
         {
+            Guard.IsNotNull(xml);
+
             var result = new MultipleContentBuilder();
 
             MultipleContents? mc;

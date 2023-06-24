@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CommunityToolkit.Diagnostics;
 using TextTemplateTransformationFramework.Abstractions;
 
 namespace TextTemplateTransformationFramework.Core
@@ -15,6 +16,9 @@ namespace TextTemplateTransformationFramework.Core
 
         public TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
         {
+            Guard.IsNotNull(multipleContentBuilder);
+            Guard.IsNotNull(stringBuilder);
+
             MultipleContentBuilder = multipleContentBuilder;
             _originalStringBuilder = stringBuilder;
         }
@@ -24,6 +28,8 @@ namespace TextTemplateTransformationFramework.Core
 
         public StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
         {
+            Guard.IsNotNull(fileName);
+
             var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new StringBuilder());
             GenerationEnvironment = currentContent.Builder;
             return currentContent.Builder;
@@ -52,13 +58,18 @@ namespace TextTemplateTransformationFramework.Core
             }
         }
 
-        public void SaveAll()
-            => MultipleContentBuilder.SaveAll();
+        public void SaveAll() => MultipleContentBuilder.SaveAll();
 
         public void SaveLastGeneratedFiles(string lastGeneratedFilesPath)
-            => MultipleContentBuilder.SaveLastGeneratedFiles(lastGeneratedFilesPath);
+        {
+            Guard.IsNotNull(lastGeneratedFilesPath);
+            MultipleContentBuilder.SaveLastGeneratedFiles(lastGeneratedFilesPath);
+        }
 
         public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse = true)
-            => MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath, recurse);
+        {
+            Guard.IsNotNull(lastGeneratedFilesPath);
+            MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath, recurse);
+        }
     }
 }

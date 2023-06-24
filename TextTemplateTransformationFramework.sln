@@ -42,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deprecated", "Deprecated", "{DD693416-7AF0-453E-994E-B16C6F35ACC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.Core", "src\TextTemplateTransformationFramework.Core\TextTemplateTransformationFramework.Core.csproj", "{82125523-90F5-4230-AD52-92E232818DC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Core", "src\TextTemplateTransformationFramework.Core\TextTemplateTransformationFramework.Core.csproj", "{82125523-90F5-4230-AD52-92E232818DC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

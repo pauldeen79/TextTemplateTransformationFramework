@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CommunityToolkit.Diagnostics;
 using TextTemplateTransformationFramework.Abstractions;
 
 namespace TextTemplateTransformationFramework.Core
@@ -15,15 +16,8 @@ namespace TextTemplateTransformationFramework.Core
 
         public CodeGenerationEngine(ITemplateRenderer templateRenderer, ITemplateFileManager templateFileManager)
         {
-            if (templateFileManager is null)
-            {
-                throw new ArgumentNullException(nameof(templateFileManager));
-            }
-
-            if (templateRenderer is null)
-            {
-                throw new ArgumentNullException(nameof(templateRenderer));
-            }
+            Guard.IsNotNull(templateRenderer);
+            Guard.IsNotNull(templateFileManager);
 
             _templateFileManager = templateFileManager;
             _templateRenderer = templateRenderer;
@@ -34,15 +28,8 @@ namespace TextTemplateTransformationFramework.Core
 
         public void Generate(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            Guard.IsNotNull(settings);
+            Guard.IsNotNull(provider);
 
             provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists, settings.BasePath);
 

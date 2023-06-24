@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CommunityToolkit.Diagnostics;
 using TextTemplateTransformationFramework.Abstractions;
 
 namespace TextTemplateTransformationFramework.Core
@@ -9,11 +10,7 @@ namespace TextTemplateTransformationFramework.Core
 
         public Content(StringBuilder builder)
         {
-            if (builder is null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-
+            Guard.IsNotNull(builder);
             Builder = builder;
         }
 
