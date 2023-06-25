@@ -6,4 +6,5 @@ global using System.Xml;
 global using CommunityToolkit.Diagnostics;
 global using TextTemplateTransformationFramework.Abstractions;
 global using TextTemplateTransformationFramework.Core.Extensions;
+global using TextTemplateTransformationFramework.Core.Infrastructure;
 global using TextTemplateTransformationFramework.Core.Models;

@@ -1,6 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Core;
+﻿namespace TextTemplateTransformationFramework.Core.Infrastructure;
 
-public class TemplateRenderer : ITemplateRenderer
+internal class TemplateRenderer : ITemplateRenderer
 {
     public void Render(object template,
                        StringBuilder generationEnvironment,

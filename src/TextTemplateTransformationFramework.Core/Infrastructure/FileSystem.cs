@@ -1,6 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Core;
+﻿namespace TextTemplateTransformationFramework.Core.Infrastructure;
 
-public class FileSystem : IFileSystem
+internal class FileSystem : IFileSystem
 {
     public void CreateDirectory(string path)
         => Directory.CreateDirectory(path);
