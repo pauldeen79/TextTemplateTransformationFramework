@@ -93,7 +93,10 @@ public class TemplateContext : ITemplateContext
                                                object? viewModel = null,
                                                int? iterationNumber = null,
                                                int? iterationCount = null)
-        => new TemplateContext
+    {
+        Guard.IsNotNull(template);
+
+        return new TemplateContext
         (
             template: template,
             model: model,
@@ -102,6 +105,7 @@ public class TemplateContext : ITemplateContext
             iterationNumber: iterationNumber,
             iterationCount: iterationCount
         );
+    }
 
     public int? IterationNumber { get; set; }
     public int? IterationCount { get; set; }
@@ -117,7 +121,7 @@ public class TemplateContext : ITemplateContext
                 return null;
             }
 
-            return IterationNumber == 0;
+            return IterationNumber.Value == 0;
         }
     }
 
@@ -130,7 +134,7 @@ public class TemplateContext : ITemplateContext
                 return null;
             }
 
-            return IterationNumber + 1 == IterationCount;
+            return IterationNumber.Value + 1 == IterationCount.Value;
         }
     }
 
