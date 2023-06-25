@@ -123,7 +123,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     public static MultipleContentBuilder FromString(string xml)
     {
-        Guard.IsNotNull(xml);
+        Guard.IsNotNullOrWhiteSpace(xml);
 
         var result = new MultipleContentBuilder();
 

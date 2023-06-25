@@ -27,7 +27,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Throws_On_Whitespace_LastGeneratedFilesPath()
+        public void Throws_On_WhiteSpace_LastGeneratedFilesPath()
         {
             // Arrange
             var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
