@@ -5,6 +5,17 @@ public partial class MultipleContentBuilderTests
     public class SaveLastGeneratedFiles : MultipleContentBuilderTests
     {
         [Fact]
+        public void Throws_On_Null_LastGeneratedFilesPath()
+        {
+            // Arrange
+            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+
+            // Act & Assert
+            sut.Invoking(x => x.SaveLastGeneratedFiles(null!))
+               .Should().Throw<ArgumentNullException>().WithParameterName("lastGeneratedFilesPath");
+        }
+
+        [Fact]
         public void Throws_On_Empty_FullPath()
         {
             // Arrange

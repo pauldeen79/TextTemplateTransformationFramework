@@ -59,6 +59,8 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     public void SaveLastGeneratedFiles(string lastGeneratedFilesPath)
     {
+        Guard.IsNotNull(lastGeneratedFilesPath);
+
         var fullPath = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(lastGeneratedFilesPath)
             ? lastGeneratedFilesPath
             : Path.Combine(BasePath, lastGeneratedFilesPath);
