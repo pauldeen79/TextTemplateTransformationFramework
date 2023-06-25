@@ -3,20 +3,19 @@
 public class CodeGenerationEngine : ICodeGenerationEngine
 {
     public CodeGenerationEngine(string basePath = "")
-        : this(new TemplateRenderer(), new TemplateFileManager(new StringBuilder(), basePath))
+        : this(new TemplateRenderer(), () => new TemplateFileManager(new StringBuilder(), basePath))
     {
     }
 
-    internal CodeGenerationEngine(ITemplateRenderer templateRenderer, ITemplateFileManager templateFileManager)
+    internal CodeGenerationEngine(ITemplateRenderer templateRenderer, Func<ITemplateFileManager> templateFileManagerDelegate)
     {
         Guard.IsNotNull(templateRenderer);
-        Guard.IsNotNull(templateFileManager);
 
-        _templateFileManager = templateFileManager;
+        _templateFileManagerDelegate = templateFileManagerDelegate;
         _templateRenderer = templateRenderer;
     }
 
-    private readonly ITemplateFileManager _templateFileManager;
+    private readonly Func<ITemplateFileManager> _templateFileManagerDelegate;
     private readonly ITemplateRenderer _templateRenderer;
 
     public void Generate(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
@@ -31,10 +30,11 @@ public class CodeGenerationEngine : ICodeGenerationEngine
         var shouldUseLastGeneratedFiles = provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName);
         var additionalParameters = provider.CreateAdditionalParameters();
 
+        var templateFileManager = _templateFileManagerDelegate.Invoke();
         if (provider.GenerateMultipleFiles)
         {
             _templateRenderer.Render(template: generator,
-                                     generationEnvironment: _templateFileManager.MultipleContentBuilder,
+                                     generationEnvironment: templateFileManager.MultipleContentBuilder,
                                      model: provider.CreateModel(),
                                      defaultFileName: provider.DefaultFileName,
                                      additionalParameters: additionalParameters);
@@ -42,24 +42,24 @@ public class CodeGenerationEngine : ICodeGenerationEngine
         else
         {
             _templateRenderer.Render(template: generator,
-                                     generationEnvironment: _templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFileName)),
+                                     generationEnvironment: templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFileName)),
                                      model: provider.CreateModel(),
                                      defaultFileName: string.Empty,
                                      additionalParameters: additionalParameters);
         }
 
-        _templateFileManager.Process(true, shouldSave);
+        templateFileManager.Process(true, shouldSave);
 
         if (shouldSave)
         {
             if (shouldUseLastGeneratedFiles)
             {
                 var prefixedLastGeneratedFilesFileName = Path.Combine(provider.Path, provider.LastGeneratedFilesFileName);
-                _templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFileName, provider.RecurseOnDeleteGeneratedFiles);
-                _templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFileName);
+                templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFileName, provider.RecurseOnDeleteGeneratedFiles);
+                templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFileName);
             }
 
-            _templateFileManager.SaveAll();
+            templateFileManager.SaveAll();
         }
     }
 }
