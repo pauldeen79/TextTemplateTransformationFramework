@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
@@ -14,9 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-    <_Parameter1>TextTemplateTransformationFramework.Core.Tests</_Parameter1>
-    </AssemblyAttribute>
+    <InternalsVisibleTo Include="TextTemplateTransformationFramework.Core.Tests" />
   </ItemGroup>
 
   <ItemGroup>
