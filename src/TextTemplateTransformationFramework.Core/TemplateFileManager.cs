@@ -57,13 +57,13 @@ public class TemplateFileManager : ITemplateFileManager
 
     public void SaveLastGeneratedFiles(string lastGeneratedFilesPath)
     {
-        Guard.IsNotNull(lastGeneratedFilesPath);
+        Guard.IsNotNullOrWhiteSpace(lastGeneratedFilesPath);
         MultipleContentBuilder.SaveLastGeneratedFiles(lastGeneratedFilesPath);
     }
 
     public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse = true)
     {
-        Guard.IsNotNull(lastGeneratedFilesPath);
+        Guard.IsNotNullOrWhiteSpace(lastGeneratedFilesPath);
         MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath, recurse);
     }
 }
