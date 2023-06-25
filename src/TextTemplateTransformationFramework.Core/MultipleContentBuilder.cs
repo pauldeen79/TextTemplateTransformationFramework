@@ -69,12 +69,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
 
         var dir = Path.GetDirectoryName(fullPath);
-        if (string.IsNullOrEmpty(dir))
-        {
-            throw new InvalidOperationException("Directory could not be determined");
-        }
-
-        if (!_fileSystem.DirectoryExists(dir))
+        if (!string.IsNullOrEmpty(dir) && !_fileSystem.DirectoryExists(dir))
         {
             _fileSystem.CreateDirectory(dir);
         }
