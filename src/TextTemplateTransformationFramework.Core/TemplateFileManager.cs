@@ -13,7 +13,7 @@ namespace TextTemplateTransformationFramework.Core
         {
         }
 
-        public TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
+        internal TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
         {
             Guard.IsNotNull(multipleContentBuilder);
             Guard.IsNotNull(stringBuilder);

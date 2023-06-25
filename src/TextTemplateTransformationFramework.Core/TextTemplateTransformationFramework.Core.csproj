@@ -12,7 +12,13 @@
   <ItemGroup>
     <AdditionalFiles Include="..\..\.sonarlint\pauldeen79_texttemplatetransformationframework\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+    <_Parameter1>TextTemplateTransformationFramework.Core.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.0" />
   </ItemGroup>

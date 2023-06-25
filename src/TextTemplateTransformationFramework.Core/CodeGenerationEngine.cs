@@ -11,7 +11,7 @@ namespace TextTemplateTransformationFramework.Core
         {
         }
 
-        public CodeGenerationEngine(ITemplateRenderer templateRenderer, ITemplateFileManager templateFileManager)
+        internal CodeGenerationEngine(ITemplateRenderer templateRenderer, ITemplateFileManager templateFileManager)
         {
             Guard.IsNotNull(templateRenderer);
             Guard.IsNotNull(templateFileManager);

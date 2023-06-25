@@ -21,7 +21,7 @@ namespace TextTemplateTransformationFramework.Core
         {
         }
 
-        public MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath = "")
+        internal MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath = "")
         {
             Guard.IsNotNull(fileSystem);
             Guard.IsNotNull(encoding);
@@ -54,12 +54,7 @@ namespace TextTemplateTransformationFramework.Core
                 }
 
                 var dir = Path.GetDirectoryName(path);
-                if (string.IsNullOrEmpty(dir))
-                {
-                    throw new InvalidOperationException("Directory could not be determined");
-                }
-
-                if (!_fileSystem.DirectoryExists(dir))
+                if (!string.IsNullOrEmpty(dir) && !_fileSystem.DirectoryExists(dir))
                 {
                     _fileSystem.CreateDirectory(dir);
                 }

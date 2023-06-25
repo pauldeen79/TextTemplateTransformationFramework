@@ -25,6 +25,16 @@
             }
 
             [Fact]
+            public void Creates_Instance_With_Filled_BasePath_And_Encoding()
+            {
+                // Act
+                var sut = new MultipleContentBuilder(Encoding.UTF32, TestData.BasePath);
+
+                // Assert
+                sut.BasePath.Should().Be(TestData.BasePath);
+            }
+
+            [Fact]
             public void Throws_On_Null_FileSystem()
             {
                 // Act & Assert
