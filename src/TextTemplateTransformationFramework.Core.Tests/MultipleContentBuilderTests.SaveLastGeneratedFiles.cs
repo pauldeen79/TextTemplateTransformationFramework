@@ -16,16 +16,25 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Throws_On_Empty_FullPath()
+        public void Throws_On_Empty_LastGeneratedFilesPath()
         {
             // Arrange
             var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
-            var c1 = sut.AddContent(string.Empty);
-            c1.Builder.AppendLine("Test1");
 
             // Act & Assert
             sut.Invoking(x => x.SaveLastGeneratedFiles(string.Empty))
-               .Should().Throw<InvalidOperationException>().WithMessage("Full path could not be determined");
+               .Should().Throw<ArgumentException>().WithParameterName("lastGeneratedFilesPath");
+        }
+
+        [Fact]
+        public void Throws_On_Whitespace_LastGeneratedFilesPath()
+        {
+            // Arrange
+            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+
+            // Act & Assert
+            sut.Invoking(x => x.SaveLastGeneratedFiles(" "))
+               .Should().Throw<ArgumentException>().WithParameterName("lastGeneratedFilesPath");
         }
 
         [Fact]

@@ -59,16 +59,11 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     public void SaveLastGeneratedFiles(string lastGeneratedFilesPath)
     {
-        Guard.IsNotNull(lastGeneratedFilesPath);
+        Guard.IsNotNullOrWhiteSpace(lastGeneratedFilesPath);
 
         var fullPath = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(lastGeneratedFilesPath)
             ? lastGeneratedFilesPath
             : Path.Combine(BasePath, lastGeneratedFilesPath);
-
-        if (string.IsNullOrEmpty(fullPath))
-        {
-            throw new InvalidOperationException("Full path could not be determined");
-        }
 
         var dir = Path.GetDirectoryName(fullPath);
         if (!string.IsNullOrEmpty(dir) && !_fileSystem.DirectoryExists(dir))
@@ -84,43 +79,27 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
     {
-        Guard.IsNotNull(lastGeneratedFilesPath);
+        Guard.IsNotNullOrWhiteSpace(lastGeneratedFilesPath);
 
         var basePath = BasePath;
-        if (lastGeneratedFilesPath.Contains('\\'))
+        if (lastGeneratedFilesPath.Contains(Path.DirectorySeparatorChar))
         {
-            var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
-
-            basePath = $"{basePath}\\{lastGeneratedFilesPath.Substring(0, lastSlash)}";
+            var lastSlash = lastGeneratedFilesPath.LastIndexOf(Path.DirectorySeparatorChar);
+            basePath = Path.Combine(basePath, lastGeneratedFilesPath.Substring(0, lastSlash));
             lastGeneratedFilesPath = lastGeneratedFilesPath.Substring(lastSlash + 1);
         }
-        var fullPath = GetFullPath(lastGeneratedFilesPath, basePath);
 
-        if (!_fileSystem.FileExists(fullPath))
+        var fullPath = GetFullPath(basePath, lastGeneratedFilesPath);
+
+        if (fullPath.Contains('*')
+            && !string.IsNullOrEmpty(basePath)
+            && _fileSystem.DirectoryExists(basePath))
         {
-            if (fullPath.Contains('*')
-                && !string.IsNullOrEmpty(basePath)
-                && _fileSystem.DirectoryExists(basePath))
-            {
-                foreach (var filename in GetFiles(basePath, lastGeneratedFilesPath, recurse))
-                {
-                    _fileSystem.FileDelete(filename);
-                }
-            }
-            // No previously generated files to delete
-            return;
+            DeleteFilesUsingPattern(lastGeneratedFilesPath, recurse, basePath);
         }
-
-        foreach (var fileName in _fileSystem.ReadAllLines(fullPath, _encoding))
+        else if (!fullPath.Contains('*') && _fileSystem.FileExists(fullPath))
         {
-            var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(fileName)
-                ? fileName
-                : Path.Combine(basePath, fileName);
-
-            if (_fileSystem.FileExists(fileFullPath))
-            {
-                _fileSystem.FileDelete(fileFullPath);
-            }
+            DeleteFilesFromLastGeneratedFilesContents(basePath, fullPath);
         }
     }
 
@@ -210,6 +189,32 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         return sb.ToString();
     }
 
+    private void DeleteFilesFromLastGeneratedFilesContents(string basePath, string fullPath)
+    {
+        foreach (var fileName in _fileSystem.ReadAllLines(fullPath, _encoding))
+        {
+            var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(fileName)
+                ? fileName
+                : Path.Combine(basePath, fileName);
+
+            if (_fileSystem.FileExists(fileFullPath))
+            {
+                _fileSystem.FileDelete(fileFullPath);
+            }
+        }
+    }
+
+    private void DeleteFilesUsingPattern(string lastGeneratedFilesPath, bool recurse, string basePath)
+    {
+        foreach (var filename in GetFiles(basePath, lastGeneratedFilesPath, recurse))
+        {
+            _fileSystem.FileDelete(filename);
+        }
+    }
+
+    private string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
+        => _fileSystem.GetFiles(basePath, lastGeneratedFilesPath, recurse);
+
     private static void Retry(Action action)
     {
         for (int i = 1; i < 3; i++)
@@ -226,17 +231,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
     }
 
-    private string[] GetFiles(string basePath, string lastGeneratedFilesPath, bool recurse)
-    {
-        if (!_fileSystem.DirectoryExists(basePath))
-        {
-            return Array.Empty<string>();
-        }
-
-        return _fileSystem.GetFiles(basePath, lastGeneratedFilesPath, recurse);
-    }
-
-    private static string GetFullPath(string lastGeneratedFilesPath, string basePath)
+    private static string GetFullPath(string basePath, string lastGeneratedFilesPath)
         => string.IsNullOrEmpty(basePath) || Path.IsPathRooted(lastGeneratedFilesPath)
             ? lastGeneratedFilesPath
             : Path.Combine(basePath, lastGeneratedFilesPath);
