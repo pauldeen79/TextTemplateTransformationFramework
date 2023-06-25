@@ -1,9 +1,16 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Tests;
 
-public partial class CodeGenerationEngineTests
+public abstract partial class CodeGenerationEngineTests
 {
     protected Mock<ITemplateRenderer> TemplateRendererMock { get; } = new();
     protected Mock<ITemplateFileManager> TemplateFileManagerMock { get; } = new();
+    protected Mock<ITemplateFileManagerFactory> TemplateFileManagerFactoryMock { get; }
 
-    protected CodeGenerationEngine CreateSut() => new(TemplateRendererMock.Object, () => TemplateFileManagerMock.Object);
+    protected CodeGenerationEngineTests()
+    {
+        TemplateFileManagerFactoryMock = new Mock<ITemplateFileManagerFactory>();
+        TemplateFileManagerFactoryMock.Setup(x => x.Create(It.IsAny<string>())).Returns(TemplateFileManagerMock.Object);
+    }
+
+    protected CodeGenerationEngine CreateSut() => new(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object);
 }

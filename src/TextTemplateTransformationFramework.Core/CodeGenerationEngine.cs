@@ -3,20 +3,23 @@
 public class CodeGenerationEngine : ICodeGenerationEngine
 {
     public CodeGenerationEngine(string basePath = "")
-        : this(new TemplateRenderer(), () => new TemplateFileManager(new StringBuilder(), basePath))
+        : this(new TemplateRenderer(), new TemplateFileManagerFactory(), basePath)
     {
     }
 
-    internal CodeGenerationEngine(ITemplateRenderer templateRenderer, Func<ITemplateFileManager> templateFileManagerDelegate)
+    internal CodeGenerationEngine(ITemplateRenderer templateRenderer, ITemplateFileManagerFactory templateFileManagerFactory, string basePath = "")
     {
         Guard.IsNotNull(templateRenderer);
+        Guard.IsNotNull(basePath);
 
-        _templateFileManagerDelegate = templateFileManagerDelegate;
+        _templateFileManagerFactory = templateFileManagerFactory;
         _templateRenderer = templateRenderer;
+        _basePath = basePath;
     }
 
-    private readonly Func<ITemplateFileManager> _templateFileManagerDelegate;
+    private readonly ITemplateFileManagerFactory _templateFileManagerFactory;
     private readonly ITemplateRenderer _templateRenderer;
+    private readonly string _basePath;
 
     public void Generate(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
     {
@@ -30,7 +33,7 @@ public class CodeGenerationEngine : ICodeGenerationEngine
         var shouldUseLastGeneratedFiles = provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName);
         var additionalParameters = provider.CreateAdditionalParameters();
 
-        var templateFileManager = _templateFileManagerDelegate.Invoke();
+        var templateFileManager = _templateFileManagerFactory.Create(_basePath);
         if (provider.GenerateMultipleFiles)
         {
             _templateRenderer.Render(template: generator,
