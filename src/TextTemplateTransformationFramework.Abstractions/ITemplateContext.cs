@@ -16,7 +16,7 @@
 
         T? GetModelFromContextByType<T>(Predicate<ITemplateContext>? predicate = null);
         T? GetViewModelFromContextByType<T>(Predicate<ITemplateContext>? predicate = null);
-        T? GetContextByType<T>(Predicate<ITemplateContext>? predicate = null);
+        T? GetContextByTemplateType<T>(Predicate<ITemplateContext>? predicate = null);
 
         ITemplateContext CreateChildContext(object template,
                                             object? model = null,

@@ -70,7 +70,7 @@ public class TemplateContext : ITemplateContext
         return default;
     }
 
-    public T? GetContextByType<T>(Predicate<ITemplateContext>? predicate = null)
+    public T? GetContextByTemplateType<T>(Predicate<ITemplateContext>? predicate = null)
     {
         ITemplateContext? p = this;
         while (p != null)
