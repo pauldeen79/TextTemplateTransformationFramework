@@ -9,6 +9,8 @@ public class TemplateContext : ITemplateContext
                            int? iterationNumber = null,
                            int? iterationCount = null)
     {
+        Guard.IsNotNull(template);
+
         Template = template;
         Model = model;
         ViewModel = viewModel;
@@ -48,6 +50,7 @@ public class TemplateContext : ITemplateContext
 
             p = p.ParentContext;
         }
+
         return default;
     }
 
@@ -63,6 +66,7 @@ public class TemplateContext : ITemplateContext
 
             p = p.ParentContext;
         }
+
         return default;
     }
 
@@ -78,6 +82,7 @@ public class TemplateContext : ITemplateContext
 
             p = p.ParentContext;
         }
+
         return default;
     }
 
