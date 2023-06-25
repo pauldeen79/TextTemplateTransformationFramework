@@ -1,6 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Core.Infrastructure;
+﻿namespace TextTemplateTransformationFramework.Core;
 
-internal class TemplateFileManager : ITemplateFileManager
+public class TemplateFileManager : ITemplateFileManager
 {
     private readonly StringBuilder _originalStringBuilder;
 
