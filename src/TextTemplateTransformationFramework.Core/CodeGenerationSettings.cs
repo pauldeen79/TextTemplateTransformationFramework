@@ -1,33 +1,29 @@
-﻿using CommunityToolkit.Diagnostics;
-using TextTemplateTransformationFramework.Abstractions;
+﻿namespace TextTemplateTransformationFramework.Core;
 
-namespace TextTemplateTransformationFramework.Core
+public class CodeGenerationSettings : ICodeGenerationSettings
 {
-    public class CodeGenerationSettings : ICodeGenerationSettings
+    public CodeGenerationSettings(string basePath, bool dryRun)
+        : this(basePath, false, false, dryRun)
     {
-        public CodeGenerationSettings(string basePath, bool dryRun)
-            : this(basePath, false, false, dryRun)
-        {
-        }
-
-        public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool dryRun)
-            : this(basePath, generateMultipleFiles, false, dryRun)
-        {
-        }
-
-        public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool skipWhenFileExists, bool dryRun)
-        {
-            Guard.IsNotNull(basePath);
-
-            BasePath = basePath;
-            GenerateMultipleFiles = generateMultipleFiles;
-            SkipWhenFileExists = skipWhenFileExists;
-            DryRun = dryRun;
-        }
-
-        public string BasePath { get; }
-        public bool GenerateMultipleFiles { get; }
-        public bool SkipWhenFileExists { get; }
-        public bool DryRun { get; }
     }
+
+    public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool dryRun)
+        : this(basePath, generateMultipleFiles, false, dryRun)
+    {
+    }
+
+    public CodeGenerationSettings(string basePath, bool generateMultipleFiles, bool skipWhenFileExists, bool dryRun)
+    {
+        Guard.IsNotNull(basePath);
+
+        BasePath = basePath;
+        GenerateMultipleFiles = generateMultipleFiles;
+        SkipWhenFileExists = skipWhenFileExists;
+        DryRun = dryRun;
+    }
+
+    public string BasePath { get; }
+    public bool GenerateMultipleFiles { get; }
+    public bool SkipWhenFileExists { get; }
+    public bool DryRun { get; }
 }

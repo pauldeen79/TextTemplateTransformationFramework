@@ -2,7 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using TextTemplateTransformationFramework.Abstractions;
 
-namespace TextTemplateTransformationFramework.Core
+namespace TextTemplateTransformationFramework.Core.Models
 {
     public class Content : IContent
     {

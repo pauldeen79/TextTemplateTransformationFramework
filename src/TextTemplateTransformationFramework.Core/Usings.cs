@@ -1,0 +1,9 @@
+﻿global using System.ComponentModel;
+global using System.Runtime.Serialization;
+global using System.Text;
+global using System.Text.RegularExpressions;
+global using System.Xml;
+global using CommunityToolkit.Diagnostics;
+global using TextTemplateTransformationFramework.Abstractions;
+global using TextTemplateTransformationFramework.Core.Extensions;
+global using TextTemplateTransformationFramework.Core.Models;

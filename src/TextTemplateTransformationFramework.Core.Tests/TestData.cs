@@ -1,15 +1,14 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests
+﻿namespace TextTemplateTransformationFramework.Core.Tests;
+
+internal static class TestData
 {
-    internal static class TestData
-    {
 #if Windows
-        internal const string BasePath = @"C:\Somewhere";
+    internal const string BasePath = @"C:\Somewhere";
 #elif Linux
-        internal const string BasePath = @"/usr/bin/python3";
+    internal const string BasePath = @"/usr/bin/python3";
 #elif OSX
-        internal const string BasePath = @"/Users/moi/Downloads";
+    internal const string BasePath = @"/Users/moi/Downloads";
 #else
-        internal const string BasePath = "Unknown basepath, only Windows, Linux and OSX are supported";
+    internal const string BasePath = "Unknown basepath, only Windows, Linux and OSX are supported";
 #endif
-    }
 }
