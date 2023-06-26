@@ -1,7 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions
+﻿namespace TextTemplateTransformationFramework.Abstractions;
+
+public interface IMultipleContentBuilderContainer
 {
-    public interface IMultipleContentBuilderContainer
-    {
-        IMultipleContentBuilder MultipleContentBuilder { get; }
-    }
+    IMultipleContentBuilder MultipleContentBuilder { get; }
 }

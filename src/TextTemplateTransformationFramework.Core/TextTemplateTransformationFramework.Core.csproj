@@ -4,6 +4,7 @@
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>11.0</LangVersion>
     <PackageId>pauldeen79.TextTemplateTransformationFramework.Core</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>

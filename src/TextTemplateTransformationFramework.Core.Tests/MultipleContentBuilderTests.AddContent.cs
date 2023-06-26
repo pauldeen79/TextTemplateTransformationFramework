@@ -20,7 +20,7 @@ public partial class MultipleContentBuilderTests
         {
             // Arrange
             var sut = CreateSut(TestData.BasePath);
-            var builder = new StringBuilder("ExistingContent");
+            var builder = new IndentedStringBuilder("ExistingContent");
 
             // Act
             var result = sut.AddContent("File.txt", builder: builder);

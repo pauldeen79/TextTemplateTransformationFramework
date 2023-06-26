@@ -52,7 +52,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
                 _fileSystem.CreateDirectory(dir);
             }
 
-            var contents = content.Builder.ToString().NormalizeLineEndings();
+            var contents = content.Builder.ToString()?.NormalizeLineEndings() ?? string.Empty;
             Retry(() => _fileSystem.WriteAllText(path, contents, _encoding));
         }
     }
@@ -103,7 +103,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
     }
 
-    public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
+    public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, IIndentedStringBuilder? builder = null)
     {
         Guard.IsNotNull(fileName);
 
@@ -173,7 +173,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
             Contents = _contentList.Select(c => new Contents
             {
                 FileName = c.FileName,
-                Lines = c.Builder.ToString().NormalizeLineEndings().Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
+                Lines = (c.Builder.ToString()?.NormalizeLineEndings() ?? string.Empty).Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
                 SkipWhenFileExists = c.SkipWhenFileExists
             }).ToList()
         };

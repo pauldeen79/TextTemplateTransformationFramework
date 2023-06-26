@@ -1,7 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions
+﻿namespace TextTemplateTransformationFramework.Abstractions;
+
+public interface IModelContainer
 {
-    public interface IModelContainer
-    {
-        IModel Model { get; set; }
-    }
+    IModel Model { get; set; }
 }

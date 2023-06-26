@@ -1,11 +1,8 @@
-﻿using System.Text;
+﻿namespace TextTemplateTransformationFramework.Abstractions;
 
-namespace TextTemplateTransformationFramework.Abstractions
+public interface IContent
 {
-    public interface IContent
-    {
-        string FileName { get; set; }
-        bool SkipWhenFileExists { get; set; }
-        StringBuilder Builder { get; }
-    }
+    string FileName { get; set; }
+    bool SkipWhenFileExists { get; set; }
+    IIndentedStringBuilder Builder { get; }
 }

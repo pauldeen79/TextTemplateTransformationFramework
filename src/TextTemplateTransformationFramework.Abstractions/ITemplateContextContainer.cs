@@ -1,7 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions
+﻿namespace TextTemplateTransformationFramework.Abstractions;
+
+public interface ITemplateContextContainer
 {
-    public interface ITemplateContextContainer
-    {
-        ITemplateContext Context { get; set; }
-    }
+    ITemplateContext Context { get; set; }
 }

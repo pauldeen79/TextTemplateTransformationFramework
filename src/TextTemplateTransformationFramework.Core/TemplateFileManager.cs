@@ -2,14 +2,14 @@
 
 public class TemplateFileManager : ITemplateFileManager
 {
-    private readonly StringBuilder _originalStringBuilder;
+    private readonly IIndentedStringBuilder _originalStringBuilder;
 
-    public TemplateFileManager(StringBuilder stringBuilder, string basePath = "")
+    public TemplateFileManager(IIndentedStringBuilder stringBuilder, string basePath = "")
         : this (new MultipleContentBuilder(basePath), stringBuilder)
     {
     }
 
-    internal TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
+    internal TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, IIndentedStringBuilder stringBuilder)
     {
         Guard.IsNotNull(multipleContentBuilder);
         Guard.IsNotNull(stringBuilder);
@@ -19,13 +19,13 @@ public class TemplateFileManager : ITemplateFileManager
     }
 
     public IMultipleContentBuilder MultipleContentBuilder { get; }
-    public StringBuilder GenerationEnvironment { get; private set; } = new();
+    public IIndentedStringBuilder GenerationEnvironment { get; private set; } = new IndentedStringBuilder();
 
-    public StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
+    public IIndentedStringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
     {
         Guard.IsNotNull(fileName);
 
-        var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new StringBuilder());
+        var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new IndentedStringBuilder());
         GenerationEnvironment = currentContent.Builder;
         return currentContent.Builder;
     }
@@ -41,7 +41,7 @@ public class TemplateFileManager : ITemplateFileManager
             _originalStringBuilder.Clear();
             if (!silentOutput)
             {
-                _originalStringBuilder.Append(MultipleContentBuilder.ToString());
+                _originalStringBuilder.Append(MultipleContentBuilder.ToString()!);
             }
         }
         else if (!silentOutput)

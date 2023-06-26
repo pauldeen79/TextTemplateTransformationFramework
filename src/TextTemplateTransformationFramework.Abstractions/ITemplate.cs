@@ -1,9 +1,6 @@
-﻿using System.Text;
+﻿namespace TextTemplateTransformationFramework.Abstractions;
 
-namespace TextTemplateTransformationFramework.Abstractions
+public interface ITemplate
 {
-    public interface ITemplate
-    {
-        void Render(StringBuilder builder);
-    }
+    void Render(IIndentedStringBuilder builder);
 }

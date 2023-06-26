@@ -1,10 +1,8 @@
-﻿using System.Text;
-
-namespace TextTemplateTransformationFramework.Abstractions
+﻿namespace TextTemplateTransformationFramework.Abstractions
 {
     public interface ITemplateFileManager : IMultipleContentBuilderContainer
     {
-        StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false);
+        IIndentedStringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false);
         void ResetToDefaultOutput();
         void Process(bool split = true, bool silentOutput = false);
         void SaveAll();

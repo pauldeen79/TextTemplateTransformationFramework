@@ -3,7 +3,7 @@
 public class TemplateRenderer : ITemplateRenderer
 {
     public void Render(object template,
-                       StringBuilder generationEnvironment,
+                       IIndentedStringBuilder generationEnvironment,
                        string defaultFileName = "",
                        object? model = null,
                        object? additionalParameters = null)
@@ -36,7 +36,7 @@ public class TemplateRenderer : ITemplateRenderer
         TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
         TrySetViewModelOnTemplate(template, CreateSession(model), additionalParameters);
 
-        if (generationEnvironment is StringBuilder stringBuilder)
+        if (generationEnvironment is IIndentedStringBuilder stringBuilder)
         {
             RenderTemplate(template, stringBuilder);
         }
@@ -46,7 +46,7 @@ public class TemplateRenderer : ITemplateRenderer
         }
     }
 
-    private static void RenderTemplate(object template, StringBuilder builder)
+    private static void RenderTemplate(object template, IIndentedStringBuilder builder)
     {
         if (template is ITemplate typedTemplate)
         {
@@ -68,7 +68,7 @@ public class TemplateRenderer : ITemplateRenderer
                                                string defaultFileName = "",
                                                bool defaultSkipWhenFileExists = false)
     {
-        var stringBuilder = new StringBuilder();
+        var stringBuilder = new IndentedStringBuilder();
         RenderTemplate(template, stringBuilder);
         var builderResult = stringBuilder.ToString();
 
@@ -91,7 +91,7 @@ public class TemplateRenderer : ITemplateRenderer
         }
         else
         {
-            builder.AddContent(defaultFileName, defaultSkipWhenFileExists, new StringBuilder(builderResult));
+            builder.AddContent(defaultFileName, defaultSkipWhenFileExists, new IndentedStringBuilder(builderResult));
         }
     }
 

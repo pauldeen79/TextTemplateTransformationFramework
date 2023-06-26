@@ -2,11 +2,11 @@
 
 internal class Content : IContent
 {
-    public Content() : this(new StringBuilder())
+    public Content() : this(new IndentedStringBuilder())
     {
     }
 
-    public Content(StringBuilder builder)
+    public Content(IIndentedStringBuilder builder)
     {
         Guard.IsNotNull(builder);
         Builder = builder;
@@ -16,5 +16,5 @@ internal class Content : IContent
 
     public bool SkipWhenFileExists { get; set; }
 
-    public StringBuilder Builder { get; }
+    public IIndentedStringBuilder Builder { get; }
 }
