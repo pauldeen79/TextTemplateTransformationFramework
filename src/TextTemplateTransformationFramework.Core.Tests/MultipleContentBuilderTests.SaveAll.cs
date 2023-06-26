@@ -120,5 +120,31 @@ public partial class MultipleContentBuilderTests
             FileSystemMock.Verify(x => x.WriteAllText(Path.Combine(TestData.BasePath, "File1.txt"), "Test1" + Environment.NewLine, Encoding.UTF8), Times.Once);
             FileSystemMock.Verify(x => x.WriteAllText(Path.Combine(TestData.BasePath, "File2.txt"), "Test2" + Environment.NewLine, Encoding.UTF8), Times.Once);
         }
+
+        [Fact]
+        public void Retries_When_IOException_Occurs()
+        {
+            // Arrange
+            var sut = CreateSut(TestData.BasePath, encoding: Encoding.UTF32);
+            int attempt = 0;
+            FileSystemMock.Setup(x => x.WriteAllText(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Encoding>()))
+                          .Callback<string, string, Encoding>((path, contents, encoding) =>
+                          {
+                              if (path == Path.Combine(TestData.BasePath, "File1.txt"))
+                              {
+                                  attempt++;
+                                  if (attempt < 3)
+                                  {
+                                      throw new IOException("Can't write to file because it is being used by another process");
+                                  }
+                              }
+                          });
+            // Act
+            sut.SaveAll();
+
+            // Assert
+            FileSystemMock.Verify(x => x.WriteAllText(Path.Combine(TestData.BasePath, "File1.txt"), "Test1" + Environment.NewLine, Encoding.UTF32), Times.Exactly(3));
+            FileSystemMock.Verify(x => x.WriteAllText(Path.Combine(TestData.BasePath, "File2.txt"), "Test2" + Environment.NewLine, Encoding.UTF32), Times.Once);
+        }
     }
 }

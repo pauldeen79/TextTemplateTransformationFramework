@@ -217,7 +217,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     private static void Retry(Action action)
     {
-        for (int i = 1; i < 3; i++)
+        for (int i = 1; i <= 3; i++)
         {
             try
             {
