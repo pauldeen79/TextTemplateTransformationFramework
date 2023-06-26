@@ -23,6 +23,13 @@ public class TemplateRenderer : ITemplateRenderer
                        object? additionalParameters = null)
         => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
 
+    public void Render(object template,
+                       IMultipleContentBuilderContainer generationEnvironment,
+                       string defaultFileName = "",
+                       object? model = null,
+                       object? additionalParameters = null)
+        => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
+
     private void Render(object template,
                         object generationEnvironment,
                         string defaultFileName = "",
@@ -37,10 +44,12 @@ public class TemplateRenderer : ITemplateRenderer
 
         if (generationEnvironment is IIndentedStringBuilder stringBuilder)
         {
+            // This path includes both StringBuilder (which is wrapped in an IndentedStringBuilder above) and IIndentedStringBuilder
             RenderTemplate(template, stringBuilder);
         }
         else
         {
+            // This path includes IMultipleContentBuilder and IMultipleContentBuilderContainer (which includes ITemplateFileManager)
             RenderIncludedTemplate(template, generationEnvironment, string.Empty, defaultFileName);
         }
     }
@@ -78,6 +87,7 @@ public class TemplateRenderer : ITemplateRenderer
                 ?? throw new InvalidOperationException("MultipleContentBuilder property is null");
         }
 
+        // Note that we can safely cast here, as the public method only accepts IMultipleContentBuilder and IMultipleContentBuilderContainer
         var builder = (IMultipleContentBuilder)multipleContentBuilder;
 
         if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))

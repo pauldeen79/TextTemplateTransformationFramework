@@ -19,4 +19,10 @@ public interface ITemplateRenderer
                 string defaultFileName = "",
                 object? model = null,
                 object? additionalParameters = null);
+
+    void Render(object template,
+                IMultipleContentBuilderContainer generationEnvironment,
+                string defaultFileName = "",
+                object? model = null,
+                object? additionalParameters = null);
 }
