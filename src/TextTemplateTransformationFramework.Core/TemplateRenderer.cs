@@ -3,6 +3,13 @@
 public class TemplateRenderer : ITemplateRenderer
 {
     public void Render(object template,
+                       StringBuilder generationEnvironment,
+                       string defaultFileName = "",
+                       object? model = null,
+                       object? additionalParameters = null)
+        => Render(template, (IIndentedStringBuilder)new IndentedStringBuilder(generationEnvironment), defaultFileName, model, additionalParameters);
+
+    public void Render(object template,
                        IIndentedStringBuilder generationEnvironment,
                        string defaultFileName = "",
                        object? model = null,
@@ -15,14 +22,6 @@ public class TemplateRenderer : ITemplateRenderer
                        object? model = null,
                        object? additionalParameters = null)
         => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
-
-    public void Render(object template,
-                       IMultipleContentBuilderContainer generationEnvironment,
-                       string defaultFileName = "",
-                       object? model = null,
-                       object? additionalParameters = null)
-        => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
-
 
     private void Render(object template,
                         object generationEnvironment,
