@@ -14,7 +14,7 @@ public partial class TemplateFileManagerFactoryTests
             var result = sut.Create(TestData.BasePath);
 
             // Assert
-            result.Should().BeOfType<TemplateFileManager>();
+            result.Should().BeOfType<Core.TemplateFileManager>();
         }
     }
 }
