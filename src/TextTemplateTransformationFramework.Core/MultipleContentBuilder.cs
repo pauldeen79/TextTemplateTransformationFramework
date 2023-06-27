@@ -103,7 +103,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
     }
 
-    public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, IIndentedStringBuilder? builder = null)
+    public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
     {
         Guard.IsNotNull(fileName);
 

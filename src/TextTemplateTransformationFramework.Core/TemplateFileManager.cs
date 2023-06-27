@@ -2,14 +2,14 @@
 
 public class TemplateFileManager : ITemplateFileManager
 {
-    private readonly IIndentedStringBuilder _originalStringBuilder;
+    private readonly StringBuilder _originalStringBuilder;
 
-    public TemplateFileManager(IIndentedStringBuilder stringBuilder, string basePath = "")
+    public TemplateFileManager(StringBuilder stringBuilder, string basePath = "")
         : this (new MultipleContentBuilder(basePath), stringBuilder)
     {
     }
 
-    internal TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, IIndentedStringBuilder stringBuilder)
+    internal TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
     {
         Guard.IsNotNull(stringBuilder);
 
@@ -18,9 +18,9 @@ public class TemplateFileManager : ITemplateFileManager
     }
 
     public IMultipleContentBuilder MultipleContentBuilder { get; }
-    public IIndentedStringBuilder GenerationEnvironment { get; private set; } = new IndentedStringBuilder();
+    public StringBuilder GenerationEnvironment { get; private set; } = new IndentedStringBuilder();
 
-    public IIndentedStringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
+    public StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
     {
         Guard.IsNotNull(fileName);
 

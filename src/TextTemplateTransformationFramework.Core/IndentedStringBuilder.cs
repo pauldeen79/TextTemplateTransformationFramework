@@ -12,7 +12,7 @@ namespace TextTemplateTransformationFramework.Core;
 ///     See <see href="https://github.com/dotnet/efcore/">Source package where this class was copied from.</see>
 /// </remarks>
 [ExcludeFromCodeCoverage]
-public class IndentedStringBuilder : IIndentedStringBuilder
+public class IndentedStringBuilder
 {
     private const byte IndentSize = 4;
     private int _indent;
@@ -54,7 +54,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </summary>
     /// <param name="value">The string to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder Append(string value)
+    public virtual IndentedStringBuilder Append(string value)
     {
         DoIndent();
 
@@ -63,7 +63,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
         return this;
     }
 
-    public virtual IIndentedStringBuilder Append(IIndentedStringBuilder builder)
+    public virtual IndentedStringBuilder Append(IndentedStringBuilder builder)
     {
         Guard.IsNotNull(builder);
         return Append(builder.ToString()!);
@@ -74,7 +74,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </summary>
     /// <param name="value">The string to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder Append(FormattableString value)
+    public virtual IndentedStringBuilder Append(FormattableString value)
     {
         DoIndent();
 
@@ -88,7 +88,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </summary>
     /// <param name="value">The char to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder Append(char value)
+    public virtual IndentedStringBuilder Append(char value)
     {
         DoIndent();
 
@@ -102,7 +102,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </summary>
     /// <param name="value">The strings to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder Append(IEnumerable<string> value)
+    public virtual IndentedStringBuilder Append(IEnumerable<string> value)
     {
         Guard.IsNotNull(value);
 
@@ -121,7 +121,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </summary>
     /// <param name="value">The chars to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder Append(IEnumerable<char> value)
+    public virtual IndentedStringBuilder Append(IEnumerable<char> value)
     {
         Guard.IsNotNull(value);
 
@@ -139,7 +139,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     ///     Appends a new line to the string being built.
     /// </summary>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder AppendLine()
+    public virtual IndentedStringBuilder AppendLine()
     {
         AppendLine(string.Empty);
 
@@ -154,7 +154,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </remarks>
     /// <param name="value">The string to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder AppendLine(string value)
+    public virtual IndentedStringBuilder AppendLine(string value)
     {
         Guard.IsNotNull(value);
 
@@ -175,7 +175,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// </summary>
     /// <param name="value">The string to append.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder AppendLine(FormattableString value)
+    public virtual IndentedStringBuilder AppendLine(FormattableString value)
     {
         DoIndent();
 
@@ -193,7 +193,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// <param name="value">The string to append.</param>
     /// <param name="skipFinalNewline">If <see langword="true" />, then the terminating new line is not added after the last line.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder AppendLines(string value, bool skipFinalNewline = false)
+    public virtual IndentedStringBuilder AppendLines(string value, bool skipFinalNewline = false)
     {
         using (var reader = new StringReader(value))
         {
@@ -232,7 +232,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     ///// <param name="values">The values to concatenate.</param>
     ///// <param name="separator">The separator.</param>
     ///// <returns>This builder so that additional calls can be chained.</returns>
-    //public virtual IIndentedStringBuilder AppendJoin(
+    //public virtual IndentedStringBuilder AppendJoin(
     //    IEnumerable<string> values,
     //    string separator = ", ")
     //{
@@ -250,7 +250,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     /// <param name="values">The values to concatenate.</param>
     /// <param name="separator">The separator.</param>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder AppendJoin(
+    public virtual IndentedStringBuilder AppendJoin(
         string separator,
         params string[] values)
     {
@@ -265,7 +265,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     ///     Resets this builder ready to build a new string.
     /// </summary>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder Clear()
+    public virtual IndentedStringBuilder Clear()
     {
         _stringBuilder.Clear();
         _indent = 0;
@@ -277,7 +277,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     ///     Increments the indent.
     /// </summary>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder IncrementIndent()
+    public virtual IndentedStringBuilder IncrementIndent()
     {
         _indent++;
 
@@ -288,7 +288,7 @@ public class IndentedStringBuilder : IIndentedStringBuilder
     ///     Decrements the indent.
     /// </summary>
     /// <returns>This builder so that additional calls can be chained.</returns>
-    public virtual IIndentedStringBuilder DecrementIndent()
+    public virtual IndentedStringBuilder DecrementIndent()
     {
         if (_indent > 0)
         {

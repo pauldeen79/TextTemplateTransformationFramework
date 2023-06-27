@@ -7,5 +7,5 @@ public interface IMultipleContentBuilder
     void SaveAll();
     void SaveLastGeneratedFiles(string lastGeneratedFilesPath);
     void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse);
-    IContent AddContent(string fileName = "", bool skipWhenFileExists = false, IIndentedStringBuilder? builder = null);
+    IContent AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null);
 }

@@ -2,5 +2,5 @@
 
 public interface ITemplate
 {
-    void Render(IIndentedStringBuilder builder);
+    void Render(StringBuilder builder);
 }

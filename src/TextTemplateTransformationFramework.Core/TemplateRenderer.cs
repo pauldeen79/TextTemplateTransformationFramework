@@ -7,13 +7,6 @@ public class TemplateRenderer : ITemplateRenderer
                        string defaultFileName = "",
                        object? model = null,
                        object? additionalParameters = null)
-        => Render(template, (IIndentedStringBuilder)new IndentedStringBuilder(generationEnvironment), defaultFileName, model, additionalParameters);
-
-    public void Render(object template,
-                       IIndentedStringBuilder generationEnvironment,
-                       string defaultFileName = "",
-                       object? model = null,
-                       object? additionalParameters = null)
         => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
 
     public void Render(object template,
@@ -42,9 +35,9 @@ public class TemplateRenderer : ITemplateRenderer
         TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
         TrySetViewModelOnTemplate(template, CreateSession(model), additionalParameters);
 
-        if (generationEnvironment is IIndentedStringBuilder stringBuilder)
+        if (generationEnvironment is StringBuilder stringBuilder)
         {
-            // This path includes both StringBuilder (which is wrapped in an IndentedStringBuilder above) and IIndentedStringBuilder
+            // This path is for StringBuilder
             RenderTemplate(template, stringBuilder);
         }
         else
@@ -54,7 +47,7 @@ public class TemplateRenderer : ITemplateRenderer
         }
     }
 
-    private static void RenderTemplate(object template, IIndentedStringBuilder builder)
+    private static void RenderTemplate(object template, StringBuilder builder)
     {
         if (template is ITemplate typedTemplate)
         {
