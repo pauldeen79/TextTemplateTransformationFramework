@@ -160,6 +160,7 @@
     <Rule Id="S2760" Action="None" />
     <Rule Id="S2761" Action="Warning" />
     <Rule Id="S2857" Action="Warning" />
+    <Rule Id="S2925" Action="Warning" />
     <Rule Id="S2930" Action="Warning" />
     <Rule Id="S2931" Action="None" />
     <Rule Id="S2933" Action="Warning" />
