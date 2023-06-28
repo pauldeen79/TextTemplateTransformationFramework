@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests.TemplateFileManager;
+﻿namespace TextTemplateTransformationFramework.Core.Tests;
 
 public partial class TemplateFileManagerTests
 {

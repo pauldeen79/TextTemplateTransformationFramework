@@ -18,7 +18,7 @@ public class TemplateFileManager : ITemplateFileManager
     }
 
     public IMultipleContentBuilder MultipleContentBuilder { get; }
-    public StringBuilder GenerationEnvironment { get; private set; } = new IndentedStringBuilder();
+    public StringBuilder GenerationEnvironment { get; private set; } = new StringBuilder();
 
     public StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
     {

@@ -69,7 +69,7 @@ public class TemplateRenderer : ITemplateRenderer
                                                string defaultFileName = "",
                                                bool defaultSkipWhenFileExists = false)
     {
-        var stringBuilder = new IndentedStringBuilder();
+        var stringBuilder = new StringBuilder();
         RenderTemplate(template, stringBuilder);
         var builderResult = stringBuilder.ToString();
 
