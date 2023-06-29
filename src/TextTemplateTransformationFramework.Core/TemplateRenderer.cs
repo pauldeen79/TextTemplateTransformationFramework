@@ -93,7 +93,7 @@ public class TemplateRenderer : ITemplateRenderer
         }
         else
         {
-            builder.AddContent(defaultFileName, defaultSkipWhenFileExists, new IndentedStringBuilder(builderResult));
+            builder.AddContent(defaultFileName, defaultSkipWhenFileExists, new StringBuilder(builderResult));
         }
     }
 
