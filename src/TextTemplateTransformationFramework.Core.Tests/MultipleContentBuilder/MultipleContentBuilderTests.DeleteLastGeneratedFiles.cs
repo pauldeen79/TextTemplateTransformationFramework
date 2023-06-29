@@ -11,7 +11,7 @@ public partial class MultipleContentBuilderTests
             var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
 
             // Act & Assert
-            sut.Invoking(x => x.DeleteLastGeneratedFiles(null!, false))
+            sut.Invoking(x => x.DeleteLastGeneratedFiles(lastGeneratedFilesPath: null!, false))
                .Should().Throw<ArgumentNullException>().WithParameterName("lastGeneratedFilesPath");
         }
 
@@ -22,7 +22,7 @@ public partial class MultipleContentBuilderTests
             var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
 
             // Act & Assert
-            sut.Invoking(x => x.DeleteLastGeneratedFiles(string.Empty, false))
+            sut.Invoking(x => x.DeleteLastGeneratedFiles(lastGeneratedFilesPath: string.Empty, false))
                .Should().Throw<ArgumentException>().WithParameterName("lastGeneratedFilesPath");
         }
 
@@ -33,7 +33,7 @@ public partial class MultipleContentBuilderTests
             var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
 
             // Act & Assert
-            sut.Invoking(x => x.DeleteLastGeneratedFiles(" ", false))
+            sut.Invoking(x => x.DeleteLastGeneratedFiles(lastGeneratedFilesPath: " ", false))
                .Should().Throw<ArgumentException>().WithParameterName("lastGeneratedFilesPath");
         }
 

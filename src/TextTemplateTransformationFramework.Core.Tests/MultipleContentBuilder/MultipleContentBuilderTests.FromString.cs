@@ -8,7 +8,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_Null_Xml()
         {
             // Act & Assert
-            this.Invoking(_ => MultipleContentBuilder.FromString(null!))
+            this.Invoking(_ => MultipleContentBuilder.FromString(xml: null!))
                 .Should().Throw<ArgumentNullException>().WithParameterName("xml");
         }
 
@@ -16,7 +16,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_Empty_Xml()
         {
             // Act & Assert
-            this.Invoking(_ => MultipleContentBuilder.FromString(string.Empty))
+            this.Invoking(_ => MultipleContentBuilder.FromString(xml: string.Empty))
                 .Should().Throw<ArgumentException>().WithParameterName("xml");
         }
 
@@ -24,7 +24,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_WhiteSpace_Xml()
         {
             // Act & Assert
-            this.Invoking(_ => MultipleContentBuilder.FromString(" "))
+            this.Invoking(_ => MultipleContentBuilder.FromString(xml: " "))
                 .Should().Throw<ArgumentException>().WithParameterName("xml");
         }
 

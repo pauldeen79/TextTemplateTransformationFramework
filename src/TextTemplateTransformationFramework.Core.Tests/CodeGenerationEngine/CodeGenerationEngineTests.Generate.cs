@@ -14,7 +14,7 @@ public partial class CodeGenerationEngineTests
             var sut = CreateSut();
 
             // Act
-            sut.Invoking(x => x.Generate(null!, CodeGenerationSettingsMock.Object))
+            sut.Invoking(x => x.Generate(provider: null!, CodeGenerationSettingsMock.Object))
                .Should().Throw<ArgumentNullException>().WithParameterName("provider");
         }
 
@@ -25,7 +25,7 @@ public partial class CodeGenerationEngineTests
             var sut = CreateSut();
 
             // Act
-            sut.Invoking(x => x.Generate(CodeGenerationProviderMock.Object, null!))
+            sut.Invoking(x => x.Generate(CodeGenerationProviderMock.Object, settings: null!))
                .Should().Throw<ArgumentNullException>().WithParameterName("settings");
         }
 

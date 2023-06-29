@@ -16,7 +16,6 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     internal MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath = "")
     {
-        Guard.IsNotNull(fileSystem);
         Guard.IsNotNull(encoding);
         Guard.IsNotNull(basePath);
         

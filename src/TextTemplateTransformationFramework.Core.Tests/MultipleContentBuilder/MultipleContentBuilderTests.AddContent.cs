@@ -11,7 +11,7 @@ public partial class MultipleContentBuilderTests
             var sut = CreateSut(TestData.BasePath);
 
             // Act & Assert
-            sut.Invoking(x => x.AddContent(null!))
+            sut.Invoking(x => x.AddContent(fileName: null!))
                .Should().Throw<ArgumentNullException>().WithParameterName("fileName");
         }
 

@@ -43,7 +43,7 @@ public partial class CodeGenerationSettingsTests
         [Fact]
         public void Throws_On_Null_BasePath()
         {
-            this.Invoking(_ => new CodeGenerationSettings(null!, false))
+            this.Invoking(_ => new CodeGenerationSettings(basePath: null!, false))
                 .Should().Throw<ArgumentNullException>().WithParameterName("basePath");
         }
     }

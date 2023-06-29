@@ -24,7 +24,7 @@ public class TemplateFileManager : ITemplateFileManager
     {
         Guard.IsNotNull(fileName);
 
-        var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new IndentedStringBuilder());
+        var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new StringBuilder());
         GenerationEnvironment = currentContent.Builder;
         return currentContent.Builder;
     }

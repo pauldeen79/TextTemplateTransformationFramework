@@ -35,18 +35,10 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Throws_On_Null_FileSystem()
-        {
-            // Act & Assert
-            this.Invoking(_ => new MultipleContentBuilder(null!, Encoding.UTF8, TestData.BasePath))
-                .Should().Throw<ArgumentNullException>().WithParameterName("fileSystem");
-        }
-
-        [Fact]
         public void Throws_On_Null_Encoding()
         {
             // Act & Assert
-            this.Invoking(_ => new MultipleContentBuilder(FileSystemMock.Object, null!, TestData.BasePath))
+            this.Invoking(_ => new MultipleContentBuilder(FileSystemMock.Object, encoding: null!, TestData.BasePath))
                 .Should().Throw<ArgumentNullException>().WithParameterName("encoding");
         }
 
@@ -54,7 +46,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_Null_BasePath()
         {
             // Act & Assert
-            this.Invoking(_ => new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, null!))
+            this.Invoking(_ => new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, basePath: null!))
                 .Should().Throw<ArgumentNullException>().WithParameterName("basePath");
         }
     }

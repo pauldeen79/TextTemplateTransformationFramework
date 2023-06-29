@@ -15,7 +15,7 @@ public partial class CodeGenerationEngineTests
         public void Throws_On_Null_TemplateRenderer()
         {
             // Act & Assert
-            this.Invoking(_ => new CodeGenerationEngine(null!, TemplateFileManagerFactoryMock.Object))
+            this.Invoking(_ => new CodeGenerationEngine(templateRenderer: null!, TemplateFileManagerFactoryMock.Object))
                 .Should().Throw<ArgumentNullException>().WithParameterName("templateRenderer");
         }
 
@@ -23,7 +23,7 @@ public partial class CodeGenerationEngineTests
         public void Throws_On_Null_BasePath()
         {
             // Act & Assert
-            this.Invoking(_ => new CodeGenerationEngine(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object, null!))
+            this.Invoking(_ => new CodeGenerationEngine(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object, basePath: null!))
                 .Should().Throw<ArgumentNullException>().WithParameterName("basePath");
         }
     }
