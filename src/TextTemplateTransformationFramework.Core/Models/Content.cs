@@ -2,19 +2,19 @@
 
 internal class Content : IContent
 {
-    public Content() : this(new StringBuilder())
-    {
-    }
-
-    public Content(StringBuilder builder)
+    public Content(StringBuilder builder, bool skipWhenFileExists, string fileName)
     {
         Guard.IsNotNull(builder);
+        Guard.IsNotNullOrWhiteSpace(fileName);
+
         Builder = builder;
+        SkipWhenFileExists = skipWhenFileExists;
+        FileName = fileName;
     }
 
-    public string FileName { get; set; } = "";
+    public string FileName { get; }
 
-    public bool SkipWhenFileExists { get; set; }
+    public bool SkipWhenFileExists { get; }
 
     public StringBuilder Builder { get; }
 }

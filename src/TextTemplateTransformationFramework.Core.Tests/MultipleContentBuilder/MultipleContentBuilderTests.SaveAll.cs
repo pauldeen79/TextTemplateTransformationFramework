@@ -52,12 +52,12 @@ public partial class MultipleContentBuilderTests
         {
             // Arrange
             var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
-            var c1 = sut.AddContent(string.Empty);
+            var c1 = sut.AddContent(fileName: string.Empty);
             c1.Builder.AppendLine("Test1");
 
             // Act & Assert
             sut.Invoking(x => x.SaveAll())
-               .Should().Throw<InvalidOperationException>().WithMessage("Path could not be determined");
+               .Should().Throw<ArgumentException>().WithParameterName("fileName");
         }
 
         [Fact]

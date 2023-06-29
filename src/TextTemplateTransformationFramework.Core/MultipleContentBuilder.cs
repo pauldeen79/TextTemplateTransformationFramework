@@ -4,7 +4,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 {
     private readonly IFileSystem _fileSystem;
     private readonly Encoding _encoding;
-    private readonly List<IContent> _contentList;
+    private readonly List<IContentBuilder> _contentList;
 
     public MultipleContentBuilder(string basePath = "") : this(new FileSystem(), Encoding.UTF8, basePath)
     {
@@ -21,7 +21,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         
         _fileSystem = fileSystem;
         _encoding = encoding;
-        _contentList = new List<IContent>();
+        _contentList = new List<IContentBuilder>();
         BasePath = basePath;
     }
 
@@ -29,16 +29,11 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     public void SaveAll()
     {
-        foreach (var content in _contentList)
+        foreach (var content in _contentList.Select(x => x.Build()))
         {
             var path = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(content.FileName)
                 ? content.FileName
                 : Path.Combine(BasePath, content.FileName);
-
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new InvalidOperationException("Path could not be determined");
-            }
 
             if (content.SkipWhenFileExists && _fileSystem.FileExists(path))
             {
@@ -72,7 +67,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
         if (!fullPath.Contains('*'))
         {
-            _fileSystem.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName), _encoding);
+            _fileSystem.WriteAllLines(fullPath, _contentList.Select(x => x.Build()).OrderBy(c => c.FileName).Select(c => c.FileName), _encoding);
         }
     }
 
@@ -102,13 +97,13 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
     }
 
-    public IContent AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
+    public IContentBuilder AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
     {
         Guard.IsNotNull(fileName);
 
         var content = builder is null
-            ? new Content()
-            : new Content(builder);
+            ? new ContentBuilder()
+            : new ContentBuilder(builder);
 
         content.FileName = fileName;
         content.SkipWhenFileExists = skipWhenFileExists;
@@ -118,7 +113,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         return content;
     }
 
-    public IEnumerable<IContent> Contents => _contentList.AsReadOnly();
+    public IEnumerable<IContentBuilder> Contents => _contentList.AsReadOnly();
 
     public static MultipleContentBuilder FromString(string xml)
     {
@@ -169,11 +164,11 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         var mc = new MultipleContents
         {
             BasePath = BasePath,
-            Contents = _contentList.Select(c => new Contents
+            Contents = _contentList.Select(x => x.Build()).Select(x => new Contents
             {
-                FileName = c.FileName,
-                Lines = (c.Builder.ToString()?.NormalizeLineEndings() ?? string.Empty).Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
-                SkipWhenFileExists = c.SkipWhenFileExists
+                FileName = x.FileName,
+                Lines = (x.Builder.ToString()?.NormalizeLineEndings() ?? string.Empty).Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
+                SkipWhenFileExists = x.SkipWhenFileExists
             }).ToList()
         };
 

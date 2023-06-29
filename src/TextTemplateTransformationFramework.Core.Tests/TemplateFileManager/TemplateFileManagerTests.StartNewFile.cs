@@ -20,7 +20,7 @@ public partial class TemplateFileManagerTests
         {
             // Arrange
             var sut = CreateSut();
-            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => CreateContent(fileName, skipFileWhenExists, builder));
+            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => CreateContentBuilder(fileName, skipFileWhenExists, builder));
 
             // Act
             sut.StartNewFile("MyFile.txt");
@@ -30,33 +30,33 @@ public partial class TemplateFileManagerTests
         }
 
         [Fact]
-        public void Sets_GenerationEnvironment_To_Builder_Of_Added_Content()
+        public void Sets_GenerationEnvironment_To_Builder_Of_Added_ContentBuilder()
         {
             // Arrange
             var sut = CreateSut();
-            IContent? createdContent = null;
-            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => { createdContent = CreateContent(fileName, skipFileWhenExists, builder); return createdContent; });
+            IContentBuilder? createdContentBuilder = null;
+            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => { createdContentBuilder = CreateContentBuilder(fileName, skipFileWhenExists, builder); return createdContentBuilder; });
 
             // Act
             sut.StartNewFile("MyFile.txt");
 
             // Assert
-            sut.GenerationEnvironment.Should().BeSameAs(createdContent?.Builder);
+            sut.GenerationEnvironment.Should().BeSameAs(createdContentBuilder?.Builder);
         }
 
         [Fact]
-        public void Returns_Builder_Of_Added_Content()
+        public void Returns_Builder_Of_Added_ContentBuilder()
         {
             // Arrange
             var sut = CreateSut();
-            IContent? createdContent = null;
-            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => { createdContent = CreateContent(fileName, skipFileWhenExists, builder); return createdContent; });
+            IContentBuilder? createdContentBuilder = null;
+            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => { createdContentBuilder = CreateContentBuilder(fileName, skipFileWhenExists, builder); return createdContentBuilder; });
 
             // Act
             var result = sut.StartNewFile("MyFile.txt");
 
             // Assert
-            result.Should().BeSameAs(createdContent?.Builder);
+            result.Should().BeSameAs(createdContentBuilder?.Builder);
         }
     }
 }
