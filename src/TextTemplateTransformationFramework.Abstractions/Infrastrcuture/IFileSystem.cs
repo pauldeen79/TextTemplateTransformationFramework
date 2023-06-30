@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions;
+﻿namespace TextTemplateTransformationFramework.Abstractions.Infrastructure;
 
 public interface IFileSystem
 {
