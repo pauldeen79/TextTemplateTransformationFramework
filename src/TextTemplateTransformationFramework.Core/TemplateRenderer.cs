@@ -109,15 +109,23 @@ public class TemplateRenderer : ITemplateRenderer
                                                              object? model,
                                                              object? additionalParameters)
     {
+        if (template is IModelContainer modelContainer)
+        {
+            if (modelContainer.Model is null)
+            {
+                modelContainer.Model = new Model();
+            }
+            else
+            {
+                modelContainer.Model.Initialize();
+            }
+
+            modelContainer.Model.Set(model);
+        }
+
         var props = template.GetType().GetProperties(Constants.BindingFlags);
 
-        var modelProperty = model is null
-            ? null
-            : Array.Find(props, p => p.Name == Constants.ModelKey);
-
-        modelProperty?.SetValue(template, model);
-
-        foreach (var item in additionalParameters.ToKeyValuePairs())
+        foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey))
         {
             var additionalProperty = Array.Find(props, p => p.Name == item.Key);
             additionalProperty?.SetValue(template, item.Value);
@@ -142,7 +150,14 @@ public class TemplateRenderer : ITemplateRenderer
     {
         if (template is IViewModelContainer viewModelContainer)
         {
-            viewModelContainer.ViewModel.Initialize();
+            if (viewModelContainer.ViewModel is null)
+            {
+                viewModelContainer.ViewModel = new Model();
+            }
+            else
+            {
+                viewModelContainer.ViewModel.Initialize();
+            }
             var viewModelValue = viewModelContainer.ViewModel.Get();
 
             CopySessionVariablesToViewModel(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
@@ -170,10 +185,13 @@ public class TemplateRenderer : ITemplateRenderer
             prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
         }
 
-        if (viewModelValue is IModelContainer modelContainer
-            && modelContainer.Model.Get() is null
-            && session.Any(kvp => kvp.Key == Constants.ModelKey))
+        if (viewModelValue is IModelContainer modelContainer && session.Any(kvp => kvp.Key == Constants.ModelKey))
         {
+            if (modelContainer.Model is null)
+            {
+                modelContainer.Model = new Model();
+            }
+
             modelContainer.Model.Set(session.First(kvp => kvp.Key == Constants.ModelKey).Value);
         }
     }

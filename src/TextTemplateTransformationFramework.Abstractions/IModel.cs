@@ -6,8 +6,3 @@ public interface IModel
     void Set(object? value);
     void Initialize();
 }
-
-public interface IModel<T> : IModel
-{
-    T Value { get; set; }
-}
