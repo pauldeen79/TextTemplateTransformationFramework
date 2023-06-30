@@ -53,6 +53,14 @@ public class TemplateRenderer : ITemplateRenderer
         {
             typedTemplate.Render(builder);
         }
+        else if (template is ITextTransformTemplate textTransformTemplate)
+        {
+            var output = textTransformTemplate.TransformText();
+            if (!string.IsNullOrEmpty(output))
+            {
+                builder.Append(output);
+            }
+        }
         else
         {
             var output = template.ToString();
