@@ -20,7 +20,7 @@ public partial class TemplateFileManagerTests
         {
             // Arrange
             var sut = CreateSut();
-            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>((fileName, skipFileWhenExists, builder) => CreateContentBuilder(fileName, skipFileWhenExists, builder));
+            MultipleContentBuilderMock.Setup(x => x.AddContent("MyFile.txt", false, It.IsAny<StringBuilder>())).Returns<string, bool, StringBuilder>(CreateContentBuilder);
 
             // Act
             sut.StartNewFile("MyFile.txt");

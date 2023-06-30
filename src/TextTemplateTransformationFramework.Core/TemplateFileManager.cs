@@ -40,7 +40,11 @@ public class TemplateFileManager : ITemplateFileManager
             _originalStringBuilder.Clear();
             if (!silentOutput)
             {
-                _originalStringBuilder.Append(MultipleContentBuilder.ToString()!);
+                var output = MultipleContentBuilder.ToString();
+                if (!string.IsNullOrEmpty(output))
+                {
+                    _originalStringBuilder.Append(output);
+                }
             }
         }
         else if (!silentOutput)

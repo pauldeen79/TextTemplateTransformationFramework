@@ -3,8 +3,13 @@
 public partial class TemplateFileManagerTests
 {
     protected Mock<IMultipleContentBuilder> MultipleContentBuilderMock { get; } = new();
+    protected Mock<IFileSystem> FileSystemMock { get; } = new();
+    protected StringBuilder StringBuilder { get; } = new();
 
-    protected TemplateFileManager CreateSut() => new(MultipleContentBuilderMock.Object, new StringBuilder());
+    protected TemplateFileManager CreateSut() => new(MultipleContentBuilderMock.Object, StringBuilder);
+
+    protected TemplateFileManager CreateSutWithRealMultipleContentBuilder() => new(new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8), StringBuilder);
+
 
     protected IContentBuilder CreateContentBuilder(string fileName, bool skipFileWhenExists, StringBuilder builder)
     {
