@@ -20,7 +20,7 @@ public static class ObjectExtensions
         }
         else
         {
-            var properties = TypeDescriptor.GetProperties(instance).Cast<PropertyDescriptor>();
+            var properties = instance.GetType().GetProperties(Constants.BindingFlags);
             foreach (var prop in properties.OrderBy(p => p.Name))
             {
                 result.Add(prop.Name, prop.GetValue(instance));

@@ -110,11 +110,11 @@ public class TemplateRenderer : ITemplateRenderer
             modelContainer.Model = model;
         }
 
-        var props = template.GetType().GetProperties(Constants.BindingFlags);
+        var properties = template.GetType().GetProperties(Constants.BindingFlags);
 
         foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey))
         {
-            var additionalProperty = Array.Find(props, p => p.Name == item.Key);
+            var additionalProperty = Array.Find(properties, p => p.Name == item.Key);
             additionalProperty?.SetValue(template, item.Value);
         }
     }
