@@ -12,7 +12,7 @@ internal static class TestData
     internal const string BasePath = "Unknown basepath, only Windows, Linux and OSX are supported";
 #endif
 
-    internal class PlainTemplate
+    internal sealed class PlainTemplate
     {
         private readonly Func<string> _delegate;
 
@@ -21,7 +21,7 @@ internal static class TestData
         public override string ToString() => _delegate();
     }
 
-    internal class Template : ITemplate
+    internal sealed class Template : ITemplate
     {
         private readonly Action<StringBuilder> _delegate;
 
@@ -30,7 +30,7 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    internal class TemplateWithModel<T> : ITemplate, IModelContainer<T>
+    internal sealed class TemplateWithModel<T> : ITemplate, IModelContainer<T>
     {
         public T? Model { get; set; } = default!;
 
@@ -41,7 +41,7 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    internal class TemplateWithViewModel<T> : ITemplate, IViewModelContainer<T>
+    internal sealed class TemplateWithViewModel<T> : ITemplate, IViewModelContainer<T>
     {
         public T? ViewModel { get; set; } = default!;
 
@@ -52,14 +52,14 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    internal class PlainTemplateWithAdditionalParameters
+    internal sealed class PlainTemplateWithAdditionalParameters
     {
         public string AdditionalParameter { get; set; } = "";
 
         public override string ToString() => AdditionalParameter;
     }
 
-    internal class PlainTemplateWithModelAndAdditionalParameters<T> : IModelContainer<T>
+    internal sealed class PlainTemplateWithModelAndAdditionalParameters<T> : IModelContainer<T>
     {
         public T? Model { get; set; } = default!;
 
