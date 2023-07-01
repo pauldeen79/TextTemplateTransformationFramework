@@ -1,43 +1,37 @@
 ﻿namespace TextTemplateTransformationFramework.Core;
 
-public class TemplateRenderer : TemplateRenderer<object?>
-{
-}
-
-public class TemplateRenderer<T> : ITemplateRenderer<T>
+public class TemplateRenderer : ITemplateRenderer
 {
     public void Render(object template,
-                       StringBuilder generationEnvironment,
-                       string defaultFileName = "",
-                       T? model = default,
-                       object? additionalParameters = null)
-        => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
+                   StringBuilder generationEnvironment,
+                   string defaultFileName = "",
+                   object? additionalParameters = null)
+        => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
                        string defaultFileName = "",
-                       T? model = default,
                        object? additionalParameters = null)
-        => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
+        => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
                        string defaultFileName = "",
-                       T? model = default,
                        object? additionalParameters = null)
-        => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
+        => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
 
-    private void Render(object template,
-                        object generationEnvironment,
-                        string defaultFileName = "",
-                        T? model = default,
-                        object? additionalParameters = null)
+
+    protected void Render<T>(object template,
+                             object generationEnvironment,
+                             string defaultFileName = "",
+                             T? model = default,
+                             object? additionalParameters = null)
     {
         Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
 
         TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
-        TrySetViewModelOnTemplate(template, CreateSession(model), additionalParameters);
+        TrySetViewModelOnTemplate<T>(template, CreateSession(model), additionalParameters);
 
         if (generationEnvironment is StringBuilder stringBuilder)
         {
@@ -109,9 +103,9 @@ public class TemplateRenderer<T> : ITemplateRenderer<T>
         }
     }
 
-    private static void TrySetAdditionalParametersOnTemplate(object template,
-                                                             T? model,
-                                                             object? additionalParameters)
+    private static void TrySetAdditionalParametersOnTemplate<T>(object template,
+                                                                T? model,
+                                                                object? additionalParameters)
     {
         if (template is IModelContainer<T> modelContainer)
         {
@@ -139,9 +133,9 @@ public class TemplateRenderer<T> : ITemplateRenderer<T>
         return session;
     }
 
-    private static void TrySetViewModelOnTemplate(object template,
-                                                  IEnumerable<KeyValuePair<string, object?>> session,
-                                                  object? additionalParameters)
+    private static void TrySetViewModelOnTemplate<T>(object template,
+                                                     IEnumerable<KeyValuePair<string, object?>> session,
+                                                     object? additionalParameters)
     {
         var templateType = template.GetType();
         if (templateType.IsGenericTypeDefinition && templateType.GetGenericTypeDefinition() == typeof(IViewModelContainer<>))
@@ -157,13 +151,13 @@ public class TemplateRenderer<T> : ITemplateRenderer<T>
                 }
             }
 
-            CopySessionVariablesToViewModel(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
+            CopySessionVariablesToViewModel<T>(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
             CopyTemplateContextToViewModel(viewModelValue, template);
         }
     }
 
-    private static void CopySessionVariablesToViewModel(object? viewModelValue,
-                                                        IEnumerable<KeyValuePair<string, object?>> session)
+    private static void CopySessionVariablesToViewModel<T>(object? viewModelValue,
+                                                           IEnumerable<KeyValuePair<string, object?>> session)
     {
         if (viewModelValue is null)
         {
@@ -231,4 +225,28 @@ public class TemplateRenderer<T> : ITemplateRenderer<T>
             .Where(x => !additionalParameters.Any(y => y.Key == x.Key))
             .Concat(additionalParameters)
             .ToDictionary(x => x.Key, x => x.Value);
+}
+
+public class TemplateRenderer<T> : TemplateRenderer, ITemplateRenderer<T>
+{
+    public void Render(object template,
+                       StringBuilder generationEnvironment,
+                       T model,
+                       string defaultFileName = "",
+                       object? additionalParameters = null)
+        => Render(template, generationEnvironment, defaultFileName, model, additionalParameters);
+
+    public void Render(object template,
+                       IMultipleContentBuilder generationEnvironment,
+                       T model,
+                       string defaultFileName = "",
+                       object? additionalParameters = null)
+        => Render(template, generationEnvironment, defaultFileName, model, additionalParameters);
+
+    public void Render(object template,
+                       IMultipleContentBuilderContainer generationEnvironment,
+                       T model,
+                       string defaultFileName = "",
+                       object? additionalParameters = null)
+        => Render(template, generationEnvironment, defaultFileName, model, additionalParameters);
 }

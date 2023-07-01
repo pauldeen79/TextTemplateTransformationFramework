@@ -1,10 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Abstractions;
 
-public interface ICodeGenerationProvider : ICodeGenerationProvider<object?>
-{
-}
-
-public interface ICodeGenerationProvider<out T>
+public interface ICodeGenerationProvider
 {
     bool GenerateMultipleFiles { get; }
     bool SkipWhenFileExists { get; }
@@ -16,6 +12,10 @@ public interface ICodeGenerationProvider<out T>
 
     void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath);
     object CreateGenerator();
-    T? CreateModel();
     object CreateAdditionalParameters();
+}
+
+public interface ICodeGenerationProvider<out T> : ICodeGenerationProvider
+{
+    T CreateModel();
 }
