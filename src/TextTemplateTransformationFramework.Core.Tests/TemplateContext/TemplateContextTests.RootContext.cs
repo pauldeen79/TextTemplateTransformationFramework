@@ -8,7 +8,7 @@ public partial class TemplateContextTests
         public void Returns_Same_Instance_When_There_Is_No_ParentContext()
         {
             // Arrange
-            var sut = new TemplateContext(template: this, parentContext: null);
+            var sut = new TemplateContext(template: this);
 
             // Act
             var result = sut.RootContext;
@@ -21,7 +21,7 @@ public partial class TemplateContextTests
         public void Returns_RootContext_One_Level_Deep()
         {
             // Arrange
-            var parentTemplateContext = new TemplateContext(template: this, parentContext: null);
+            var parentTemplateContext = new TemplateContext(template: this);
             var sut = new TemplateContext(template: this, parentContext: parentTemplateContext);
 
             // Act
@@ -35,7 +35,7 @@ public partial class TemplateContextTests
         public void Returns_RootContext_Two_Levels_Deep()
         {
             // Arrange
-            var rootTemplateContext = new TemplateContext(template: this, parentContext: null);
+            var rootTemplateContext = new TemplateContext(template: this);
             var parentTemplateContext = new TemplateContext(template: this, parentContext: rootTemplateContext);
             var sut = new TemplateContext(template: this, parentContext: parentTemplateContext);
 

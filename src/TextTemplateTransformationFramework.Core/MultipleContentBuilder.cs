@@ -6,15 +6,23 @@ public class MultipleContentBuilder : IMultipleContentBuilder
     private readonly Encoding _encoding;
     private readonly List<IContentBuilder> _contentList;
 
-    public MultipleContentBuilder(string basePath = "") : this(new FileSystem(), Encoding.UTF8, basePath)
+    public MultipleContentBuilder() : this(new FileSystem(), Encoding.UTF8, string.Empty)
     {
     }
 
-    public MultipleContentBuilder(Encoding encoding, string basePath = "") : this(new FileSystem(), encoding, basePath)
+    public MultipleContentBuilder(string basePath) : this(new FileSystem(), Encoding.UTF8, basePath)
     {
     }
 
-    internal MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath = "")
+    public MultipleContentBuilder(Encoding encoding) : this(new FileSystem(), encoding, string.Empty)
+    {
+    }
+
+    public MultipleContentBuilder(Encoding encoding, string basePath) : this(new FileSystem(), encoding, basePath)
+    {
+    }
+
+    internal MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath)
     {
         Guard.IsNotNull(encoding);
         Guard.IsNotNull(basePath);
@@ -97,7 +105,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
     }
 
-    public IContentBuilder AddContent(string fileName = "", bool skipWhenFileExists = false, StringBuilder? builder = null)
+    public IContentBuilder AddContent(string fileName, bool skipWhenFileExists, StringBuilder? builder)
     {
         Guard.IsNotNull(fileName);
 

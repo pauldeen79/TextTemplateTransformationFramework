@@ -23,7 +23,7 @@ public partial class MultipleContentBuilderTests
             var builder = new StringBuilder("ExistingContent");
 
             // Act
-            var result = sut.AddContent("File.txt", builder: builder);
+            var result = sut.AddContent("File.txt", skipWhenFileExists: false, builder: builder);
 
             // Assert
             result.Builder.ToString().Should().Be("ExistingContent");

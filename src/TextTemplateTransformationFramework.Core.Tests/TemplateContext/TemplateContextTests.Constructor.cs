@@ -35,7 +35,7 @@ public partial class TemplateContextTests
         public void Creates_Instance_With_ViewModel_When_Supplied()
         {
             // Act
-            var instance = new TemplateContext(this, viewModel: "test");
+            var instance = new TemplateContext(this, model: "test model", viewModel: "test");
 
             // Assert
             instance.ViewModel.Should().BeEquivalentTo("test");
@@ -57,7 +57,7 @@ public partial class TemplateContextTests
         public void Creates_Instance_With_IterationNumber_And_IterationCount_When_Supplied()
         {
             // Act
-            var instance = new TemplateContext(this, iterationNumber: 1, iterationCount: 2);
+            var instance = new TemplateContext(this, model: "test", parentContext: new TemplateContext(this, model: "parent"), iterationNumber: 1, iterationCount: 2);
 
             // Assert
             instance.IterationNumber.Should().Be(1);

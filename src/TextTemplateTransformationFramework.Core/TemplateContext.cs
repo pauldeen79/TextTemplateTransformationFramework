@@ -2,12 +2,44 @@
 
 public class TemplateContext : ITemplateContext
 {
+    public TemplateContext(object template) : this(template, null, null, null, null, null)
+    {
+    }
+
+    public TemplateContext(object template, ITemplateContext parentContext) : this(template, null, null, parentContext, null, null)
+    {
+    }
+
+    public TemplateContext(object template, object? model) : this(template, model, null, null, null, null)
+    {
+    }
+
+    public TemplateContext(object template, object? model, ITemplateContext parentContext) : this(template, model, null, parentContext, null, null)
+    {
+    }
+
+    public TemplateContext(object template, object? model, object? viewModel) : this(template, model, viewModel, null, null, null)
+    {
+    }
+
+    public TemplateContext(object template, object? model, object? viewModel, ITemplateContext parentContext) : this(template, model, viewModel, parentContext, null, null)
+    {
+    }
+
     public TemplateContext(object template,
-                           object? model = null,
-                           object? viewModel = null,
-                           ITemplateContext? parentContext = null,
-                           int? iterationNumber = null,
-                           int? iterationCount = null)
+                           object? model,
+                           ITemplateContext? parentContext,
+                           int? iterationNumber,
+                           int? iterationCount) : this(template, model, null, parentContext, iterationNumber, iterationCount)
+    {
+    }
+
+    public TemplateContext(object template,
+                           object? model,
+                           object? viewModel,
+                           ITemplateContext? parentContext,
+                           int? iterationNumber,
+                           int? iterationCount)
     {
         Guard.IsNotNull(template);
 
@@ -38,7 +70,7 @@ public class TemplateContext : ITemplateContext
         }
     }
 
-    public T? GetModelFromContextByType<T>(Predicate<ITemplateContext>? predicate = null)
+    public T? GetModelFromContextByType<T>(Predicate<ITemplateContext>? predicate)
     {
         ITemplateContext? p = this;
         while (p is not null)
@@ -54,7 +86,7 @@ public class TemplateContext : ITemplateContext
         return default;
     }
 
-    public T? GetViewModelFromContextByType<T>(Predicate<ITemplateContext>? predicate = null)
+    public T? GetViewModelFromContextByType<T>(Predicate<ITemplateContext>? predicate)
     {
         ITemplateContext? p = this;
         while (p is not null)
@@ -70,7 +102,7 @@ public class TemplateContext : ITemplateContext
         return default;
     }
 
-    public T? GetContextByTemplateType<T>(Predicate<ITemplateContext>? predicate = null)
+    public T? GetContextByTemplateType<T>(Predicate<ITemplateContext>? predicate)
     {
         ITemplateContext? p = this;
         while (p is not null)
@@ -89,10 +121,10 @@ public class TemplateContext : ITemplateContext
     public bool IsRootContext => ParentContext is null;
 
     public ITemplateContext CreateChildContext(object template,
-                                               object? model = null,
-                                               object? viewModel = null,
-                                               int? iterationNumber = null,
-                                               int? iterationCount = null)
+                                               object? model,
+                                               object? viewModel,
+                                               int? iterationNumber,
+                                               int? iterationCount)
     {
         Guard.IsNotNull(template);
 
