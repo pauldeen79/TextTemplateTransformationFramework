@@ -3,6 +3,7 @@
 public abstract partial class CodeGenerationEngineTests
 {
     protected Mock<ITemplateRenderer> TemplateRendererMock { get; } = new();
+    protected Mock<ITemplateRenderer<string>> TypedTemplateRendererMock { get; } = new();
     protected Mock<ITemplateFileManager> TemplateFileManagerMock { get; } = new();
     protected Mock<ITemplateFileManagerFactory> TemplateFileManagerFactoryMock { get; }
 
@@ -13,4 +14,5 @@ public abstract partial class CodeGenerationEngineTests
     }
 
     protected CodeGenerationEngine CreateSut() => new(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object);
+    protected CodeGenerationEngine<string> CreateTypedSut() => new(TypedTemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object);
 }
