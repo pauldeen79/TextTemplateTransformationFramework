@@ -142,7 +142,7 @@ public class TemplateRenderer : ITemplateRenderer
             if (viewModelValue is null)
             {
                 var viewModelType = templateType.GetGenericArguments().FirstOrDefault();
-                if (viewModelType is not null && viewModelType.GetConstructors().Any(x => x.GetParameters().Length == 0))
+                if (viewModelType is not null && Array.Exists(viewModelType.GetConstructors(), x => x.GetParameters().Length == 0))
                 {
                     viewModelValue = Activator.CreateInstance(viewModelType);
                     templateType.GetProperty(nameof(IViewModelContainer<object>.ViewModel))!.SetValue(template, viewModelValue);
