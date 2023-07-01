@@ -41,7 +41,7 @@ public class TemplateRenderer : ITemplateRenderer
         else
         {
             // This path includes IMultipleContentBuilder and IMultipleContentBuilderContainer (which includes ITemplateFileManager)
-            RenderIncludedTemplate(template, generationEnvironment, string.Empty, defaultFileName);
+            RenderIncludedTemplate(template, generationEnvironment, defaultFileName);
         }
     }
 
@@ -71,9 +71,7 @@ public class TemplateRenderer : ITemplateRenderer
 
     private static void RenderIncludedTemplate(object template,
                                                object multipleContentBuilder,
-                                               string fileNamePrefix = "",
-                                               string defaultFileName = "",
-                                               bool defaultSkipWhenFileExists = false)
+                                               string defaultFileName = "")
     {
         var stringBuilder = new StringBuilder();
         RenderTemplate(template, stringBuilder);
@@ -92,14 +90,14 @@ public class TemplateRenderer : ITemplateRenderer
         if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
         {
             var multipleContents = MultipleContentBuilder.FromString(builderResult);
-            foreach (var c in multipleContents.Contents)
+            foreach (var c in multipleContents.Contents.Select(x => x.Build()))
             {
-                builder.AddContent(fileNamePrefix + c.FileName, c.SkipWhenFileExists, c.Builder);
+                builder.AddContent(c.FileName, c.SkipWhenFileExists, c.Builder);
             }
         }
         else
         {
-            builder.AddContent(defaultFileName, defaultSkipWhenFileExists, new StringBuilder(builderResult));
+            builder.AddContent(defaultFileName, false, new StringBuilder(builderResult));
         }
     }
 
