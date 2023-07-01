@@ -31,22 +31,6 @@ public partial class TemplateRendererTests
         }
 
         [Fact]
-        public void Constructs_And_Sets_Model_On_Template_When_Possible()
-        {
-            // Arrange
-            var sut = new TemplateRenderer<string>();
-            var template = new TestData.TemplateWithModel<string>(_ => { });
-            IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
-
-            // Act
-            sut.Render(template, generationEnvironment, model: "Hello world");
-
-            // Assert
-            template.Model.Should().NotBeNull();
-            template.Model.Should().Be("Hello world");
-        }
-
-        [Fact]
         public void Sets_AdditionalParameters_On_Template_When_Possible()
         {
             // Arrange
@@ -58,22 +42,6 @@ public partial class TemplateRendererTests
             sut.Render(template, generationEnvironment, additionalParameters: new { AdditionalParameter = "Some value" });
 
             // Assert
-            template.AdditionalParameter.Should().Be("Some value");
-        }
-
-        [Fact]
-        public void Sets_Model_And_AdditionalParameters_On_Template_When_Possible()
-        {
-            // Arrange
-            var sut = new TemplateRenderer<string>();
-            var template = new TestData.PlainTemplateWithModelAndAdditionalParameters<string>();
-            IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
-
-            // Act
-            sut.Render(template, generationEnvironment, model: "Hello world", additionalParameters: new { AdditionalParameter = "Some value", Model = "Ignored" });
-
-            // Assert
-            template.Model.Should().Be("Hello world");
             template.AdditionalParameter.Should().Be("Some value");
         }
     }

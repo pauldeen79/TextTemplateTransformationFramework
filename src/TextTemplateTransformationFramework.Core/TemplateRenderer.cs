@@ -3,9 +3,9 @@
 public class TemplateRenderer : ITemplateRenderer
 {
     public void Render(object template,
-                   StringBuilder generationEnvironment,
-                   string defaultFileName = "",
-                   object? additionalParameters = null)
+                       StringBuilder generationEnvironment,
+                       string defaultFileName = "",
+                       object? additionalParameters = null)
         => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
 
     public void Render(object template,
