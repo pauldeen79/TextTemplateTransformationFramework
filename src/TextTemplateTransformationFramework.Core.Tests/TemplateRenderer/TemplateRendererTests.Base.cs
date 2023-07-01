@@ -5,4 +5,7 @@ public partial class TemplateRendererTests
     protected StringBuilder StringBuilder { get; } = new();
     protected Mock<IMultipleContentBuilder> MultipleContentBuilderMock { get; } = new();
     protected Mock<IMultipleContentBuilderContainer> MultipleContentBuilderContainerMock { get; } = new();
+
+    protected TemplateRenderer CreateSut() => new();
+    protected TemplateRenderer<string> CreateTypedSut() => new();
 }

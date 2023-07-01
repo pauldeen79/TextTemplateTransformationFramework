@@ -22,7 +22,7 @@ public partial class MultipleContentBuilderTests
         public void Uses_Content_FileName_When_Content_FileName_Is_A_Full_Path()
         {
             // Arrange
-            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+            var sut = CreateSut();
             var c1 = sut.AddContent(Path.Combine(TestData.BasePath, "File1.txt"));
             c1.Builder.AppendLine("Test1");
 
@@ -51,7 +51,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_When_FileName_Is_Empty()
         {
             // Arrange
-            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+            var sut = CreateSut();
             var c1 = sut.AddContent(fileName: string.Empty);
             c1.Builder.AppendLine("Test1");
 

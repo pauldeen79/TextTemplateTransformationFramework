@@ -44,7 +44,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deprecated", "Deprecated", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Core", "src\TextTemplateTransformationFramework.Core\TextTemplateTransformationFramework.Core.csproj", "{82125523-90F5-4230-AD52-92E232818DC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.Core.Tests", "src\TextTemplateTransformationFramework.Core.Tests\TextTemplateTransformationFramework.Core.Tests.csproj", "{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Core.Tests", "src\TextTemplateTransformationFramework.Core.Tests\TextTemplateTransformationFramework.Core.Tests.csproj", "{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.Abstractions.Tests", "src\TextTemplateTransformationFramework.Abstractions.Tests\TextTemplateTransformationFramework.Abstractions.Tests.csproj", "{0894A4FC-2E8D-48D0-9F14-8102722FC22C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,6 +126,10 @@ Global
 		{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

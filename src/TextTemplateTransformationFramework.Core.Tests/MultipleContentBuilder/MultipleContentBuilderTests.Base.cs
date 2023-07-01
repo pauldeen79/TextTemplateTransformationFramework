@@ -4,7 +4,7 @@ public partial class MultipleContentBuilderTests
 {
     protected Mock<IFileSystem> FileSystemMock { get; } = new();
 
-    protected MultipleContentBuilder CreateSut(string basePath, bool skipWhenFileExists = false, Encoding? encoding = null)
+    protected MultipleContentBuilder CreateSut(string basePath = "", bool skipWhenFileExists = false, Encoding? encoding = null)
     {
         var sut = new MultipleContentBuilder(FileSystemMock.Object, encoding ?? Encoding.UTF8, basePath);
         var c1 = sut.AddContent("File1.txt", skipWhenFileExists: skipWhenFileExists);

@@ -8,7 +8,7 @@ public partial class TemplateRendererTests
         public void Throws_On_Null_Template()
         {
             // Arrange
-            var sut = new TemplateRenderer();
+            var sut = CreateSut();
             object? template = null;
             IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
 
@@ -21,7 +21,7 @@ public partial class TemplateRendererTests
         public void Throws_On_Null_GenerationEnvironment()
         {
             // Arrange
-            var sut = new TemplateRenderer();
+            var sut = CreateSut();
             object? template = this;
             IMultipleContentBuilder? generationEnvironment = null;
 

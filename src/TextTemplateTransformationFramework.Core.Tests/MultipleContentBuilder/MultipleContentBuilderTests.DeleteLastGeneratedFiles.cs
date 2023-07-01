@@ -8,7 +8,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_Null_LastGeneratedFilesPath()
         {
             // Arrange
-            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+            var sut = CreateSut();
 
             // Act & Assert
             sut.Invoking(x => x.DeleteLastGeneratedFiles(lastGeneratedFilesPath: null!, false))
@@ -19,7 +19,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_Empty_LastGeneratedFilesPath()
         {
             // Arrange
-            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+            var sut = CreateSut();
 
             // Act & Assert
             sut.Invoking(x => x.DeleteLastGeneratedFiles(lastGeneratedFilesPath: string.Empty, false))
@@ -30,7 +30,7 @@ public partial class MultipleContentBuilderTests
         public void Throws_On_WhiteSpace_LastGeneratedFilesPath()
         {
             // Arrange
-            var sut = new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty);
+            var sut = CreateSut();
 
             // Act & Assert
             sut.Invoking(x => x.DeleteLastGeneratedFiles(lastGeneratedFilesPath: " ", false))
