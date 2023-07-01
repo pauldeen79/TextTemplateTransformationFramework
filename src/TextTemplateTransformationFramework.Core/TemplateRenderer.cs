@@ -4,28 +4,28 @@ public class TemplateRenderer : ITemplateRenderer
 {
     public void Render(object template,
                        StringBuilder generationEnvironment,
-                       string defaultFileName = "",
-                       object? additionalParameters = null)
-        => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
+                       string defaultFileName,
+                       object? additionalParameters)
+        => Render(template, generationEnvironment, defaultFileName, default(object?), additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
-                       string defaultFileName = "",
-                       object? additionalParameters = null)
-        => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
+                       string defaultFileName,
+                       object? additionalParameters)
+        => Render(template, generationEnvironment, defaultFileName, default(object?), additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
-                       string defaultFileName = "",
-                       object? additionalParameters = null)
-        => Render<object?>(template, generationEnvironment, defaultFileName, default, additionalParameters);
+                       string defaultFileName,
+                       object? additionalParameters)
+        => Render(template, generationEnvironment, defaultFileName, default(object?), additionalParameters);
 
 
     protected void Render<T>(object template,
                              object generationEnvironment,
-                             string defaultFileName = "",
-                             T? model = default,
-                             object? additionalParameters = null)
+                             string defaultFileName,
+                             T? model,
+                             object? additionalParameters)
     {
         Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
@@ -71,7 +71,7 @@ public class TemplateRenderer : ITemplateRenderer
 
     private static void RenderIncludedTemplate(object template,
                                                object multipleContentBuilder,
-                                               string defaultFileName = "")
+                                               string defaultFileName)
     {
         var stringBuilder = new StringBuilder();
         RenderTemplate(template, stringBuilder);
@@ -230,21 +230,21 @@ public class TemplateRenderer<T> : TemplateRenderer, ITemplateRenderer<T>
     public void Render(object template,
                        StringBuilder generationEnvironment,
                        T model,
-                       string defaultFileName = "",
-                       object? additionalParameters = null)
+                       string defaultFileName,
+                       object? additionalParameters)
         => Render(template, generationEnvironment, defaultFileName, model, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
                        T model,
-                       string defaultFileName = "",
-                       object? additionalParameters = null)
+                       string defaultFileName,
+                       object? additionalParameters)
         => Render(template, generationEnvironment, defaultFileName, model, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
                        T model,
-                       string defaultFileName = "",
-                       object? additionalParameters = null)
+                       string defaultFileName,
+                       object? additionalParameters)
         => Render(template, generationEnvironment, defaultFileName, model, additionalParameters);
 }

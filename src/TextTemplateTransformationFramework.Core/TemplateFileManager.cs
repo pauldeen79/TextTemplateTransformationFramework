@@ -4,8 +4,13 @@ public class TemplateFileManager : ITemplateFileManager
 {
     private readonly StringBuilder _originalStringBuilder;
 
-    public TemplateFileManager(StringBuilder stringBuilder, string basePath = "")
-        : this (new MultipleContentBuilder(basePath), stringBuilder)
+    public TemplateFileManager(StringBuilder stringBuilder)
+        : this (new MultipleContentBuilder(), stringBuilder)
+    {
+    }
+
+    public TemplateFileManager(StringBuilder stringBuilder, string basePath)
+        : this(new MultipleContentBuilder(basePath), stringBuilder)
     {
     }
 
@@ -20,7 +25,7 @@ public class TemplateFileManager : ITemplateFileManager
     public IMultipleContentBuilder MultipleContentBuilder { get; }
     public StringBuilder GenerationEnvironment { get; private set; } = new StringBuilder();
 
-    public StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false)
+    public StringBuilder StartNewFile(string fileName, bool skipWhenFileExists)
     {
         Guard.IsNotNull(fileName);
 
@@ -31,7 +36,7 @@ public class TemplateFileManager : ITemplateFileManager
 
     public void ResetToDefaultOutput() => GenerationEnvironment = _originalStringBuilder;
 
-    public void Process(bool split = true, bool silentOutput = false)
+    public void Process(bool split, bool silentOutput)
     {
         ResetToDefaultOutput();
 
@@ -64,7 +69,7 @@ public class TemplateFileManager : ITemplateFileManager
         MultipleContentBuilder.SaveLastGeneratedFiles(lastGeneratedFilesPath);
     }
 
-    public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse = true)
+    public void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse)
     {
         Guard.IsNotNullOrWhiteSpace(lastGeneratedFilesPath);
         MultipleContentBuilder.DeleteLastGeneratedFiles(lastGeneratedFilesPath, recurse);

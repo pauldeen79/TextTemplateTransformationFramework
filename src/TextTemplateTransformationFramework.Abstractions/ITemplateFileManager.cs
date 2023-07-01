@@ -2,11 +2,11 @@
 {
     public interface ITemplateFileManager : IMultipleContentBuilderContainer
     {
-        StringBuilder StartNewFile(string fileName = "", bool skipWhenFileExists = false);
+        StringBuilder StartNewFile(string fileName, bool skipWhenFileExists);
         void ResetToDefaultOutput();
-        void Process(bool split = true, bool silentOutput = false);
+        void Process(bool split, bool silentOutput);
         void SaveAll();
         void SaveLastGeneratedFiles(string lastGeneratedFilesPath);
-        void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse = true);
+        void DeleteLastGeneratedFiles(string lastGeneratedFilesPath, bool recurse);
     }
 }

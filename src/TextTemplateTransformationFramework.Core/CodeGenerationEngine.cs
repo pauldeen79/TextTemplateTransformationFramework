@@ -53,14 +53,19 @@ public abstract class CodeGenerationEngineBase
 
 public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEngine
 {
-    public CodeGenerationEngine(string basePath = "")
+    public CodeGenerationEngine()
+        : this(new TemplateRenderer(), new TemplateFileManagerFactory(), string.Empty)
+    {
+    }
+
+    public CodeGenerationEngine(string basePath)
         : this(new TemplateRenderer(), new TemplateFileManagerFactory(), basePath)
     {
     }
 
     internal CodeGenerationEngine(ITemplateRenderer templateRenderer,
                                   ITemplateFileManagerFactory templateFileManagerFactory,
-                                  string basePath = "")
+                                  string basePath)
         : base(templateFileManagerFactory, basePath)
     {
         Guard.IsNotNull(templateRenderer);

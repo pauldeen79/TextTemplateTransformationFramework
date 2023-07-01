@@ -13,6 +13,6 @@ public abstract partial class CodeGenerationEngineTests
         TemplateFileManagerFactoryMock.Setup(x => x.Create(It.IsAny<string>())).Returns(TemplateFileManagerMock.Object);
     }
 
-    protected CodeGenerationEngine CreateSut() => new(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object);
+    protected CodeGenerationEngine CreateSut() => new(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object, string.Empty);
     protected CodeGenerationEngine<string> CreateTypedSut() => new(TypedTemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object);
 }

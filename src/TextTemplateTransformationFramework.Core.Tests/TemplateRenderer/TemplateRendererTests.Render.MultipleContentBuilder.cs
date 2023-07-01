@@ -34,7 +34,7 @@ public partial class TemplateRendererTests
         public void Sets_AdditionalParameters_On_Template_When_Possible()
         {
             // Arrange
-            var sut = new TemplateRenderer();
+            ITemplateRenderer sut = new TemplateRenderer();
             var template = new TestData.PlainTemplateWithAdditionalParameters();
             IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
 

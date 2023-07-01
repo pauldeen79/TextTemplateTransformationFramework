@@ -1,10 +1,9 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions
+﻿namespace TextTemplateTransformationFramework.Abstractions;
+
+public interface IContentBuilder
 {
-    public interface IContentBuilder
-    {
-        string? FileName { get; set; }
-        bool SkipWhenFileExists { get; set; }
-        StringBuilder Builder { get; }
-        IContent Build();
-    }
+    string? FileName { get; set; }
+    bool SkipWhenFileExists { get; set; }
+    StringBuilder Builder { get; }
+    IContent Build();
 }
