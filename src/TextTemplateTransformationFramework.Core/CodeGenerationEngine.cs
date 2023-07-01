@@ -1,13 +1,24 @@
 ﻿namespace TextTemplateTransformationFramework.Core;
 
-public class CodeGenerationEngine : ICodeGenerationEngine
+public class CodeGenerationEngine : CodeGenerationEngine<object?>
 {
-    public CodeGenerationEngine(string basePath = "")
-        : this(new TemplateRenderer(), new TemplateFileManagerFactory(), basePath)
+    public CodeGenerationEngine(string basePath = "") : base(basePath)
     {
     }
 
-    internal CodeGenerationEngine(ITemplateRenderer templateRenderer, ITemplateFileManagerFactory templateFileManagerFactory, string basePath = "")
+    internal CodeGenerationEngine(ITemplateRenderer<object?> templateRenderer, ITemplateFileManagerFactory templateFileManagerFactory, string basePath = "") : base(templateRenderer, templateFileManagerFactory, basePath)
+    {
+    }
+}
+
+public class CodeGenerationEngine<T> : ICodeGenerationEngine<T>
+{
+    public CodeGenerationEngine(string basePath = "")
+        : this(new TemplateRenderer<T>(), new TemplateFileManagerFactory(), basePath)
+    {
+    }
+
+    internal CodeGenerationEngine(ITemplateRenderer<T> templateRenderer, ITemplateFileManagerFactory templateFileManagerFactory, string basePath = "")
     {
         Guard.IsNotNull(templateRenderer);
         Guard.IsNotNull(basePath);
@@ -18,10 +29,10 @@ public class CodeGenerationEngine : ICodeGenerationEngine
     }
 
     private readonly ITemplateFileManagerFactory _templateFileManagerFactory;
-    private readonly ITemplateRenderer _templateRenderer;
+    private readonly ITemplateRenderer<T> _templateRenderer;
     private readonly string _basePath;
 
-    public void Generate(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
+    public void Generate(ICodeGenerationProvider<T> provider, ICodeGenerationSettings settings)
     {
         Guard.IsNotNull(settings);
         Guard.IsNotNull(provider);

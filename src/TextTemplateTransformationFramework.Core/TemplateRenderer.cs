@@ -1,32 +1,36 @@
 ﻿namespace TextTemplateTransformationFramework.Core;
 
-public class TemplateRenderer : ITemplateRenderer
+public class TemplateRenderer : TemplateRenderer<object?>
+{
+}
+
+public class TemplateRenderer<T> : ITemplateRenderer<T>
 {
     public void Render(object template,
                        StringBuilder generationEnvironment,
                        string defaultFileName = "",
-                       object? model = null,
+                       T? model = default,
                        object? additionalParameters = null)
         => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
                        string defaultFileName = "",
-                       object? model = null,
+                       T? model = default,
                        object? additionalParameters = null)
         => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
                        string defaultFileName = "",
-                       object? model = null,
+                       T? model = default,
                        object? additionalParameters = null)
         => Render(template, (object)generationEnvironment, defaultFileName, model, additionalParameters);
 
     private void Render(object template,
                         object generationEnvironment,
                         string defaultFileName = "",
-                        object? model = null,
+                        T? model = default,
                         object? additionalParameters = null)
     {
         Guard.IsNotNull(template);
@@ -106,21 +110,12 @@ public class TemplateRenderer : ITemplateRenderer
     }
 
     private static void TrySetAdditionalParametersOnTemplate(object template,
-                                                             object? model,
+                                                             T? model,
                                                              object? additionalParameters)
     {
-        if (template is IModelContainer modelContainer)
+        if (template is IModelContainer<T> modelContainer)
         {
-            if (modelContainer.Model is null)
-            {
-                modelContainer.Model = new Model();
-            }
-            else
-            {
-                modelContainer.Model.Initialize();
-            }
-
-            modelContainer.Model.Set(model);
+            modelContainer.Model = model;
         }
 
         var props = template.GetType().GetProperties(Constants.BindingFlags);
@@ -148,17 +143,19 @@ public class TemplateRenderer : ITemplateRenderer
                                                   IEnumerable<KeyValuePair<string, object?>> session,
                                                   object? additionalParameters)
     {
-        if (template is IViewModelContainer viewModelContainer)
+        var templateType = template.GetType();
+        if (templateType.IsGenericTypeDefinition && templateType.GetGenericTypeDefinition() == typeof(IViewModelContainer<>))
         {
-            if (viewModelContainer.ViewModel is null)
+            var viewModelValue = templateType.GetProperty(nameof(IViewModelContainer<object>.ViewModel))!.GetValue(template);
+            if (viewModelValue is null)
             {
-                viewModelContainer.ViewModel = new Model();
+                var viewModelType = templateType.GetGenericArguments().FirstOrDefault();
+                if (viewModelType is not null && viewModelType.GetConstructors().Any(x => x.GetParameters().Length == 0))
+                {
+                    viewModelValue = Activator.CreateInstance(viewModelType);
+                    templateType.GetProperty(nameof(IViewModelContainer<object>.ViewModel))!.SetValue(template, viewModelValue);
+                }
             }
-            else
-            {
-                viewModelContainer.ViewModel.Initialize();
-            }
-            var viewModelValue = viewModelContainer.ViewModel.Get();
 
             CopySessionVariablesToViewModel(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
             CopyTemplateContextToViewModel(viewModelValue, template);
@@ -185,14 +182,9 @@ public class TemplateRenderer : ITemplateRenderer
             prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
         }
 
-        if (viewModelValue is IModelContainer modelContainer && session.Any(kvp => kvp.Key == Constants.ModelKey))
+        if (viewModelValue is IModelContainer<T> modelContainer && session.Any(kvp => kvp.Key == Constants.ModelKey))
         {
-            if (modelContainer.Model is null)
-            {
-                modelContainer.Model = new Model();
-            }
-
-            modelContainer.Model.Set(session.First(kvp => kvp.Key == Constants.ModelKey).Value);
+            modelContainer.Model = (T?)session.First(kvp => kvp.Key == Constants.ModelKey).Value;
         }
     }
 

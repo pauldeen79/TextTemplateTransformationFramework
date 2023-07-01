@@ -30,9 +30,9 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    public class TemplateWithModel : ITemplate, IModelContainer
+    public class TemplateWithModel<T> : ITemplate, IModelContainer<T>
     {
-        public IModel Model { get; set; } = default!;
+        public T? Model { get; set; } = default!;
 
         private readonly Action<StringBuilder> _delegate;
 
@@ -41,9 +41,9 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    public class TemplateWithViewModel : ITemplate, IViewModelContainer
+    public class TemplateWithViewModel<T> : ITemplate, IViewModelContainer<T>
     {
-        public IModel ViewModel { get; set; } = default!;
+        public T? ViewModel { get; set; } = default!;
 
         private readonly Action<StringBuilder> _delegate;
 
@@ -59,9 +59,9 @@ internal static class TestData
         public override string ToString() => AdditionalParameter;
     }
 
-    public class PlainTemplateWithModelAndAdditionalParameters : IModelContainer
+    public class PlainTemplateWithModelAndAdditionalParameters<T> : IModelContainer<T>
     {
-        public IModel Model { get; set; } = default!;
+        public T? Model { get; set; } = default!;
 
         public string AdditionalParameter { get; set; } = "";
 

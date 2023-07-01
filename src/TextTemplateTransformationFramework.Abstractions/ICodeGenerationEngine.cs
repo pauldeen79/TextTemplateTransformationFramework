@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Abstractions;
 
-public interface ICodeGenerationEngine
+public interface ICodeGenerationEngine<in T>
 {
-    void Generate(ICodeGenerationProvider provider, ICodeGenerationSettings settings);
+    void Generate(ICodeGenerationProvider<T> provider, ICodeGenerationSettings settings);
 }

@@ -199,7 +199,7 @@ public class IndentedStringBuilder
         {
             var first = true;
             string? line;
-            while ((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()) is not null)
             {
                 if (first)
                 {

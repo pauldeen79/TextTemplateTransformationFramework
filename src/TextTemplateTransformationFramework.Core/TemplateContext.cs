@@ -29,7 +29,7 @@ public class TemplateContext : ITemplateContext
         get
         {
             ITemplateContext? p = this;
-            while (p.ParentContext != null)
+            while (p.ParentContext is not null)
             {
                 p = p.ParentContext;
             }
@@ -41,7 +41,7 @@ public class TemplateContext : ITemplateContext
     public T? GetModelFromContextByType<T>(Predicate<ITemplateContext>? predicate = null)
     {
         ITemplateContext? p = this;
-        while (p != null)
+        while (p is not null)
         {
             if (p.Model is T t && (predicate is null || predicate(p)))
             {
@@ -57,7 +57,7 @@ public class TemplateContext : ITemplateContext
     public T? GetViewModelFromContextByType<T>(Predicate<ITemplateContext>? predicate = null)
     {
         ITemplateContext? p = this;
-        while (p != null)
+        while (p is not null)
         {
             if (p.ViewModel is T t && (predicate is null || predicate(p)))
             {
@@ -73,7 +73,7 @@ public class TemplateContext : ITemplateContext
     public T? GetContextByTemplateType<T>(Predicate<ITemplateContext>? predicate = null)
     {
         ITemplateContext? p = this;
-        while (p != null)
+        while (p is not null)
         {
             if (p.Template is T t && (predicate is null || predicate(p)))
             {
