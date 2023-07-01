@@ -19,4 +19,7 @@ public static class TemplateContextExtensions
 
     public static ITemplateContext CreateChildContext(this ITemplateContext instance, object template, object? model, object? viewModel)
         => instance.CreateChildContext(template, model, viewModel, null, null);
+
+    public static ITemplateContext CreateChildContext(this ITemplateContext instance, object template, object? model, int? iterationNumber, int? iterationCount)
+        => instance.CreateChildContext(template, model, null, iterationNumber, iterationCount);
 }
