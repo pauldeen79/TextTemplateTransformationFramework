@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Core;
 
-public class TemplateRenderer : ITemplateRenderer
+public class TemplateEngine : ITemplateEngine
 {
     public void Render(object template,
                        StringBuilder generationEnvironment,
@@ -225,7 +225,7 @@ public class TemplateRenderer : ITemplateRenderer
             .ToDictionary(x => x.Key, x => x.Value);
 }
 
-public class TemplateRenderer<T> : TemplateRenderer, ITemplateRenderer<T>
+public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
 {
     public void Render(object template,
                        StringBuilder generationEnvironment,

@@ -1,8 +1,8 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Tests;
 
-public partial class TemplateRendererTests
+public partial class TemplateEngineTests
 {
-    public class Render_MultipleContentBuilder : TemplateRendererTests
+    public class Render_MultipleContentBuilder : TemplateEngineTests
     {
         [Fact]
         public void Throws_On_Null_Template()
@@ -34,7 +34,7 @@ public partial class TemplateRendererTests
         public void Sets_AdditionalParameters_On_Template_When_Possible()
         {
             // Arrange
-            ITemplateRenderer sut = new TemplateRenderer();
+            ITemplateEngine sut = new TemplateEngine();
             var template = new TestData.PlainTemplateWithAdditionalParameters();
             IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
 

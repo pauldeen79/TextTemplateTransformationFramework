@@ -1,8 +1,8 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Tests;
 
-public partial class TemplateRendererTests
+public partial class TemplateEngineTests
 {
-    public class Render_MultipleContentBuilder_Typed : TemplateRendererTests
+    public class Render_MultipleContentBuilder_Typed : TemplateEngineTests
     {
         [Fact]
         public void Throws_On_Null_Template()

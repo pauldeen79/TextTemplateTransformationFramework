@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Abstractions;
 
-public interface ITemplateRenderer<in T>
+public interface ITemplateEngine<in T>
 {
     void Render(object template,
                 StringBuilder generationEnvironment,
@@ -21,7 +21,7 @@ public interface ITemplateRenderer<in T>
                 object? additionalParameters);
 }
 
-public interface ITemplateRenderer
+public interface ITemplateEngine
 {
     void Render(object template,
                 StringBuilder generationEnvironment,

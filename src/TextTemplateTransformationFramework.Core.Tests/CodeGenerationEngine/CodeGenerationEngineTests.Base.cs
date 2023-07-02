@@ -2,8 +2,8 @@
 
 public abstract partial class CodeGenerationEngineTests
 {
-    protected Mock<ITemplateRenderer> TemplateRendererMock { get; } = new();
-    protected Mock<ITemplateRenderer<string>> TypedTemplateRendererMock { get; } = new();
+    protected Mock<ITemplateEngine> TemplateEngineMock { get; } = new();
+    protected Mock<ITemplateEngine<string>> TypedTemplateEngineMock { get; } = new();
     protected Mock<ITemplateFileManager> TemplateFileManagerMock { get; } = new();
     protected Mock<ITemplateFileManagerFactory> TemplateFileManagerFactoryMock { get; }
 
@@ -13,6 +13,6 @@ public abstract partial class CodeGenerationEngineTests
         TemplateFileManagerFactoryMock.Setup(x => x.Create(It.IsAny<string>())).Returns(TemplateFileManagerMock.Object);
     }
 
-    protected CodeGenerationEngine CreateSut() => new(TemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object, string.Empty);
-    protected CodeGenerationEngine<string> CreateTypedSut() => new(TypedTemplateRendererMock.Object, TemplateFileManagerFactoryMock.Object);
+    protected CodeGenerationEngine CreateSut() => new(TemplateEngineMock.Object, TemplateFileManagerFactoryMock.Object, string.Empty);
+    protected CodeGenerationEngine<string> CreateTypedSut() => new(TypedTemplateEngineMock.Object, TemplateFileManagerFactoryMock.Object);
 }
