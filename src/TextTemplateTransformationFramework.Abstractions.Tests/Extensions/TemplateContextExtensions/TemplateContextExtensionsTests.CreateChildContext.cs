@@ -55,6 +55,5 @@ public partial class TemplateContextExtensionsTests
             // Assert
             sut.Verify(x => x.CreateChildContext(Template, Model, null, IterationNumber, IterationCount), Times.Once);
         }
-
     }
 }
