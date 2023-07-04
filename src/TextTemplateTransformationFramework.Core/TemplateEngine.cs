@@ -73,10 +73,6 @@ public class TemplateEngine : ITemplateEngine
                                                object multipleContentBuilder,
                                                string defaultFilename)
     {
-        var stringBuilder = new StringBuilder();
-        RenderTemplate(template, stringBuilder);
-        var builderResult = stringBuilder.ToString();
-
         if (multipleContentBuilder is IMultipleContentBuilderContainer container)
         {
             // Use TemplateFileManager
@@ -86,6 +82,18 @@ public class TemplateEngine : ITemplateEngine
 
         // Note that we can safely cast here, as the public method only accepts IMultipleContentBuilder and IMultipleContentBuilderContainer
         var builder = (IMultipleContentBuilder)multipleContentBuilder;
+
+        if (template is IMultipleContentBuilderTemplate multipleContentBuilderTemplate)
+        {
+            // No need to convert string to MultipleContentBuilder, and then add it again..
+            // We can simply pass the MultipleContentBuilder instance
+            multipleContentBuilderTemplate.Render(builder);
+            return;
+        }
+
+        var stringBuilder = new StringBuilder();
+        RenderTemplate(template, stringBuilder);
+        var builderResult = stringBuilder.ToString();
 
         if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
         {
