@@ -24,7 +24,7 @@ public abstract class CodeGenerationEngineBase
         (
             provider.CreateGenerator(),
             !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun,
-            provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFileName),
+            provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFilename),
             provider.CreateAdditionalParameters(),
             _templateFileManagerFactory.Create(_basePath)
         );
@@ -41,9 +41,9 @@ public abstract class CodeGenerationEngineBase
         {
             if (shouldUseLastGeneratedFiles)
             {
-                var prefixedLastGeneratedFilesFileName = Path.Combine(provider.Path, provider.LastGeneratedFilesFileName);
-                templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFileName, provider.RecurseOnDeleteGeneratedFiles);
-                templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFileName);
+                var prefixedLastGeneratedFilesFilename = Path.Combine(provider.Path, provider.LastGeneratedFilesFilename);
+                templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFilename, provider.RecurseOnDeleteGeneratedFiles);
+                templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFilename);
             }
 
             templateFileManager.SaveAll();
@@ -82,14 +82,14 @@ public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEng
         {
             _templateEngine.Render(template: result.generator,
                                    generationEnvironment: result.templateFileManager.MultipleContentBuilder,
-                                   defaultFileName: provider.DefaultFileName,
+                                   defaultFilename: provider.DefaultFilename,
                                    additionalParameters: result.additionalParameters);
         }
         else
         {
             _templateEngine.Render(template: result.generator,
-                                   generationEnvironment: result.templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFileName)),
-                                   defaultFileName: string.Empty,
+                                   generationEnvironment: result.templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
+                                   defaultFilename: string.Empty,
                                    additionalParameters: result.additionalParameters);
         }
 
@@ -124,15 +124,15 @@ public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGeneration
             _templateEngine.Render(template: result.generator,
                                    generationEnvironment: result.templateFileManager.MultipleContentBuilder,
                                    model: provider.CreateModel(),
-                                   defaultFileName: provider.DefaultFileName,
+                                   defaultFilename: provider.DefaultFilename,
                                    additionalParameters: result.additionalParameters);
         }
         else
         {
             _templateEngine.Render(template: result.generator,
-                                   generationEnvironment: result.templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFileName)),
+                                   generationEnvironment: result.templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
                                    model: provider.CreateModel(),
-                                   defaultFileName: string.Empty,
+                                   defaultFilename: string.Empty,
                                    additionalParameters: result.additionalParameters);
         }
 

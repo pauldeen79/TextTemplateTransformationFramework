@@ -2,7 +2,7 @@
 
 public interface IContentBuilder
 {
-    string? FileName { get; set; }
+    string? Filename { get; set; }
     bool SkipWhenFileExists { get; set; }
     StringBuilder Builder { get; }
     IContent Build();

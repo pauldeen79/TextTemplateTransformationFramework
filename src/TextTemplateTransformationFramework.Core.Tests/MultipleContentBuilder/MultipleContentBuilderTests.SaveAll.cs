@@ -5,7 +5,7 @@ public partial class MultipleContentBuilderTests
     public class SaveAll : MultipleContentBuilderTests
     {
         [Fact]
-        public void Uses_Content_FileName_When_BasePath_Is_Empty()
+        public void Uses_Content_Filename_When_BasePath_Is_Empty()
         {
             // Arrange
             var sut = CreateSut(string.Empty);
@@ -19,7 +19,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Uses_Content_FileName_When_Content_FileName_Is_A_Full_Path()
+        public void Uses_Content_Filename_When_Content_Filename_Is_A_Full_Path()
         {
             // Arrange
             var sut = CreateSut();
@@ -34,7 +34,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Uses_Combined_Path_When_Content_FileName_Is_Not_A_Full_Path_And_BasePath_Is_Filled()
+        public void Uses_Combined_Path_When_Content_Filename_Is_Not_A_Full_Path_And_BasePath_Is_Filled()
         {
             // Arrange
             var sut = CreateSut(TestData.BasePath);
@@ -48,16 +48,16 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Throws_When_FileName_Is_Empty()
+        public void Throws_When_Filename_Is_Empty()
         {
             // Arrange
             var sut = CreateSut();
-            var c1 = sut.AddContent(fileName: string.Empty);
+            var c1 = sut.AddContent(filename: string.Empty);
             c1.Builder.AppendLine("Test1");
 
             // Act & Assert
             sut.Invoking(x => x.SaveAll())
-               .Should().Throw<ArgumentException>().WithParameterName("fileName");
+               .Should().Throw<ArgumentException>().WithParameterName("filename");
         }
 
         [Fact]

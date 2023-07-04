@@ -18,7 +18,7 @@ public partial class MultipleContentBuilderExtensionsTests
         }
 
         [Fact]
-        public void With_FileName_Argument_Works_Correctly()
+        public void With_Filename_Argument_Works_Correctly()
         {
             // Arrange
             var sut = CreateSut();
@@ -31,7 +31,7 @@ public partial class MultipleContentBuilderExtensionsTests
         }
 
         [Fact]
-        public void With_FileName_And_SkipWhenFileExists_Arguments_Works_Correctly()
+        public void With_Filename_And_SkipWhenFileExists_Arguments_Works_Correctly()
         {
             // Arrange
             var sut = CreateSut();

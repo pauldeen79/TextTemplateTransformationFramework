@@ -18,16 +18,16 @@ public partial class TemplateFileManagerExtensionsTests
         }
 
         [Fact]
-        public void Only_FileName_Argument_Works_Correctly()
+        public void Only_Filename_Argument_Works_Correctly()
         {
             // Arrange
             var sut = CreateSut();
 
             // Act
-            _ = sut.Object.StartNewFile(FileName);
+            _ = sut.Object.StartNewFile(Filename);
 
             // Assert
-            sut.Verify(x => x.StartNewFile(FileName, false), Times.Once);
+            sut.Verify(x => x.StartNewFile(Filename, false), Times.Once);
         }
     }
 }

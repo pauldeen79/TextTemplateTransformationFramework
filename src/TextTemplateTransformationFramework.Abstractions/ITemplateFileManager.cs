@@ -2,7 +2,7 @@
 {
     public interface ITemplateFileManager : IMultipleContentBuilderContainer
     {
-        StringBuilder StartNewFile(string fileName, bool skipWhenFileExists);
+        StringBuilder StartNewFile(string filename, bool skipWhenFileExists);
         void ResetToDefaultOutput();
         void Process(bool split, bool silentOutput);
         void SaveAll();

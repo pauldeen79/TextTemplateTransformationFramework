@@ -12,10 +12,10 @@ internal class ContentBuilder : IContentBuilder
         Builder = builder;
     }
 
-    public string? FileName { get; set; }
+    public string? Filename { get; set; }
     public bool SkipWhenFileExists { get; set; }
 
     public StringBuilder Builder { get; }
 
-    public IContent Build() => new Content(Builder, SkipWhenFileExists, FileName!);
+    public IContent Build() => new Content(Builder, SkipWhenFileExists, Filename!);
 }

@@ -5,8 +5,8 @@ public static class TemplateFileManagerExtensions
     public static StringBuilder StartNewFile(this ITemplateFileManager instance)
         => instance.StartNewFile(string.Empty, false);
 
-    public static StringBuilder StartNewFile(this ITemplateFileManager instance, string fileName)
-        => instance.StartNewFile(fileName, false);
+    public static StringBuilder StartNewFile(this ITemplateFileManager instance, string filename)
+        => instance.StartNewFile(filename, false);
 
     public static void Process(this ITemplateFileManager instance)
         => instance.Process(true, false);

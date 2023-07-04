@@ -25,11 +25,11 @@ public class TemplateFileManager : ITemplateFileManager
     public IMultipleContentBuilder MultipleContentBuilder { get; }
     public StringBuilder GenerationEnvironment { get; private set; } = new StringBuilder();
 
-    public StringBuilder StartNewFile(string fileName, bool skipWhenFileExists)
+    public StringBuilder StartNewFile(string filename, bool skipWhenFileExists)
     {
-        Guard.IsNotNull(fileName);
+        Guard.IsNotNull(filename);
 
-        var currentContent = MultipleContentBuilder.AddContent(fileName, skipWhenFileExists, new StringBuilder());
+        var currentContent = MultipleContentBuilder.AddContent(filename, skipWhenFileExists, new StringBuilder());
         GenerationEnvironment = currentContent.Builder;
         return currentContent.Builder;
     }

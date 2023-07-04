@@ -5,14 +5,14 @@ public partial class MultipleContentBuilderTests
     public class AddContent : MultipleContentBuilderTests
     {
         [Fact]
-        public void Throws_On_Null_FileName()
+        public void Throws_On_Null_Filename()
         {
             // Arrange
             var sut = CreateSut(TestData.BasePath);
 
             // Act & Assert
-            sut.Invoking(x => x.AddContent(fileName: null!))
-               .Should().Throw<ArgumentNullException>().WithParameterName("fileName");
+            sut.Invoking(x => x.AddContent(filename: null!))
+               .Should().Throw<ArgumentNullException>().WithParameterName("filename");
         }
 
         [Fact]
@@ -43,7 +43,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Sets_FileName_Correctly()
+        public void Sets_Filename_Correctly()
         {
             // Arrange
             var sut = CreateSut(TestData.BasePath);
@@ -52,7 +52,7 @@ public partial class MultipleContentBuilderTests
             var result = sut.AddContent("File.txt");
 
             // Assert
-            result.FileName.Should().Be("File.txt");
+            result.Filename.Should().Be("File.txt");
         }
 
         [Fact]
@@ -79,7 +79,7 @@ public partial class MultipleContentBuilderTests
 
             // Assert
             sut.Contents.Should().HaveCount(3); //two are added from initialization in CreateSut, one is added using AddContent here
-            sut.Contents.Should().Contain(x => x.FileName == "File.txt");
+            sut.Contents.Should().Contain(x => x.Filename == "File.txt");
         }
     }
 }

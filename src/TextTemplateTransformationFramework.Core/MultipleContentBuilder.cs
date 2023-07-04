@@ -39,9 +39,9 @@ public class MultipleContentBuilder : IMultipleContentBuilder
     {
         foreach (var content in _contentList.Select(x => x.Build()))
         {
-            var path = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(content.FileName)
-                ? content.FileName
-                : Path.Combine(BasePath, content.FileName);
+            var path = string.IsNullOrEmpty(BasePath) || Path.IsPathRooted(content.Filename)
+                ? content.Filename
+                : Path.Combine(BasePath, content.Filename);
 
             if (content.SkipWhenFileExists && _fileSystem.FileExists(path))
             {
@@ -75,7 +75,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
         if (!fullPath.Contains('*'))
         {
-            _fileSystem.WriteAllLines(fullPath, _contentList.Select(x => x.Build()).OrderBy(c => c.FileName).Select(c => c.FileName), _encoding);
+            _fileSystem.WriteAllLines(fullPath, _contentList.Select(x => x.Build()).OrderBy(c => c.Filename).Select(c => c.Filename), _encoding);
         }
     }
 
@@ -105,15 +105,15 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         }
     }
 
-    public IContentBuilder AddContent(string fileName, bool skipWhenFileExists, StringBuilder? builder)
+    public IContentBuilder AddContent(string filename, bool skipWhenFileExists, StringBuilder? builder)
     {
-        Guard.IsNotNull(fileName);
+        Guard.IsNotNull(filename);
 
         var content = builder is null
             ? new ContentBuilder()
             : new ContentBuilder(builder);
 
-        content.FileName = fileName;
+        content.Filename = filename;
         content.SkipWhenFileExists = skipWhenFileExists;
 
         _contentList.Add(content);
@@ -157,7 +157,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         result.BasePath = mc.BasePath;
         foreach (var item in mc.Contents)
         {
-            var c = result.AddContent(item.FileName, item.SkipWhenFileExists);
+            var c = result.AddContent(item.Filename, item.SkipWhenFileExists);
             foreach (var line in item.Lines)
             {
                 c.Builder.AppendLine(line);
@@ -174,7 +174,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
             BasePath = BasePath,
             Contents = _contentList.Select(x => x.Build()).Select(x => new Contents
             {
-                FileName = x.FileName,
+                Filename = x.Filename,
                 Lines = (x.Builder.ToString()?.NormalizeLineEndings() ?? string.Empty).Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList(),
                 SkipWhenFileExists = x.SkipWhenFileExists
             }).ToList()
@@ -193,11 +193,11 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     private void DeleteFilesFromLastGeneratedFilesContents(string basePath, string fullPath)
     {
-        foreach (var fileName in _fileSystem.ReadAllLines(fullPath, _encoding))
+        foreach (var filename in _fileSystem.ReadAllLines(fullPath, _encoding))
         {
-            var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(fileName)
-                ? fileName
-                : Path.Combine(basePath, fileName);
+            var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(filename)
+                ? filename
+                : Path.Combine(basePath, filename);
 
             if (_fileSystem.FileExists(fileFullPath))
             {

@@ -19,7 +19,7 @@ public partial class MultipleContentBuilderTests
   <BasePath></BasePath>
   <Contents>
     <Contents>
-      <FileName>File1.txt</FileName>
+      <Filename>File1.txt</Filename>
       <Lines xmlns:d4p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
         <d4p1:string>Test1</d4p1:string>
         <d4p1:string></d4p1:string>
@@ -27,7 +27,7 @@ public partial class MultipleContentBuilderTests
       <SkipWhenFileExists>false</SkipWhenFileExists>
     </Contents>
     <Contents>
-      <FileName>File2.txt</FileName>
+      <Filename>File2.txt</Filename>
       <Lines xmlns:d4p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
         <d4p1:string>Test2</d4p1:string>
         <d4p1:string></d4p1:string>

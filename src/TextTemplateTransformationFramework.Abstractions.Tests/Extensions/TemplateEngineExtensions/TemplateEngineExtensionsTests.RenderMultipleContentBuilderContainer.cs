@@ -18,16 +18,16 @@ public partial class TemplateEngineExtensionsTests
         }
 
         [Fact]
-        public void Template_GenerationEnvironment_And_DefaultFileName_Arguments_Works_Correctly()
+        public void Template_GenerationEnvironment_And_DefaultFilename_Arguments_Works_Correctly()
         {
             // Arrange
             var sut = CreateSut();
 
             // Act
-            sut.Object.Render(Template, MultipleContentBuilderContainerMock.Object, DefaultFileName);
+            sut.Object.Render(Template, MultipleContentBuilderContainerMock.Object, DefaultFilename);
 
             // Assert
-            sut.Verify(x => x.Render(Template, MultipleContentBuilderContainerMock.Object, DefaultFileName, null), Times.Once);
+            sut.Verify(x => x.Render(Template, MultipleContentBuilderContainerMock.Object, DefaultFilename, null), Times.Once);
         }
 
         [Fact]

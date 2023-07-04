@@ -5,14 +5,14 @@ public partial class TemplateFileManagerTests
     public class StartNewFile : TemplateFileManagerTests
     {
         [Fact]
-        public void Throws_On_FileName_Null()
+        public void Throws_On_Filename_Null()
         {
             // Arrange
             var sut = CreateSut();
 
             // Act & Assert
-            sut.Invoking(x => x.StartNewFile(fileName: null!))
-               .Should().Throw<ArgumentNullException>().WithParameterName("fileName");
+            sut.Invoking(x => x.StartNewFile(filename: null!))
+               .Should().Throw<ArgumentNullException>().WithParameterName("filename");
         }
 
         [Fact]

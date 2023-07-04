@@ -4,7 +4,7 @@
 internal class Contents
 {
     [DataMember]
-    public string FileName { get; set; } = "";
+    public string Filename { get; set; } = "";
 
     [DataMember]
     public List<string> Lines { get; set; } = new();

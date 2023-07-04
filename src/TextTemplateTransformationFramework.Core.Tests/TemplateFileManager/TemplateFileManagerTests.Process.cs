@@ -22,7 +22,7 @@ public partial class TemplateFileManagerTests
   <BasePath></BasePath>
   <Contents>
     <Contents>
-      <FileName>MyFile.txt</FileName>
+      <Filename>MyFile.txt</Filename>
       <Lines xmlns:d4p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
         <d4p1:string>Added</d4p1:string>
       </Lines>

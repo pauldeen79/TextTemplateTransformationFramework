@@ -13,7 +13,7 @@ public partial class TemplateFileManagerTests
     protected IContentBuilder CreateContentBuilder(string fileName, bool skipFileWhenExists, StringBuilder builder)
     {
         var mock = new Mock<IContentBuilder>();
-        mock.SetupGet(x => x.FileName).Returns(fileName);
+        mock.SetupGet(x => x.Filename).Returns(fileName);
         mock.SetupGet(x => x.SkipWhenFileExists).Returns(skipFileWhenExists);
         mock.SetupGet(x => x.Builder).Returns(builder);
         return mock.Object;

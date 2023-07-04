@@ -6,9 +6,9 @@ public interface ICodeGenerationProvider
     bool SkipWhenFileExists { get; }
     string BasePath { get; }
     string Path { get; }
-    string DefaultFileName { get; }
+    string DefaultFilename { get; }
     bool RecurseOnDeleteGeneratedFiles { get; }
-    string LastGeneratedFilesFileName { get; }
+    string LastGeneratedFilesFilename { get; }
 
     void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath);
     object CreateGenerator();

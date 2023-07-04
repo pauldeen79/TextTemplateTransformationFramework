@@ -27,7 +27,7 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
-            CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(false);
 
             // Act
@@ -43,7 +43,7 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
-            CodeGenerationProviderMock.SetupGet(x => x.DefaultFileName).Returns("MyFile.txt");
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);

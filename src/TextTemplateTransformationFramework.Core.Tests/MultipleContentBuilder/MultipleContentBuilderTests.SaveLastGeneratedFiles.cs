@@ -52,7 +52,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Creates_File_When_FileName_Does_Not_Contain_Asterisk_Using_NonEmpty_BasePath()
+        public void Creates_File_When_Filename_Does_Not_Contain_Asterisk_Using_NonEmpty_BasePath()
         {
             // Arrange
             var sut = CreateSut(TestData.BasePath);
@@ -66,7 +66,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Creates_File_When_FileName_Does_Not_Contain_Asterisk_Using_Empty_BasePath()
+        public void Creates_File_When_Filename_Does_Not_Contain_Asterisk_Using_Empty_BasePath()
         {
             // Arrange
             var sut = CreateSut(string.Empty);
@@ -80,7 +80,7 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
-        public void Does_Not_Create_File_When_FileName_Contains_Asterisk()
+        public void Does_Not_Create_File_When_Filename_Contains_Asterisk()
         {
             // Arrange
             var sut = CreateSut(TestData.BasePath);
