@@ -5,7 +5,7 @@ public class TemplateFileManager : ITemplateFileManager
     private readonly StringBuilder _originalStringBuilder;
 
     public TemplateFileManager(StringBuilder stringBuilder)
-        : this (new MultipleContentBuilder(), stringBuilder)
+        : this(new MultipleContentBuilder(), stringBuilder)
     {
     }
 

@@ -42,5 +42,20 @@ public partial class TemplateFileManagerTests
             sut.MultipleContentBuilder.BasePath.Should().Be(basePath);
             sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
         }
+
+        [Fact]
+        public void Creates_Instance_Without_BasePath_Argument()
+        {
+            // Arrange
+            var stringBuilder = new StringBuilder();
+
+            // Act
+            var sut = new TemplateFileManager(stringBuilder: stringBuilder);
+            sut.ResetToDefaultOutput(); // needed to check the sent StringBuilder
+
+            // Assert
+            sut.MultipleContentBuilder.BasePath.Should().BeEmpty();
+            sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
+        }
     }
 }
