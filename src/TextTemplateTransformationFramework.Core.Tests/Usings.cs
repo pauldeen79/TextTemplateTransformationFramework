@@ -1,4 +1,5 @@
-﻿global using System.Text;
+﻿global using System.Reflection;
+global using System.Text;
 global using FluentAssertions;
 global using Moq;
 global using TextTemplateTransformationFramework.Abstractions;

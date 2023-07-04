@@ -25,6 +25,16 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
+        public void Creates_Instance_With_Filled_Encoding()
+        {
+            // Act
+            var sut = new MultipleContentBuilder(Encoding.Latin1);
+
+            // Assert
+            sut.GetType().GetField("_encoding", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(sut).Should().BeEquivalentTo(Encoding.Latin1);
+        }
+
+        [Fact]
         public void Creates_Instance_With_Filled_BasePath_And_Encoding()
         {
             // Act
