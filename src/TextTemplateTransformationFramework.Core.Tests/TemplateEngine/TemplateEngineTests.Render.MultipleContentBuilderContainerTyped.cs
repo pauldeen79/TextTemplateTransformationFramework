@@ -1,16 +1,14 @@
-﻿using static TextTemplateTransformationFramework.Core.Tests.TestData;
-
-namespace TextTemplateTransformationFramework.Core.Tests;
+﻿namespace TextTemplateTransformationFramework.Core.Tests;
 
 public partial class TemplateEngineTests
 {
-    public class Render_MultipleContentBuilderContainer : TemplateEngineTests
+    public class Render_MultipleContentBuilderContainer_Typed : TemplateEngineTests
     {
         [Fact]
         public void Throws_On_Null_Template()
         {
             // Arrange
-            var sut = CreateSut();
+            var sut = CreateTypedSut();
             object? template = null;
             IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
 
@@ -23,7 +21,7 @@ public partial class TemplateEngineTests
         public void Throws_On_Null_GenerationEnvironment()
         {
             // Arrange
-            var sut = CreateSut();
+            var sut = CreateTypedSut();
             object? template = this;
             IMultipleContentBuilderContainer? generationEnvironment = null;
 
@@ -33,35 +31,27 @@ public partial class TemplateEngineTests
         }
 
         [Fact]
-        public void Constructs_Template_When_Possible()
+        public void Constructs_And_Sets_Model_On_Template_When_Possible()
         {
             // Arrange
-            var sut = CreateSut();
-            var template = new TextTransformTemplate(() => "Hello world!");
+            var sut = CreateTypedSut();
+            var template = new TestData.TemplateWithModel<string>(_ => { });
             IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
             MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
-            var contentBuilderMock = new Mock<IContentBuilder>();
-            MultipleContentBuilderMock.Setup(x => x.AddContent(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<StringBuilder?>()))
-                                      .Returns<string, bool, StringBuilder?>((filename, skipWhenFileExists, b) =>
-                                      {
-                                          contentBuilderMock.SetupGet(x => x.Builder).Returns(b ?? new StringBuilder());
-
-                                          return contentBuilderMock.Object;
-                                      });
 
             // Act
-            sut.Render(template, generationEnvironment);
+            sut.Render(template, generationEnvironment, model: "Hello world");
 
             // Assert
-            contentBuilderMock.Object.Builder.Should().NotBeNull();
-            contentBuilderMock.Object.Builder.ToString().Should().Be("Hello world!");
+            template.Model.Should().NotBeNull();
+            template.Model.Should().Be("Hello world");
         }
 
         [Fact]
         public void Sets_AdditionalParameters_On_Template_When_Possible()
         {
             // Arrange
-            var sut = CreateSut();
+            var sut = CreateTypedSut();
             var template = new TestData.PlainTemplateWithAdditionalParameters();
             IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
             MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
@@ -70,6 +60,23 @@ public partial class TemplateEngineTests
             sut.Render(template, generationEnvironment, additionalParameters: new { AdditionalParameter = "Some value" });
 
             // Assert
+            template.AdditionalParameter.Should().Be("Some value");
+        }
+
+        [Fact]
+        public void Sets_Model_And_AdditionalParameters_On_Template_When_Possible()
+        {
+            // Arrange
+            var sut = CreateTypedSut();
+            var template = new TestData.PlainTemplateWithModelAndAdditionalParameters<string>();
+            IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
+            MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
+
+            // Act
+            sut.Render(template, generationEnvironment, model: "Hello world", additionalParameters: new { AdditionalParameter = "Some value", Model = "Ignored" });
+
+            // Assert
+            template.Model.Should().Be("Hello world");
             template.AdditionalParameter.Should().Be("Some value");
         }
     }

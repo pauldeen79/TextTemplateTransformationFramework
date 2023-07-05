@@ -1,4 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests;
+﻿using static TextTemplateTransformationFramework.Core.Tests.TestData;
+
+namespace TextTemplateTransformationFramework.Core.Tests;
 
 public partial class TemplateEngineTests
 {
@@ -28,6 +30,30 @@ public partial class TemplateEngineTests
             // Act & Assert
             sut.Invoking(x => x.Render(template!, generationEnvironment!))
                .Should().Throw<ArgumentNullException>().WithParameterName(nameof(generationEnvironment));
+        }
+
+        [Fact]
+        public void Constructs_Template_When_Possible()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TextTransformTemplate(() => "Hello world!");
+            IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
+            var contentBuilderMock = new Mock<IContentBuilder>();
+            MultipleContentBuilderMock.Setup(x => x.AddContent(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<StringBuilder?>()))
+                                      .Returns<string, bool, StringBuilder?>((filename, skipWhenFileExists, b) =>
+                                      {
+                                          contentBuilderMock.SetupGet(x => x.Builder).Returns(b ?? new StringBuilder());
+
+                                          return contentBuilderMock.Object;
+                                      });
+
+            // Act
+            sut.Render(template, generationEnvironment);
+
+            // Assert
+            contentBuilderMock.Object.Builder.Should().NotBeNull();
+            contentBuilderMock.Object.Builder.ToString().Should().Be("Hello world!");
         }
 
         [Fact]

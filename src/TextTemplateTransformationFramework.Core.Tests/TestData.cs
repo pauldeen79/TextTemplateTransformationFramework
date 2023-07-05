@@ -67,4 +67,22 @@ internal static class TestData
 
         public override string ToString() => AdditionalParameter;
     }
+
+    internal sealed class TextTransformTemplate : ITextTransformTemplate
+    {
+        private readonly Func<string> _delegate;
+
+        public TextTransformTemplate(Func<string> @delegate) => _delegate = @delegate;
+
+        public string TransformText() => _delegate();
+    }
+
+    internal sealed class MultipleContentBuilderTemplate : IMultipleContentBuilderTemplate
+    {
+        private readonly Action<IMultipleContentBuilder> _delegate;
+
+        public MultipleContentBuilderTemplate(Action<IMultipleContentBuilder> @delegate) => _delegate = @delegate;
+
+        public void Render(IMultipleContentBuilder builder) => _delegate(builder);
+    }
 }

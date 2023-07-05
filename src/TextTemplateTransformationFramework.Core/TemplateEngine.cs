@@ -20,7 +20,6 @@ public class TemplateEngine : ITemplateEngine
                        object? additionalParameters)
         => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
 
-
     protected void Render<T>(object template,
                              object generationEnvironment,
                              string defaultFilename,
