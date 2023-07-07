@@ -47,34 +47,38 @@ public partial class TemplateEngineTests
         }
 
         [Fact]
-        public void Sets_AdditionalParameters_On_Template_When_Possible()
+        public void Initializes_Template_Correctly()
         {
             // Arrange
-            var sut = CreateTypedSut();
-            var template = new TestData.PlainTemplateWithAdditionalParameters();
+            var sut = new TemplateEngine<string>(TemplateInitializerMock.Object, DefaultTemplateRenderers);
+            var template = new TestData.PlainTemplateWithModelAndAdditionalParameters<string>();
             IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
+            var model = "Hello world";
+            var additionalParameters = new { AdditionalParameter = "Some value", Model = "Ignored" };
 
             // Act
-            sut.Render(template, generationEnvironment, additionalParameters: new { AdditionalParameter = "Some value" });
+            sut.Render(template, generationEnvironment, model, additionalParameters);
 
             // Assert
-            template.AdditionalParameter.Should().Be("Some value");
+            TemplateInitializerMock.Verify(x => x.Initialize(template, string.Empty, model, additionalParameters, null), Times.Once);
         }
 
         [Fact]
-        public void Sets_Model_And_AdditionalParameters_On_Template_When_Possible()
+        public void Renders_Template_Correctly()
         {
             // Arrange
-            var sut = CreateTypedSut();
+            var sut = new TemplateEngine<string>(TemplateInitializerMock.Object, new[] { TemplateRendererMock.Object });
             var template = new TestData.PlainTemplateWithModelAndAdditionalParameters<string>();
             IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
+            var model = "Hello world";
+            var additionalParameters = new { AdditionalParameter = "Some value", Model = "Ignored" };
+            TemplateRendererMock.Setup(x => x.Supports(It.IsAny<object>())).Returns(true);
 
             // Act
-            sut.Render(template, generationEnvironment, model: "Hello world", additionalParameters: new { AdditionalParameter = "Some value", Model = "Ignored" });
+            sut.Render(template, generationEnvironment, model, additionalParameters);
 
             // Assert
-            template.Model.Should().Be("Hello world");
-            template.AdditionalParameter.Should().Be("Some value");
+            TemplateRendererMock.Verify(x => x.Render(template, generationEnvironment, string.Empty), Times.Once);
         }
     }
 }

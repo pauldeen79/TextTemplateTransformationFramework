@@ -31,18 +31,36 @@ public partial class TemplateEngineTests
         }
 
         [Fact]
-        public void Sets_AdditionalParameters_On_Template_When_Possible()
+        public void Initializes_Template_Correctly()
         {
             // Arrange
-            ITemplateEngine sut = new TemplateEngine();
+            var sut = new TemplateEngine(TemplateInitializerMock.Object, DefaultTemplateRenderers);
             var template = new TestData.PlainTemplateWithAdditionalParameters();
             StringBuilder? generationEnvironment = StringBuilder;
+            var additionalParameters = new { AdditionalParameter = "Some value" };
 
             // Act
-            sut.Render(template, generationEnvironment, additionalParameters: new { AdditionalParameter = "Some value" });
+            sut.Render(template, generationEnvironment, additionalParameters);
 
             // Assert
-            template.AdditionalParameter.Should().Be("Some value");
+            TemplateInitializerMock.Verify(x => x.Initialize(template, string.Empty, default(object), additionalParameters, null), Times.Once);
+        }
+
+        [Fact]
+        public void Renders_Template_Correctly()
+        {
+            // Arrange
+            var sut = new TemplateEngine(TemplateInitializerMock.Object, new[] { TemplateRendererMock.Object });
+            var template = new TestData.PlainTemplateWithAdditionalParameters();
+            StringBuilder? generationEnvironment = StringBuilder;
+            var additionalParameters = new { AdditionalParameter = "Some value" };
+            TemplateRendererMock.Setup(x => x.Supports(It.IsAny<object>())).Returns(true);
+
+            // Act
+            sut.Render(template, generationEnvironment, additionalParameters);
+
+            // Assert
+            TemplateRendererMock.Verify(x => x.Render(template, generationEnvironment, string.Empty), Times.Once);
         }
     }
 }
