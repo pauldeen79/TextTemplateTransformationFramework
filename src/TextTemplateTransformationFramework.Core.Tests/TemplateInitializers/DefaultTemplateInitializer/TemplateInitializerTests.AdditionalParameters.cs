@@ -80,5 +80,20 @@ public partial class TemplateInitializerTests
             template.Model.Should().Be(model);
             template.AdditionalParameter.Should().Be(additionalParameters.AdditionalParameter);
         }
+
+        [Fact]
+        public void Skips_ReadOnly_Property_On_AdditionalParameters()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var additionalParameters = new { ReadOnlyParameter = "Ignored" };
+            var template = new TestData.PlainTemplateWithAdditionalParameters();
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters, null);
+
+            // Assert
+            template.ReadOnlyParameter.Should().Be("Original value");
+        }
     }
 }

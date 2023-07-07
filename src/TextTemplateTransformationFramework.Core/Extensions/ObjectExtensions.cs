@@ -23,7 +23,7 @@ public static class ObjectExtensions
             var properties = instance.GetType().GetProperties(Constants.BindingFlags);
             foreach (var prop in properties.OrderBy(p => p.Name))
             {
-                result.Add(prop.Name, prop.GetValue(instance));
+                result.Add(prop.Name, prop.GetValue(instance, Constants.BindingFlags, null, null, null));
             }
         }
 

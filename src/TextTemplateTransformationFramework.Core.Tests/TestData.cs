@@ -56,6 +56,7 @@ internal static class TestData
     {
         public string AdditionalParameter { get; set; } = "";
         internal string InternalParameter { get; set; } = "";
+        public string ReadOnlyParameter => "Original value";
 
         public override string ToString() => AdditionalParameter;
     }
@@ -100,7 +101,20 @@ internal static class TestData
 
     internal sealed class ViewModel
     {
+        public string AdditionalParameter { get; set; } = "";
         public string Property { get; set; } = "";
+        public string ReadOnlyParameter => "Original value";
+        public TestEnum EnumParameter { get; set; }
+    }
+
+    internal sealed class ViewModelWithModel<T> : IModelContainer<T>
+    {
+        public T? Model { get; set; }
+    }
+
+    internal sealed class ViewModelWithTemplateContext : ITemplateContextContainer
+    {
+        public ITemplateContext Context { get; set; } = default!;
     }
 
     /// <summary>

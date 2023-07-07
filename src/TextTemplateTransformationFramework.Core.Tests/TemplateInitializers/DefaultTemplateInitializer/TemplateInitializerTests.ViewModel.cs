@@ -62,5 +62,127 @@ public partial class TemplateInitializerTests
             // Assert
             template.ViewModel.Should().BeSameAs(viewModel);
         }
+
+        [Fact]
+        public void Can_Inject_Additional_Properties_Of_Same_Type_To_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { AdditionalParameter = "some value" }, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.AdditionalParameter.Should().Be("some value");
+        }
+
+        [Fact]
+        public void Can_Inject_Additional_Properties_Of_Different_Type_To_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { AdditionalParameter = 1 }, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.AdditionalParameter.Should().Be("1");
+        }
+
+        [Fact]
+        public void Can_Inject_Additional_Enum_Property_Using_Int32_Value_To_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { EnumParameter = (int)TestEnum.SecondValue }, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.EnumParameter.Should().Be(TestEnum.SecondValue);
+        }
+
+        [Fact]
+        public void Can_Inject_Null_Value_To_Additional_Property_On_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { AdditionalParameter = (object?)null }, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.AdditionalParameter.Should().BeNull();
+        }
+
+        [Fact]
+        public void Skips_Non_Existing_Additional_Property_On_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { WrongName = "some value" }, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.AdditionalParameter.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Skips_ReadOnly_Additional_Property_On_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { ReadOnlyParameter = "Ignored" }, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.ReadOnlyParameter.Should().Be("Original value");
+        }
+
+        [Fact]
+        public void Can_Inject_Model_To_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModelWithModel<string>>(_ => { });
+            var model = "Hello world!";
+
+            // Act
+            sut.Initialize(template, DefaultFilename, model, null, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.Model.Should().Be(model);
+        }
+
+        [Fact]
+        public void Can_Inject_TemplateContext_To_ViewModel()
+        {
+            // Arrange
+            var sut = CreateSut();
+            // Note that this template doesn't have a template context, but it can be injected into the ViewModel :)
+            var template = new TestData.TemplateWithViewModel<TestData.ViewModelWithTemplateContext>(_ => { });
+
+            // Act
+            sut.Initialize(template, DefaultFilename, default(object?), null, null);
+
+            // Assert
+            template.ViewModel.Should().NotBeNull();
+            template.ViewModel!.Context.Should().NotBeNull();
+        }
     }
 }

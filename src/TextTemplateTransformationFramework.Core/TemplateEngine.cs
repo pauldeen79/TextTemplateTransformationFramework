@@ -51,7 +51,7 @@ public class TemplateEngine : ITemplateEngine
         _templateInitializer.Initialize(template, defaultFilename, model, additionalParameters, context);
 
         var renderer = Array.Find(_templateRenderers, x => x.Supports(generationEnvironment));
-        if (renderer == null)
+        if (renderer is null)
         {
             throw new ArgumentOutOfRangeException(nameof(generationEnvironment), "Type of GenerationEnvironment is not supported");
         }
