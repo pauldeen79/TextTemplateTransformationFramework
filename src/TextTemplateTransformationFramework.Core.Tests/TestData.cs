@@ -72,13 +72,13 @@ internal static class TestData
 
     internal sealed class PlainTemplateWithTemplateContext : ITemplateContextContainer
     {
-        private readonly Func<string> _delegate;
+        private readonly Func<ITemplateContext, string> _delegate;
 
-        public PlainTemplateWithTemplateContext(Func<string> @delegate) => _delegate = @delegate;
+        public PlainTemplateWithTemplateContext(Func<ITemplateContext, string> @delegate) => _delegate = @delegate;
 
         public ITemplateContext Context { get; set; } = default!;
 
-        public override string ToString() => _delegate();
+        public override string ToString() => _delegate(Context);
     }
 
     internal sealed class TextTransformTemplate : ITextTransformTemplate
@@ -97,6 +97,17 @@ internal static class TestData
         public MultipleContentBuilderTemplate(Action<IMultipleContentBuilder> @delegate) => _delegate = @delegate;
 
         public void Render(IMultipleContentBuilder builder) => _delegate(builder);
+    }
+
+    internal sealed class MultipleContentBuilderTemplateWithTepmlateContext : IMultipleContentBuilderTemplate, ITemplateContextContainer
+    {
+        private readonly Action<IMultipleContentBuilder, ITemplateContext> _delegate;
+
+        public MultipleContentBuilderTemplateWithTepmlateContext(Action<IMultipleContentBuilder, ITemplateContext> @delegate) => _delegate = @delegate;
+
+        public ITemplateContext Context { get; set; } = default!;
+
+        public void Render(IMultipleContentBuilder builder) => _delegate(builder, Context);
     }
 
     internal sealed class ViewModel

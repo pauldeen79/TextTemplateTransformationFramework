@@ -9,7 +9,7 @@ public partial class TemplateInitializerTests
         {
             // Arrange
             var sut = CreateSut();
-            var template = new TestData.PlainTemplateWithTemplateContext(() => "Hello world!");
+            var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!");
             var context = new Core.TemplateContext(template);
 
             // Act
@@ -24,7 +24,7 @@ public partial class TemplateInitializerTests
         {
             // Arrange
             var sut = CreateSut();
-            var template = new TestData.PlainTemplateWithTemplateContext(() => "Hello world!");
+            var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!");
 
             // Act
             sut.Initialize(template, DefaultFilename, default(object?), null, context: null);
@@ -42,7 +42,7 @@ public partial class TemplateInitializerTests
         {
             // Arrange
             var sut = CreateSut();
-            var template = new TestData.PlainTemplateWithTemplateContext(() => "Hello world!"); // note that this template type does not implement IModelContainer<T>, so the model property will not be set. But it will be available in the TemplateContext (untyped)
+            var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!"); // note that this template type does not implement IModelContainer<T>, so the model property will not be set. But it will be available in the TemplateContext (untyped)
             var model = "Hello world!";
 
             // Act
