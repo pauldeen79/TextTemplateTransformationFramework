@@ -40,76 +40,16 @@ public class TemplateEngine : ITemplateEngine
         if (generationEnvironment is StringBuilder stringBuilder)
         {
             // This path is for StringBuilder
-            RenderTemplate(template, stringBuilder);
+            SingleContentTemplateRenderer.Render(template, stringBuilder);
+        }
+        else if (generationEnvironment is not IMultipleContentBuilder and not IMultipleContentBuilderContainer)
+        {
+            throw new ArgumentOutOfRangeException(nameof(generationEnvironment), "GenerationEnvironment should be of type IMultipleContentBuilder or IMultipleContentBuilderContainer");
         }
         else
         {
             // This path includes IMultipleContentBuilder and IMultipleContentBuilderContainer (which includes ITemplateFileManager)
-            RenderIncludedTemplate(template, generationEnvironment, defaultFilename);
-        }
-    }
-
-    private static void RenderTemplate(object template, StringBuilder builder)
-    {
-        if (template is ITemplate typedTemplate)
-        {
-            typedTemplate.Render(builder);
-        }
-        else if (template is ITextTransformTemplate textTransformTemplate)
-        {
-            var output = textTransformTemplate.TransformText();
-            if (!string.IsNullOrEmpty(output))
-            {
-                builder.Append(output);
-            }
-        }
-        else
-        {
-            var output = template.ToString();
-            if (!string.IsNullOrEmpty(output))
-            {
-                builder.Append(output);
-            }
-        }
-    }
-
-    private static void RenderIncludedTemplate(object template,
-                                               object multipleContentBuilder,
-                                               string defaultFilename)
-    {
-        if (multipleContentBuilder is IMultipleContentBuilderContainer container)
-        {
-            // Use TemplateFileManager
-            multipleContentBuilder = container.MultipleContentBuilder
-                ?? throw new InvalidOperationException("MultipleContentBuilder property is null");
-        }
-
-        // Note that we can safely cast here, as the public method only accepts IMultipleContentBuilder and IMultipleContentBuilderContainer
-        var builder = (IMultipleContentBuilder)multipleContentBuilder;
-
-        if (template is IMultipleContentBuilderTemplate multipleContentBuilderTemplate)
-        {
-            // No need to convert string to MultipleContentBuilder, and then add it again..
-            // We can simply pass the MultipleContentBuilder instance
-            multipleContentBuilderTemplate.Render(builder);
-            return;
-        }
-
-        var stringBuilder = new StringBuilder();
-        RenderTemplate(template, stringBuilder);
-        var builderResult = stringBuilder.ToString();
-
-        if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
-        {
-            var multipleContents = MultipleContentBuilder.FromString(builderResult);
-            foreach (var content in multipleContents.Contents.Select(x => x.Build()))
-            {
-                builder.AddContent(content.Filename, content.SkipWhenFileExists, content.Builder);
-            }
-        }
-        else
-        {
-            builder.AddContent(defaultFilename, false, new StringBuilder(builderResult));
+            MultipleContentTemplateRenderer.Render(template, generationEnvironment, defaultFilename);
         }
     }
 
