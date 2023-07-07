@@ -83,14 +83,16 @@ public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEng
             _templateEngine.Render(template: result.generator,
                                    generationEnvironment: result.templateFileManager.MultipleContentBuilder,
                                    defaultFilename: provider.DefaultFilename,
-                                   additionalParameters: result.additionalParameters);
+                                   additionalParameters: result.additionalParameters,
+                                   context: null);
         }
         else
         {
             _templateEngine.Render(template: result.generator,
                                    generationEnvironment: result.templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
                                    defaultFilename: string.Empty,
-                                   additionalParameters: result.additionalParameters);
+                                   additionalParameters: result.additionalParameters,
+                                   context: null);
         }
 
         ProcessResult(provider, result.shouldSave, result.shouldUseLastGeneratedFiles, result.templateFileManager);
@@ -125,7 +127,8 @@ public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGeneration
                                    generationEnvironment: result.templateFileManager.MultipleContentBuilder,
                                    model: provider.CreateModel(),
                                    defaultFilename: provider.DefaultFilename,
-                                   additionalParameters: result.additionalParameters);
+                                   additionalParameters: result.additionalParameters,
+                                   context: null);
         }
         else
         {
@@ -133,7 +136,8 @@ public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGeneration
                                    generationEnvironment: result.templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
                                    model: provider.CreateModel(),
                                    defaultFilename: string.Empty,
-                                   additionalParameters: result.additionalParameters);
+                                   additionalParameters: result.additionalParameters,
+                                   context: null);
         }
 
         ProcessResult(provider, result.shouldSave, result.shouldUseLastGeneratedFiles, result.templateFileManager);

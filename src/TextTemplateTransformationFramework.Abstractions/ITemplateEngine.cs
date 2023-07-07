@@ -6,19 +6,22 @@ public interface ITemplateEngine<in T>
                 StringBuilder generationEnvironment,
                 T model,
                 string defaultFilename,
-                object? additionalParameters);
+                object? additionalParameters,
+                ITemplateContext? context);
 
     void Render(object template,
                 IMultipleContentBuilder generationEnvironment,
                 T model,
                 string defaultFilename,
-                object? additionalParameters);
+                object? additionalParameters,
+                ITemplateContext? context);
 
     void Render(object template,
                 IMultipleContentBuilderContainer generationEnvironment,
                 T model,
                 string defaultFilename,
-                object? additionalParameters);
+                object? additionalParameters,
+                ITemplateContext? context);
 }
 
 public interface ITemplateEngine
@@ -26,15 +29,18 @@ public interface ITemplateEngine
     void Render(object template,
                 StringBuilder generationEnvironment,
                 string defaultFilename,
-                object? additionalParameters);
+                object? additionalParameters,
+                ITemplateContext? context);
 
     void Render(object template,
                 IMultipleContentBuilder generationEnvironment,
                 string defaultFilename,
-                object? additionalParameters);
+                object? additionalParameters,
+                ITemplateContext? context);
 
     void Render(object template,
                 IMultipleContentBuilderContainer generationEnvironment,
                 string defaultFilename,
-                object? additionalParameters);
+                object? additionalParameters,
+                ITemplateContext? context);
 }

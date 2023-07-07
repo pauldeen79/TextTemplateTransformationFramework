@@ -5,19 +5,22 @@ public class TemplateEngine : ITemplateEngine
     public void Render(object template,
                        StringBuilder generationEnvironment,
                        string defaultFilename,
-                       object? additionalParameters)
+                       object? additionalParameters,
+                       ITemplateContext? context)
         => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
                        string defaultFilename,
-                       object? additionalParameters)
+                       object? additionalParameters,
+                       ITemplateContext? context)
         => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
                        string defaultFilename,
-                       object? additionalParameters)
+                       object? additionalParameters,
+                       ITemplateContext? context)
         => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
 
     protected void Render<T>(object template,
@@ -238,20 +241,23 @@ public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
                        StringBuilder generationEnvironment,
                        T model,
                        string defaultFilename,
-                       object? additionalParameters)
+                       object? additionalParameters,
+                       ITemplateContext? context)
         => Render(template, generationEnvironment, defaultFilename, model, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
                        T model,
                        string defaultFilename,
-                       object? additionalParameters)
+                       object? additionalParameters,
+                       ITemplateContext? context)
         => Render(template, generationEnvironment, defaultFilename, model, additionalParameters);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
                        T model,
                        string defaultFilename,
-                       object? additionalParameters)
+                       object? additionalParameters,
+                       ITemplateContext? context)
         => Render(template, generationEnvironment, defaultFilename, model, additionalParameters);
 }

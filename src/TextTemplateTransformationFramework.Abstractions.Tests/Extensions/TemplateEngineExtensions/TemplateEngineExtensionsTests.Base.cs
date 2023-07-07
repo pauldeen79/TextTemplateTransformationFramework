@@ -10,5 +10,6 @@ public partial class TemplateEngineExtensionsTests
     protected StringBuilder StringBuilder { get; } = new();
     protected Mock<IMultipleContentBuilder> MultipleContentBuilderMock { get; } = new();
     protected Mock<IMultipleContentBuilderContainer> MultipleContentBuilderContainerMock { get; } = new();
+    protected Mock<ITemplateContext> TemplateContextMock { get; } = new();
     protected const string DefaultFilename = "Default.txt";
 }

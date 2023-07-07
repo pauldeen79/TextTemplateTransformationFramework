@@ -18,7 +18,7 @@ public partial class CodeGenerationEngineTests
             sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
-            TypedTemplateEngineMock.Verify(x => x.Render(It.IsAny<object>(), It.IsAny<IMultipleContentBuilder>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object?>()), Times.Once);
+            TypedTemplateEngineMock.Verify(x => x.Render(It.IsAny<object>(), It.IsAny<IMultipleContentBuilder>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object?>(), It.IsAny<ITemplateContext?>()), Times.Once);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ public partial class CodeGenerationEngineTests
             sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
-            TypedTemplateEngineMock.Verify(x => x.Render(It.IsAny<object>(), It.IsAny<StringBuilder>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object?>()), Times.Once);
+            TypedTemplateEngineMock.Verify(x => x.Render(It.IsAny<object>(), It.IsAny<StringBuilder>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object?>(), It.IsAny<ITemplateContext?>()), Times.Once);
         }
 
         [Fact]
