@@ -4,6 +4,7 @@ internal class SingleContentTemplateRenderer : ITemplateRenderer
 {
     public void Render(object template, object generationEnvironment, string defaultFilename)
     {
+        Guard.IsNotNull(generationEnvironment);
         Guard.IsAssignableToType<StringBuilder>(generationEnvironment);
 
         var builder = (StringBuilder)generationEnvironment;

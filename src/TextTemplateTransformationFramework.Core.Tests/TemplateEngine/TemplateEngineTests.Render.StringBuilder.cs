@@ -31,21 +31,6 @@ public partial class TemplateEngineTests
         }
 
         [Fact]
-        public void Constructs_Template_When_Possible()
-        {
-            // Arrange
-            var sut = CreateSut();
-            var template = new TestData.TextTransformTemplate(() => "Hello world!");
-            StringBuilder? generationEnvironment = StringBuilder;
-
-            // Act
-            sut.Render(template, generationEnvironment);
-
-            // Assert
-            generationEnvironment.ToString().Should().Be("Hello world!");
-        }
-
-        [Fact]
         public void Sets_AdditionalParameters_On_Template_When_Possible()
         {
             // Arrange

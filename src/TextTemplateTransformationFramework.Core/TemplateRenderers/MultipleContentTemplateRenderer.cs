@@ -6,12 +6,14 @@ internal class MultipleContentTemplateRenderer : ITemplateRenderer
 
     public void Render(object template, object generationEnvironment, string defaultFilename)
     {
+        Guard.IsNotNull(generationEnvironment);
+
         IMultipleContentBuilder multipleContentBuilder;
         if (generationEnvironment is IMultipleContentBuilderContainer container)
         {
             // Use TemplateFileManager
             multipleContentBuilder = container.MultipleContentBuilder
-                ?? throw new InvalidOperationException("MultipleContentBuilder property is null");
+                ?? throw new ArgumentException("MultipleContentBuilder property is null", nameof(generationEnvironment));
         }
         else if (generationEnvironment is IMultipleContentBuilder builder)
         {
