@@ -1,6 +1,4 @@
-﻿using static TextTemplateTransformationFramework.Core.Tests.TestData;
-
-namespace TextTemplateTransformationFramework.Core.Tests;
+﻿namespace TextTemplateTransformationFramework.Core.Tests;
 
 public partial class TemplateEngineTests
 {
@@ -37,7 +35,7 @@ public partial class TemplateEngineTests
         {
             // Arrange
             var sut = CreateSut();
-            var template = new TextTransformTemplate(() => "Hello world!");
+            var template = new TestData.TextTransformTemplate(() => "Hello world!");
             IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
             MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
             var contentBuilderMock = new Mock<IContentBuilder>();

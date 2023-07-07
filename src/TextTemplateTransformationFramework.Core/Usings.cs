@@ -11,3 +11,4 @@ global using TextTemplateTransformationFramework.Core.Extensions;
 global using TextTemplateTransformationFramework.Core.Infrastructure;
 global using TextTemplateTransformationFramework.Core.Models;
 global using TextTemplateTransformationFramework.Core.TemplateRenderers;
+global using TextTemplateTransformationFramework.Core.Contracts;

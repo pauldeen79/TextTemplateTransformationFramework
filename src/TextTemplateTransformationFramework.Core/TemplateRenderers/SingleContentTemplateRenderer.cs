@@ -1,9 +1,13 @@
 ﻿namespace TextTemplateTransformationFramework.Core.TemplateRenderers;
 
-internal static class SingleContentTemplateRenderer
+internal class SingleContentTemplateRenderer : ITemplateRenderer
 {
-    internal static void Render(object template, StringBuilder builder)
+    public void Render(object template, object generationEnvironment, string defaultFilename)
     {
+        Guard.IsAssignableToType<StringBuilder>(generationEnvironment);
+
+        var builder = (StringBuilder)generationEnvironment;
+
         if (template is ITemplate typedTemplate)
         {
             typedTemplate.Render(builder);
@@ -25,4 +29,6 @@ internal static class SingleContentTemplateRenderer
             }
         }
     }
+
+    public bool Supports(object generationEnvironment) => generationEnvironment is StringBuilder;
 }

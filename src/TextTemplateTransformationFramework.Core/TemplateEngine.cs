@@ -2,6 +2,18 @@
 
 public class TemplateEngine : ITemplateEngine
 {
+    private readonly ITemplateRenderer[] _templateRenderers;
+
+    public TemplateEngine()
+    {
+        _templateRenderers = new ITemplateRenderer[] { new SingleContentTemplateRenderer(), new MultipleContentTemplateRenderer() };
+    }
+
+    internal TemplateEngine(ITemplateRenderer[] templateRenderers)
+    {
+        _templateRenderers = templateRenderers;
+    }
+
     public void Render(object template,
                        StringBuilder generationEnvironment,
                        string defaultFilename,
@@ -37,25 +49,16 @@ public class TemplateEngine : ITemplateEngine
         TrySetTemplateContextOnTemplate(template, model, context);
         TrySetViewModelOnTemplate<T>(template, CreateSession(model), additionalParameters);
 
-        if (generationEnvironment is StringBuilder stringBuilder)
+        var renderer = _templateRenderers.FirstOrDefault(x => x.Supports(generationEnvironment));
+        if (renderer == null)
         {
-            // This path is for StringBuilder
-            SingleContentTemplateRenderer.Render(template, stringBuilder);
+            throw new ArgumentOutOfRangeException(nameof(generationEnvironment), "Type of GenerationEnvironment is not supported");
         }
-        else if (generationEnvironment is not IMultipleContentBuilder and not IMultipleContentBuilderContainer)
-        {
-            throw new ArgumentOutOfRangeException(nameof(generationEnvironment), "GenerationEnvironment should be of type IMultipleContentBuilder or IMultipleContentBuilderContainer");
-        }
-        else
-        {
-            // This path includes IMultipleContentBuilder and IMultipleContentBuilderContainer (which includes ITemplateFileManager)
-            MultipleContentTemplateRenderer.Render(template, generationEnvironment, defaultFilename);
-        }
+
+        renderer.Render(template, generationEnvironment, defaultFilename);
     }
 
-    private static void TrySetAdditionalParametersOnTemplate<T>(object template,
-                                                                T? model,
-                                                                object? additionalParameters)
+    private static void TrySetAdditionalParametersOnTemplate<T>(object template, T? model, object? additionalParameters)
     {
         if (template is IModelContainer<T> modelContainer)
         {
@@ -98,9 +101,7 @@ public class TemplateEngine : ITemplateEngine
         return session;
     }
 
-    private static void TrySetViewModelOnTemplate<T>(object template,
-                                                  IEnumerable<KeyValuePair<string, object?>> session,
-                                                  object? additionalParameters)
+    private static void TrySetViewModelOnTemplate<T>(object template, IEnumerable<KeyValuePair<string, object?>> session, object? additionalParameters)
     {
         var templateType = template.GetType();
         if (templateType.IsGenericTypeDefinition && templateType.GetGenericTypeDefinition() == typeof(IViewModelContainer<>))
@@ -123,8 +124,7 @@ public class TemplateEngine : ITemplateEngine
         }
     }
 
-    private static void CopySessionVariablesToViewModel<T>(object? viewModelValue,
-                                                           IEnumerable<KeyValuePair<string, object?>> session)
+    private static void CopySessionVariablesToViewModel<T>(object? viewModelValue, IEnumerable<KeyValuePair<string, object?>> session)
     {
         if (viewModelValue is null)
         {
@@ -186,8 +186,7 @@ public class TemplateEngine : ITemplateEngine
         return Convert.ChangeType(parameter.Value, property.PropertyType);
     }
 
-    private static IEnumerable<KeyValuePair<string, object?>> CombineSession(IEnumerable<KeyValuePair<string, object?>> session,
-                                                                             IEnumerable<KeyValuePair<string, object?>> additionalParameters)
+    private static IEnumerable<KeyValuePair<string, object?>> CombineSession(IEnumerable<KeyValuePair<string, object?>> session, IEnumerable<KeyValuePair<string, object?>> additionalParameters)
         => session
             .Where(x => !additionalParameters.Any(y => y.Key == x.Key))
             .Concat(additionalParameters)
