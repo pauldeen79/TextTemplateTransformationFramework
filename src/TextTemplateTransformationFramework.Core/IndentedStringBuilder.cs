@@ -225,23 +225,23 @@ public class IndentedStringBuilder
         return this;
     }
 
-    ///// <summary>
-    /////     Concatenates the members of the given collection, using the specified separator between each member,
-    /////     and then appends the resulting string,
-    ///// </summary>
-    ///// <param name="values">The values to concatenate.</param>
-    ///// <param name="separator">The separator.</param>
-    ///// <returns>This builder so that additional calls can be chained.</returns>
-    //public virtual IndentedStringBuilder AppendJoin(
-    //    IEnumerable<string> values,
-    //    string separator = ", ")
-    //{
-    //    DoIndent();
+    /// <summary>
+    ///     Concatenates the members of the given collection, using the specified separator between each member,
+    ///     and then appends the resulting string,
+    /// </summary>
+    /// <param name="values">The values to concatenate.</param>
+    /// <param name="separator">The separator.</param>
+    /// <returns>This builder so that additional calls can be chained.</returns>
+    public virtual IndentedStringBuilder AppendJoin(
+        IEnumerable<string> values,
+        string separator = ", ")
+    {
+        DoIndent();
 
-    //    _stringBuilder.AppendJoin(values, separator);
+        _stringBuilder.AppendJoin(separator, values);
 
-    //    return this;
-    //}
+        return this;
+    }
 
     /// <summary>
     ///     Concatenates the members of the given collection, using the specified separator between each member,
