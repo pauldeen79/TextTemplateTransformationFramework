@@ -1,14 +1,13 @@
-﻿using System.Reflection.Metadata;
-
-namespace TextTemplateTransformationFramework.Core.TemplateInitializers;
+﻿namespace TextTemplateTransformationFramework.Core.TemplateInitializers;
 
 internal class DefaultTemplateInitializer : ITemplateInitializer
 {
-    public void Initialize<T>(object template, string defaultFilename, T? model, object? additionalParameters, ITemplateContext? context)
+    public void Initialize<T>(object template, string defaultFilename, ITemplateEngine engine, T? model, object? additionalParameters, ITemplateContext? context)
     {
         TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
         context = TrySetTemplateContextOnTemplate(template, model, context);
         TrySetViewModelOnTemplate<T>(template, CreateSession(model), additionalParameters, context!);
+        TrySetTemplateEngineOnTemplate(template, engine);
     }
 
     private static void TrySetAdditionalParametersOnTemplate<T>(object template, T? model, object? additionalParameters)
@@ -82,6 +81,16 @@ internal class DefaultTemplateInitializer : ITemplateInitializer
 
         CopyAdditionalParametersAndModelToViewModel<T>(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
         CopyTemplateContextToViewModel(viewModelValue, context);
+    }
+
+    private static void TrySetTemplateEngineOnTemplate(object template, ITemplateEngine engine)
+    {
+        if (template is not ITemplateEngineContainer templateEngineContainer)
+        {
+            return;
+        }
+
+        templateEngineContainer.TemplateEngine = engine;
     }
 
     private static Dictionary<string, object?> CreateSession(object? model)

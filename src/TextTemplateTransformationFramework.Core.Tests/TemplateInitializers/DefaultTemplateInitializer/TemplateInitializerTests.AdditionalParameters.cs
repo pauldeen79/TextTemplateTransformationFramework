@@ -13,7 +13,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithModel<string>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, model, null, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, model, null, null);
 
             // Assert
             template.Model.Should().Be(model);
@@ -28,7 +28,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.PlainTemplateWithAdditionalParameters();
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters, null);
 
             // Assert
             template.AdditionalParameter.Should().Be(additionalParameters.AdditionalParameter);
@@ -43,7 +43,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.PlainTemplateWithAdditionalParameters();
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters, null);
 
             // Assert
             template.InternalParameter.Should().Be(additionalParameters.InternalParameter);
@@ -58,7 +58,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.PlainTemplateWithAdditionalParameters();
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters, null);
 
             // Assert
             template.AdditionalParameter.Should().Be(additionalParameters.AdditionalParameter);
@@ -74,7 +74,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.PlainTemplateWithModelAndAdditionalParameters<string>();
 
             // Act
-            sut.Initialize(template, DefaultFilename, model, additionalParameters, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, model, additionalParameters, null);
 
             // Assert
             template.Model.Should().Be(model);
@@ -90,7 +90,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.PlainTemplateWithAdditionalParameters();
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters, null);
 
             // Assert
             template.ReadOnlyParameter.Should().Be("Original value");

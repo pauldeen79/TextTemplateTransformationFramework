@@ -13,7 +13,7 @@ public partial class TemplateInitializerTests
             var context = new Core.TemplateContext(template);
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), null, context);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, context);
 
             // Assert
             template.Context.Should().BeSameAs(context);
@@ -27,7 +27,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!");
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), null, context: null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, context: null);
 
             // Assert
             template.Context.Should().NotBeNull();
@@ -46,7 +46,7 @@ public partial class TemplateInitializerTests
             var model = "Hello world!";
 
             // Act
-            sut.Initialize(template, DefaultFilename, model, null, context: null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, model, null, context: null);
 
             // Assert
             template.Context.Should().NotBeNull();

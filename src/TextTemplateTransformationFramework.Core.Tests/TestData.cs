@@ -99,15 +99,16 @@ internal static class TestData
         public void Render(IMultipleContentBuilder builder) => _delegate(builder);
     }
 
-    internal sealed class MultipleContentBuilderTemplateWithTepmlateContext : IMultipleContentBuilderTemplate, ITemplateContextContainer
+    internal sealed class MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine : IMultipleContentBuilderTemplate, ITemplateContextContainer, ITemplateEngineContainer
     {
-        private readonly Action<IMultipleContentBuilder, ITemplateContext> _delegate;
+        private readonly Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine> _delegate;
 
-        public MultipleContentBuilderTemplateWithTepmlateContext(Action<IMultipleContentBuilder, ITemplateContext> @delegate) => _delegate = @delegate;
+        public MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine(Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine> @delegate) => _delegate = @delegate;
 
         public ITemplateContext Context { get; set; } = default!;
+        public ITemplateEngine TemplateEngine { get; set; } = default!;
 
-        public void Render(IMultipleContentBuilder builder) => _delegate(builder, Context);
+        public void Render(IMultipleContentBuilder builder) => _delegate(builder, Context, TemplateEngine);
     }
 
     internal sealed class ViewModel

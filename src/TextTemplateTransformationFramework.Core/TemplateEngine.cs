@@ -48,7 +48,7 @@ public class TemplateEngine : ITemplateEngine
         Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
 
-        _templateInitializer.Initialize(template, defaultFilename, model, additionalParameters, context);
+        _templateInitializer.Initialize(template, defaultFilename, this, model, additionalParameters, context);
 
         var renderer = Array.Find(_templateRenderers, x => x.Supports(generationEnvironment));
         if (renderer is null)

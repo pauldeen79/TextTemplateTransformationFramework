@@ -7,10 +7,10 @@ public class IntegrationTests
     {
         // Arrange
         var sut = new TemplateEngine();
-        var template = new TestData.MultipleContentBuilderTemplateWithTepmlateContext((builder, context) =>
+        var template = new TestData.MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine((builder, context, engine) =>
         {
             var childTemplate = new TestData.PlainTemplateWithTemplateContext(context => "Context IsRootContext: " + context.IsRootContext);
-            sut.Render(childTemplate, builder, context.CreateChildContext(childTemplate));
+            engine.Render(childTemplate, builder, context.CreateChildContext(childTemplate));
 
         });
         var generationEnvironment = new MultipleContentBuilder(new Mock<IFileSystem>().Object, Encoding.UTF8, TestData.BasePath);

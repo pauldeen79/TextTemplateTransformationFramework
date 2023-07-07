@@ -45,7 +45,7 @@ public partial class TemplateEngineTests
             sut.Render(template, generationEnvironment, model, additionalParameters);
 
             // Assert
-            TemplateInitializerMock.Verify(x => x.Initialize(template, string.Empty, model, additionalParameters, null), Times.Once);
+            TemplateInitializerMock.Verify(x => x.Initialize(template, string.Empty, sut, model, additionalParameters, null), Times.Once);
         }
 
         [Fact]

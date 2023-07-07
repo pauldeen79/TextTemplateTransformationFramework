@@ -12,7 +12,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), null, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -28,7 +28,7 @@ public partial class TemplateInitializerTests
             template.ViewModel = viewModel;
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), null, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, null);
 
             // Assert
             template.ViewModel.Should().BeSameAs(viewModel);
@@ -42,7 +42,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.NonConstructableViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), null, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, null);
 
             // Assert
             template.ViewModel.Should().BeNull();
@@ -57,7 +57,7 @@ public partial class TemplateInitializerTests
             var viewModel = new TestData.NonConstructableViewModel("Some value");
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { ViewModel = viewModel }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { ViewModel = viewModel }, null);
 
             // Assert
             template.ViewModel.Should().BeSameAs(viewModel);
@@ -71,7 +71,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { AdditionalParameter = "some value" }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { AdditionalParameter = "some value" }, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -86,7 +86,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { AdditionalParameter = 1 }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { AdditionalParameter = 1 }, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -101,7 +101,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { EnumParameter = (int)TestEnum.SecondValue }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { EnumParameter = (int)TestEnum.SecondValue }, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -116,7 +116,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { AdditionalParameter = (object?)null }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { AdditionalParameter = (object?)null }, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -131,7 +131,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { WrongName = "some value" }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { WrongName = "some value" }, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -146,7 +146,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModel>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), additionalParameters: new { ReadOnlyParameter = "Ignored" }, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { ReadOnlyParameter = "Ignored" }, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -162,7 +162,7 @@ public partial class TemplateInitializerTests
             var model = "Hello world!";
 
             // Act
-            sut.Initialize(template, DefaultFilename, model, null, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, model, null, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
@@ -178,7 +178,7 @@ public partial class TemplateInitializerTests
             var template = new TestData.TemplateWithViewModel<TestData.ViewModelWithTemplateContext>(_ => { });
 
             // Act
-            sut.Initialize(template, DefaultFilename, default(object?), null, null);
+            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, null);
 
             // Assert
             template.ViewModel.Should().NotBeNull();
