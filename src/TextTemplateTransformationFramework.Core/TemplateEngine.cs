@@ -7,32 +7,34 @@ public class TemplateEngine : ITemplateEngine
                        string defaultFilename,
                        object? additionalParameters,
                        ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
+        => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters, context);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
                        string defaultFilename,
                        object? additionalParameters,
                        ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
+        => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters, context);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
                        string defaultFilename,
                        object? additionalParameters,
                        ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters);
+        => Render(template, generationEnvironment, defaultFilename, default(object?), additionalParameters, context);
 
     protected void Render<T>(object template,
                              object generationEnvironment,
                              string defaultFilename,
                              T? model,
-                             object? additionalParameters)
+                             object? additionalParameters,
+                             ITemplateContext? context)
     {
         Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
 
         TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
+        TrySetTemplateContextOnTemplate(template, model, context);
         TrySetViewModelOnTemplate<T>(template, CreateSession(model), additionalParameters);
 
         if (generationEnvironment is StringBuilder stringBuilder)
@@ -100,9 +102,9 @@ public class TemplateEngine : ITemplateEngine
         if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">"))
         {
             var multipleContents = MultipleContentBuilder.FromString(builderResult);
-            foreach (var c in multipleContents.Contents.Select(x => x.Build()))
+            foreach (var content in multipleContents.Contents.Select(x => x.Build()))
             {
-                builder.AddContent(c.Filename, c.SkipWhenFileExists, c.Builder);
+                builder.AddContent(content.Filename, content.SkipWhenFileExists, content.Builder);
             }
         }
         else
@@ -122,11 +124,26 @@ public class TemplateEngine : ITemplateEngine
 
         var properties = template.GetType().GetProperties(Constants.BindingFlags);
 
-        foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey))
+        foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey)) //note: also set ViewModel property here
         {
             var additionalProperty = Array.Find(properties, p => p.Name == item.Key);
             additionalProperty?.SetValue(template, item.Value);
         }
+    }
+
+    private static void TrySetTemplateContextOnTemplate(object template, object? model, ITemplateContext? context)
+    {
+        if (template is not ITemplateContextContainer templateContextContainer)
+        {
+            return;
+        }
+
+        if (context == null)
+        {
+            context = new TemplateContext(template, model);
+        }
+
+        templateContextContainer.Context = context;
     }
 
     private static Dictionary<string, object?> CreateSession(object? model)
@@ -142,20 +159,22 @@ public class TemplateEngine : ITemplateEngine
     }
 
     private static void TrySetViewModelOnTemplate<T>(object template,
-                                                     IEnumerable<KeyValuePair<string, object?>> session,
-                                                     object? additionalParameters)
+                                                  IEnumerable<KeyValuePair<string, object?>> session,
+                                                  object? additionalParameters)
     {
         var templateType = template.GetType();
         if (templateType.IsGenericTypeDefinition && templateType.GetGenericTypeDefinition() == typeof(IViewModelContainer<>))
         {
-            var viewModelValue = templateType.GetProperty(nameof(IViewModelContainer<object>.ViewModel))!.GetValue(template);
+            var viewModelValue = templateType.GetProperty(Constants.ViewModelKey)!.GetValue(template);
             if (viewModelValue is null)
             {
+                // Allow dynamic construction of ViewModel.
+                // Note that if you need injected values, then you have to inject the ViewModel into the template engine using additionalProperties: new { ViewModel = myViewModelInstance }
                 var viewModelType = templateType.GetGenericArguments().FirstOrDefault();
                 if (viewModelType is not null && Array.Exists(viewModelType.GetConstructors(), x => x.GetParameters().Length == 0))
                 {
                     viewModelValue = Activator.CreateInstance(viewModelType);
-                    templateType.GetProperty(nameof(IViewModelContainer<object>.ViewModel))!.SetValue(template, viewModelValue);
+                    templateType.GetProperty(Constants.ViewModelKey)!.SetValue(template, viewModelValue);
                 }
             }
 
@@ -173,7 +192,7 @@ public class TemplateEngine : ITemplateEngine
         }
 
         var viewModelValueType = viewModelValue.GetType();
-        foreach (var kvp in session.Where(kvp => kvp.Key != Constants.ModelKey))
+        foreach (var kvp in session.Where(kvp => kvp.Key != Constants.ModelKey && kvp.Key != Constants.ViewModelKey)) //note: do not copy ViewModel property to ViewModel instance... this would be unlogical
         {
             var prop = viewModelValueType.GetProperty(kvp.Key, Constants.BindingFlags);
             if (prop is not null && prop.GetSetMethod() is null)
@@ -243,7 +262,7 @@ public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
                        string defaultFilename,
                        object? additionalParameters,
                        ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters);
+        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters, context);
 
     public void Render(object template,
                        IMultipleContentBuilder generationEnvironment,
@@ -251,7 +270,7 @@ public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
                        string defaultFilename,
                        object? additionalParameters,
                        ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters);
+        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters, context);
 
     public void Render(object template,
                        IMultipleContentBuilderContainer generationEnvironment,
@@ -259,5 +278,5 @@ public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
                        string defaultFilename,
                        object? additionalParameters,
                        ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters);
+        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters, context);
 }
