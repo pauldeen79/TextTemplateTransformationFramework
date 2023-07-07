@@ -40,6 +40,31 @@ internal class TemplateInitializer : ITemplateInitializer
         templateContextContainer.Context = context;
     }
 
+    private static void TrySetViewModelOnTemplate<T>(object template, IEnumerable<KeyValuePair<string, object?>> session, object? additionalParameters)
+    {
+        var templateType = template.GetType();
+        if (!templateType.GetInterfaces().Any(x => x.FullName?.StartsWith("TextTemplateTransformationFramework.Abstractions.IViewModelContainer") == true))
+        {
+            return;
+        }
+
+        var viewModelValue = templateType.GetProperty(Constants.ViewModelKey)!.GetValue(template);
+        if (viewModelValue is null)
+        {
+            // Allow dynamic construction of ViewModel.
+            // Note that if you need injected values, then you have to inject the ViewModel into the template engine using additionalProperties: new { ViewModel = myViewModelInstance }
+            var viewModelType = templateType.GetGenericArguments().FirstOrDefault();
+            if (viewModelType is not null && Array.Exists(viewModelType.GetConstructors(), x => x.GetParameters().Length == 0))
+            {
+                viewModelValue = Activator.CreateInstance(viewModelType);
+                templateType.GetProperty(Constants.ViewModelKey)!.SetValue(template, viewModelValue);
+            }
+        }
+
+        CopySessionVariablesToViewModel<T>(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
+        CopyTemplateContextToViewModel(viewModelValue, template);
+    }
+
     private static Dictionary<string, object?> CreateSession(object? model)
     {
         var session = new Dictionary<string, object?>();
@@ -50,29 +75,6 @@ internal class TemplateInitializer : ITemplateInitializer
         }
 
         return session;
-    }
-
-    private static void TrySetViewModelOnTemplate<T>(object template, IEnumerable<KeyValuePair<string, object?>> session, object? additionalParameters)
-    {
-        var templateType = template.GetType();
-        if (templateType.IsGenericTypeDefinition && templateType.GetGenericTypeDefinition() == typeof(IViewModelContainer<>))
-        {
-            var viewModelValue = templateType.GetProperty(Constants.ViewModelKey)!.GetValue(template);
-            if (viewModelValue is null)
-            {
-                // Allow dynamic construction of ViewModel.
-                // Note that if you need injected values, then you have to inject the ViewModel into the template engine using additionalProperties: new { ViewModel = myViewModelInstance }
-                var viewModelType = templateType.GetGenericArguments().FirstOrDefault();
-                if (viewModelType is not null && Array.Exists(viewModelType.GetConstructors(), x => x.GetParameters().Length == 0))
-                {
-                    viewModelValue = Activator.CreateInstance(viewModelType);
-                    templateType.GetProperty(Constants.ViewModelKey)!.SetValue(template, viewModelValue);
-                }
-            }
-
-            CopySessionVariablesToViewModel<T>(viewModelValue, CombineSession(session, additionalParameters.ToKeyValuePairs()));
-            CopyTemplateContextToViewModel(viewModelValue, template);
-        }
     }
 
     private static void CopySessionVariablesToViewModel<T>(object? viewModelValue, IEnumerable<KeyValuePair<string, object?>> session)

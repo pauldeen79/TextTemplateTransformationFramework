@@ -55,6 +55,7 @@ internal static class TestData
     internal sealed class PlainTemplateWithAdditionalParameters
     {
         public string AdditionalParameter { get; set; } = "";
+        internal string InternalParameter { get; set; } = "";
 
         public override string ToString() => AdditionalParameter;
     }
@@ -66,6 +67,17 @@ internal static class TestData
         public string AdditionalParameter { get; set; } = "";
 
         public override string ToString() => AdditionalParameter;
+    }
+
+    internal sealed class PlainTemplateWithTemplateContext : ITemplateContextContainer
+    {
+        private readonly Func<string> _delegate;
+
+        public PlainTemplateWithTemplateContext(Func<string> @delegate) => _delegate = @delegate;
+
+        public ITemplateContext Context { get; set; } = default!;
+
+        public override string ToString() => _delegate();
     }
 
     internal sealed class TextTransformTemplate : ITextTransformTemplate
@@ -84,5 +96,23 @@ internal static class TestData
         public MultipleContentBuilderTemplate(Action<IMultipleContentBuilder> @delegate) => _delegate = @delegate;
 
         public void Render(IMultipleContentBuilder builder) => _delegate(builder);
+    }
+
+    internal sealed class ViewModel
+    {
+        public string Property { get; set; } = "";
+    }
+
+    /// <summary>
+    /// Example of a ViewModel class without a public parameterless constructor. This one can't be initialized by the TemplateInitializer.
+    /// </summary>
+    internal sealed class NonConstructableViewModel
+    {
+        public NonConstructableViewModel(string property)
+        {
+            Property = property;
+        }
+
+        public string Property { get; set; }
     }
 }
