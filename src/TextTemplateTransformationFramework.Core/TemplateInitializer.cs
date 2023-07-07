@@ -43,7 +43,7 @@ internal class TemplateInitializer : ITemplateInitializer
     private static void TrySetViewModelOnTemplate<T>(object template, IEnumerable<KeyValuePair<string, object?>> session, object? additionalParameters)
     {
         var templateType = template.GetType();
-        if (!templateType.GetInterfaces().Any(x => x.FullName?.StartsWith("TextTemplateTransformationFramework.Abstractions.IViewModelContainer") == true))
+        if (!Array.Exists(templateType.GetInterfaces(), x => x.FullName?.StartsWith("TextTemplateTransformationFramework.Abstractions.IViewModelContainer") == true))
         {
             return;
         }
