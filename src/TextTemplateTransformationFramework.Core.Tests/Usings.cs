@@ -6,5 +6,6 @@ global using TextTemplateTransformationFramework.Abstractions;
 global using TextTemplateTransformationFramework.Abstractions.Extensions;
 global using TextTemplateTransformationFramework.Abstractions.Infrastructure;
 global using TextTemplateTransformationFramework.Core.Contracts;
+global using TextTemplateTransformationFramework.Core.TemplateInitializers;
 global using TextTemplateTransformationFramework.Core.TemplateRenderers;
 global using Xunit;

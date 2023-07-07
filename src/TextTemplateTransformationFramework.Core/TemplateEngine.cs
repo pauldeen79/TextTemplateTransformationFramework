@@ -7,7 +7,7 @@ public class TemplateEngine : ITemplateEngine
 
     public TemplateEngine()
     {
-        _templateInitializer = new TemplateInitializer();
+        _templateInitializer = new DefaultTemplateInitializer();
         _templateRenderers = new ITemplateRenderer[] { new SingleContentTemplateRenderer(), new MultipleContentTemplateRenderer() };
     }
 

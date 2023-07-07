@@ -1,6 +1,6 @@
-﻿namespace TextTemplateTransformationFramework.Core;
+﻿namespace TextTemplateTransformationFramework.Core.TemplateInitializers;
 
-internal class TemplateInitializer : ITemplateInitializer
+internal class DefaultTemplateInitializer : ITemplateInitializer
 {
     public void Initialize<T>(object template, string defaultFilename, T? model, object? additionalParameters, ITemplateContext? context)
     {
