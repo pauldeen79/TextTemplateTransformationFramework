@@ -5,10 +5,10 @@ public partial class CodeGenerationEngineTests
     public class Constructor : CodeGenerationEngineTests
     {
         [Fact]
-        public void Creates_Instance_Without_Arguments()
+        public void Creates_Instance_When_All_Arguments_Are_Valid()
         {
             // Act & Assert
-            this.Invoking(_ => new CodeGenerationEngine()).Should().NotThrow();
+            this.Invoking(_ => new CodeGenerationEngine(TemplateEngineMock.Object, TemplateFileManagerFactoryMock.Object)).Should().NotThrow();
         }
 
         [Fact]

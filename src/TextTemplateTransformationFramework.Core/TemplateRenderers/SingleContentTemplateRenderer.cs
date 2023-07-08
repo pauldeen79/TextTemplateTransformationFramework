@@ -1,9 +1,10 @@
 ﻿namespace TextTemplateTransformationFramework.Core.TemplateRenderers;
 
-internal class SingleContentTemplateRenderer : ITemplateRenderer
+public class SingleContentTemplateRenderer : ITemplateRenderer
 {
     public void Render(object template, object generationEnvironment, string defaultFilename)
     {
+        Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
         Guard.IsAssignableToType<StringBuilder>(generationEnvironment);
 

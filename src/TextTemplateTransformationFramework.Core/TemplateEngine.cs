@@ -3,16 +3,12 @@
 public class TemplateEngine : ITemplateEngine
 {
     private readonly ITemplateInitializer _templateInitializer;
-    private readonly ITemplateRenderer[] _templateRenderers;
+    private readonly IEnumerable<ITemplateRenderer> _templateRenderers;
 
-    public TemplateEngine()
+    public TemplateEngine(ITemplateInitializer templateInitializer, IEnumerable<ITemplateRenderer> templateRenderers)
     {
-        _templateInitializer = new DefaultTemplateInitializer();
-        _templateRenderers = new ITemplateRenderer[] { new SingleContentTemplateRenderer(), new MultipleContentTemplateRenderer() };
-    }
-
-    internal TemplateEngine(ITemplateInitializer templateInitializer, ITemplateRenderer[] templateRenderers)
-    {
+        Guard.IsNotNull(templateInitializer);
+        Guard.IsNotNull(templateRenderers);
         _templateInitializer = templateInitializer;
         _templateRenderers = templateRenderers;
     }
@@ -50,7 +46,7 @@ public class TemplateEngine : ITemplateEngine
 
         _templateInitializer.Initialize(template, defaultFilename, this, model, additionalParameters, context);
 
-        var renderer = Array.Find(_templateRenderers, x => x.Supports(generationEnvironment));
+        var renderer = _templateRenderers.FirstOrDefault(x => x.Supports(generationEnvironment));
         if (renderer is null)
         {
             throw new ArgumentOutOfRangeException(nameof(generationEnvironment), "Type of GenerationEnvironment is not supported");
@@ -62,11 +58,7 @@ public class TemplateEngine : ITemplateEngine
 
 public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
 {
-    public TemplateEngine()
-    {
-    }
-
-    internal TemplateEngine(ITemplateInitializer templateInitializer, ITemplateRenderer[] templateRenderers)
+    public TemplateEngine(ITemplateInitializer templateInitializer, IEnumerable<ITemplateRenderer> templateRenderers)
         : base(templateInitializer, templateRenderers)
     {
     }

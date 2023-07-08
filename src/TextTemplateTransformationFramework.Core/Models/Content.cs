@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Models;
 
-internal class Content : IContent
+internal sealed class Content : IContent
 {
     public Content(StringBuilder builder, bool skipWhenFileExists, string filename)
     {

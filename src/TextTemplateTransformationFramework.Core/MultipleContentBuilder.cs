@@ -22,7 +22,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
     {
     }
 
-    internal MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath)
+    public MultipleContentBuilder(IFileSystem fileSystem, Encoding encoding, string basePath)
     {
         Guard.IsNotNull(encoding);
         Guard.IsNotNull(basePath);

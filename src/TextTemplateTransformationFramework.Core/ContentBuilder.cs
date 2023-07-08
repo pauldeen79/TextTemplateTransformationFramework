@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Core;
 
-internal class ContentBuilder : IContentBuilder
+internal sealed class ContentBuilder : IContentBuilder
 {
     public ContentBuilder() : this(new StringBuilder())
     {

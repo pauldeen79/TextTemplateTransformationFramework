@@ -1,7 +1,7 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Models;
 
 [DataContract(Name = "Contents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
-internal class Contents
+internal sealed class Contents
 {
     [DataMember]
     public string Filename { get; set; } = "";

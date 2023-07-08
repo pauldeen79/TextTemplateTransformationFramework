@@ -31,22 +31,6 @@ public partial class TemplateEngineTests
         }
 
         [Fact]
-        public void Constructs_And_Sets_Model_On_Template_When_Possible()
-        {
-            // Arrange
-            var sut = CreateTypedSut();
-            var template = new TestData.TemplateWithModel<string>(_ => { });
-            IMultipleContentBuilder? generationEnvironment = MultipleContentBuilderMock.Object;
-
-            // Act
-            sut.Render(template, generationEnvironment, model: "Hello world");
-
-            // Assert
-            template.Model.Should().NotBeNull();
-            template.Model.Should().Be("Hello world");
-        }
-
-        [Fact]
         public void Initializes_Template_Correctly()
         {
             // Arrange

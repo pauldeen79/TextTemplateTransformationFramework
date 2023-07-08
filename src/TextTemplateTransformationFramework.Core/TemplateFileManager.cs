@@ -14,8 +14,9 @@ public class TemplateFileManager : ITemplateFileManager
     {
     }
 
-    internal TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
+    public TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
     {
+        Guard.IsNotNull(multipleContentBuilder);
         Guard.IsNotNull(stringBuilder);
 
         MultipleContentBuilder = multipleContentBuilder;

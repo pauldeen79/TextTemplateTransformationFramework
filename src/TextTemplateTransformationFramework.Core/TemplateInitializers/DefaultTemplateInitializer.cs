@@ -1,9 +1,13 @@
 ﻿namespace TextTemplateTransformationFramework.Core.TemplateInitializers;
 
-internal class DefaultTemplateInitializer : ITemplateInitializer
+public class DefaultTemplateInitializer : ITemplateInitializer
 {
     public void Initialize<T>(object template, string defaultFilename, ITemplateEngine engine, T? model, object? additionalParameters, ITemplateContext? context)
     {
+        Guard.IsNotNull(template);
+        Guard.IsNotNull(defaultFilename);
+        Guard.IsNotNull(engine);
+
         TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
         context = TrySetTemplateContextOnTemplate(template, model, context);
         TrySetViewModelOnTemplate<T>(template, CreateSession(model), additionalParameters, context!);

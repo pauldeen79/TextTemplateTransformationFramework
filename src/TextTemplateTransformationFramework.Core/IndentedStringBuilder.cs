@@ -317,7 +317,7 @@ public class IndentedStringBuilder
     /// </summary>
     /// <returns>The built string.</returns>
     public override string ToString()
-    => _stringBuilder.ToString();
+        => _stringBuilder.ToString();
 
     public static implicit operator StringBuilder(IndentedStringBuilder instance)
     {

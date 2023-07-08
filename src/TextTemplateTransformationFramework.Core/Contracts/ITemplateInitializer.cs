@@ -1,6 +1,6 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Contracts;
 
-internal interface ITemplateInitializer
+public interface ITemplateInitializer
 {
     void Initialize<T>(object template,
                        string defaultFilename,

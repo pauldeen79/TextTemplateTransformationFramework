@@ -51,13 +51,8 @@ public abstract class CodeGenerationEngineBase
 
 public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEngine
 {
-    public CodeGenerationEngine()
-        : this(new TemplateEngine(), new TemplateFileManagerFactory())
-    {
-    }
-
-    internal CodeGenerationEngine(ITemplateEngine templateEngine,
-                                  ITemplateFileManagerFactory templateFileManagerFactory)
+    public CodeGenerationEngine(ITemplateEngine templateEngine,
+                                ITemplateFileManagerFactory templateFileManagerFactory)
         : base(templateFileManagerFactory)
     {
         Guard.IsNotNull(templateEngine);
@@ -93,13 +88,8 @@ public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEng
 
 public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGenerationEngine<T>
 {
-    public CodeGenerationEngine()
-        : this(new TemplateEngine<T>(), new TemplateFileManagerFactory())
-    {
-    }
-
-    internal CodeGenerationEngine(ITemplateEngine<T> templateEngine,
-                                  ITemplateFileManagerFactory templateFileManagerFactory)
+    public CodeGenerationEngine(ITemplateEngine<T> templateEngine,
+                                ITemplateFileManagerFactory templateFileManagerFactory)
         : base(templateFileManagerFactory)
     {
         Guard.IsNotNull(templateEngine);

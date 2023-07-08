@@ -2,6 +2,6 @@
 
 public partial class SingleContentTemplateRendererTests
 {
-    internal SingleContentTemplateRenderer CreateSut() => new();
+    protected SingleContentTemplateRenderer CreateSut() => new();
     protected const string DefaultFilename = "MyFile.txt";
 }

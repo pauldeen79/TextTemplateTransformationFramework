@@ -2,6 +2,6 @@
 
 public partial class MultipleContentTemplateRendererTests
 {
-    internal MultipleContentTemplateRenderer CreateSut() => new();
+    protected MultipleContentTemplateRenderer CreateSut() => new();
     protected const string DefaultFilename = "MyFile.txt";
 }

@@ -1,11 +1,13 @@
 ﻿global using System.Reflection;
 global using System.Text;
 global using FluentAssertions;
+global using Microsoft.Extensions.DependencyInjection;
 global using Moq;
 global using TextTemplateTransformationFramework.Abstractions;
 global using TextTemplateTransformationFramework.Abstractions.Extensions;
 global using TextTemplateTransformationFramework.Abstractions.Infrastructure;
 global using TextTemplateTransformationFramework.Core.Contracts;
+global using TextTemplateTransformationFramework.Core.Extensions;
 global using TextTemplateTransformationFramework.Core.TemplateInitializers;
 global using TextTemplateTransformationFramework.Core.TemplateRenderers;
 global using Xunit;

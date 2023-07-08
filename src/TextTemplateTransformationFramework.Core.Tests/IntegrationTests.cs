@@ -6,10 +6,6 @@ public class IntegrationTests
     public void Can_Render_MultipleContentBuilderTemplate_With_ChildTemplate_And_TemplateContext()
     {
         // Arrange
-        var sut = new TemplateEngine();
-
-        // For now, we setup the child template creators using a mock implementation.
-        // When using DI, you have to register your own template creators as IChildTemplateCreator, and the child template factory as IChildTemplateFactory, and then resolve the IChildTemplateFactory.
         var childTemplateCreatorMock = new Mock<IChildTemplateCreator>();
         childTemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>()))
                                 .Returns<string>(name => name == "MyChildTemplate");
@@ -17,14 +13,20 @@ public class IntegrationTests
                                 .Returns<string>(name => name == "MyChildTemplate"
                                     ? new TestData.PlainTemplateWithTemplateContext(context => "Context IsRootContext: " + context.IsRootContext)
                                     : throw new NotSupportedException("What are you doing?!"));
+        using var provider = new ServiceCollection()
+            .AddTemplateFramework()
+            .AddSingleton(_ => childTemplateCreatorMock.Object)
+            .BuildServiceProvider();
+        var sut = provider.GetRequiredService<ITemplateEngine>();
 
-        var childTemplateFactory = new ChildTemplateFactory(new[] { childTemplateCreatorMock.Object });
+        var childTemplateFactory = provider.GetRequiredService<IChildTemplateFactory>();
         var template = new TestData.MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine(childTemplateFactory, (builder, context, engine, factory) =>
         {
             var childTemplate = factory.CreateByName("MyChildTemplate");
             engine.Render(childTemplate, builder, context.CreateChildContext(childTemplate));
         });
-        var generationEnvironment = new MultipleContentBuilder(new Mock<IFileSystem>().Object, Encoding.UTF8, TestData.BasePath);
+        var fileSystemMock = new Mock<IFileSystem>();
+        var generationEnvironment = new MultipleContentBuilder(fileSystemMock.Object, Encoding.UTF8, TestData.BasePath);
 
         // Act
         sut.Render(template, generationEnvironment);

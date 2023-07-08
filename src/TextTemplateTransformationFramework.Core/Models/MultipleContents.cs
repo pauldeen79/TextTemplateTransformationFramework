@@ -1,7 +1,7 @@
 ﻿namespace TextTemplateTransformationFramework.Core.Models;
 
 [DataContract(Name = "MultipleContents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
-internal class MultipleContents
+internal sealed class MultipleContents
 {
     [DataMember]
     public string BasePath { get; set; } = "";

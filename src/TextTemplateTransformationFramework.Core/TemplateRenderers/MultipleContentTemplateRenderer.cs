@@ -1,12 +1,14 @@
 ﻿namespace TextTemplateTransformationFramework.Core.TemplateRenderers;
 
-internal class MultipleContentTemplateRenderer : ITemplateRenderer
+public class MultipleContentTemplateRenderer : ITemplateRenderer
 {
     public bool Supports(object generationEnvironment) => generationEnvironment is IMultipleContentBuilder or IMultipleContentBuilderContainer;
 
     public void Render(object template, object generationEnvironment, string defaultFilename)
     {
+        Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
+        Guard.IsNotNull(defaultFilename);
 
         IMultipleContentBuilder multipleContentBuilder;
         if (generationEnvironment is IMultipleContentBuilderContainer container)
