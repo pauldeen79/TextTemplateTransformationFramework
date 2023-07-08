@@ -14,7 +14,7 @@ public class ChildTemplateFactory : IChildTemplateFactory
     public object CreateByModel(object? model)
     {
         var creator = _childTemplateCreators.FirstOrDefault(x => x.SupportsModel(model));
-        if (creator == null)
+        if (creator is null)
         {
             throw new NotSupportedException($"Model of type {model?.GetType()} is not supported");
         }
@@ -27,7 +27,7 @@ public class ChildTemplateFactory : IChildTemplateFactory
         Guard.IsNotNull(name);
 
         var creator = _childTemplateCreators.FirstOrDefault(x => x.SupportsName(name));
-        if (creator == null)
+        if (creator is null)
         {
             throw new NotSupportedException($"Name {name} is not supported");
         }

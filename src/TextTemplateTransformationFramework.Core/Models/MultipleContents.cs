@@ -1,6 +1,6 @@
 ﻿namespace TemplateFramework.Core.Models;
 
-[DataContract(Name = "MultipleContents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
+[DataContract(Name = "MultipleContents", Namespace = "http://schemas.datacontract.org/2004/07/TemplateFramework")]
 internal sealed class MultipleContents
 {
     [DataMember]
@@ -9,5 +9,5 @@ internal sealed class MultipleContents
     [DataMember]
     public List<Contents> Contents { get; set; } = new();
 
-    public const string XmlStringFragment = @"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformation"">";
+    public const string XmlStringFragment = @"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">";
 }

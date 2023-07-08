@@ -1,6 +1,6 @@
 ﻿namespace TemplateFramework.Core.Models;
 
-[DataContract(Name = "Contents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
+[DataContract(Name = "Contents", Namespace = "http://schemas.datacontract.org/2004/07/TemplateFramework")]
 internal sealed class Contents
 {
     [DataMember]

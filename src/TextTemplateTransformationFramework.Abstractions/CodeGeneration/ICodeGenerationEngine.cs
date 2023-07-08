@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Abstractions;
+﻿namespace TemplateFramework.Abstractions.CodeGeneration;
 
 public interface ICodeGenerationEngine
 {

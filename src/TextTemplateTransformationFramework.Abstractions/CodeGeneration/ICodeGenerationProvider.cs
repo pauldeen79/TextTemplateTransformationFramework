@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Abstractions;
+﻿namespace TemplateFramework.Abstractions.CodeGeneration;
 
 public interface ICodeGenerationProvider
 {
@@ -12,7 +12,7 @@ public interface ICodeGenerationProvider
 
     void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath);
     object CreateGenerator();
-    object CreateAdditionalParameters();
+    object? CreateAdditionalParameters();
 }
 
 public interface ICodeGenerationProvider<out T> : ICodeGenerationProvider

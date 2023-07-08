@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Core.Tests;
+﻿namespace TemplateFramework.Core.Tests.CodeGeneration;
 
 public partial class CodeGenerationEngineTests
 {

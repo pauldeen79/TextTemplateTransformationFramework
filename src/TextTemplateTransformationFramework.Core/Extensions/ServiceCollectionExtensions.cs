@@ -1,4 +1,6 @@
-﻿namespace TemplateFramework.Core.Extensions;
+﻿using TemplateFramework.Core.CodeGeneration;
+
+namespace TemplateFramework.Core.Extensions;
 
 public static class ServiceCollectionExtensions
 {

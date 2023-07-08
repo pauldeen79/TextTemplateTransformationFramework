@@ -1,4 +1,6 @@
-﻿namespace TemplateFramework.Core.Tests;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace TemplateFramework.Core.Tests;
 
 internal static class TestData
 {
@@ -146,5 +148,40 @@ internal static class TestData
         }
 
         public string Property { get; set; }
+    }
+
+    internal sealed class MyGeneratorProvider : ICodeGenerationProvider
+    {
+        public bool GenerateMultipleFiles { get; private set; }
+
+        public bool SkipWhenFileExists { get; private set; }
+
+#pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
+        public string BasePath { get; private set; }
+#pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
+
+        public string Path { get; }
+
+        public string DefaultFilename => "MyFile.txt";
+
+        public bool RecurseOnDeleteGeneratedFiles { get; }
+
+        public string LastGeneratedFilesFilename { get; }
+
+        public object? CreateAdditionalParameters() => null;
+
+        public object CreateGenerator() => new MyGenerator();
+
+        public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath)
+        {
+            GenerateMultipleFiles = generateMultipleFiles;
+            SkipWhenFileExists = skipWhenFileExists;
+            BasePath = basePath;
+        }
+    }
+
+    internal sealed class MyGenerator
+    {
+        public override string ToString() => "Here is code from MyGenerator";
     }
 }

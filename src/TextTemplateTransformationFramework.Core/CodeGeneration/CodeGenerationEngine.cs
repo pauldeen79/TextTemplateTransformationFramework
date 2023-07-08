@@ -1,9 +1,9 @@
-﻿namespace TemplateFramework.Core;
+﻿namespace TemplateFramework.Core.CodeGeneration;
 
 public abstract class CodeGenerationEngineBase
 {
     private readonly ITemplateFileManagerFactory _templateFileManagerFactory;
-    
+
     protected CodeGenerationEngineBase(ITemplateFileManagerFactory templateFileManagerFactory)
     {
         Guard.IsNotNull(templateFileManagerFactory);
@@ -11,7 +11,7 @@ public abstract class CodeGenerationEngineBase
         _templateFileManagerFactory = templateFileManagerFactory;
     }
 
-    protected (object generator, bool shouldSave, bool shouldUseLastGeneratedFiles, object additionalParameters, ITemplateFileManager templateFileManager) Initialize(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
+    protected (object generator, bool shouldSave, bool shouldUseLastGeneratedFiles, object? additionalParameters, ITemplateFileManager templateFileManager) Initialize(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
     {
         Guard.IsNotNull(provider);
         Guard.IsNotNull(settings);

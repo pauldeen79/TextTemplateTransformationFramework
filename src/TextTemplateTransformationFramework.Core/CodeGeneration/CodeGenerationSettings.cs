@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Core;
+﻿namespace TemplateFramework.Core.CodeGeneration;
 
 public class CodeGenerationSettings : ICodeGenerationSettings
 {
