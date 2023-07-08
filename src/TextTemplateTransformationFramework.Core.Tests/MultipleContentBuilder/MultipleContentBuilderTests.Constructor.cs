@@ -45,6 +45,14 @@ public partial class MultipleContentBuilderTests
         }
 
         [Fact]
+        public void Throws_On_Null_FileSystem()
+        {
+            // Act & Assert
+            this.Invoking(_ => new MultipleContentBuilder(fileSystem: null!, Encoding.UTF8, TestData.BasePath))
+                .Should().Throw<ArgumentNullException>().WithParameterName("fileSystem");
+        }
+
+        [Fact]
         public void Throws_On_Null_Encoding()
         {
             // Act & Assert

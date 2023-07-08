@@ -13,6 +13,14 @@ public partial class TemplateFileManagerTests
         }
 
         [Fact]
+        public void Throws_On_Null_MultipleContentBuilder()
+        {
+            // Act & Assert
+            this.Invoking(_ => new TemplateFileManager(multipleContentBuilder: null!, new StringBuilder()))
+                .Should().Throw<ArgumentNullException>().WithParameterName("multipleContentBuilder");
+        }
+
+        [Fact]
         public void Creates_Instance_With_Empty_BasePath()
         {
             // Arrange

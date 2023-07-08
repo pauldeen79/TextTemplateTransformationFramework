@@ -16,6 +16,17 @@ public partial class SingleContentTemplateRendererTests
         }
 
         [Fact]
+        public void Throws_When_Template_Is_Null()
+        {
+            // Arrange
+            var sut = CreateSut();
+
+            // Act & Assert
+            sut.Invoking(x => x.Render(template: null!, new StringBuilder(), DefaultFilename))
+               .Should().Throw<ArgumentException>().WithParameterName("template");
+        }
+
+        [Fact]
         public void Throws_When_GenerationEnvironment_Is_Null()
         {
             // Arrange
