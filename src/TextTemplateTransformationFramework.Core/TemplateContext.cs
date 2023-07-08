@@ -2,27 +2,33 @@
 
 public class TemplateContext : ITemplateContext
 {
-    public TemplateContext(object template) : this(template, null, null, null, null, null)
+    public TemplateContext(object template)
+        : this(template, null, null, null, null, null)
     {
     }
 
-    public TemplateContext(object template, ITemplateContext parentContext) : this(template, null, null, parentContext, null, null)
+    public TemplateContext(object template, ITemplateContext parentContext)
+        : this(template, null, null, parentContext, null, null)
     {
     }
 
-    public TemplateContext(object template, object? model) : this(template, model, null, null, null, null)
+    public TemplateContext(object template, object? model)
+        : this(template, model, null, null, null, null)
     {
     }
 
-    public TemplateContext(object template, object? model, ITemplateContext parentContext) : this(template, model, null, parentContext, null, null)
+    public TemplateContext(object template, object? model, ITemplateContext parentContext)
+        : this(template, model, null, parentContext, null, null)
     {
     }
 
-    public TemplateContext(object template, object? model, object? viewModel) : this(template, model, viewModel, null, null, null)
+    public TemplateContext(object template, object? model, object? viewModel)
+        : this(template, model, viewModel, null, null, null)
     {
     }
 
-    public TemplateContext(object template, object? model, object? viewModel, ITemplateContext parentContext) : this(template, model, viewModel, parentContext, null, null)
+    public TemplateContext(object template, object? model, object? viewModel, ITemplateContext parentContext)
+        : this(template, model, viewModel, parentContext, null, null)
     {
     }
 
@@ -30,7 +36,8 @@ public class TemplateContext : ITemplateContext
                            object? model,
                            ITemplateContext? parentContext,
                            int? iterationNumber,
-                           int? iterationCount) : this(template, model, null, parentContext, iterationNumber, iterationCount)
+                           int? iterationCount)
+        : this(template, model, null, parentContext, iterationNumber, iterationCount)
     {
     }
 

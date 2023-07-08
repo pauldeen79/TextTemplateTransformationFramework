@@ -3,14 +3,12 @@
 public abstract class CodeGenerationEngineBase
 {
     private readonly ITemplateFileManagerFactory _templateFileManagerFactory;
-    private readonly string _basePath;
-
-    protected CodeGenerationEngineBase(ITemplateFileManagerFactory templateFileManagerFactory, string basePath = "")
+    
+    protected CodeGenerationEngineBase(ITemplateFileManagerFactory templateFileManagerFactory)
     {
-        Guard.IsNotNull(basePath);
+        Guard.IsNotNull(templateFileManagerFactory);
 
         _templateFileManagerFactory = templateFileManagerFactory;
-        _basePath = basePath;
     }
 
     protected (object generator, bool shouldSave, bool shouldUseLastGeneratedFiles, object additionalParameters, ITemplateFileManager templateFileManager) Initialize(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
@@ -26,7 +24,7 @@ public abstract class CodeGenerationEngineBase
             !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun,
             provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFilename),
             provider.CreateAdditionalParameters(),
-            _templateFileManagerFactory.Create(_basePath)
+            _templateFileManagerFactory.Create(settings.BasePath)
         );
     }
 
@@ -54,19 +52,13 @@ public abstract class CodeGenerationEngineBase
 public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEngine
 {
     public CodeGenerationEngine()
-        : this(new TemplateEngine(), new TemplateFileManagerFactory(), string.Empty)
-    {
-    }
-
-    public CodeGenerationEngine(string basePath)
-        : this(new TemplateEngine(), new TemplateFileManagerFactory(), basePath)
+        : this(new TemplateEngine(), new TemplateFileManagerFactory())
     {
     }
 
     internal CodeGenerationEngine(ITemplateEngine templateEngine,
-                                  ITemplateFileManagerFactory templateFileManagerFactory,
-                                  string basePath)
-        : base(templateFileManagerFactory, basePath)
+                                  ITemplateFileManagerFactory templateFileManagerFactory)
+        : base(templateFileManagerFactory)
     {
         Guard.IsNotNull(templateEngine);
 
@@ -101,15 +93,14 @@ public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEng
 
 public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGenerationEngine<T>
 {
-    public CodeGenerationEngine(string basePath = "")
-        : this(new TemplateEngine<T>(), new TemplateFileManagerFactory(), basePath)
+    public CodeGenerationEngine()
+        : this(new TemplateEngine<T>(), new TemplateFileManagerFactory())
     {
     }
 
     internal CodeGenerationEngine(ITemplateEngine<T> templateEngine,
-                                  ITemplateFileManagerFactory templateFileManagerFactory,
-                                  string basePath = "")
-        : base(templateFileManagerFactory, basePath)
+                                  ITemplateFileManagerFactory templateFileManagerFactory)
+        : base(templateFileManagerFactory)
     {
         Guard.IsNotNull(templateEngine);
 

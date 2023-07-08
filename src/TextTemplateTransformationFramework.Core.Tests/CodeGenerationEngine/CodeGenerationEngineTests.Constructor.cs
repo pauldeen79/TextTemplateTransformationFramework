@@ -12,26 +12,11 @@ public partial class CodeGenerationEngineTests
         }
 
         [Fact]
-        public void Creates_Instance_With_BasePath_Argument()
-        {
-            // Act & Assert
-            this.Invoking(_ => new CodeGenerationEngine(TestData.BasePath)).Should().NotThrow();
-        }
-
-        [Fact]
         public void Throws_On_Null_TemplateEngine()
         {
             // Act & Assert
-            this.Invoking(_ => new CodeGenerationEngine(templateEngine: null!, TemplateFileManagerFactoryMock.Object, basePath: string.Empty))
+            this.Invoking(_ => new CodeGenerationEngine(templateEngine: null!, TemplateFileManagerFactoryMock.Object))
                 .Should().Throw<ArgumentNullException>().WithParameterName("templateEngine");
-        }
-
-        [Fact]
-        public void Throws_On_Null_BasePath()
-        {
-            // Act & Assert
-            this.Invoking(_ => new CodeGenerationEngine(templateEngine: TemplateEngineMock.Object, TemplateFileManagerFactoryMock.Object, basePath: null!))
-                .Should().Throw<ArgumentNullException>().WithParameterName("basePath");
         }
     }
 }

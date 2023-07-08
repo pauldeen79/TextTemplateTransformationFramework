@@ -4,15 +4,13 @@ public partial class CodeGenerationEngineTests
 {
     public class Generate : CodeGenerationEngineTests
     {
-        private Mock<ICodeGenerationProvider> CodeGenerationProviderMock { get; } = new();
-        private Mock<ICodeGenerationSettings> CodeGenerationSettingsMock { get; } = new();
-
         [Fact]
         public void Generates_Multiple_Files_When_Provider_Wants_This()
         {
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
+            CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
@@ -29,6 +27,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(false);
+            CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
@@ -44,6 +43,7 @@ public partial class CodeGenerationEngineTests
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
+            CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);

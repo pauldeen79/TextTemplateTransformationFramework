@@ -66,7 +66,8 @@ public class TemplateEngine<T> : TemplateEngine, ITemplateEngine<T>
     {
     }
 
-    internal TemplateEngine(ITemplateInitializer templateInitializer, ITemplateRenderer[] templateRenderers) : base(templateInitializer, templateRenderers)
+    internal TemplateEngine(ITemplateInitializer templateInitializer, ITemplateRenderer[] templateRenderers)
+        : base(templateInitializer, templateRenderers)
     {
     }
 
