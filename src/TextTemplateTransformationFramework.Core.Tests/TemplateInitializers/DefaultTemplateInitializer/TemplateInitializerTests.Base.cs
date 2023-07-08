@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests.TemplateInitializers;
+﻿namespace TemplateFramework.Core.Tests.TemplateInitializers;
 
 public partial class TemplateInitializerTests
 {

@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions;
+﻿namespace TemplateFramework.Abstractions;
 
 public interface ITemplateFileManagerFactory
 {

@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests;
+﻿namespace TemplateFramework.Core.Tests;
 
 internal static class TestData
 {

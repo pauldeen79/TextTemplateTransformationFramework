@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Models;
+﻿namespace TemplateFramework.Core.Models;
 
 internal sealed class Content : IContent
 {

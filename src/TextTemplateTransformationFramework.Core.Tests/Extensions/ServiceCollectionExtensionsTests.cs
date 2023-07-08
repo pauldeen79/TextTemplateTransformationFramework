@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests.Extensions;
+﻿namespace TemplateFramework.Core.Tests.Extensions;
 
 public class ServiceCollectionExtensionsTests
 {

@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Models;
+﻿namespace TemplateFramework.Core.Models;
 
 [DataContract(Name = "Contents", Namespace = "http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework")]
 internal sealed class Contents

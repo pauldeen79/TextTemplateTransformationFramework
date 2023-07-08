@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Infrastructure;
+﻿namespace TemplateFramework.Core.Infrastructure;
 
 [ExcludeFromCodeCoverage]
 public class FileSystem : IFileSystem

@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests.TemplateRenderers;
+﻿namespace TemplateFramework.Core.Tests.TemplateRenderers;
 
 public partial class SingleContentTemplateRendererTests
 {

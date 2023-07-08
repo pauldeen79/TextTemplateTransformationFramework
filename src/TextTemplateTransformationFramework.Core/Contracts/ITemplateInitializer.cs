@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Contracts;
+﻿namespace TemplateFramework.Core.Contracts;
 
 public interface ITemplateInitializer
 {

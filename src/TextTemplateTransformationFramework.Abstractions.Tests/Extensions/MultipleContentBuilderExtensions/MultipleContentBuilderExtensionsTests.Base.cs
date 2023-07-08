@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions.Tests.Extensions;
+﻿namespace TemplateFramework.Abstractions.Tests.Extensions;
 
 public partial class MultipleContentBuilderExtensionsTests
 {

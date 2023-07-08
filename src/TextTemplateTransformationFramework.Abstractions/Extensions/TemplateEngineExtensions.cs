@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Abstractions.Extensions;
+﻿namespace TemplateFramework.Abstractions.Extensions;
 
 public static class TemplateEngineExtensions
 {

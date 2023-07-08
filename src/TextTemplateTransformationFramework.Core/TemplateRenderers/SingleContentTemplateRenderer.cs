@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.TemplateRenderers;
+﻿namespace TemplateFramework.Core.TemplateRenderers;
 
 public class SingleContentTemplateRenderer : ITemplateRenderer
 {

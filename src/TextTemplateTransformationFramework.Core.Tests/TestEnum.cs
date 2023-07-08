@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Tests;
+﻿namespace TemplateFramework.Core.Tests;
 
 #pragma warning disable S2344 // Enumeration type names should not have "Flags" or "Enum" suffixes
 internal enum TestEnum

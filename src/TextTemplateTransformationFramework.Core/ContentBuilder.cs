@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core;
+﻿namespace TemplateFramework.Core;
 
 internal sealed class ContentBuilder : IContentBuilder
 {

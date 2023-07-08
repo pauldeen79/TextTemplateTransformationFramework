@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core;
+﻿namespace TemplateFramework.Core;
 
 public class TemplateEngine : ITemplateEngine
 {

@@ -38,15 +38,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Runtime.Tests", "src\Runtime.Tests\TextTemplateTransformationFramework.Runtime.Tests.csproj", "{AB53CD8C-800F-4528-AF6B-4A39B46DAB2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Abstractions", "src\TextTemplateTransformationFramework.Abstractions\TextTemplateTransformationFramework.Abstractions.csproj", "{5A8581E0-086D-4F09-9592-DF6CA9F0479D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateFramework.Abstractions", "src\TextTemplateTransformationFramework.Abstractions\TemplateFramework.Abstractions.csproj", "{5A8581E0-086D-4F09-9592-DF6CA9F0479D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deprecated", "Deprecated", "{DD693416-7AF0-453E-994E-B16C6F35ACC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Core", "src\TextTemplateTransformationFramework.Core\TextTemplateTransformationFramework.Core.csproj", "{82125523-90F5-4230-AD52-92E232818DC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateFramework.Core", "src\TextTemplateTransformationFramework.Core\TemplateFramework.Core.csproj", "{82125523-90F5-4230-AD52-92E232818DC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextTemplateTransformationFramework.Core.Tests", "src\TextTemplateTransformationFramework.Core.Tests\TextTemplateTransformationFramework.Core.Tests.csproj", "{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateFramework.Core.Tests", "src\TextTemplateTransformationFramework.Core.Tests\TemplateFramework.Core.Tests.csproj", "{A791BDF6-0B5B-45A9-8E3A-3AFACAB78A97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextTemplateTransformationFramework.Abstractions.Tests", "src\TextTemplateTransformationFramework.Abstractions.Tests\TextTemplateTransformationFramework.Abstractions.Tests.csproj", "{0894A4FC-2E8D-48D0-9F14-8102722FC22C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateFramework.Abstractions.Tests", "src\TextTemplateTransformationFramework.Abstractions.Tests\TemplateFramework.Abstractions.Tests.csproj", "{0894A4FC-2E8D-48D0-9F14-8102722FC22C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

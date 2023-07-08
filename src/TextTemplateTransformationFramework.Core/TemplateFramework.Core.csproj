@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>11.0</LangVersion>
-    <PackageId>pauldeen79.TextTemplateTransformationFramework.Core</PackageId>
+    <PackageId>pauldeen79.TemplateFramework.Core</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
     <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TextTemplateTransformationFramework.Abstractions\TextTemplateTransformationFramework.Abstractions.csproj" />
+    <ProjectReference Include="..\TextTemplateTransformationFramework.Abstractions\TemplateFramework.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

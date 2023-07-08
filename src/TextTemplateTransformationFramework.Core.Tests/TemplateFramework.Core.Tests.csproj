@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TextTemplateTransformationFramework.Core\TextTemplateTransformationFramework.Core.csproj" />
+    <ProjectReference Include="..\TextTemplateTransformationFramework.Core\TemplateFramework.Core.csproj" />
   </ItemGroup>
 
 </Project>

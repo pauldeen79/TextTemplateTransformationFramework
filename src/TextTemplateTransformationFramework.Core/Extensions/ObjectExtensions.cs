@@ -1,4 +1,4 @@
-﻿namespace TextTemplateTransformationFramework.Core.Extensions;
+﻿namespace TemplateFramework.Core.Extensions;
 
 public static class ObjectExtensions
 {
