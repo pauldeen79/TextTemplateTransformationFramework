@@ -33,7 +33,7 @@ public partial class MultipleContentBuilderTests
         {
             // Arrange
             const string xml = @"<?xml version=""1.0"" encoding=""utf-16""?>
-<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TextTemplateTransformationFramework"">
+<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">
   <BasePath></BasePath>
   <Contents>
     <Contents>
