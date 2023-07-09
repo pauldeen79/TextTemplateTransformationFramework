@@ -31,7 +31,7 @@ public partial class MultipleContentBuilderTests
             var sut = new MultipleContentBuilder(Encoding.Latin1);
 
             // Assert
-            sut.GetType().GetField("_encoding", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(sut).Should().BeEquivalentTo(Encoding.Latin1);
+            sut.Encoding.Should().BeEquivalentTo(Encoding.Latin1);
         }
 
         [Fact]
@@ -41,6 +41,7 @@ public partial class MultipleContentBuilderTests
             var sut = new MultipleContentBuilder(Encoding.UTF32, TestData.BasePath);
 
             // Assert
+            sut.Encoding.Should().Be(Encoding.UTF32);
             sut.BasePath.Should().Be(TestData.BasePath);
         }
 

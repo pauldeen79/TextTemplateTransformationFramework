@@ -3,7 +3,6 @@
 public class MultipleContentBuilder : IMultipleContentBuilder
 {
     private readonly IFileSystem _fileSystem;
-    private readonly Encoding _encoding;
     private readonly List<IContentBuilder> _contentList;
 
     public MultipleContentBuilder() : this(new FileSystem(), Encoding.UTF8, string.Empty)
@@ -29,12 +28,14 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         Guard.IsNotNull(basePath);
         
         _fileSystem = fileSystem;
-        _encoding = encoding;
         _contentList = new List<IContentBuilder>();
+        Encoding = encoding;
         BasePath = basePath;
     }
 
     public string BasePath { get; set; }
+
+    public Encoding Encoding { get; set; }
 
     public void SaveAll()
     {
@@ -56,7 +57,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
             }
 
             var contents = content.Builder.ToString()?.NormalizeLineEndings() ?? string.Empty;
-            Retry(() => _fileSystem.WriteAllText(path, contents, _encoding));
+            Retry(() => _fileSystem.WriteAllText(path, contents, Encoding));
         }
     }
 
@@ -76,7 +77,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
         if (!fullPath.Contains('*'))
         {
-            _fileSystem.WriteAllLines(fullPath, _contentList.Select(x => x.Build()).OrderBy(c => c.Filename).Select(c => c.Filename), _encoding);
+            _fileSystem.WriteAllLines(fullPath, _contentList.Select(x => x.Build()).OrderBy(c => c.Filename).Select(c => c.Filename), Encoding);
         }
     }
 
@@ -194,7 +195,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
     private void DeleteFilesFromLastGeneratedFilesContents(string basePath, string fullPath)
     {
-        foreach (var filename in _fileSystem.ReadAllLines(fullPath, _encoding))
+        foreach (var filename in _fileSystem.ReadAllLines(fullPath, Encoding))
         {
             var fileFullPath = string.IsNullOrEmpty(basePath) || Path.IsPathRooted(filename)
                 ? filename
