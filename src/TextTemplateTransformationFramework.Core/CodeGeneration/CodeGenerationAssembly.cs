@@ -44,13 +44,13 @@ public sealed class CodeGenerationAssembly : IDisposable
 
     public string Generate()
     {
-        var assembly = LoadAssembly(_context ?? AssemblyLoadContext.Default);
+        var assembly = LoadAssembly(_context);
         var settings = new CodeGenerationSettings(_basePath, _generateMultipleFiles, _dryRun);
 
         return GetOutputFromAssembly(assembly, settings);
     }
 
-    public void Dispose() => _context?.Unload();
+    public void Dispose() => _context.Unload();
 
     private Assembly LoadAssembly(AssemblyLoadContext context)
     {
