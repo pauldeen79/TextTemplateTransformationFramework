@@ -12,7 +12,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TypedTemplateEngineMock.Verify(x => x.Render(It.IsAny<object>(), It.IsAny<IMultipleContentBuilder>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object?>(), It.IsAny<ITemplateContext?>()), Times.Once);
@@ -29,7 +29,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TypedTemplateEngineMock.Verify(x => x.Render(It.IsAny<object>(), It.IsAny<StringBuilder>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object?>(), It.IsAny<ITemplateContext?>()), Times.Once);
@@ -45,7 +45,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.Process(true, false), Times.Once);

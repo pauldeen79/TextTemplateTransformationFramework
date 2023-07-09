@@ -14,7 +14,7 @@ public partial class CodeGenerationAssemblyTests
             _ = sut.Generate();
 
             // Assert
-            CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Once);
+            CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.IsAny<ITemplateFileManager>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Once);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ public partial class CodeGenerationAssemblyTests
             _ = sut.Generate();
 
             // Assert
-            CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Once);
+            CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.IsAny<ITemplateFileManager>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Once);
         }
 
         [Fact]
@@ -40,7 +40,24 @@ public partial class CodeGenerationAssemblyTests
             _ = sut.Generate();
 
             // Assert
-            CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Never);
+            CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.IsAny<ITemplateFileManager>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Never);
+        }
+
+        [Fact]
+        public void Returns_Output()
+        {
+            // Arrange
+            using var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, GetAssemblyName(), TestData.BasePath, true, true);
+
+            // Act
+            var result = sut.Generate();
+
+            // Assert
+            result.Should().Be(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">
+  <BasePath>C:\Somewhere</BasePath>
+  <Contents />
+</MultipleContents>");
         }
     }
 }

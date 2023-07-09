@@ -72,13 +72,14 @@ public sealed class CodeGenerationAssembly : IDisposable
     private string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings)
     {
         var multipleContentBuilder = new MultipleContentBuilder { BasePath = settings.BasePath };
+        var templateFileManager = new TemplateFileManager(multipleContentBuilder);
 
         foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly))
         {
-            _codeGenerationEngine.Generate(codeGenerationProvider, settings);
+            _codeGenerationEngine.Generate(codeGenerationProvider, templateFileManager, settings);
         }
 
-        return multipleContentBuilder.ToString();
+        return multipleContentBuilder.ToString()!;
     }
 
     private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)

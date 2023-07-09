@@ -11,8 +11,19 @@ public partial class CodeGenerationEngineTests
             var sut = CreateSut();
 
             // Act
-            sut.Invoking(x => x.Generate(provider: null!, CodeGenerationSettingsMock.Object))
+            sut.Invoking(x => x.Generate(provider: null!, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object))
                .Should().Throw<ArgumentNullException>().WithParameterName("provider");
+        }
+
+        [Fact]
+        public void Throws_On_Null_TemplateFileManager()
+        {
+            // Arrange
+            var sut = CreateSut();
+
+            // Act
+            sut.Invoking(x => x.Generate(CodeGenerationProviderMock.Object, templateFileManager: null!, CodeGenerationSettingsMock.Object))
+               .Should().Throw<ArgumentNullException>().WithParameterName("templateFileManager");
         }
 
         [Fact]
@@ -22,7 +33,7 @@ public partial class CodeGenerationEngineTests
             var sut = CreateSut();
 
             // Act
-            sut.Invoking(x => x.Generate(CodeGenerationProviderMock.Object, settings: null!))
+            sut.Invoking(x => x.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, settings: null!))
                .Should().Throw<ArgumentNullException>().WithParameterName("settings");
         }
 
@@ -38,7 +49,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.SaveAll(), Times.Once);
@@ -56,7 +67,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.SaveAll(), Times.Never);
@@ -74,7 +85,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.SaveAll(), Times.Never);
@@ -93,7 +104,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.DeleteLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt"), false), Times.Once);
@@ -112,7 +123,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.DeleteLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt"), false), Times.Never);
@@ -131,7 +142,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.SaveLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt")), Times.Once);
@@ -150,7 +161,7 @@ public partial class CodeGenerationEngineTests
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
 
             // Act
-            sut.Generate(CodeGenerationProviderMock.Object, CodeGenerationSettingsMock.Object);
+            sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
 
             // Assert
             TemplateFileManagerMock.Verify(x => x.SaveLastGeneratedFiles(Path.Combine(TestData.BasePath, "GeneratedFiles.txt")), Times.Never);

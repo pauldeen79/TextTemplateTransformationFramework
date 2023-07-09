@@ -10,7 +10,6 @@ public static class ServiceCollectionExtensions
             .AddSingleton<ICodeGenerationEngine, CodeGenerationEngine>()
             .AddSingleton<IFileSystem, FileSystem>()
             .AddSingleton<ITemplateEngine, TemplateEngine>()
-            .AddSingleton<ITemplateFileManagerFactory, TemplateFileManagerFactory>()
             .AddSingleton<ITemplateInitializer, DefaultTemplateInitializer>()
             .AddSingleton<ITemplateRenderer, SingleContentTemplateRenderer>()
             .AddSingleton<ITemplateRenderer, MultipleContentTemplateRenderer>()

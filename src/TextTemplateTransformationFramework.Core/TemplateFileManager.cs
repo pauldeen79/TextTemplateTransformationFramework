@@ -4,8 +4,18 @@ public class TemplateFileManager : ITemplateFileManager
 {
     private readonly StringBuilder _originalStringBuilder;
 
+    public TemplateFileManager()
+        : this(new MultipleContentBuilder(), new StringBuilder())
+    {
+    }
+
     public TemplateFileManager(StringBuilder stringBuilder)
         : this(new MultipleContentBuilder(), stringBuilder)
+    {
+    }
+
+    public TemplateFileManager(IMultipleContentBuilder multipleContentBuilder)
+        : this(multipleContentBuilder, new StringBuilder())
     {
     }
 

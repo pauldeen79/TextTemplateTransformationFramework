@@ -2,7 +2,7 @@
 
 public partial class TemplateFileManagerTests
 {
-    public class Constructor
+    public class Constructor : TemplateFileManagerTests
     {
         [Fact]
         public void Throws_On_Null_StringBuilder()
@@ -31,6 +31,7 @@ public partial class TemplateFileManagerTests
             sut.ResetToDefaultOutput(); // needed to check the sent StringBuilder
 
             // Assert
+            sut.MultipleContentBuilder.Should().NotBeNull();
             sut.MultipleContentBuilder.BasePath.Should().BeEmpty();
             sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
         }
@@ -47,6 +48,7 @@ public partial class TemplateFileManagerTests
             sut.ResetToDefaultOutput(); // needed to check the sent StringBuilder
 
             // Assert
+            sut.MultipleContentBuilder.Should().NotBeNull();
             sut.MultipleContentBuilder.BasePath.Should().Be(basePath);
             sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
         }
@@ -62,8 +64,35 @@ public partial class TemplateFileManagerTests
             sut.ResetToDefaultOutput(); // needed to check the sent StringBuilder
 
             // Assert
+            sut.MultipleContentBuilder.Should().NotBeNull();
             sut.MultipleContentBuilder.BasePath.Should().BeEmpty();
             sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
+        }
+
+        [Fact]
+        public void Creates_Instance_With_No_Arguments()
+        {
+            // Act
+            var sut = new TemplateFileManager();
+
+            // Assert
+            sut.MultipleContentBuilder.Should().NotBeNull();
+            sut.MultipleContentBuilder.BasePath.Should().BeEmpty();
+            sut.GenerationEnvironment.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Creates_Instance_With_Only_MultipleContentBuilder_Argument()
+        {
+            // Arrange
+            var multipleContentBuilder = MultipleContentBuilderMock.Object;
+
+            // Act
+            var sut = new TemplateFileManager(multipleContentBuilder: multipleContentBuilder);
+
+            // Assert
+            sut.MultipleContentBuilder.Should().BeSameAs(multipleContentBuilder);
+            sut.GenerationEnvironment.Should().NotBeNull();
         }
     }
 }
