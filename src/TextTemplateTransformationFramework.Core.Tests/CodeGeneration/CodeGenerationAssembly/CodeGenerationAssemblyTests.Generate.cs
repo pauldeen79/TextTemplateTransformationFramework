@@ -55,7 +55,7 @@ public partial class CodeGenerationAssemblyTests
             // Assert
             result.Should().Be(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">
-  <BasePath>C:\Somewhere</BasePath>
+  <BasePath>" + TestData.BasePath + @"</BasePath>
   <Contents />
 </MultipleContents>");
         }
