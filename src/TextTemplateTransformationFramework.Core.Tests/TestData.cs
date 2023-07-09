@@ -157,16 +157,16 @@ internal static class TestData
         public bool SkipWhenFileExists { get; private set; }
 
 #pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
-        public string BasePath { get; private set; }
+        public string BasePath { get; private set; } = "";
 #pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
 
-        public string Path { get; }
+        public string Path { get; } = "";
 
         public string DefaultFilename => "MyFile.txt";
 
         public bool RecurseOnDeleteGeneratedFiles { get; }
 
-        public string LastGeneratedFilesFilename { get; }
+        public string LastGeneratedFilesFilename { get; } = "";
 
         public object? CreateAdditionalParameters() => null;
 
