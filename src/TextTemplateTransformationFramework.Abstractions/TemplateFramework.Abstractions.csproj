@@ -6,11 +6,6 @@
     <Nullable>enable</Nullable>
     <PackageId>pauldeen79.TemplateFramework.Abstractions</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
-    <CodeAnalysisRuleSet>..\..\.sonarlint\pauldeen79_texttemplatetransformationframeworkcsharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\.sonarlint\pauldeen79_texttemplatetransformationframework\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
 
 </Project>
