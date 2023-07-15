@@ -11,6 +11,7 @@ global using TemplateFramework.Abstractions;
 global using TemplateFramework.Abstractions.CodeGeneration;
 global using TemplateFramework.Abstractions.Extensions;
 global using TemplateFramework.Abstractions.Infrastructure;
+global using TemplateFramework.Abstractions.Templates;
 global using TemplateFramework.Core.Contracts;
 global using TemplateFramework.Core.Extensions;
 global using TemplateFramework.Core.Infrastructure;

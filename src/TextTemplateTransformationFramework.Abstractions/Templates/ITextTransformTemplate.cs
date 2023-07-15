@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Abstractions;
+﻿namespace TemplateFramework.Abstractions.Templates;
 
 public interface ITextTransformTemplate
 {
