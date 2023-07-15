@@ -123,10 +123,10 @@ internal static class TestData
 
     internal sealed class MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine : IMultipleContentBuilderTemplate, ITemplateContextContainer, ITemplateEngineContainer
     {
-        private readonly Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine, IChildTemplateFactory> _delegate;
+        private readonly Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine, ITemplateFactory> _delegate;
 
-        public MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine(IChildTemplateFactory childTemplateFactory,
-                                                                                  Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine, IChildTemplateFactory> @delegate)
+        public MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine(ITemplateFactory childTemplateFactory,
+                                                                                  Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine, ITemplateFactory> @delegate)
         {
             ChildTemplateFactory = childTemplateFactory;
             _delegate = @delegate;
@@ -134,7 +134,7 @@ internal static class TestData
 
         public ITemplateContext Context { get; set; } = default!;
         public ITemplateEngine TemplateEngine { get; set; } = default!;
-        public IChildTemplateFactory ChildTemplateFactory { get; }
+        public ITemplateFactory ChildTemplateFactory { get; }
 
         public void Render(IMultipleContentBuilder builder) => _delegate(builder, Context, TemplateEngine, ChildTemplateFactory);
     }

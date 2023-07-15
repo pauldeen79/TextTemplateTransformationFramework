@@ -1,16 +1,16 @@
 ﻿namespace TemplateFramework.Core.Tests;
 
-public partial class ChildTemplateFactoryTests
+public partial class TemplateFactoryTests
 {
-    public class CreateByModel : ChildTemplateFactoryTests
+    public class CreateByModel : TemplateFactoryTests
     {
         [Fact]
         public void Does_Not_Throw_On_Null_Argument()
         {
             // Arrange
             var sut = CreateSut();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(true);
-            ChildTemplateCreatorMock.Setup(x => x.CreateByModel(It.IsAny<object?>())).Returns(new object());
+            TemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(true);
+            TemplateCreatorMock.Setup(x => x.CreateByModel(It.IsAny<object?>())).Returns(new object());
 
             // Act & Assert
             sut.Invoking(x => x.CreateByModel(null!))
@@ -22,7 +22,7 @@ public partial class ChildTemplateFactoryTests
         {
             // Arrange
             var sut = CreateSut();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(false);
+            TemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(false);
 
             // Act & Assert
             sut.Invoking(x => x.CreateByModel(1))
@@ -34,7 +34,7 @@ public partial class ChildTemplateFactoryTests
         {
             // Arrange
             var sut = CreateSut();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(false);
+            TemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(false);
 
             // Act & Assert
             sut.Invoking(x => x.CreateByModel(null))
@@ -46,8 +46,8 @@ public partial class ChildTemplateFactoryTests
         {
             // Arrange
             var sut = CreateSut();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(true);
-            ChildTemplateCreatorMock.Setup(x => x.CreateByModel(It.IsAny<object?>())).Returns(null!);
+            TemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns(true);
+            TemplateCreatorMock.Setup(x => x.CreateByModel(It.IsAny<object?>())).Returns(null!);
 
             // Act & Assert
             sut.Invoking(x => x.CreateByModel(null!))
@@ -60,8 +60,8 @@ public partial class ChildTemplateFactoryTests
             // Arrange
             var sut = CreateSut();
             var template = new object();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns<object>(x => x is int);
-            ChildTemplateCreatorMock.Setup(x => x.CreateByModel(It.IsAny<object?>())).Returns(template);
+            TemplateCreatorMock.Setup(x => x.SupportsModel(It.IsAny<object?>())).Returns<object>(x => x is int);
+            TemplateCreatorMock.Setup(x => x.CreateByModel(It.IsAny<object?>())).Returns(template);
 
             // Act
             var result = sut.CreateByModel(1);

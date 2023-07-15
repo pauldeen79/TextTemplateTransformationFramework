@@ -1,9 +1,7 @@
 ﻿namespace TemplateFramework.Abstractions;
 
-public interface IChildTemplateCreator
+public interface ITemplateFactory
 {
-    bool SupportsModel(object? model);
-    bool SupportsName(string name);
     object CreateByModel(object? model);
     object CreateByName(string name);
 }

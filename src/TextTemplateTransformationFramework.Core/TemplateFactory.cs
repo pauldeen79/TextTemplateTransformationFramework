@@ -1,10 +1,10 @@
 ﻿namespace TemplateFramework.Core;
 
-public class ChildTemplateFactory : IChildTemplateFactory
+public class TemplateFactory : ITemplateFactory
 {
-    private readonly IEnumerable<IChildTemplateCreator> _childTemplateCreators;
+    private readonly IEnumerable<ITemplateCreator> _childTemplateCreators;
 
-    public ChildTemplateFactory(IEnumerable<IChildTemplateCreator> childTemplateCreators)
+    public TemplateFactory(IEnumerable<ITemplateCreator> childTemplateCreators)
     {
         Guard.IsNotNull(childTemplateCreators);
 

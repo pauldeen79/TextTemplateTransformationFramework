@@ -6,7 +6,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddTemplateFramework(this IServiceCollection services)
         => services
-            .AddSingleton<IChildTemplateFactory, ChildTemplateFactory>()
+            .AddSingleton<ITemplateFactory, TemplateFactory>()
             .AddSingleton<ICodeGenerationAssembly, CodeGenerationAssembly>()
             .AddSingleton<ICodeGenerationEngine, CodeGenerationEngine>()
             .AddSingleton<IFileSystem, FileSystem>()

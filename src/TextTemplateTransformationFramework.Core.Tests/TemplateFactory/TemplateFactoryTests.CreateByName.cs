@@ -1,8 +1,8 @@
 ﻿namespace TemplateFramework.Core.Tests;
 
-public partial class ChildTemplateFactoryTests
+public partial class TemplateFactoryTests
 {
-    public class CreateByName : ChildTemplateFactoryTests
+    public class CreateByName : TemplateFactoryTests
     {
         [Fact]
         public void Throws_On_Null_Argument()
@@ -20,7 +20,7 @@ public partial class ChildTemplateFactoryTests
         {
             // Arrange
             var sut = CreateSut();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>())).Returns(false);
+            TemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>())).Returns(false);
 
             // Act & Assert
             sut.Invoking(x => x.CreateByName("test"))
@@ -32,8 +32,8 @@ public partial class ChildTemplateFactoryTests
         {
             // Arrange
             var sut = CreateSut();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>())).Returns(true);
-            ChildTemplateCreatorMock.Setup(x => x.CreateByName(It.IsAny<string>())).Returns(null!);
+            TemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>())).Returns(true);
+            TemplateCreatorMock.Setup(x => x.CreateByName(It.IsAny<string>())).Returns(null!);
 
             // Act & Assert
             sut.Invoking(x => x.CreateByName("test"))
@@ -46,8 +46,8 @@ public partial class ChildTemplateFactoryTests
             // Arrange
             var sut = CreateSut();
             var template = new object();
-            ChildTemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>())).Returns<string>(x => x == "test");
-            ChildTemplateCreatorMock.Setup(x => x.CreateByName(It.IsAny<string>())).Returns(template);
+            TemplateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>())).Returns<string>(x => x == "test");
+            TemplateCreatorMock.Setup(x => x.CreateByName(It.IsAny<string>())).Returns(template);
 
             // Act
             var result = sut.CreateByName("test");
