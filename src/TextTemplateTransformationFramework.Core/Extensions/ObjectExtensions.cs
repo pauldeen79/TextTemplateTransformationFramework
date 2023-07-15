@@ -20,10 +20,10 @@ public static class ObjectExtensions
         }
         else
         {
-            var properties = instance.GetType().GetProperties(Constants.BindingFlags);
+            var properties = instance.GetType().GetProperties(Constants.CustomBindingFlags);
             foreach (var prop in properties.OrderBy(p => p.Name))
             {
-                result.Add(prop.Name, prop.GetValue(instance, Constants.BindingFlags, null, null, null));
+                result.Add(prop.Name, prop.GetValue(instance, Constants.CustomBindingFlags, null, null, null));
             }
         }
 

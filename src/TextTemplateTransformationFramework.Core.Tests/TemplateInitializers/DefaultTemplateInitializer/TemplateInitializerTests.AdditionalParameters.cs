@@ -20,7 +20,7 @@ public partial class TemplateInitializerTests
         }
 
         [Fact]
-        public void Sets_AdditionalParameters_When_On_Public_Property()
+        public void Sets_AdditionalParameters_When_Template_Implements_IParameterizedTemplate()
         {
             // Arrange
             var sut = CreateSut();
@@ -32,21 +32,6 @@ public partial class TemplateInitializerTests
 
             // Assert
             template.AdditionalParameter.Should().Be(additionalParameters.AdditionalParameter);
-        }
-
-        [Fact]
-        public void Sets_AdditionalParameters_When_On_Internal_Property()
-        {
-            // Arrange
-            var sut = CreateSut();
-            var additionalParameters = new { InternalParameter = "Hello world!" };
-            var template = new TestData.PlainTemplateWithAdditionalParameters();
-
-            // Act
-            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters, null);
-
-            // Assert
-            template.InternalParameter.Should().Be(additionalParameters.InternalParameter);
         }
 
         [Fact]
@@ -79,21 +64,6 @@ public partial class TemplateInitializerTests
             // Assert
             template.Model.Should().Be(model);
             template.AdditionalParameter.Should().Be(additionalParameters.AdditionalParameter);
-        }
-
-        [Fact]
-        public void Skips_ReadOnly_Property_On_AdditionalParameters()
-        {
-            // Arrange
-            var sut = CreateSut();
-            var additionalParameters = new { ReadOnlyParameter = "Ignored" };
-            var template = new TestData.PlainTemplateWithAdditionalParameters();
-
-            // Act
-            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters, null);
-
-            // Assert
-            template.ReadOnlyParameter.Should().Be("Original value");
         }
     }
 }

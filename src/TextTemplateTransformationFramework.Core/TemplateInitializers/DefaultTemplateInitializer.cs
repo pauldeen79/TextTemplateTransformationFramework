@@ -8,36 +8,28 @@ public class DefaultTemplateInitializer : ITemplateInitializer
         Guard.IsNotNull(defaultFilename);
         Guard.IsNotNull(engine);
 
-        TrySetAdditionalParametersOnTemplate(template, model, additionalParameters);
+        var session = additionalParameters.ToKeyValuePairs();
+        TrySetAdditionalParametersOnTemplate(template, model, session);
         context = TrySetTemplateContextOnTemplate(template, model, context);
-        TrySetViewModelOnTemplate<T>(template, CreateSession(model), additionalParameters, context!);
+        TrySetViewModelOnTemplate<T>(template, CreateSession(model), session, context!);
         TrySetTemplateEngineOnTemplate(template, engine);
     }
 
-    private static void TrySetAdditionalParametersOnTemplate<T>(object template, T? model, object? additionalParameters)
+    private static void TrySetAdditionalParametersOnTemplate<T>(object template, T? model, IEnumerable<KeyValuePair<string, object?>> additionalParameters)
     {
         if (template is IModelContainer<T> modelContainer)
         {
             modelContainer.Model = model;
         }
 
-        //TODO: Refactor to interface, to remove reflection here
-        var properties = template.GetType().GetProperties(Constants.BindingFlags);
+        if (template is not IParameterizedTemplate parameterizedTemplate)
+        {
+            return;
+        }
 
         foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey)) //note: also set ViewModel property here
         {
-            var additionalProperty = Array.Find(properties, p => p.Name == item.Key);
-            if (additionalProperty is null)
-            {
-                continue;
-            }
-
-            if (additionalProperty.GetSetMethod(true) is null)
-            {
-                continue;
-            }
-            
-            additionalProperty.SetValue(template, item.Value);
+            parameterizedTemplate.SetParameter(item.Key, item.Value);
         }
     }
 
@@ -58,15 +50,16 @@ public class DefaultTemplateInitializer : ITemplateInitializer
         return context;
     }
 
-    private static void TrySetViewModelOnTemplate<T>(object template, IEnumerable<KeyValuePair<string, object?>> session, object? additionalParameters, ITemplateContext context)
+    private static void TrySetViewModelOnTemplate<T>(object template, IEnumerable<KeyValuePair<string, object?>> session, IEnumerable<KeyValuePair<string, object?>> additionalParameters, ITemplateContext context)
     {
         var templateType = template.GetType();
-        if (!Array.Exists(templateType.GetInterfaces(), x => x.FullName?.StartsWith("TemplateFramework.Abstractions.IViewModelContainer") == true))
+        if (!Array.Exists(templateType.GetInterfaces(), x => x.FullName?.StartsWith(Constants.ViewModelTypeName) == true))
         {
             return;
         }
 
-        var viewModelValue = templateType.GetProperty(Constants.ViewModelKey, Constants.BindingFlags)!.GetValue(template, Constants.BindingFlags, null, null, null);
+        var viewModelValue = templateType.GetProperty(Constants.ViewModelKey, Constants.CustomBindingFlags)!
+                                         .GetValue(template, Constants.CustomBindingFlags, null, null, null);
         if (viewModelValue is null)
         {
             // Allow dynamic construction of ViewModel.
@@ -112,22 +105,12 @@ public class DefaultTemplateInitializer : ITemplateInitializer
 
     private static void CopyAdditionalParametersAndModelToViewModel<T>(object viewModelValue, IEnumerable<KeyValuePair<string, object?>> session)
     {
-        var viewModelValueType = viewModelValue.GetType();
-        foreach (var kvp in session.Where(kvp => kvp.Key != Constants.ModelKey && kvp.Key != Constants.ViewModelKey)) //note: do not copy ViewModel property to ViewModel instance... this would be unlogical
+        if (viewModelValue is IParameterizedTemplate parameterizedViewModel)
         {
-            //TODO: Refactor to interface, to remove reflection here
-            var prop = viewModelValueType.GetProperty(kvp.Key, Constants.BindingFlags);
-            if (prop is null)
+            foreach (var kvp in session.Where(kvp => kvp.Key != Constants.ModelKey && kvp.Key != Constants.ViewModelKey)) //note: do not copy ViewModel property to ViewModel instance... this would be unlogical
             {
-                continue;
+                parameterizedViewModel.SetParameter(kvp.Key, kvp.Value);
             }
-
-            if (prop.GetSetMethod(true) is null)
-            {
-                continue;
-            }
-
-            prop.SetValue(viewModelValue, ConvertType(kvp.Value, prop.PropertyType));
         }
 
         if (viewModelValue is IModelContainer<T> modelContainer)

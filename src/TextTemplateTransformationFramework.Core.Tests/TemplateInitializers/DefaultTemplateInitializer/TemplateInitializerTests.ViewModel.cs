@@ -135,7 +135,7 @@ public partial class TemplateInitializerTests
 
             // Assert
             template.ViewModel.Should().NotBeNull();
-            template.ViewModel!.AdditionalParameter.Should().BeEmpty();
+            template.ViewModel!.AdditionalParameter.Should().BeNull();
         }
 
         [Fact]

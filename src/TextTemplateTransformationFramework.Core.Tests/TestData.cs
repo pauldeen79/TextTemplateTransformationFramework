@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace TemplateFramework.Core.Tests;
+﻿namespace TemplateFramework.Core.Tests;
 
 internal static class TestData
 {
@@ -43,7 +41,7 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    internal sealed class TemplateWithViewModel<T> : ITemplate, IViewModelContainer<T>
+    internal sealed class TemplateWithViewModel<T> : ITemplate, IViewModelContainer<T>, IParameterizedTemplate
     {
         public T? ViewModel { get; set; } = default!;
 
@@ -52,22 +50,44 @@ internal static class TestData
         public TemplateWithViewModel(Action<StringBuilder> @delegate) => _delegate = @delegate;
 
         public void Render(StringBuilder builder) => _delegate(builder);
+
+        public void SetParameter(string name, object? value) // this is added in case of viewmodels which don't have a public parameterless constructor
+        {
+            if (name == nameof(ViewModel))
+            {
+                ViewModel = (T?)value;
+            }
+        }
     }
 
-    internal sealed class PlainTemplateWithAdditionalParameters
+    internal sealed class PlainTemplateWithAdditionalParameters : IParameterizedTemplate
     {
         public string AdditionalParameter { get; set; } = "";
-        internal string InternalParameter { get; set; } = "";
-        public string ReadOnlyParameter => "Original value";
+
+        public void SetParameter(string name, object? value)
+        {
+            if (name == nameof(AdditionalParameter))
+            {
+                AdditionalParameter = value?.ToString() ?? string.Empty;
+            }
+        }
 
         public override string ToString() => AdditionalParameter;
     }
 
-    internal sealed class PlainTemplateWithModelAndAdditionalParameters<T> : IModelContainer<T>
+    internal sealed class PlainTemplateWithModelAndAdditionalParameters<T> : IModelContainer<T>, IParameterizedTemplate
     {
         public T? Model { get; set; } = default!;
 
         public string AdditionalParameter { get; set; } = "";
+
+        public void SetParameter(string name, object? value)
+        {
+            if (name == nameof(AdditionalParameter))
+            {
+                AdditionalParameter = value?.ToString() ?? string.Empty;
+            }
+        }
 
         public override string ToString() => AdditionalParameter;
     }
@@ -119,12 +139,28 @@ internal static class TestData
         public void Render(IMultipleContentBuilder builder) => _delegate(builder, Context, TemplateEngine, ChildTemplateFactory);
     }
 
-    internal sealed class ViewModel
+    internal sealed class ViewModel : IParameterizedTemplate
     {
-        public string AdditionalParameter { get; set; } = "";
+        public string? AdditionalParameter { get; set; }
         public string Property { get; set; } = "";
         public string ReadOnlyParameter => "Original value";
         public TestEnum EnumParameter { get; set; }
+
+        public void SetParameter(string name, object? value)
+        {
+            switch (name)
+            {
+                case nameof(AdditionalParameter):
+                    AdditionalParameter = value?.ToString();
+                    break;
+                case nameof(Property):
+                    Property = value?.ToString() ?? string.Empty;
+                    break;
+                case nameof(EnumParameter):
+                    EnumParameter = value is string s ? Enum.Parse<TestEnum>(s) : (TestEnum)Convert.ToInt32(value);
+                    break;
+            }
+        }
     }
 
     internal sealed class ViewModelWithModel<T> : IModelContainer<T>
@@ -140,7 +176,7 @@ internal static class TestData
     /// <summary>
     /// Example of a ViewModel class without a public parameterless constructor. This one can't be initialized by the TemplateInitializer.
     /// </summary>
-    internal sealed class NonConstructableViewModel
+    internal sealed class NonConstructableViewModel : IParameterizedTemplate
     {
         public NonConstructableViewModel(string property)
         {
@@ -148,6 +184,14 @@ internal static class TestData
         }
 
         public string Property { get; set; }
+
+        public void SetParameter(string name, object? value)
+        {
+            if (name == nameof(Property))
+            {
+                Property = value?.ToString() ?? string.Empty;
+            }
+        }
     }
 
     internal static string GetAssemblyName() => typeof(TestData).Assembly.FullName!;
