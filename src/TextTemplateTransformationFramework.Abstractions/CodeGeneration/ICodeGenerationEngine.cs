@@ -4,8 +4,3 @@ public interface ICodeGenerationEngine
 {
     void Generate(ICodeGenerationProvider provider, ITemplateFileManager templateFileManager, ICodeGenerationSettings settings);
 }
-
-public interface ICodeGenerationEngine<in T>
-{
-    void Generate(ICodeGenerationProvider<T> provider, ITemplateFileManager templateFileManager, ICodeGenerationSettings settings);
-}

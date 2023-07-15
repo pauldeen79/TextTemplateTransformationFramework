@@ -13,9 +13,5 @@ public interface ICodeGenerationProvider
     void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath);
     object CreateGenerator();
     object? CreateAdditionalParameters();
-}
-
-public interface ICodeGenerationProvider<out T> : ICodeGenerationProvider
-{
-    T CreateModel();
+    object? CreateModel();
 }

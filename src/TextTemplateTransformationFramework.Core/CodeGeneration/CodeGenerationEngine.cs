@@ -1,45 +1,6 @@
 ﻿namespace TemplateFramework.Core.CodeGeneration;
 
-public abstract class CodeGenerationEngineBase
-{
-    protected (object generator, bool shouldSave, bool shouldUseLastGeneratedFiles, object? additionalParameters) Initialize(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
-    {
-        Guard.IsNotNull(provider);
-        Guard.IsNotNull(settings);
-
-        provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists, settings.BasePath);
-
-        return
-        (
-            provider.CreateGenerator(),
-            !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun,
-            provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFilename),
-            provider.CreateAdditionalParameters()
-        );
-    }
-
-    protected static void ProcessResult(ICodeGenerationProvider provider, bool shouldSave, bool shouldUseLastGeneratedFiles, ITemplateFileManager templateFileManager)
-    {
-        Guard.IsNotNull(provider);
-        Guard.IsNotNull(templateFileManager);
-
-        templateFileManager.Process(true, shouldSave);
-
-        if (shouldSave)
-        {
-            if (shouldUseLastGeneratedFiles)
-            {
-                var prefixedLastGeneratedFilesFilename = Path.Combine(provider.Path, provider.LastGeneratedFilesFilename);
-                templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFilename, provider.RecurseOnDeleteGeneratedFiles);
-                templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFilename);
-            }
-
-            templateFileManager.SaveAll();
-        }
-    }
-}
-
-public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEngine
+public class CodeGenerationEngine : ICodeGenerationEngine
 {
     public CodeGenerationEngine(ITemplateEngine templateEngine)
     {
@@ -61,45 +22,6 @@ public class CodeGenerationEngine : CodeGenerationEngineBase, ICodeGenerationEng
         {
             _templateEngine.Render(template: result.generator,
                                    generationEnvironment: templateFileManager.MultipleContentBuilder,
-                                   defaultFilename: provider.DefaultFilename,
-                                   additionalParameters: result.additionalParameters,
-                                   context: null);
-        }
-        else
-        {
-            _templateEngine.Render(template: result.generator,
-                                   generationEnvironment: templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
-                                   defaultFilename: string.Empty,
-                                   additionalParameters: result.additionalParameters,
-                                   context: null);
-        }
-
-        ProcessResult(provider, result.shouldSave, result.shouldUseLastGeneratedFiles, templateFileManager);
-    }
-}
-
-public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGenerationEngine<T>
-{
-    public CodeGenerationEngine(ITemplateEngine<T> templateEngine)
-    {
-        Guard.IsNotNull(templateEngine);
-
-        _templateEngine = templateEngine;
-    }
-
-    private readonly ITemplateEngine<T> _templateEngine;
-
-    public void Generate(ICodeGenerationProvider<T> provider, ITemplateFileManager templateFileManager, ICodeGenerationSettings settings)
-    {
-        Guard.IsNotNull(provider);
-        Guard.IsNotNull(templateFileManager);
-        Guard.IsNotNull(settings);
-
-        var result = Initialize(provider, settings);
-        if (provider.GenerateMultipleFiles)
-        {
-            _templateEngine.Render(template: result.generator,
-                                   generationEnvironment: templateFileManager.MultipleContentBuilder,
                                    model: provider.CreateModel(),
                                    defaultFilename: provider.DefaultFilename,
                                    additionalParameters: result.additionalParameters,
@@ -116,5 +38,35 @@ public class CodeGenerationEngine<T> : CodeGenerationEngineBase, ICodeGeneration
         }
 
         ProcessResult(provider, result.shouldSave, result.shouldUseLastGeneratedFiles, templateFileManager);
+    }
+
+    private static (object generator, bool shouldSave, bool shouldUseLastGeneratedFiles, object? additionalParameters) Initialize(ICodeGenerationProvider provider, ICodeGenerationSettings settings)
+    {
+        provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists, settings.BasePath);
+
+        return
+        (
+            provider.CreateGenerator(),
+            !string.IsNullOrEmpty(provider.BasePath) && !settings.DryRun,
+            provider.GenerateMultipleFiles && !string.IsNullOrEmpty(provider.LastGeneratedFilesFilename),
+            provider.CreateAdditionalParameters()
+        );
+    }
+
+    private static void ProcessResult(ICodeGenerationProvider provider, bool shouldSave, bool shouldUseLastGeneratedFiles, ITemplateFileManager templateFileManager)
+    {
+        templateFileManager.Process(true, shouldSave);
+
+        if (shouldSave)
+        {
+            if (shouldUseLastGeneratedFiles)
+            {
+                var prefixedLastGeneratedFilesFilename = Path.Combine(provider.Path, provider.LastGeneratedFilesFilename);
+                templateFileManager.DeleteLastGeneratedFiles(prefixedLastGeneratedFilesFilename, provider.RecurseOnDeleteGeneratedFiles);
+                templateFileManager.SaveLastGeneratedFiles(prefixedLastGeneratedFilesFilename);
+            }
+
+            templateFileManager.SaveAll();
+        }
     }
 }

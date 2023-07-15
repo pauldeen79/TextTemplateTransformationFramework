@@ -217,6 +217,8 @@ public sealed class MyGeneratorProvider : ICodeGenerationProvider
 
     public object CreateGenerator() => new MyGenerator();
 
+    public object? CreateModel() => null;
+
     public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath)
     {
         GenerateMultipleFiles = generateMultipleFiles;

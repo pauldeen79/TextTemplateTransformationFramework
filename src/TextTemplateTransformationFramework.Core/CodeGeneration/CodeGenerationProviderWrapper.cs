@@ -28,6 +28,8 @@ public sealed class CodeGenerationProviderWrapper : ICodeGenerationProvider
 
     public object CreateGenerator() => _instance.GetType().GetMethod(nameof(CreateGenerator)).Invoke(_instance, Array.Empty<object>());
 
+    public object? CreateModel() => _instance.GetType().GetMethod(nameof(CreateModel)).Invoke(_instance, Array.Empty<object>());
+
     public void Initialize(bool generateMultipleFiles, bool skipWhenFileExists, string basePath) => _instance.GetType().GetMethod(nameof(Initialize)).Invoke(_instance, new object[] { generateMultipleFiles, skipWhenFileExists, basePath });
 #pragma warning restore CS8605 // Unboxing a possibly null value.
 #pragma warning restore CS8603 // Possible null reference return.

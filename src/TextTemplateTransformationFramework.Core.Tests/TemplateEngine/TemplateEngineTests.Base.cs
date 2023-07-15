@@ -12,5 +12,4 @@ public partial class TemplateEngineTests
     protected Mock<ITemplateRenderer> TemplateRendererMock { get; } = new();
 
     protected TemplateEngine CreateSut() => new(TemplateInitializerMock.Object, DefaultTemplateRenderers);
-    protected TemplateEngine<string> CreateTypedSut() => new(TemplateInitializerMock.Object, DefaultTemplateRenderers);
 }

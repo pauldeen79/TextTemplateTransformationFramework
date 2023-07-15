@@ -41,7 +41,7 @@ public partial class TemplateEngineTests
             var additionalParameters = new { AdditionalParameter = "Some value" };
 
             // Act
-            sut.Render(template, generationEnvironment, additionalParameters);
+            sut.Render(template, generationEnvironment, null, additionalParameters);
 
             // Assert
             TemplateInitializerMock.Verify(x => x.Initialize(template, string.Empty, sut, default(object?), additionalParameters, null), Times.Once);
