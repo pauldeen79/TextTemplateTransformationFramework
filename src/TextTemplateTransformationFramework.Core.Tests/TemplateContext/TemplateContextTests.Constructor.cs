@@ -32,16 +32,6 @@ public partial class TemplateContextTests
         }
 
         [Fact]
-        public void Creates_Instance_With_ViewModel_When_Supplied()
-        {
-            // Act
-            var instance = new TemplateContext(this, model: "test model", viewModel: "test");
-
-            // Assert
-            instance.ViewModel.Should().BeEquivalentTo("test");
-        }
-
-        [Fact]
         public void Creates_Instance_With_ParentContext_When_Supplied()
         {
             // Act

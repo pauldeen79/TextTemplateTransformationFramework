@@ -41,7 +41,7 @@ internal static class TestData
         public void Render(StringBuilder builder) => _delegate(builder);
     }
 
-    internal sealed class TemplateWithViewModel<T> : ITemplate, IViewModelContainer<T>, IParameterizedTemplate
+    internal sealed class TemplateWithViewModel<T> : ITemplate, IParameterizedTemplate
     {
         public T? ViewModel { get; set; } = default!;
 
@@ -203,9 +203,7 @@ public sealed class MyGeneratorProvider : ICodeGenerationProvider
 
     public bool SkipWhenFileExists { get; private set; }
 
-#pragma warning disable S3218 // Inner class members should not shadow outer class "static" or type members
     public string BasePath { get; private set; } = "";
-#pragma warning restore S3218 // Inner class members should not shadow outer class "static" or type members
 
     public string Path { get; } = "";
 

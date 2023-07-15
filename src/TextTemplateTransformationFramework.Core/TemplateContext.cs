@@ -3,47 +3,27 @@
 public class TemplateContext : ITemplateContext
 {
     public TemplateContext(object template)
-        : this(template, null, null, null, null, null)
+        : this(template, null, null, null, null)
     {
     }
 
     public TemplateContext(object template, ITemplateContext parentContext)
-        : this(template, null, null, parentContext, null, null)
+        : this(template, null, parentContext, null, null)
     {
     }
 
     public TemplateContext(object template, object? model)
-        : this(template, model, null, null, null, null)
+        : this(template, model, null, null, null)
     {
     }
 
     public TemplateContext(object template, object? model, ITemplateContext parentContext)
-        : this(template, model, null, parentContext, null, null)
-    {
-    }
-
-    public TemplateContext(object template, object? model, object? viewModel)
-        : this(template, model, viewModel, null, null, null)
-    {
-    }
-
-    public TemplateContext(object template, object? model, object? viewModel, ITemplateContext parentContext)
-        : this(template, model, viewModel, parentContext, null, null)
+        : this(template, model, parentContext, null, null)
     {
     }
 
     public TemplateContext(object template,
                            object? model,
-                           ITemplateContext? parentContext,
-                           int? iterationNumber,
-                           int? iterationCount)
-        : this(template, model, null, parentContext, iterationNumber, iterationCount)
-    {
-    }
-
-    public TemplateContext(object template,
-                           object? model,
-                           object? viewModel,
                            ITemplateContext? parentContext,
                            int? iterationNumber,
                            int? iterationCount)
@@ -52,7 +32,6 @@ public class TemplateContext : ITemplateContext
 
         Template = template;
         Model = model;
-        ViewModel = viewModel;
         ParentContext = parentContext;
         IterationNumber = iterationNumber;
         IterationCount = iterationCount;
@@ -60,7 +39,6 @@ public class TemplateContext : ITemplateContext
 
     public object Template { get; }
     public object? Model { get; }
-    public object? ViewModel { get; }
     public ITemplateContext? ParentContext { get; }
 
     public ITemplateContext RootContext
@@ -93,22 +71,6 @@ public class TemplateContext : ITemplateContext
         return default;
     }
 
-    public T? GetViewModelFromContextByType<T>(Predicate<ITemplateContext>? predicate)
-    {
-        ITemplateContext? p = this;
-        while (p is not null)
-        {
-            if (p.ViewModel is T t && (predicate is null || predicate(p)))
-            {
-                return t;
-            }
-
-            p = p.ParentContext;
-        }
-
-        return default;
-    }
-
     public T? GetContextByTemplateType<T>(Predicate<ITemplateContext>? predicate)
     {
         ITemplateContext? p = this;
@@ -129,7 +91,6 @@ public class TemplateContext : ITemplateContext
 
     public ITemplateContext CreateChildContext(object template,
                                                object? model,
-                                               object? viewModel,
                                                int? iterationNumber,
                                                int? iterationCount)
     {
@@ -139,7 +100,6 @@ public class TemplateContext : ITemplateContext
         (
             template: template,
             model: model,
-            viewModel: viewModel,
             parentContext: this,
             iterationNumber: iterationNumber,
             iterationCount: iterationCount
