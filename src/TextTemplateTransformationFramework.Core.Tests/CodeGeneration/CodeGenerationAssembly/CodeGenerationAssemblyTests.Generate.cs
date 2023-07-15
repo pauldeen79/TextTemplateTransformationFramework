@@ -4,14 +4,23 @@ public partial class CodeGenerationAssemblyTests
 {
     public class Generate : CodeGenerationAssemblyTests
     {
+        public Generate()
+        {
+            var templateFileManagerMock = new Mock<ITemplateFileManager>();
+            TemplateFileManagerFactoryMock.Setup(x => x.Create()).Returns(templateFileManagerMock.Object);
+            var multipleConentBuilderMock = new Mock<IMultipleContentBuilder>();
+            templateFileManagerMock.SetupGet(x => x.MultipleContentBuilder).Returns(multipleConentBuilderMock.Object);
+            multipleConentBuilderMock.Setup(x => x.ToString()).Returns("Output");
+        }
+
         [Fact]
         public void Runs_All_CodeGenerators_In_Specified_Assembly()
         {
             // Arrange
-            using var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, GetAssemblyName(), TestData.BasePath, true, true);
+            var sut = CreateSut();
 
             // Act
-            _ = sut.Generate();
+            _ = sut.Generate(new CodeGenerationAssemblySettings(TestData.BasePath, TestData.GetAssemblyName(), currentDirectory: TestData.BasePath));
 
             // Assert
             CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.IsAny<ITemplateFileManager>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Once);
@@ -21,10 +30,10 @@ public partial class CodeGenerationAssemblyTests
         public void Runs_Filtered_CodeGenerators_In_Specified_Assembly()
         {
             // Arrange
-            using var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, GetAssemblyName(), TestData.BasePath, true, true, classNameFilter: new[] { typeof(MyGeneratorProvider).FullName! });
+            var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, TemplateFileManagerFactoryMock.Object);
 
             // Act
-            _ = sut.Generate();
+            _ = sut.Generate(new CodeGenerationAssemblySettings(TestData.BasePath, TestData.GetAssemblyName(), currentDirectory: TestData.BasePath, classNameFilter: new[] { typeof(MyGeneratorProvider).FullName! }));
 
             // Assert
             CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.IsAny<ITemplateFileManager>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Once);
@@ -34,10 +43,10 @@ public partial class CodeGenerationAssemblyTests
         public void Runs_Filtered_CodeGenerators_In_Specified_Assembly_No_Matches()
         {
             // Arrange
-            using var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, GetAssemblyName(), TestData.BasePath, true, true, classNameFilter: new[] { "WrongName" });
+            var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, TemplateFileManagerFactoryMock.Object);
 
             // Act
-            _ = sut.Generate();
+            _ = sut.Generate(new CodeGenerationAssemblySettings(TestData.BasePath, TestData.GetAssemblyName(), currentDirectory: TestData.BasePath, classNameFilter: new[] { "WrongName" }));
 
             // Assert
             CodeGenerationEngineMock.Verify(x => x.Generate(It.IsAny<ICodeGenerationProvider>(), It.IsAny<ITemplateFileManager>(), It.Is<ICodeGenerationSettings>(x => x.BasePath == TestData.BasePath)), Times.Never);
@@ -47,17 +56,13 @@ public partial class CodeGenerationAssemblyTests
         public void Returns_Output()
         {
             // Arrange
-            using var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, GetAssemblyName(), TestData.BasePath, true, true);
+            var sut = new CodeGenerationAssembly(CodeGenerationEngineMock.Object, TemplateFileManagerFactoryMock.Object);
 
             // Act
-            var result = sut.Generate();
+            var result = sut.Generate(new CodeGenerationAssemblySettings(TestData.BasePath, TestData.GetAssemblyName(), currentDirectory: TestData.BasePath));
 
             // Assert
-            result.Should().Be(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">
-  <BasePath>" + TestData.BasePath + @"</BasePath>
-  <Contents />
-</MultipleContents>");
+            result.Should().Be(@"Output");
         }
     }
 }

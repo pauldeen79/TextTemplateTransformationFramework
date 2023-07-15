@@ -1,92 +1,71 @@
 ﻿namespace TemplateFramework.Core.CodeGeneration;
 
-public sealed class CodeGenerationAssembly : IDisposable
+public sealed class CodeGenerationAssembly : ICodeGenerationAssembly
 {
     private readonly ICodeGenerationEngine _codeGenerationEngine;
-    private readonly string _assemblyName;
-    private readonly string _basePath;
-    private readonly bool _generateMultipleFiles;
-    private readonly bool _dryRun;
-    private readonly IEnumerable<string> _classNameFilter;
-    private readonly AssemblyLoadContext _context;
-    private readonly string _currentDirectory;
+    private readonly ITemplateFileManagerFactory _templateFileManagerFactory;
 
     public CodeGenerationAssembly(ICodeGenerationEngine codeGenerationEngine,
-                                  string assemblyName,
-                                  string basePath,
-                                  bool generateMultipleFiles,
-                                  bool dryRun,
-                                  string? currentDirectory = null,
-                                  IEnumerable<string>? classNameFilter = null)
+                                  ITemplateFileManagerFactory templateFileManagerFactory)
     {
         Guard.IsNotNull(codeGenerationEngine);
-        Guard.IsNotNullOrWhiteSpace(assemblyName);
-        Guard.IsNotNull(basePath);
+        Guard.IsNotNull(templateFileManagerFactory);
 
         _codeGenerationEngine = codeGenerationEngine;
-        _assemblyName = assemblyName;
-        _basePath = basePath;
-        _generateMultipleFiles = generateMultipleFiles;
-        _dryRun = dryRun;
-        _classNameFilter = classNameFilter ?? Enumerable.Empty<string>();
-
-        if (string.IsNullOrEmpty(currentDirectory))
-        {
-            _currentDirectory = Directory.GetCurrentDirectory();
-        }
-        else
-        {
-            _currentDirectory = currentDirectory;
-        }
-
-        _context = new CustomAssemblyLoadContext("TemplateFramework.Core.CodeGeneration", true, () => new[] { _currentDirectory });
+        _templateFileManagerFactory = templateFileManagerFactory;
     }
 
-    public string Generate()
+    public string Generate(ICodeGenerationAssemblySettings settings)
     {
-        var assembly = LoadAssembly(_context);
-        var settings = new CodeGenerationSettings(_basePath, _generateMultipleFiles, _dryRun);
+        Guard.IsNotNull(settings);
+        
+        var context = new CustomAssemblyLoadContext("TemplateFramework.Core.CodeGeneration", true, () => new[] { settings.CurrentDirectory });
+        try
+        {
+            var assembly = LoadAssembly(context, settings);
 
-        return GetOutputFromAssembly(assembly, settings);
+            return GetOutputFromAssembly(assembly, settings);
+        }
+        finally
+        {
+            context.Unload();
+        }
     }
 
-    public void Dispose() => _context.Unload();
-
-    private Assembly LoadAssembly(AssemblyLoadContext context)
+    private Assembly LoadAssembly(AssemblyLoadContext context, ICodeGenerationAssemblySettings settings)
     {
         try
         {
-            return context.LoadFromAssemblyName(new AssemblyName(_assemblyName));
+            return context.LoadFromAssemblyName(new AssemblyName(settings.AssemblyName));
         }
         catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
         {
-            var assemblyName = _assemblyName;
-            if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
+            if (settings.AssemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(settings.AssemblyName))
             {
-                assemblyName = Path.Combine(_currentDirectory, Path.GetFileName(assemblyName));
+                return context.LoadFromAssemblyPath(Path.Combine(settings.CurrentDirectory, Path.GetFileName(settings.AssemblyName)));
             }
-            return context.LoadFromAssemblyPath(assemblyName);
+            return context.LoadFromAssemblyPath(settings.AssemblyName);
         }
     }
 
-    private string GetOutputFromAssembly(Assembly assembly, CodeGenerationSettings settings)
+    private string GetOutputFromAssembly(Assembly assembly, ICodeGenerationAssemblySettings settings)
     {
-        var multipleContentBuilder = new MultipleContentBuilder { BasePath = settings.BasePath };
-        var templateFileManager = new TemplateFileManager(multipleContentBuilder);
+        var templateFileManager = _templateFileManagerFactory.Create();
+        templateFileManager.MultipleContentBuilder.BasePath = settings.BasePath;
 
-        foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly))
+        foreach (var codeGenerationProvider in GetCodeGeneratorProviders(assembly, settings.ClassNameFilter))
         {
             _codeGenerationEngine.Generate(codeGenerationProvider, templateFileManager, settings);
         }
 
-        return multipleContentBuilder.ToString()!;
+        return templateFileManager.MultipleContentBuilder.ToString()!;
     }
 
-    private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly)
+    private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly, IEnumerable<string>? classNameFilter)
         => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && Array.Exists(t.GetInterfaces(), i => i.FullName == typeof(ICodeGenerationProvider).FullName))
-            .Where(FilterIsValid)
+            .Where(t => FilterIsValid(t, classNameFilter))
             .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)!));
 
-    private bool FilterIsValid(Type type)
-        => !_classNameFilter.Any() || _classNameFilter.Any(x => x == type.FullName);
+    private bool FilterIsValid(Type type, IEnumerable<string>? classNameFilter)
+        => classNameFilter == null || !classNameFilter.Any() || classNameFilter.Any(x => x == type.FullName);
 }

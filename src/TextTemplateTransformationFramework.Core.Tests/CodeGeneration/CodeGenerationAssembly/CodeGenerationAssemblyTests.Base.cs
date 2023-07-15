@@ -3,6 +3,7 @@
 public partial class CodeGenerationAssemblyTests
 {
     protected Mock<ICodeGenerationEngine> CodeGenerationEngineMock { get; } = new();
-    protected string GetAssemblyName() => GetType().Assembly.FullName!;
-    protected CodeGenerationAssembly CreateSut() => new(CodeGenerationEngineMock.Object, GetAssemblyName(), TestData.BasePath, true, false);
+    protected Mock<ITemplateFileManagerFactory> TemplateFileManagerFactoryMock { get; } = new();
+
+    protected CodeGenerationAssembly CreateSut() => new(CodeGenerationEngineMock.Object, TemplateFileManagerFactoryMock.Object);
 }

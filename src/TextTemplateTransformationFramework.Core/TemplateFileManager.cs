@@ -19,11 +19,6 @@ public class TemplateFileManager : ITemplateFileManager
     {
     }
 
-    public TemplateFileManager(StringBuilder stringBuilder, string basePath)
-        : this(new MultipleContentBuilder(basePath), stringBuilder)
-    {
-    }
-
     public TemplateFileManager(IMultipleContentBuilder multipleContentBuilder, StringBuilder stringBuilder)
     {
         Guard.IsNotNull(multipleContentBuilder);

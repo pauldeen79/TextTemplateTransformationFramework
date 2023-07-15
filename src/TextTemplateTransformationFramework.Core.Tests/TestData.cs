@@ -149,6 +149,8 @@ internal static class TestData
 
         public string Property { get; set; }
     }
+
+    internal static string GetAssemblyName() => typeof(TestData).Assembly.FullName!;
 }
 
 public sealed class MyGeneratorProvider : ICodeGenerationProvider

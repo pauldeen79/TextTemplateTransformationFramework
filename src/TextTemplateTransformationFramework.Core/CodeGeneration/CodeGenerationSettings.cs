@@ -2,6 +2,11 @@
 
 public class CodeGenerationSettings : ICodeGenerationSettings
 {
+    public CodeGenerationSettings(string basePath)
+        : this(basePath, false, false, false)
+    {
+    }
+
     public CodeGenerationSettings(string basePath, bool dryRun)
         : this(basePath, false, false, dryRun)
     {

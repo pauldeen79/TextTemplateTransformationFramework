@@ -21,40 +21,7 @@ public partial class TemplateFileManagerTests
         }
 
         [Fact]
-        public void Creates_Instance_With_Empty_BasePath()
-        {
-            // Arrange
-            var stringBuilder = new StringBuilder();
-
-            // Act
-            var sut = new TemplateFileManager(stringBuilder: stringBuilder, basePath: string.Empty);
-            sut.ResetToDefaultOutput(); // needed to check the sent StringBuilder
-
-            // Assert
-            sut.MultipleContentBuilder.Should().NotBeNull();
-            sut.MultipleContentBuilder.BasePath.Should().BeEmpty();
-            sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
-        }
-        
-        [Fact]
-        public void Creates_Instance_With_Filled_BasePath()
-        {
-            // Arrange
-            var basePath = TestData.BasePath;
-            var stringBuilder = new StringBuilder();
-
-            // Act
-            var sut = new TemplateFileManager(stringBuilder: stringBuilder, basePath: basePath);
-            sut.ResetToDefaultOutput(); // needed to check the sent StringBuilder
-
-            // Assert
-            sut.MultipleContentBuilder.Should().NotBeNull();
-            sut.MultipleContentBuilder.BasePath.Should().Be(basePath);
-            sut.GenerationEnvironment.Should().BeSameAs(stringBuilder);
-        }
-
-        [Fact]
-        public void Creates_Instance_Without_BasePath_Argument()
+        public void Creates_Instance_With_StringBuilder()
         {
             // Arrange
             var stringBuilder = new StringBuilder();
@@ -82,7 +49,7 @@ public partial class TemplateFileManagerTests
         }
 
         [Fact]
-        public void Creates_Instance_With_Only_MultipleContentBuilder_Argument()
+        public void Creates_Instance_With_MultipleContentBuilder()
         {
             // Arrange
             var multipleContentBuilder = MultipleContentBuilderMock.Object;

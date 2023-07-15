@@ -21,6 +21,7 @@ public class DefaultTemplateInitializer : ITemplateInitializer
             modelContainer.Model = model;
         }
 
+        //TODO: Refactor to interface, to remove reflection here
         var properties = template.GetType().GetProperties(Constants.BindingFlags);
 
         foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey)) //note: also set ViewModel property here
@@ -114,6 +115,7 @@ public class DefaultTemplateInitializer : ITemplateInitializer
         var viewModelValueType = viewModelValue.GetType();
         foreach (var kvp in session.Where(kvp => kvp.Key != Constants.ModelKey && kvp.Key != Constants.ViewModelKey)) //note: do not copy ViewModel property to ViewModel instance... this would be unlogical
         {
+            //TODO: Refactor to interface, to remove reflection here
             var prop = viewModelValueType.GetProperty(kvp.Key, Constants.BindingFlags);
             if (prop is null)
             {
