@@ -4,7 +4,6 @@
     <TargetFrameworks>net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>11.0</LangVersion>
     <PackageId>pauldeen79.TemplateFramework.Core</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
   </PropertyGroup>

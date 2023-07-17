@@ -48,6 +48,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateFramework.Core.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TemplateFramework.Abstractions.Tests", "src\TextTemplateTransformationFramework.Abstractions.Tests\TemplateFramework.Abstractions.Tests.csproj", "{0894A4FC-2E8D-48D0-9F14-8102722FC22C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateFramework.Console", "src\TemplateFramework.Console\TemplateFramework.Console.csproj", "{C7AD6C3B-060B-4882-A8F1-E636E72F4A04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0894A4FC-2E8D-48D0-9F14-8102722FC22C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7AD6C3B-060B-4882-A8F1-E636E72F4A04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7AD6C3B-060B-4882-A8F1-E636E72F4A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7AD6C3B-060B-4882-A8F1-E636E72F4A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7AD6C3B-060B-4882-A8F1-E636E72F4A04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
