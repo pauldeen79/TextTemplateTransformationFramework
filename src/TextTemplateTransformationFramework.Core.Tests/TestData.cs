@@ -58,6 +58,8 @@ internal static class TestData
                 ViewModel = (T?)value;
             }
         }
+
+        public ITemplateParameter[] GetParameters() => new[] { new TemplateParameter(nameof(ViewModel), typeof(T?)) };
     }
 
     internal sealed class PlainTemplateWithAdditionalParameters : IParameterizedTemplate
@@ -71,6 +73,8 @@ internal static class TestData
                 AdditionalParameter = value?.ToString() ?? string.Empty;
             }
         }
+
+        public ITemplateParameter[] GetParameters() => new[] { new TemplateParameter(nameof(AdditionalParameter), typeof(string)) };
 
         public override string ToString() => AdditionalParameter;
     }
@@ -88,6 +92,8 @@ internal static class TestData
                 AdditionalParameter = value?.ToString() ?? string.Empty;
             }
         }
+
+        public ITemplateParameter[] GetParameters() => new[] { new TemplateParameter(nameof(AdditionalParameter), typeof(T?)) };
 
         public override string ToString() => AdditionalParameter;
     }
@@ -161,6 +167,13 @@ internal static class TestData
                     break;
             }
         }
+
+        public ITemplateParameter[] GetParameters() => new[]
+        {
+            new TemplateParameter(nameof(AdditionalParameter), typeof(string)),
+            new TemplateParameter(nameof(Property), typeof(string)),
+            new TemplateParameter(nameof(EnumParameter), typeof(TestEnum))
+        };
     }
 
     internal sealed class ViewModelWithModel<T> : IModelContainer<T>
@@ -192,6 +205,8 @@ internal static class TestData
                 Property = value?.ToString() ?? string.Empty;
             }
         }
+
+        public ITemplateParameter[] GetParameters() => new[] { new TemplateParameter(nameof(Property), typeof(string)) };
     }
 
     internal static string GetAssemblyName() => typeof(TestData).Assembly.FullName!;
