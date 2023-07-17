@@ -2,7 +2,21 @@
 
 public class DefaultTemplateInitializer : ITemplateInitializer
 {
-    public void Initialize<T>(object template, string defaultFilename, ITemplateEngine engine, T? model, object? additionalParameters, ITemplateContext? context)
+    private readonly IEnumerable<ITemplateParameterConverter> _converters;
+
+    public DefaultTemplateInitializer(IEnumerable<ITemplateParameterConverter> converters)
+    {
+        Guard.IsNotNull(converters);
+
+        _converters = converters;
+    }
+
+    public void Initialize<T>(object template,
+                              string defaultFilename,
+                              ITemplateEngine engine,
+                              T? model,
+                              object? additionalParameters,
+                              ITemplateContext? context)
     {
         Guard.IsNotNull(template);
         Guard.IsNotNull(defaultFilename);
@@ -14,7 +28,9 @@ public class DefaultTemplateInitializer : ITemplateInitializer
         TrySetTemplateEngineOnTemplate(template, engine);
     }
 
-    private static void TrySetAdditionalParametersOnTemplate<T>(object template, T? model, IEnumerable<KeyValuePair<string, object?>> additionalParameters)
+    private void TrySetAdditionalParametersOnTemplate<T>(object template,
+                                                         T? model,
+                                                         IEnumerable<KeyValuePair<string, object?>> additionalParameters)
     {
         if (template is IModelContainer<T> modelContainer)
         {
@@ -26,9 +42,16 @@ public class DefaultTemplateInitializer : ITemplateInitializer
             return;
         }
 
+        var parameters = parameterizedTemplate.GetParameters();
         foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey))
         {
-            parameterizedTemplate.SetParameter(item.Key, item.Value);
+            var parameter = Array.Find(parameters, p => p.Name == item.Key);
+            if (parameter == null)
+            {
+                throw new NotSupportedException($"Unsupported template parameter: {item.Key}");
+            }
+
+            parameterizedTemplate.SetParameter(item.Key, ConvertType(item.Value, parameter.Type));
         }
     }
 
@@ -55,5 +78,18 @@ public class DefaultTemplateInitializer : ITemplateInitializer
         }
 
         templateEngineContainer.TemplateEngine = engine;
+    }
+
+    private object? ConvertType(object? value, Type type)
+    {
+        foreach (var converter in _converters)
+        {
+            if (converter.TryConvert(value, type, out var convertedValue))
+            {
+                return convertedValue;
+            }
+        }
+
+        return value;
     }
 }
