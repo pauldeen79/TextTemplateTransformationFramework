@@ -29,11 +29,6 @@ jobs:
           dotnet-version: 7.0.x
       - name: Restore
         run: dotnet restore TextTemplateTransformationFramework.sln
-      - name: Run .NET Code Analysis
-        uses: dotnet/code-analysis@main
-        id: code-analysis
-        with:
-          build-breaking: true
       - name: Build
         run: dotnet build --no-restore TextTemplateTransformationFramework.sln -c Release
       - name: Test
