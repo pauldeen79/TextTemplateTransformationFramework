@@ -67,5 +67,13 @@ public sealed class CodeGenerationAssembly : ICodeGenerationAssembly
             .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)!));
 
     private bool FilterIsValid(Type type, IEnumerable<string>? classNameFilter)
-        => classNameFilter == null || !classNameFilter.Any() || classNameFilter.Any(x => x == type.FullName);
+    {
+        if (classNameFilter == null)
+        {
+            return true;
+        }
+
+        var items = classNameFilter.ToArray();
+        return !items.Any() || Array.Find(items, x => x == type.FullName) != null;
+    }
 }

@@ -47,16 +47,16 @@ public class ObjectExtensionsTests
             };
 
             // Act
-            var result = input.ToKeyValuePairs();
+            var result = input.ToKeyValuePairs()?.ToArray();
 
             // Assert
             result.Should().HaveCount(3);
-            result.ElementAt(0).Key.Should().Be("Item1");
-            result.ElementAt(0).Value.Should().Be(1);
-            result.ElementAt(1).Key.Should().Be("Item2");
-            result.ElementAt(1).Value.Should().Be("some value");
-            result.ElementAt(2).Key.Should().Be("Item3");
-            result.ElementAt(2).Value.Should().BeNull();
+            result![0].Key.Should().Be("Item1");
+            result[0].Value.Should().Be(1);
+            result[1].Key.Should().Be("Item2");
+            result[1].Value.Should().Be("some value");
+            result[2].Key.Should().Be("Item3");
+            result[2].Value.Should().BeNull();
         }
     }
 }
