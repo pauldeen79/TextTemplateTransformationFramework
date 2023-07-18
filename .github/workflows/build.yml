@@ -30,7 +30,7 @@ jobs:
       - name: Restore
         run: dotnet restore TextTemplateTransformationFramework.sln
       - name: Build
-        run: dotnet build --no-restore TextTemplateTransformationFramework.sln -c Release
+        run: dotnet build --no-restore TextTemplateTransformationFramework.sln -warnaserror -c Release
       - name: Test
         run: dotnet test --no-restore TextTemplateTransformationFramework.sln -c Release -f net7.0
   #    - name: Pack
