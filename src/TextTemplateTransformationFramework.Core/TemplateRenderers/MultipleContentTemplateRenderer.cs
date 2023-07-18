@@ -38,7 +38,7 @@ public class MultipleContentTemplateRenderer : ITemplateRenderer
         new SingleContentTemplateRenderer().Render(template, stringBuilder, defaultFilename);
         var builderResult = stringBuilder.ToString();
 
-        if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">"))
+        if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">", StringComparison.InvariantCulture))
         {
             var multipleContents = MultipleContentBuilder.FromString(builderResult);
             foreach (var content in multipleContents.Contents.Select(x => x.Build()))

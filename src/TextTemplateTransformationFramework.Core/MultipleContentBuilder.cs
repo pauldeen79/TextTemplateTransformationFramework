@@ -75,7 +75,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
             _fileSystem.CreateDirectory(dir);
         }
 
-        if (!fullPath.Contains('*'))
+        if (!fullPath.Contains('*', StringComparison.InvariantCulture))
         {
             _fileSystem.WriteAllLines(fullPath, _contentList.Select(x => x.Build()).OrderBy(c => c.Filename).Select(c => c.Filename), Encoding);
         }
@@ -86,7 +86,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
         Guard.IsNotNullOrWhiteSpace(lastGeneratedFilesPath);
 
         var basePath = BasePath;
-        if (lastGeneratedFilesPath.Contains(Path.DirectorySeparatorChar))
+        if (lastGeneratedFilesPath.Contains(Path.DirectorySeparatorChar, StringComparison.InvariantCulture))
         {
             var lastSlash = lastGeneratedFilesPath.LastIndexOf(Path.DirectorySeparatorChar);
             basePath = Path.Combine(basePath, lastGeneratedFilesPath.Substring(0, lastSlash));
@@ -95,13 +95,13 @@ public class MultipleContentBuilder : IMultipleContentBuilder
 
         var fullPath = GetFullPath(basePath, lastGeneratedFilesPath);
 
-        if (fullPath.Contains('*')
+        if (fullPath.Contains('*', StringComparison.InvariantCulture)
             && !string.IsNullOrEmpty(basePath)
             && _fileSystem.DirectoryExists(basePath))
         {
             DeleteFilesUsingPattern(lastGeneratedFilesPath, recurse, basePath);
         }
-        else if (!fullPath.Contains('*') && _fileSystem.FileExists(fullPath))
+        else if (!fullPath.Contains('*', StringComparison.InvariantCulture) && _fileSystem.FileExists(fullPath))
         {
             DeleteFilesFromLastGeneratedFilesContents(basePath, fullPath);
         }
@@ -228,7 +228,7 @@ public class MultipleContentBuilder : IMultipleContentBuilder
                 action();
                 return;
             }
-            catch (IOException x) when (x.Message.Contains("because it is being used by another process"))
+            catch (IOException x) when (x.Message.Contains("because it is being used by another process", StringComparison.InvariantCulture))
             {
                 Thread.Sleep(i * 500);
             }
