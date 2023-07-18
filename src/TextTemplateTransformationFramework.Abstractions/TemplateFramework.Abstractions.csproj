@@ -4,6 +4,7 @@
     <TargetFrameworks>net7.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
     <PackageId>pauldeen79.TemplateFramework.Abstractions</PackageId>
     <RepositoryUrl>https://github.com/pauldeen79/TextTemplateTransformationFramework</RepositoryUrl>
   </PropertyGroup>
