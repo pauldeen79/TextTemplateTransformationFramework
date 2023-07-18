@@ -118,15 +118,6 @@ internal static class TestData
         public string TransformText() => _delegate();
     }
 
-    internal sealed class MultipleContentBuilderTemplate : IMultipleContentBuilderTemplate
-    {
-        private readonly Action<IMultipleContentBuilder> _delegate;
-
-        public MultipleContentBuilderTemplate(Action<IMultipleContentBuilder> @delegate) => _delegate = @delegate;
-
-        public void Render(IMultipleContentBuilder builder) => _delegate(builder);
-    }
-
     internal sealed class MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine : IMultipleContentBuilderTemplate, ITemplateContextContainer, ITemplateEngineContainer
     {
         private readonly Action<IMultipleContentBuilder, ITemplateContext, ITemplateEngine, ITemplateFactory> _delegate;
@@ -143,47 +134,6 @@ internal static class TestData
         public ITemplateFactory ChildTemplateFactory { get; }
 
         public void Render(IMultipleContentBuilder builder) => _delegate(builder, Context, TemplateEngine, ChildTemplateFactory);
-    }
-
-    internal sealed class ViewModel : IParameterizedTemplate
-    {
-        public string? AdditionalParameter { get; set; }
-        public string Property { get; set; } = "";
-        public string ReadOnlyParameter => "Original value";
-        public TestEnum EnumParameter { get; set; }
-
-        public void SetParameter(string name, object? value)
-        {
-            switch (name)
-            {
-                case nameof(AdditionalParameter):
-                    AdditionalParameter = value?.ToString();
-                    break;
-                case nameof(Property):
-                    Property = value?.ToString() ?? string.Empty;
-                    break;
-                case nameof(EnumParameter):
-                    EnumParameter = value is string s ? Enum.Parse<TestEnum>(s) : (TestEnum)Convert.ToInt32(value);
-                    break;
-            }
-        }
-
-        public ITemplateParameter[] GetParameters() => new[]
-        {
-            new TemplateParameter(nameof(AdditionalParameter), typeof(string)),
-            new TemplateParameter(nameof(Property), typeof(string)),
-            new TemplateParameter(nameof(EnumParameter), typeof(TestEnum))
-        };
-    }
-
-    internal sealed class ViewModelWithModel<T> : IModelContainer<T>
-    {
-        public T? Model { get; set; }
-    }
-
-    internal sealed class ViewModelWithTemplateContext : ITemplateContextContainer
-    {
-        public ITemplateContext Context { get; set; } = default!;
     }
 
     /// <summary>
