@@ -367,4 +367,8 @@ public class IndentedStringBuilder
         public void Dispose()
             => _stringBuilder._indent = _indent;
     }
+
+    public StringBuilder ToStringBuilder() => this;
+
+    public static IndentedStringBuilder FromStringBuilder(StringBuilder instance) => new IndentedStringBuilder(instance);
 }
