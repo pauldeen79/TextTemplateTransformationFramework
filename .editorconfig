@@ -130,6 +130,7 @@ dotnet_diagnostic.CA1305.severity = none
 # Method 'x' passes a literal string as parameter 'y' of a call to 'z'. Retrieve the following string(s) from a resource table instead: "a".
 dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.CA1310.severity = none
+#Remove the underscores from member name x
 dotnet_diagnostic.CA1707.severity = none
 dotnet_diagnostic.CA1710.severity = none
 dotnet_diagnostic.CA1711.severity = none

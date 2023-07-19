@@ -10,7 +10,7 @@ public partial class TemplateFileManagerTests
 
     protected TemplateFileManager CreateSutWithRealMultipleContentBuilder() => new(new MultipleContentBuilder(FileSystemMock.Object, Encoding.UTF8, string.Empty), StringBuilder);
 
-    protected IContentBuilder CreateContentBuilder(string fileName, bool skipFileWhenExists, StringBuilder builder)
+    protected static IContentBuilder CreateContentBuilder(string fileName, bool skipFileWhenExists, StringBuilder builder)
     {
         var mock = new Mock<IContentBuilder>();
         mock.SetupGet(x => x.Filename).Returns(fileName);

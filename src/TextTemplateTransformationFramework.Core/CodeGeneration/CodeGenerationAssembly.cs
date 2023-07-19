@@ -32,13 +32,13 @@ public sealed class CodeGenerationAssembly : ICodeGenerationAssembly
         }
     }
 
-    private Assembly LoadAssembly(AssemblyLoadContext context, ICodeGenerationAssemblySettings settings)
+    private static Assembly LoadAssembly(AssemblyLoadContext context, ICodeGenerationAssemblySettings settings)
     {
         try
         {
             return context.LoadFromAssemblyName(new AssemblyName(settings.AssemblyName));
         }
-        catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.") || e.Message.EndsWith("The system cannot find the file specified."))
+        catch (Exception e) when (e.Message.StartsWith("The given assembly name was invalid.", StringComparison.InvariantCulture) || e.Message.EndsWith("The system cannot find the file specified.", StringComparison.InvariantCulture))
         {
             if (settings.AssemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(settings.AssemblyName))
             {
@@ -61,12 +61,12 @@ public sealed class CodeGenerationAssembly : ICodeGenerationAssembly
         return templateFileManager.MultipleContentBuilder.ToString()!;
     }
 
-    private IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly, IEnumerable<string>? classNameFilter)
+    private static IEnumerable<ICodeGenerationProvider> GetCodeGeneratorProviders(Assembly assembly, IEnumerable<string>? classNameFilter)
         => assembly.GetExportedTypes().Where(t => !t.IsAbstract && !t.IsInterface && Array.Exists(t.GetInterfaces(), i => i.FullName == typeof(ICodeGenerationProvider).FullName))
             .Where(t => FilterIsValid(t, classNameFilter))
             .Select(t => new CodeGenerationProviderWrapper(Activator.CreateInstance(t)!));
 
-    private bool FilterIsValid(Type type, IEnumerable<string>? classNameFilter)
+    private static bool FilterIsValid(Type type, IEnumerable<string>? classNameFilter)
     {
         if (classNameFilter == null)
         {
