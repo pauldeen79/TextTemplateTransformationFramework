@@ -1,5 +1,6 @@
 ﻿namespace TemplateFramework.Console;
 
+[ExcludeFromCodeCoverage]
 public class CommandLineProcessor : ICommandLineProcessor
 {
     private readonly IEnumerable<ICommandLineCommand> _commands;
