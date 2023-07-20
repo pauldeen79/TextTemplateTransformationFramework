@@ -2,13 +2,15 @@
 
 public class SingleContentTemplateRenderer : ITemplateRenderer
 {
-    public void Render(object template, object generationEnvironment, string defaultFilename)
+    public bool Supports(IGenerationEnvironment generationEnvironment) => generationEnvironment is StringBuilderEnvironment;
+    
+    public void Render(object template, IGenerationEnvironment generationEnvironment, string defaultFilename)
     {
         Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
-        Guard.IsAssignableToType<StringBuilder>(generationEnvironment);
+        Guard.IsAssignableToType<StringBuilderEnvironment>(generationEnvironment);
 
-        var builder = (StringBuilder)generationEnvironment;
+        var builder = ((StringBuilderEnvironment)generationEnvironment).Builder;
 
         if (template is ITemplate typedTemplate)
         {
@@ -31,6 +33,4 @@ public class SingleContentTemplateRenderer : ITemplateRenderer
             }
         }
     }
-
-    public bool Supports(object generationEnvironment) => generationEnvironment is StringBuilder;
 }

@@ -2,20 +2,26 @@
 
 public class IntegrationTests
 {
+    private readonly Mock<ITemplateCreator> _templateCreatorMock;
+
+    public IntegrationTests()
+    {
+        _templateCreatorMock = new Mock<ITemplateCreator>();
+        _templateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>()))
+                            .Returns<string>(name => name == "MyTemplate");
+        _templateCreatorMock.Setup(x => x.CreateByName(It.IsAny<string>()))
+                            .Returns<string>(name => name == "MyTemplate"
+                                ? new TestData.PlainTemplateWithTemplateContext(context => "Context IsRootContext: " + context.IsRootContext)
+                                : throw new NotSupportedException("What are you doing?!"));
+    }
+
     [Fact]
     public void Can_Render_MultipleContentBuilderTemplate_With_ChildTemplate_And_TemplateContext()
     {
         // Arrange
-        var templateCreatorMock = new Mock<ITemplateCreator>();
-        templateCreatorMock.Setup(x => x.SupportsName(It.IsAny<string>()))
-                           .Returns<string>(name => name == "MyTemplate");
-        templateCreatorMock.Setup(x => x.CreateByName(It.IsAny<string>()))
-                           .Returns<string>(name => name == "MyTemplate"
-                                ? new TestData.PlainTemplateWithTemplateContext(context => "Context IsRootContext: " + context.IsRootContext)
-                                : throw new NotSupportedException("What are you doing?!"));
         using var provider = new ServiceCollection()
             .AddTemplateFramework()
-            .AddSingleton(_ => templateCreatorMock.Object)
+            .AddSingleton(_ => _templateCreatorMock.Object)
             .BuildServiceProvider();
         var sut = provider.GetRequiredService<ITemplateEngine>();
 
@@ -23,13 +29,13 @@ public class IntegrationTests
         var template = new TestData.MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine(templateFactory, (builder, context, engine, factory) =>
         {
             var childTemplate = factory.CreateByName("MyTemplate");
-            engine.Render(childTemplate, builder, context.CreateChildContext(childTemplate));
+            engine.Render(new RenderTemplateRequest<object?>(childTemplate, builder, string.Empty, null, null, context.CreateChildContext(childTemplate)));
         });
         var fileSystemMock = new Mock<IFileSystem>();
         var generationEnvironment = new MultipleContentBuilder(fileSystemMock.Object, Encoding.UTF8, TestData.BasePath);
 
         // Act
-        sut.Render(template, generationEnvironment);
+        sut.Render(new RenderTemplateRequest<object?>(template, generationEnvironment, string.Empty, null, null, null));
 
         // Assert
         generationEnvironment.Contents.Should().ContainSingle();

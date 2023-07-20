@@ -11,39 +11,31 @@ public class DefaultTemplateInitializer : ITemplateInitializer
         _converters = converters;
     }
 
-    public void Initialize<T>(object template,
-                              string defaultFilename,
-                              ITemplateEngine engine,
-                              T? model,
-                              object? additionalParameters,
-                              ITemplateContext? context)
+    public void Initialize<TModel>(IRenderTemplateRequest<TModel> request, ITemplateEngine engine)
     {
-        Guard.IsNotNull(template);
-        Guard.IsNotNull(defaultFilename);
+        Guard.IsNotNull(request);
         Guard.IsNotNull(engine);
 
-        var session = additionalParameters.ToKeyValuePairs();
-        TrySetAdditionalParametersOnTemplate(template, model, session);
-        TrySetTemplateContextOnTemplate(template, model, context);
-        TrySetTemplateEngineOnTemplate(template, engine);
+        TrySetAdditionalParametersOnTemplate(request);
+        TrySetTemplateContextOnTemplate(request.Template, request.Model, request.Context);
+        TrySetTemplateEngineOnTemplate(request.Template, engine);
     }
 
-    private void TrySetAdditionalParametersOnTemplate<T>(object template,
-                                                         T? model,
-                                                         IEnumerable<KeyValuePair<string, object?>> additionalParameters)
+    private void TrySetAdditionalParametersOnTemplate<TModel>(IRenderTemplateRequest<TModel> request)
     {
-        if (template is IModelContainer<T> modelContainer)
+        if (request.Template is IModelContainer<TModel> modelContainer)
         {
-            modelContainer.Model = model;
+            modelContainer.Model = request.Model;
         }
 
-        if (template is not IParameterizedTemplate parameterizedTemplate)
+        if (request.Template is not IParameterizedTemplate parameterizedTemplate)
         {
             return;
         }
 
+        var session = request.AdditionalParameters.ToKeyValuePairs();
         var parameters = parameterizedTemplate.GetParameters();
-        foreach (var item in additionalParameters.ToKeyValuePairs().Where(x => x.Key != Constants.ModelKey))
+        foreach (var item in session.Where(x => x.Key != Constants.ModelKey))
         {
             var parameter = Array.Find(parameters, p => p.Name == item.Key);
             if (parameter == null)

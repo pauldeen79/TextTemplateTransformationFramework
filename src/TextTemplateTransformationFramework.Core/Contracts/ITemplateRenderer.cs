@@ -2,6 +2,6 @@
 
 public interface ITemplateRenderer
 {
-    bool Supports(object generationEnvironment);
-    void Render(object template, object generationEnvironment, string defaultFilename);
+    bool Supports(IGenerationEnvironment generationEnvironment);
+    void Render(object template, IGenerationEnvironment generationEnvironment, string defaultFilename);
 }

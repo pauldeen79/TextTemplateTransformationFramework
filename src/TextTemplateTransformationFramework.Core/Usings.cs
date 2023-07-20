@@ -14,6 +14,7 @@ global using TemplateFramework.Abstractions.Infrastructure;
 global using TemplateFramework.Abstractions.Templates;
 global using TemplateFramework.Core.Contracts;
 global using TemplateFramework.Core.Extensions;
+global using TemplateFramework.Core.GenerationEnvironments;
 global using TemplateFramework.Core.Infrastructure;
 global using TemplateFramework.Core.Models;
 global using TemplateFramework.Core.TemplateInitializers;

@@ -20,21 +20,22 @@ public class CodeGenerationEngine : ICodeGenerationEngine
         var result = Initialize(provider, settings);
         if (provider.GenerateMultipleFiles)
         {
-            _templateEngine.Render(template: result.generator,
+            _templateEngine.Render(new RenderTemplateRequest<object?>(
+                                   template: result.generator,
                                    generationEnvironment: templateFileManager.MultipleContentBuilder,
                                    model: provider.CreateModel(),
                                    defaultFilename: provider.DefaultFilename,
                                    additionalParameters: result.additionalParameters,
-                                   context: null);
+                                   context: null));
         }
         else
         {
-            _templateEngine.Render(template: result.generator,
+            _templateEngine.Render(new RenderTemplateRequest<object?>(template: result.generator,
                                    generationEnvironment: templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
                                    model: provider.CreateModel(),
                                    defaultFilename: string.Empty,
                                    additionalParameters: result.additionalParameters,
-                                   context: null);
+                                   context: null));
         }
 
         ProcessResult(provider, result.shouldSave, result.shouldUseLastGeneratedFiles, templateFileManager);

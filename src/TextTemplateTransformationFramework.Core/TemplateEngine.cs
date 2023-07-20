@@ -13,48 +13,18 @@ public class TemplateEngine : ITemplateEngine
         _templateRenderers = templateRenderers;
     }
 
-    public void Render<T>(object template,
-                          StringBuilder generationEnvironment,
-                          T? model,
-                          string defaultFilename,
-                          object? additionalParameters,
-                          ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters, context);
-
-    public void Render<T>(object template,
-                          IMultipleContentBuilder generationEnvironment,
-                          T? model,
-                          string defaultFilename,
-                          object? additionalParameters,
-                          ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters, context);
-
-    public void Render<T>(object template,
-                          IMultipleContentBuilderContainer generationEnvironment,
-                          T? model,
-                          string defaultFilename,
-                          object? additionalParameters,
-                          ITemplateContext? context)
-        => Render(template, generationEnvironment, defaultFilename, model, additionalParameters, context);
-
-    protected void Render<T>(object template,
-                             object generationEnvironment,
-                             string defaultFilename,
-                             T? model,
-                             object? additionalParameters,
-                             ITemplateContext? context)
+    public void Render<TModel>(IRenderTemplateRequest<TModel> request)
     {
-        Guard.IsNotNull(template);
-        Guard.IsNotNull(generationEnvironment);
+        Guard.IsNotNull(request);
 
-        _templateInitializer.Initialize(template, defaultFilename, this, model, additionalParameters, context);
+        _templateInitializer.Initialize(request, this);
 
-        var renderer = _templateRenderers.FirstOrDefault(x => x.Supports(generationEnvironment));
+        var renderer = _templateRenderers.FirstOrDefault(x => x.Supports(request.GenerationEnvironment));
         if (renderer is null)
         {
-            throw new ArgumentOutOfRangeException(nameof(generationEnvironment), "Type of GenerationEnvironment is not supported");
+            throw new NotSupportedException($"Type of GenerationEnvironment ({request.GenerationEnvironment?.GetType().FullName}) is not supported");
         }
 
-        renderer.Render(template, generationEnvironment, defaultFilename);
+        renderer.Render(request.Template, request.GenerationEnvironment, request.DefaultFilename);
     }
 }

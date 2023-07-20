@@ -2,10 +2,5 @@
 
 public interface ITemplateInitializer
 {
-    void Initialize<T>(object template,
-                       string defaultFilename,
-                       ITemplateEngine engine,
-                       T? model,
-                       object? additionalParameters,
-                       ITemplateContext? context);
+    void Initialize<TModel>(IRenderTemplateRequest<TModel> request, ITemplateEngine engine);
 }

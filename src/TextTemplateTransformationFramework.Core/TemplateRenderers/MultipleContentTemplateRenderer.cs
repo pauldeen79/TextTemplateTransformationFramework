@@ -2,24 +2,24 @@
 
 public class MultipleContentTemplateRenderer : ITemplateRenderer
 {
-    public bool Supports(object generationEnvironment) => generationEnvironment is IMultipleContentBuilder or IMultipleContentBuilderContainer;
+    public bool Supports(IGenerationEnvironment generationEnvironment) => generationEnvironment is MultipleContentBuilderEnvironment or MultipleContentBuilderContainerEnvironment;
 
-    public void Render(object template, object generationEnvironment, string defaultFilename)
+    public void Render(object template, IGenerationEnvironment generationEnvironment, string defaultFilename)
     {
         Guard.IsNotNull(template);
         Guard.IsNotNull(generationEnvironment);
         Guard.IsNotNull(defaultFilename);
 
         IMultipleContentBuilder multipleContentBuilder;
-        if (generationEnvironment is IMultipleContentBuilderContainer container)
+        if (generationEnvironment is MultipleContentBuilderContainerEnvironment containerEnvironment)
         {
             // Use TemplateFileManager
-            multipleContentBuilder = container.MultipleContentBuilder
+            multipleContentBuilder = containerEnvironment.Builder.MultipleContentBuilder
                 ?? throw new ArgumentException("MultipleContentBuilder property is null", nameof(generationEnvironment));
         }
-        else if (generationEnvironment is IMultipleContentBuilder builder)
+        else if (generationEnvironment is MultipleContentBuilderEnvironment builderEnvironment)
         {
-            multipleContentBuilder = builder;
+            multipleContentBuilder = builderEnvironment.Builder;
         }
         else
         {
@@ -35,7 +35,7 @@ public class MultipleContentTemplateRenderer : ITemplateRenderer
         }
 
         var stringBuilder = new StringBuilder();
-        new SingleContentTemplateRenderer().Render(template, stringBuilder, defaultFilename);
+        new SingleContentTemplateRenderer().Render(template, new StringBuilderEnvironment(stringBuilder), defaultFilename);
         var builderResult = stringBuilder.ToString();
 
         if (builderResult.Contains(@"<MultipleContents xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/TemplateFramework"">", StringComparison.InvariantCulture))
