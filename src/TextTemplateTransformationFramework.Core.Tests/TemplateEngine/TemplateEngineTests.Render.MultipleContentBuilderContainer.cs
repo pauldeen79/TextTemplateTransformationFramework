@@ -5,29 +5,15 @@ public partial class TemplateEngineTests
     public class Render_MultipleContentBuilderContainer : TemplateEngineTests
     {
         [Fact]
-        public void Throws_On_Null_Template()
+        public void Throws_On_Null_Request()
         {
             // Arrange
             var sut = CreateSut();
-            object? template = null;
-            IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
+            IRenderTemplateRequest<object?> request = null!;
 
             // Act & Assert
-            sut.Invoking(x => x.Render(template!, generationEnvironment!))
-               .Should().Throw<ArgumentNullException>().WithParameterName(nameof(template));
-        }
-
-        [Fact]
-        public void Throws_On_Null_GenerationEnvironment()
-        {
-            // Arrange
-            var sut = CreateSut();
-            object? template = this;
-            IMultipleContentBuilderContainer? generationEnvironment = null;
-
-            // Act & Assert
-            sut.Invoking(x => x.Render(template!, generationEnvironment!))
-               .Should().Throw<ArgumentNullException>().WithParameterName(nameof(generationEnvironment));
+            sut.Invoking(x => x.Render(request))
+               .Should().Throw<ArgumentNullException>().WithParameterName(nameof(request));
         }
 
         [Fact]
@@ -39,12 +25,13 @@ public partial class TemplateEngineTests
             IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
             MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
             var additionalParameters = new { AdditionalParameter = "Some value" };
+            var request = new RenderTemplateRequest<object?>(template, generationEnvironment, string.Empty, null, additionalParameters, null);
 
             // Act
-            sut.Render(template, generationEnvironment, null, additionalParameters);
+            sut.Render(request);
 
             // Assert
-            TemplateInitializerMock.Verify(x => x.Initialize(template, string.Empty, sut, default(object?), additionalParameters, null), Times.Once);
+            TemplateInitializerMock.Verify(x => x.Initialize(request, sut), Times.Once);
         }
 
         [Fact]
@@ -56,13 +43,14 @@ public partial class TemplateEngineTests
             IMultipleContentBuilderContainer? generationEnvironment = MultipleContentBuilderContainerMock.Object;
             MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
             var additionalParameters = new { AdditionalParameter = "Some value" };
-            TemplateRendererMock.Setup(x => x.Supports(It.IsAny<object>())).Returns(true);
+            TemplateRendererMock.Setup(x => x.Supports(It.IsAny<IGenerationEnvironment>())).Returns(true);
+            var request = new RenderTemplateRequest<object?>(template, generationEnvironment, string.Empty, null, additionalParameters, null);
 
             // Act
-            sut.Render(template, generationEnvironment, additionalParameters);
+            sut.Render(request);
 
             // Assert
-            TemplateRendererMock.Verify(x => x.Render(template, generationEnvironment, string.Empty), Times.Once);
+            TemplateRendererMock.Verify(x => x.Render(template, It.Is<IGenerationEnvironment>(x => x.Type == GenerationEnvironmentType.MultipleContentBuilderContainer), string.Empty), Times.Once);
         }
     }
 }

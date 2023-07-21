@@ -9,9 +9,11 @@ public partial class SingleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var environmentMock = new Mock<IGenerationEnvironment>();
+            environmentMock.SetupGet(x => x.Type).Returns(GenerationEnvironmentType.StringBuilder);
 
             // Act
-            var result = sut.Supports(new StringBuilder());
+            var result = sut.Supports(environmentMock.Object);
 
             // Assert
             result.Should().BeTrue();
@@ -22,9 +24,11 @@ public partial class SingleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var environmentMock = new Mock<IGenerationEnvironment>();
+            environmentMock.SetupGet(x => x.Type).Returns(GenerationEnvironmentType.MultipleContentBuilder);
 
             // Act
-            var result = sut.Supports(new object());
+            var result = sut.Supports(environmentMock.Object);
 
             // Assert
             result.Should().BeFalse();

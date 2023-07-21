@@ -9,9 +9,11 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var environmentMock = new Mock<IGenerationEnvironment>();
+            environmentMock.SetupGet(x => x.Type).Returns(GenerationEnvironmentType.StringBuilder);
 
             // Act
-            var result = sut.Supports(new StringBuilder());
+            var result = sut.Supports(environmentMock.Object);
 
             // Assert
             result.Should().BeFalse();
@@ -35,9 +37,11 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var environmentMock = new Mock<IGenerationEnvironment>();
+            environmentMock.SetupGet(x => x.Type).Returns(GenerationEnvironmentType.MultipleContentBuilder);
 
             // Act
-            var result = sut.Supports(new Mock<IMultipleContentBuilder>().Object);
+            var result = sut.Supports(environmentMock.Object);
 
             // Assert
             result.Should().BeTrue();
@@ -48,13 +52,15 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var environmentMock = new Mock<IGenerationEnvironment>();
+            environmentMock.SetupGet(x => x.Type).Returns(GenerationEnvironmentType.MultipleContentBuilderContainer);
+
 
             // Act
-            var result = sut.Supports(new Mock<IMultipleContentBuilderContainer>().Object);
+            var result = sut.Supports(environmentMock.Object);
 
             // Assert
             result.Should().BeTrue();
         }
-
     }
 }
