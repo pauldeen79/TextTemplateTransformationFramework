@@ -20,7 +20,7 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
-            var request = new RenderTemplateRequest(new TestData.Template(_ => { }), new StringBuilder(), DefaultFilename, null, null);
+            var request = new RenderTemplateRequest(new TestData.Template(_ => { }), new StringBuilder(), DefaultFilename);
 
             // Act & Assert
             sut.Invoking(x => x.Render(request))
@@ -32,7 +32,7 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
-            var request = new RenderTemplateRequest(new TestData.Template(_ => { }), new Mock<IMultipleContentBuilderContainer>().Object, DefaultFilename, null, null);
+            var request = new RenderTemplateRequest(new TestData.Template(_ => { }), new Mock<IMultipleContentBuilderContainer>().Object, DefaultFilename);
 
             // Act & Assert
             sut.Invoking(x => x.Render(request))
@@ -46,7 +46,7 @@ public partial class MultipleContentTemplateRendererTests
             var sut = CreateSut();
             var template = new Mock<IMultipleContentBuilderTemplate>();
             var generationEnvironment = new Mock<IMultipleContentBuilder>();
-            var request = new RenderTemplateRequest(template.Object, generationEnvironment.Object, DefaultFilename, null, null);
+            var request = new RenderTemplateRequest(template.Object, generationEnvironment.Object, DefaultFilename);
 
             // Act
             sut.Render(request);
@@ -70,7 +70,7 @@ public partial class MultipleContentTemplateRendererTests
 
                                      return contentBuilderMock.Object;
                                  });
-            var request = new RenderTemplateRequest(template, generationEnvironment.Object, DefaultFilename, null, null);
+            var request = new RenderTemplateRequest(template, generationEnvironment.Object, DefaultFilename);
 
             // Act
             sut.Render(request);
@@ -96,7 +96,7 @@ public partial class MultipleContentTemplateRendererTests
                                       
                                           return contentBuilderMock.Object;
                                       });
-            var request = new RenderTemplateRequest(template, generationEnvironment.Object, DefaultFilename, null, null);
+            var request = new RenderTemplateRequest(template, generationEnvironment.Object, DefaultFilename);
 
             // Act
             sut.Render(request);
@@ -123,7 +123,7 @@ public partial class MultipleContentTemplateRendererTests
 
                                      return contentBuilderMock.Object;
                                  });
-            var request = new RenderTemplateRequest(template, generationEnvironment.Object, DefaultFilename, null, null);
+            var request = new RenderTemplateRequest(template, generationEnvironment.Object, DefaultFilename);
 
             // Act
             sut.Render(request);

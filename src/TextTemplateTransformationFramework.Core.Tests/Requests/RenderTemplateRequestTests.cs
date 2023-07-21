@@ -6,7 +6,7 @@ public class RenderTemplateRequestTests
     public void Throws_On_Null_StringBuilder()
     {
         // Act & Assert
-        this.Invoking(_ => new RenderTemplateRequest(this, builder: (StringBuilder)null!, string.Empty, null, null))
+        this.Invoking(_ => new RenderTemplateRequest(this, builder: (StringBuilder)null!))
             .Should().Throw<ArgumentNullException>().WithParameterName("builder");
     }
 
@@ -14,7 +14,7 @@ public class RenderTemplateRequestTests
     public void Throws_On_Null_MultipleContentBuilder()
     {
         // Act & Assert
-        this.Invoking(_ => new RenderTemplateRequest(this, builder: (IMultipleContentBuilder)null!, string.Empty, null, null))
+        this.Invoking(_ => new RenderTemplateRequest(this, builder: (IMultipleContentBuilder)null!))
             .Should().Throw<ArgumentNullException>().WithParameterName("builder");
     }
 
@@ -22,7 +22,7 @@ public class RenderTemplateRequestTests
     public void Throws_On_Null_MultipleContentBuilderContainer()
     {
         // Act & Assert
-        this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: null!, string.Empty, null, null))
+        this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: null!))
             .Should().Throw<ArgumentNullException>().WithParameterName("builderContainer");
     }
 
@@ -30,7 +30,7 @@ public class RenderTemplateRequestTests
     public void Throws_On_Null_Template()
     {
         // Act & Assert
-        this.Invoking(_ => new RenderTemplateRequest(template: null!, new StringBuilder(), string.Empty, null, null))
+        this.Invoking(_ => new RenderTemplateRequest(template: null!, new StringBuilder()))
             .Should().Throw<ArgumentNullException>().WithParameterName("template");
     }
 
@@ -38,7 +38,7 @@ public class RenderTemplateRequestTests
     public void Throws_On_Null_DefaultFileName()
     {
         // Act & Assert
-        this.Invoking(_ => new RenderTemplateRequest(this, new StringBuilder(), defaultFilename: null!, null, null))
+        this.Invoking(_ => new RenderTemplateRequest(this, new StringBuilder(), defaultFilename: null!))
             .Should().Throw<ArgumentNullException>().WithParameterName("defaultFilename");
     }
 }

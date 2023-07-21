@@ -29,13 +29,13 @@ public class IntegrationTests
         var template = new TestData.MultipleContentBuilderTemplateWithTemplateContextAndTemplateEngine(templateFactory, (builder, context, engine, factory) =>
         {
             var childTemplate = factory.CreateByName("MyTemplate");
-            engine.Render(new RenderTemplateRequest(childTemplate, builder, string.Empty, null, context.CreateChildContext(childTemplate)));
+            engine.Render(new RenderTemplateRequest(childTemplate, builder, context.CreateChildContext(childTemplate)));
         });
         var fileSystemMock = new Mock<IFileSystem>();
         var generationEnvironment = new MultipleContentBuilder(fileSystemMock.Object, Encoding.UTF8, TestData.BasePath);
 
         // Act
-        sut.Render(new RenderTemplateRequest(template, generationEnvironment, string.Empty, null, null));
+        sut.Render(new RenderTemplateRequest(template, generationEnvironment));
 
         // Assert
         generationEnvironment.Contents.Should().ContainSingle();
