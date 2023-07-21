@@ -3,5 +3,5 @@
 public interface ITemplateRenderer
 {
     bool Supports(IGenerationEnvironment generationEnvironment);
-    void Render(object template, IGenerationEnvironment generationEnvironment, string defaultFilename);
+    void Render(IRenderTemplateRequest request);
 }

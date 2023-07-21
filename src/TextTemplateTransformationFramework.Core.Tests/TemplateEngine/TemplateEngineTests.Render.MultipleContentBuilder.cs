@@ -48,7 +48,7 @@ public partial class TemplateEngineTests
             sut.Render(request);
 
             // Assert
-            TemplateRendererMock.Verify(x => x.Render(template, It.Is<IGenerationEnvironment>(x => x.Type == GenerationEnvironmentType.MultipleContentBuilder), string.Empty), Times.Once);
+            TemplateRendererMock.Verify(x => x.Render(It.Is<IRenderTemplateRequest>(req => req.Template == template && req.GenerationEnvironment.Type == GenerationEnvironmentType.MultipleContentBuilder && req.DefaultFilename == string.Empty)), Times.Once);
         }
     }
 }

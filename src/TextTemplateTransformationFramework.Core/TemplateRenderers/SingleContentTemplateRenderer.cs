@@ -4,33 +4,36 @@ public class SingleContentTemplateRenderer : ITemplateRenderer
 {
     public bool Supports(IGenerationEnvironment generationEnvironment) => generationEnvironment is StringBuilderEnvironment;
     
-    public void Render(object template, IGenerationEnvironment generationEnvironment, string defaultFilename)
+    public void Render(IRenderTemplateRequest request)
     {
-        Guard.IsNotNull(template);
-        Guard.IsNotNull(generationEnvironment);
-        Guard.IsAssignableToType<StringBuilderEnvironment>(generationEnvironment);
+        Guard.IsNotNull(request);
+        Guard.IsAssignableToType<StringBuilderEnvironment>(request.GenerationEnvironment);
 
-        var builder = ((StringBuilderEnvironment)generationEnvironment).Builder;
+        var builder = ((StringBuilderEnvironment)request.GenerationEnvironment).Builder;
 
-        if (template is ITemplate typedTemplate)
+        if (request.Template is ITemplate typedTemplate)
         {
             typedTemplate.Render(builder);
         }
-        else if (template is ITextTransformTemplate textTransformTemplate)
+        else if (request.Template is ITextTransformTemplate textTransformTemplate)
         {
             var output = textTransformTemplate.TransformText();
-            if (!string.IsNullOrEmpty(output))
-            {
-                builder.Append(output);
-            }
+            ApendIfFilled(builder, output);
         }
         else
         {
-            var output = template.ToString();
-            if (!string.IsNullOrEmpty(output))
-            {
-                builder.Append(output);
-            }
+            var output = request.Template.ToString();
+            ApendIfFilled(builder, output);
         }
+    }
+
+    private static void ApendIfFilled(StringBuilder builder, string? output)
+    {
+        if (string.IsNullOrEmpty(output))
+        {
+            return;
+        }
+        
+        builder.Append(output);
     }
 }

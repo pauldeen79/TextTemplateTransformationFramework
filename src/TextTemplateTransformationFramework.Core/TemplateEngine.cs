@@ -25,6 +25,6 @@ public class TemplateEngine : ITemplateEngine
             throw new NotSupportedException($"Type of GenerationEnvironment ({request.GenerationEnvironment?.GetType().FullName}) is not supported");
         }
 
-        renderer.Render(request.Template, request.GenerationEnvironment, request.DefaultFilename);
+        renderer.Render(request);
     }
 }
