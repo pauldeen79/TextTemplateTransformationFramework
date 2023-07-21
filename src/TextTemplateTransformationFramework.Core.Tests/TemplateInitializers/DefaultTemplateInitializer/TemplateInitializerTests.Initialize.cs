@@ -12,7 +12,7 @@ public partial class TemplateInitializerTests
 
             // Act & Assert
             sut.Invoking(x => x.Initialize<object?>(request: null!, TemplateEngineMock.Object))
-               .Should().Throw<ArgumentNullException>().WithParameterName("template");
+               .Should().Throw<ArgumentNullException>().WithParameterName("request");
         }
 
         [Fact]

@@ -11,9 +11,10 @@ public partial class TemplateInitializerTests
             var sut = CreateSut();
             var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!");
             var context = new Core.TemplateContext(template);
+            var request = new RenderTemplateRequest<object?>(template, new StringBuilder(), DefaultFilename, null, null, context);
 
             // Act
-            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, context);
+            sut.Initialize(request, TemplateEngineMock.Object);
 
             // Assert
             template.Context.Should().BeSameAs(context);
@@ -25,9 +26,10 @@ public partial class TemplateInitializerTests
             // Arrange
             var sut = CreateSut();
             var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!");
+            var request = new RenderTemplateRequest<object?>(template, new StringBuilder(), DefaultFilename, null, null, context: null);
 
             // Act
-            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), null, context: null);
+            sut.Initialize(request, TemplateEngineMock.Object);
 
             // Assert
             template.Context.Should().NotBeNull();
@@ -42,11 +44,12 @@ public partial class TemplateInitializerTests
         {
             // Arrange
             var sut = CreateSut();
-            var template = new TestData.PlainTemplateWithTemplateContext(_ => "Hello world!"); // note that this template type does not implement IModelContainer<T>, so the model property will not be set. But it will be available in the TemplateContext (untyped)
+            var template = new TestData.PlainTemplateWithTemplateContext(ctx => ctx.Model?.ToString() ?? string.Empty); // note that this template type does not implement IModelContainer<T>, so the model property will not be set. But it will be available in the TemplateContext (untyped)
             var model = "Hello world!";
+            var request = new RenderTemplateRequest<string>(template, new StringBuilder(), DefaultFilename, model, null, context: null);
 
             // Act
-            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, model, null, context: null);
+            sut.Initialize(request, TemplateEngineMock.Object);
 
             // Assert
             template.Context.Should().NotBeNull();

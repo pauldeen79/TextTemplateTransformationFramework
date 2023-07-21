@@ -11,9 +11,10 @@ public partial class TemplateInitializerTests
             var sut = CreateSut();
             var template = new TestData.TemplateWithViewModel<TestData.NonConstructableViewModel>(_ => { });
             var viewModel = new TestData.NonConstructableViewModel("Some value");
+            var request = new RenderTemplateRequest<object?>(template, new StringBuilder(), DefaultFilename, null, additionalParameters: new { ViewModel = viewModel }, null);
 
             // Act
-            sut.Initialize(template, DefaultFilename, TemplateEngineMock.Object, default(object?), additionalParameters: new { ViewModel = viewModel }, null);
+            sut.Initialize(request, TemplateEngineMock.Object);
 
             // Assert
             template.ViewModel.Should().BeSameAs(viewModel);

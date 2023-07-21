@@ -7,9 +7,13 @@ public class SingleContentTemplateRenderer : ITemplateRenderer
     public void Render(IRenderTemplateRequest request)
     {
         Guard.IsNotNull(request);
-        Guard.IsAssignableToType<StringBuilderEnvironment>(request.GenerationEnvironment);
+        var environment = request.GenerationEnvironment as StringBuilderEnvironment;
+        if (environment == null)
+        {
+            throw new NotSupportedException($"Type of GenerationEnvironment ({request.GenerationEnvironment?.GetType().FullName}) is not supported");
+        }
 
-        var builder = ((StringBuilderEnvironment)request.GenerationEnvironment).Builder;
+        var builder = environment.Builder;
 
         if (request.Template is ITemplate typedTemplate)
         {

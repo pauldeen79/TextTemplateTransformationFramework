@@ -43,10 +43,13 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns(string.Empty);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.Setup(x => x.StartNewFile(It.IsAny<string>(), It.IsAny<bool>())).Returns(new StringBuilder());
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
@@ -63,8 +66,10 @@ public partial class CodeGenerationEngineTests
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(true);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.Setup(x => x.StartNewFile(It.IsAny<string>(), It.IsAny<bool>())).Returns(new StringBuilder());
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
@@ -81,8 +86,10 @@ public partial class CodeGenerationEngineTests
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(string.Empty);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns("MyFile.txt");
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.Setup(x => x.StartNewFile(It.IsAny<string>(), It.IsAny<bool>())).Returns(new StringBuilder());
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
@@ -97,11 +104,14 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns(string.Empty);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
             CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFilename).Returns("GeneratedFiles.txt");
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.SetupGet(x => x.MultipleContentBuilder).Returns(new Mock<IMultipleContentBuilder>().Object);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
@@ -116,11 +126,14 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns(string.Empty);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
             CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFilename).Returns(string.Empty);
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.SetupGet(x => x.MultipleContentBuilder).Returns(new Mock<IMultipleContentBuilder>().Object);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
@@ -135,11 +148,14 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns(string.Empty);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
             CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFilename).Returns("GeneratedFiles.txt");
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.SetupGet(x => x.MultipleContentBuilder).Returns(new Mock<IMultipleContentBuilder>().Object);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);
@@ -154,11 +170,14 @@ public partial class CodeGenerationEngineTests
             // Arrange
             var sut = CreateSut();
             CodeGenerationProviderMock.SetupGet(x => x.BasePath).Returns(TestData.BasePath);
+            CodeGenerationProviderMock.SetupGet(x => x.DefaultFilename).Returns(string.Empty);
             CodeGenerationProviderMock.SetupGet(x => x.Path).Returns(TestData.BasePath);
             CodeGenerationProviderMock.SetupGet(x => x.GenerateMultipleFiles).Returns(true);
             CodeGenerationProviderMock.SetupGet(x => x.LastGeneratedFilesFilename).Returns(string.Empty);
+            CodeGenerationProviderMock.Setup(x => x.CreateGenerator()).Returns(this);
             CodeGenerationSettingsMock.SetupGet(x => x.DryRun).Returns(false);
             CodeGenerationSettingsMock.SetupGet(x => x.BasePath).Returns(string.Empty);
+            TemplateFileManagerMock.SetupGet(x => x.MultipleContentBuilder).Returns(new Mock<IMultipleContentBuilder>().Object);
 
             // Act
             sut.Generate(CodeGenerationProviderMock.Object, TemplateFileManagerMock.Object, CodeGenerationSettingsMock.Object);

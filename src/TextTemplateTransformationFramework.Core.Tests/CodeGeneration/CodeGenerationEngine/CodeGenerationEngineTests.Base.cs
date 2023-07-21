@@ -7,6 +7,5 @@ public abstract partial class CodeGenerationEngineTests
     protected Mock<ICodeGenerationProvider> CodeGenerationProviderMock { get; } = new();
     protected Mock<ICodeGenerationSettings> CodeGenerationSettingsMock { get; } = new();
 
-
     protected CodeGenerationEngine CreateSut() => new(TemplateEngineMock.Object);
 }

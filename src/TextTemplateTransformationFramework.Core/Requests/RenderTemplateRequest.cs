@@ -9,7 +9,7 @@ public class RenderTemplateRequest<TModel> : IRenderTemplateRequest<TModel>
         TModel? model,
         object? additionalParameters,
         ITemplateContext? context)
-        : this(template, new StringBuilderEnvironment(builder), defaultFilename, model, additionalParameters, context)
+        : this(template, new StringBuilderEnvironment(builder ?? throw new ArgumentNullException(nameof(builder))), defaultFilename, model, additionalParameters, context)
     {
     }
 
@@ -20,7 +20,7 @@ public class RenderTemplateRequest<TModel> : IRenderTemplateRequest<TModel>
         TModel? model,
         object? additionalParameters,
         ITemplateContext? context)
-        : this(template, new MultipleContentBuilderEnvironment(builder), defaultFilename, model, additionalParameters, context)
+        : this(template, new MultipleContentBuilderEnvironment(builder ?? throw new ArgumentNullException(nameof(builder))), defaultFilename, model, additionalParameters, context)
     {
     }
 
@@ -31,7 +31,7 @@ public class RenderTemplateRequest<TModel> : IRenderTemplateRequest<TModel>
         TModel? model,
         object? additionalParameters,
         ITemplateContext? context)
-        : this(template, new MultipleContentBuilderContainerEnvironment(builderContainer), defaultFilename, model, additionalParameters, context)
+        : this(template, new MultipleContentBuilderContainerEnvironment(builderContainer ?? throw new ArgumentNullException(nameof(builderContainer))), defaultFilename, model, additionalParameters, context)
     {
     }
 
@@ -44,7 +44,6 @@ public class RenderTemplateRequest<TModel> : IRenderTemplateRequest<TModel>
         ITemplateContext? context)
     {
         Guard.IsNotNull(template);
-        Guard.IsNotNull(generationEnvironment);
         Guard.IsNotNull(defaultFilename);
 
         Template = template;

@@ -13,7 +13,7 @@ public partial class TemplateEngineTests
 
             // Act & Assert
             sut.Invoking(x => x.Render(request))
-               .Should().Throw<ArgumentOutOfRangeException>().WithParameterName("generationEnvironment");
+               .Should().Throw<NotSupportedException>();
         }
     }
 }

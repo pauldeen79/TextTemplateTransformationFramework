@@ -5,36 +5,14 @@ public partial class MultipleContentTemplateRendererTests
     public class Render : MultipleContentTemplateRendererTests
     {
         [Fact]
-        public void Throws_When_Template_Is_Null()
+        public void Throws_When_Request_Is_Null()
         {
             // Arrange
             var sut = CreateSut();
 
             // Act & Assert
-            sut.Invoking(x => x.Render(template: null!, new StringBuilder(), DefaultFilename))
-               .Should().Throw<ArgumentException>().WithParameterName("template");
-        }
-
-        [Fact]
-        public void Throws_When_GenerationEnvironment_Is_Null()
-        {
-            // Arrange
-            var sut = CreateSut();
-
-            // Act & Assert
-            sut.Invoking(x => x.Render(new TestData.Template(_ => { }), generationEnvironment: null!, DefaultFilename))
-               .Should().Throw<ArgumentException>().WithParameterName("generationEnvironment");
-        }
-
-        [Fact]
-        public void Throws_When_DefaultFilename_Is_Null()
-        {
-            // Arrange
-            var sut = CreateSut();
-
-            // Act & Assert
-            sut.Invoking(x => x.Render(new TestData.Template(_ => { }), new StringBuilder(), defaultFilename: null!))
-               .Should().Throw<ArgumentException>().WithParameterName("defaultFilename");
+            sut.Invoking(x => x.Render(request: null!))
+               .Should().Throw<ArgumentException>().WithParameterName("request");
         }
 
         [Fact]
@@ -42,10 +20,11 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var request = new RenderTemplateRequest<object?>(new TestData.Template(_ => { }), new StringBuilder(), DefaultFilename, null, null, null);
 
             // Act & Assert
-            sut.Invoking(x => x.Render(new TestData.Template(_ => { }), generationEnvironment: this, DefaultFilename))
-               .Should().Throw<ArgumentException>().WithParameterName("generationEnvironment");
+            sut.Invoking(x => x.Render(request))
+               .Should().Throw<NotSupportedException>();
         }
 
         [Fact]
@@ -53,10 +32,11 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
+            var request = new RenderTemplateRequest<object?>(new TestData.Template(_ => { }), new Mock<IMultipleContentBuilderContainer>().Object, DefaultFilename, null, null, null);
 
             // Act & Assert
-            sut.Invoking(x => x.Render(new TestData.Template(_ => { }), generationEnvironment: new Mock<IMultipleContentBuilderContainer>().Object, DefaultFilename))
-               .Should().Throw<ArgumentException>().WithParameterName("generationEnvironment");
+            sut.Invoking(x => x.Render(request))
+               .Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -66,9 +46,10 @@ public partial class MultipleContentTemplateRendererTests
             var sut = CreateSut();
             var template = new Mock<IMultipleContentBuilderTemplate>();
             var generationEnvironment = new Mock<IMultipleContentBuilder>();
+            var request = new RenderTemplateRequest<object?>(template.Object, generationEnvironment.Object, DefaultFilename, null, null, null);
 
             // Act
-            sut.Render(template.Object, generationEnvironment.Object, DefaultFilename);
+            sut.Render(request);
 
             // Assert
             template.Verify(x => x.Render(It.IsAny<IMultipleContentBuilder>()), Times.Once);
@@ -89,9 +70,10 @@ public partial class MultipleContentTemplateRendererTests
 
                                      return contentBuilderMock.Object;
                                  });
+            var request = new RenderTemplateRequest<object?>(template, generationEnvironment.Object, DefaultFilename, null, null, null);
 
             // Act
-            sut.Render(template, generationEnvironment.Object, DefaultFilename);
+            sut.Render(request);
 
             // Assert
             contentBuilderMock.Object.Builder.Should().NotBeNull();
@@ -114,9 +96,10 @@ public partial class MultipleContentTemplateRendererTests
                                       
                                           return contentBuilderMock.Object;
                                       });
+            var request = new RenderTemplateRequest<object?>(template, generationEnvironment.Object, DefaultFilename, null, null, null);
 
             // Act
-            sut.Render(template, generationEnvironment.Object, DefaultFilename);
+            sut.Render(request);
 
             // Assert
             contentBuilderMock.Object.Builder.Should().NotBeNull();
@@ -140,9 +123,10 @@ public partial class MultipleContentTemplateRendererTests
 
                                      return contentBuilderMock.Object;
                                  });
+            var request = new RenderTemplateRequest<object?>(template, generationEnvironment.Object, DefaultFilename, null, null, null);
 
             // Act
-            sut.Render(template, generationEnvironment.Object, DefaultFilename);
+            sut.Render(request);
 
             // Assert
             contentBuilderMock.Object.Builder.Should().NotBeNull();
