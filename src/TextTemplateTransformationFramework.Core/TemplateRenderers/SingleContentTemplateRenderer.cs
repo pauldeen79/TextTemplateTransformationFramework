@@ -7,6 +7,7 @@ public class SingleContentTemplateRenderer : ITemplateRenderer
     public void Render(IRenderTemplateRequest request)
     {
         Guard.IsNotNull(request);
+
         var environment = request.GenerationEnvironment as StringBuilderEnvironment;
         if (environment == null)
         {
