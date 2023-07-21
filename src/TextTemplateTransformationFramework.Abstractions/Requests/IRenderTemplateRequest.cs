@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Abstractions;
+﻿namespace TemplateFramework.Abstractions.Requests;
 
 public interface IRenderTemplateRequest<out TModel>
 {

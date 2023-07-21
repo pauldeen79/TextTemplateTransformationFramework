@@ -1,4 +1,4 @@
-﻿namespace TemplateFramework.Abstractions;
+﻿namespace TemplateFramework.Abstractions.Domains;
 
 public enum GenerationEnvironmentType
 {

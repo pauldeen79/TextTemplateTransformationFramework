@@ -1,37 +1,37 @@
-﻿namespace TemplateFramework.Core;
+﻿namespace TemplateFramework.Core.Requests;
 
 public class RenderTemplateRequest<TModel> : IRenderTemplateRequest<TModel>
 {
     public RenderTemplateRequest(
         object template,
-        StringBuilder generationEnvironment,
+        StringBuilder builder,
         string defaultFilename,
         TModel? model,
         object? additionalParameters,
         ITemplateContext? context)
-        : this(template, new StringBuilderEnvironment(generationEnvironment), defaultFilename, model, additionalParameters, context)
+        : this(template, new StringBuilderEnvironment(builder), defaultFilename, model, additionalParameters, context)
     {
     }
 
     public RenderTemplateRequest(
         object template,
-        IMultipleContentBuilder generationEnvironment,
+        IMultipleContentBuilder builder,
         string defaultFilename,
         TModel? model,
         object? additionalParameters,
         ITemplateContext? context)
-        : this(template, new MultipleContentBuilderEnvironment(generationEnvironment), defaultFilename, model, additionalParameters, context)
+        : this(template, new MultipleContentBuilderEnvironment(builder), defaultFilename, model, additionalParameters, context)
     {
     }
 
     public RenderTemplateRequest(
         object template,
-        IMultipleContentBuilderContainer generationEnvironment,
+        IMultipleContentBuilderContainer builderContainer,
         string defaultFilename,
         TModel? model,
         object? additionalParameters,
         ITemplateContext? context)
-        : this(template, new MultipleContentBuilderContainerEnvironment(generationEnvironment), defaultFilename, model, additionalParameters, context)
+        : this(template, new MultipleContentBuilderContainerEnvironment(builderContainer), defaultFilename, model, additionalParameters, context)
     {
     }
 

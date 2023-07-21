@@ -22,7 +22,7 @@ public class CodeGenerationEngine : ICodeGenerationEngine
         {
             _templateEngine.Render(new RenderTemplateRequest<object?>(
                                    template: result.generator,
-                                   generationEnvironment: templateFileManager.MultipleContentBuilder,
+                                   builder: templateFileManager.MultipleContentBuilder,
                                    model: provider.CreateModel(),
                                    defaultFilename: provider.DefaultFilename,
                                    additionalParameters: result.additionalParameters,
@@ -31,7 +31,7 @@ public class CodeGenerationEngine : ICodeGenerationEngine
         else
         {
             _templateEngine.Render(new RenderTemplateRequest<object?>(template: result.generator,
-                                   generationEnvironment: templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
+                                   builder: templateFileManager.StartNewFile(Path.Combine(provider.Path, provider.DefaultFilename)),
                                    model: provider.CreateModel(),
                                    defaultFilename: string.Empty,
                                    additionalParameters: result.additionalParameters,
