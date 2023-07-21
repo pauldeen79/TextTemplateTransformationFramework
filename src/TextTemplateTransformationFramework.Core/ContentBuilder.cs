@@ -17,5 +17,5 @@ internal sealed class ContentBuilder : IContentBuilder
 
     public StringBuilder Builder { get; }
 
-    public IContent Build() => new Content(Builder, SkipWhenFileExists, Filename!);
+    public IContent Build() => new Content(Builder, SkipWhenFileExists, Filename);
 }

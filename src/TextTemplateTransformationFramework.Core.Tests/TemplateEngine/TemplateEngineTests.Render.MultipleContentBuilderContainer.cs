@@ -44,7 +44,7 @@ public partial class TemplateEngineTests
             MultipleContentBuilderContainerMock.SetupGet(x => x.MultipleContentBuilder).Returns(MultipleContentBuilderMock.Object);
             var additionalParameters = new { AdditionalParameter = "Some value" };
             TemplateRendererMock.Setup(x => x.Supports(It.IsAny<IGenerationEnvironment>())).Returns(true);
-            var request = new RenderTemplateRequest<object?>(template, generationEnvironment, string.Empty, null, additionalParameters, null);
+            var request = new RenderTemplateRequest(template, generationEnvironment, string.Empty, additionalParameters, null);
 
             // Act
             sut.Render(request);

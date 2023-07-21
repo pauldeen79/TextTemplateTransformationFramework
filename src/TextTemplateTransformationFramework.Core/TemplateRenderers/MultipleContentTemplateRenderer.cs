@@ -33,7 +33,7 @@ public class MultipleContentTemplateRenderer : ITemplateRenderer
         }
 
         var stringBuilder = new StringBuilder();
-        var singleRequest = new RenderTemplateRequest<object?>(request.Template, stringBuilder, request.DefaultFilename, null, request.AdditionalParameters, null); // note that additional parameters are currently ignored by the implemented class
+        var singleRequest = new RenderTemplateRequest(request.Template, stringBuilder, request.DefaultFilename, request.AdditionalParameters, null); // note that additional parameters are currently ignored by the implemented class
         new SingleContentTemplateRenderer().Render(singleRequest);
         var builderResult = stringBuilder.ToString();
 

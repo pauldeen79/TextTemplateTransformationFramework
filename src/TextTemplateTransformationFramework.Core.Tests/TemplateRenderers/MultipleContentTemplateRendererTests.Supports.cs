@@ -37,7 +37,7 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
-            var request = new RenderTemplateRequest<object?>(this, new Mock<IMultipleContentBuilder>().Object, DefaultFilename, null, null, null);
+            var request = new RenderTemplateRequest(this, new Mock<IMultipleContentBuilder>().Object, DefaultFilename, null, null);
 
             // Act
             var result = sut.Supports(request.GenerationEnvironment);
@@ -51,7 +51,7 @@ public partial class MultipleContentTemplateRendererTests
         {
             // Arrange
             var sut = CreateSut();
-            var request = new RenderTemplateRequest<object?>(this, new Mock<IMultipleContentBuilderContainer>().Object, DefaultFilename, null, null, null);
+            var request = new RenderTemplateRequest(this, new Mock<IMultipleContentBuilderContainer>().Object, DefaultFilename, null, null);
 
             // Act
             var result = sut.Supports(request.GenerationEnvironment);

@@ -2,10 +2,9 @@
 
 internal sealed class StringBuilderEnvironment : GenerationEnvironmentBase
 {
-    public StringBuilderEnvironment(StringBuilder builder) : base(GenerationEnvironmentType.StringBuilder)
+    internal StringBuilderEnvironment(StringBuilder builder)
+        : base(GenerationEnvironmentType.StringBuilder)
     {
-        Guard.IsNotNull(builder);
-
         Builder = builder;
     }
 

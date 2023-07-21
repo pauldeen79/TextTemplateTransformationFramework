@@ -2,10 +2,9 @@
 
 internal sealed class MultipleContentBuilderContainerEnvironment : GenerationEnvironmentBase
 {
-    public MultipleContentBuilderContainerEnvironment(IMultipleContentBuilderContainer builder) : base(GenerationEnvironmentType.MultipleContentBuilderContainer)
+    internal MultipleContentBuilderContainerEnvironment(IMultipleContentBuilderContainer builder)
+        : base(GenerationEnvironmentType.MultipleContentBuilderContainer)
     {
-        Guard.IsNotNull(builder);
-
         Builder = builder;
     }
 
