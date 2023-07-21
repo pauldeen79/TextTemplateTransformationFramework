@@ -13,11 +13,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_StringBuilder_1()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder(), string.Empty, null, null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_StringBuilder_2()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (StringBuilder)null!))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_StringBuilder_2()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder()))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -29,11 +45,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_StringBuilder_3()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder(), string.Empty))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_StringBuilder_4()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (StringBuilder)null!, string.Empty, additionalParameters: null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_StringBuilder_4()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder(), string.Empty, additionalParameters: null))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -45,11 +77,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_StringBuilder_5()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder(), additionalParameters: null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_StringBuilder_6()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (StringBuilder)null!, string.Empty, context: null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_StringBuilder_6()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder(), string.Empty, context: null))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -61,11 +109,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_StringBuilder_7()
+        {
+            // Act
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new StringBuilder(), context: null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilder_1()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (IMultipleContentBuilder)null!, string.Empty, null, null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilder_1()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object, string.Empty, null, null))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -77,11 +141,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilder_2()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilder_3()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (IMultipleContentBuilder)null!, string.Empty))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilder_3()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object, string.Empty))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -93,11 +173,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilder_4()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object, string.Empty, additionalParameters: null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilder_5()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (IMultipleContentBuilder)null!, additionalParameters: null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilder_5()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object, additionalParameters: null))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -109,11 +205,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilder_6()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object, string.Empty, context: null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilder_7()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builder: (IMultipleContentBuilder)null!, context: null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builder");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilder_7()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builder: new Mock<IMultipleContentBuilder>().Object, context: null))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -125,11 +237,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_1()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object, string.Empty, null, null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilderContainer_2()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: null!))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builderContainer");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_2()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -141,11 +269,27 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_3()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object, string.Empty))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilderContainer_4()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: null!, string.Empty, additionalParameters: null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builderContainer");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_4()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object, string.Empty, additionalParameters: null))
+                .Should().NotThrow();
         }
 
         [Fact]
@@ -157,6 +301,14 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_5()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object, additionalParameters: null))
+                .Should().NotThrow();
+        }
+
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilderContainer_6()
         {
             // Act & Assert
@@ -165,11 +317,26 @@ public class RenderTemplateRequestTests
         }
 
         [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_6()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object, string.Empty, context: null))
+                .Should().NotThrow();
+        }
+        [Fact]
         public void Throws_On_Null_MultipleContentBuilderContainer_7()
         {
             // Act & Assert
             this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: null!, context: null))
                 .Should().Throw<ArgumentNullException>().WithParameterName("builderContainer");
+        }
+
+        [Fact]
+        public void Constructs_Using_MultipleContentBuilderContainer_7()
+        {
+            // Act & Assert
+            this.Invoking(_ => new RenderTemplateRequest(this, builderContainer: new Mock<IMultipleContentBuilderContainer>().Object, context: null))
+                .Should().NotThrow();
         }
 
         [Fact]
