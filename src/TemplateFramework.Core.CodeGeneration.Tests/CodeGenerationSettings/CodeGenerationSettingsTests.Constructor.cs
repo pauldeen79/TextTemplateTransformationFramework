@@ -2,13 +2,13 @@
 
 public partial class CodeGenerationSettingsTests
 {
-    public class Constructor
+    public class Constructor : CodeGenerationSettingsTests
     {
         [Fact]
         public void Creates_Instance_With_BasePath_And_DryRun()
         {
             // Act
-            var sut = new CodeGenerationSettings(TestData.BasePath, true);
+            var sut = new CodeGenerationSettings(TestData.BasePath, DryRun);
 
             // Assert
             sut.BasePath.Should().Be(TestData.BasePath);
@@ -19,7 +19,7 @@ public partial class CodeGenerationSettingsTests
         public void Creates_Instance_With_BasePath_And_GenerateMultipleFiles_And_DryRun()
         {
             // Act
-            var sut = new CodeGenerationSettings(TestData.BasePath, true, true);
+            var sut = new CodeGenerationSettings(TestData.BasePath, GenerateMultipleFiles, DryRun);
 
             // Assert
             sut.BasePath.Should().Be(TestData.BasePath);
@@ -31,7 +31,7 @@ public partial class CodeGenerationSettingsTests
         public void Creates_Instance_With_BasePath_And_GeneratedMultipleFIles_And_SkipWhenFileExists_And_DryRun()
         {
             // Act
-            var sut = new CodeGenerationSettings(TestData.BasePath, true, true, true);
+            var sut = new CodeGenerationSettings(TestData.BasePath, GenerateMultipleFiles, SkipWhenFileExists, DryRun);
 
             // Assert
             sut.BasePath.Should().Be(TestData.BasePath);
@@ -43,7 +43,7 @@ public partial class CodeGenerationSettingsTests
         [Fact]
         public void Throws_On_Null_BasePath()
         {
-            this.Invoking(_ => new CodeGenerationSettings(basePath: null!, false))
+            this.Invoking(_ => new CodeGenerationSettings(basePath: null!, DryRun))
                 .Should().Throw<ArgumentNullException>().WithParameterName("basePath");
         }
     }
