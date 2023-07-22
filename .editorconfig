@@ -122,8 +122,15 @@ dotnet_analyzer_diagnostic.severity = warning
 dotnet_analyzer_diagnostic.category-Style.severity = silent
 
 # Specific exclusions
+# Do not nest type x. Alternatively, change its accessibility so that it is not externally visible.
+dotnet_diagnostic.CA1034.severity = none
+# Type 'x' is a static holder type but is neither static nor NotInheritable
+dotnet_diagnostic.CA1052.severity = none
 dotnet_diagnostic.CA1305.severity = none
+# Method 'x' passes a literal string as parameter 'y' of a call to 'z'. Retrieve the following string(s) from a resource table instead: "a".
+dotnet_diagnostic.CA1303.severity = none
 dotnet_diagnostic.CA1310.severity = none
+#Remove the underscores from member name x
 dotnet_diagnostic.CA1707.severity = none
 dotnet_diagnostic.CA1710.severity = none
 dotnet_diagnostic.CA1711.severity = none
