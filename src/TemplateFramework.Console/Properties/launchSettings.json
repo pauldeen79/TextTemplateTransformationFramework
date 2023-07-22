@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "TemplateFramework.Console": {
-      "commandName": "Project",
-      "commandLineArgs": "--help"
-    }
-  }
-}
