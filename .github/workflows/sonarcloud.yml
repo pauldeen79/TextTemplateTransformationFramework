@@ -38,6 +38,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet-sonarscanner begin /k:"pauldeen79_TextTemplateTransformationFramework" /n:"pauldeen79_TextTemplateTransformationFramework" /o:"pauldeen79" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" -d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx"
-          dotnet build TextTemplateTransformationFramework.sl
+          dotnet build TextTemplateTransformationFramework.sln
           dotnet test TextTemplateTransformationFramework.sln --logger trx --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
           dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
