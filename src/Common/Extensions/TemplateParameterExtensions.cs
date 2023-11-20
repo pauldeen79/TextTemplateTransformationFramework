@@ -6,19 +6,19 @@ namespace TextTemplateTransformationFramework.Common.Extensions
     {
         public static object ConvertType(this TemplateParameter parameter, Type type)
         {
-            if (parameter == null)
+            if (parameter is null)
             {
                 throw new ArgumentNullException(nameof(parameter));
             }
 
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
             var property = type.GetProperty(parameter.Name);
 
-            return property == null || parameter.Value == null || property.PropertyType.IsInstanceOfType(parameter.Value)
+            return property is null || parameter.Value is null || property.PropertyType.IsInstanceOfType(parameter.Value)
                 ? parameter.Value
                 : parameter.Value.ConvertValue(property.PropertyType);
         }

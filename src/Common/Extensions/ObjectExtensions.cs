@@ -69,12 +69,12 @@ namespace TextTemplateTransformationFramework.Common.Extensions
 
         public static object ConvertValue(this object instance, Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
             
-            if (instance == null)
+            if (instance is null)
             {
                 return null;
             }

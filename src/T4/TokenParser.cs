@@ -40,12 +40,12 @@ namespace TextTemplateTransformationFramework.T4
 
         public IEnumerable<ITemplateToken<TokenParserState>> Parse(ITextTemplateProcessorContext<TokenParserState> context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.AssemblyTemplate != null)
+            if (context.AssemblyTemplate is not null)
             {
                 // Short-hand: Skip parsing because there is no text template
                 return Enumerable.Empty<ITemplateToken<TokenParserState>>();
@@ -87,7 +87,7 @@ namespace TextTemplateTransformationFramework.T4
         private ProcessSectionResult<TokenParserState> ProcessState(TokenParserState state)
             => _tokenStateProcessor.Process(state, GetTokenParserCallback(), state.Context.Logger, state.Context.Parameters);
 
-        private ITokenParserCallback<TokenParserState> GetTokenParserCallback()
+        private TokenParserCallback GetTokenParserCallback()
             => new TokenParserCallback
             (
                 _tokenPlaceholderProcessor,

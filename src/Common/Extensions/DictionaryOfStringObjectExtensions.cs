@@ -6,13 +6,13 @@ namespace TextTemplateTransformationFramework.Common.Extensions
     public static class DictionaryOfStringObjectExtensions
     {
         public static T GetValue<T>(this IDictionary<string, object> instance, string key)
-            => instance == null || !instance.ContainsKey(key)
+            => instance is null || !instance.TryGetValue(key, out var value)
                 ? default
-                : (T)Convert.ChangeType(instance[key], typeof(T));
+                : (T)Convert.ChangeType(value, typeof(T));
 
         public static T GetValue<T>(this IDictionary<string, object> instance, string key, T defaultValue)
-            => instance == null || !instance.ContainsKey(key)
+            => instance is null || !instance.TryGetValue(key, out var value)
                 ? defaultValue
-                : (T)Convert.ChangeType(instance[key], typeof(T));
+                : (T)Convert.ChangeType(value, typeof(T));
     }
 }

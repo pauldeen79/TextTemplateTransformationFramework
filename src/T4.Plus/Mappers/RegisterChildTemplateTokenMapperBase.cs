@@ -26,12 +26,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, T model)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

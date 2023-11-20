@@ -21,7 +21,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public DirectiveProcessResult<TState> With(ProcessSectionResult<TState> addTokensResult)
         {
-            if (addTokensResult == null)
+            if (addTokensResult is null)
             {
                 throw new ArgumentNullException(nameof(addTokensResult));
             }

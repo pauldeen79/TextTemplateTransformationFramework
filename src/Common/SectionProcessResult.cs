@@ -44,7 +44,7 @@ namespace TextTemplateTransformationFramework.Common
                 switchToMode,
                 passThrough,
                 tokensAreForRootTemplateSection,
-                existingResult != null
+                existingResult is not null
                     ? existingResult.Tokens.Concat(tokens)
                     : tokens,
                 customProcessorType
@@ -57,12 +57,12 @@ namespace TextTemplateTransformationFramework.Common
             Func<string, ITemplateToken<TState>> createTokenDelegate
         ) where TState : class
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (createTokenDelegate == null)
+            if (createTokenDelegate is null)
             {
                 throw new ArgumentNullException(nameof(createTokenDelegate));
             }
@@ -93,7 +93,7 @@ namespace TextTemplateTransformationFramework.Common
         public static SectionProcessResult<TState> Create<TState>(SectionProcessResultData<TState> data)
             where TState : class
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -125,7 +125,7 @@ namespace TextTemplateTransformationFramework.Common
                     Property = p,
                     ObsoleteAttribute = p.GetCustomAttribute<ObsoleteAttribute>()
                 })
-                .Where(p => p.ObsoleteAttribute != null)
+                .Where(p => p.ObsoleteAttribute is not null)
                 .Select(p => new
                 {
                     p.Property,
@@ -169,7 +169,7 @@ namespace TextTemplateTransformationFramework.Common
         private static void AddObsoleteWarnings<TState>(SectionContext<TState> context, object model, SectionProcessResult<TState> existingResult, string directiveName, List<ITemplateToken<TState>> totalResults) where TState : class
         {
             var obsoleteAttribute = model.GetType().GetCustomAttribute<ObsoleteAttribute>();
-            if (obsoleteAttribute != null)
+            if (obsoleteAttribute is not null)
             {
                 var obsoleteMessage = obsoleteAttribute.Message ?? $"{directiveName ?? model.GetType().Name} is obsolete";
                 if (existingResult?.Tokens.Any(t => t.SectionContext.LineNumber == context.LineNumber && t is InitializeWarningToken<TState> token && token.Message == obsoleteMessage) != true)
@@ -182,17 +182,17 @@ namespace TextTemplateTransformationFramework.Common
         private static bool PropertyHasNonDefaultValue(PropertyInfo property, DefaultValueAttribute defaultValueAttribute, object model)
         {
             var actualValue = property.GetValue(model);
-            var defaultValue = defaultValueAttribute != null
+            var defaultValue = defaultValueAttribute is not null
                 ? defaultValueAttribute.Value
                 : property.PropertyType.GetDefaultValue();
 
-            if (actualValue == null && defaultValue == null)
+            if (actualValue is null && defaultValue is null)
             {
                 return false;
             }
 
-            return actualValue == null
-                || defaultValue == null
+            return actualValue is null
+                || defaultValue is null
                 || !actualValue.Equals(defaultValue);
         }
     }

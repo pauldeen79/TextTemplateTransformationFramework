@@ -23,7 +23,7 @@ namespace TextTemplateTransformationFramework.T4.LanguageServices
                              IFileContentsProvider fileContentsProvider,
                              ITemplateCodeCompiler<TokenParserState> templateCodeCompiler)
         {
-            if (defaultSectionProcessor == null)
+            if (defaultSectionProcessor is null)
             {
                 throw new ArgumentNullException(nameof(defaultSectionProcessor));
             }

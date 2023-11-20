@@ -28,8 +28,8 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 
         public static GenerateCode For(CodeGenerationSettings settings, IMultipleContentBuilder multipleContentBuilder, ICodeGenerationProvider provider)
         {
-            if (settings == null) throw new ArgumentNullException(nameof(settings));
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            if (settings is null) throw new ArgumentNullException(nameof(settings));
+            if (provider is null) throw new ArgumentNullException(nameof(provider));
             provider.Initialize(settings.GenerateMultipleFiles, settings.SkipWhenFileExists, settings.BasePath);
             var result = new GenerateCode(provider.BasePath, multipleContentBuilder);
             var generator = provider.CreateGenerator();

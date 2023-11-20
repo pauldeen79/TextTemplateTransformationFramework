@@ -42,10 +42,10 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
             _fileContentsProvider = fileContentsProvider ?? throw new ArgumentNullException(nameof(fileContentsProvider));
             _templateCodeCompiler = templateCodeCompiler ?? throw new ArgumentNullException(nameof(templateCodeCompiler));
             _tokenMapperAttribute = mapperType.GetCustomAttribute<TokenMapperAttribute>(true);
-            if (_tokenMapperAttribute == null)
+            if (_tokenMapperAttribute is null)
             {
                 var groupedAttr = mapperType.GetCustomAttribute<GroupedTokenMapperAttribute>(true);
-                if (groupedAttr == null)
+                if (groupedAttr is null)
                 {
                     throw new ArgumentException(string.Format("Mapper type [{0}] does not have a TokenMapperAttribute or GroupedTokenMapperAttribute", mapperType.FullName), nameof(mapperType));
                 }
@@ -53,20 +53,20 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
             }
 
             var prefixAttribute = mapperType.GetCustomAttribute<DirectivePrefixAttribute>(true);
-            if (prefixAttribute == null)
+            if (prefixAttribute is null)
             {
                 throw new ArgumentException(string.Format("Mapper type [{0}] does not have a DirectivePrefixAttribute", mapperType.FullName), nameof(mapperType));
             }
             TemplateCustomDirectiveName = prefixAttribute.Name;
 
             _mapMethod = mapperType.GetMethod("Map");
-            if (_mapMethod == null)
+            if (_mapMethod is null)
             {
                 throw new ArgumentException(string.Format("Mapper type [{0}] does not have a Map method", mapperType.FullName), nameof(mapperType));
             }
 
             var isValidMethod = mapperType.GetMethod("IsValidForProcessing");
-            _isValidDelegate = isValidMethod == null
+            _isValidDelegate = isValidMethod is null
                 ? new Func<SectionContext<TState>, object, bool>((ctx, m) => true)
                 : new Func<SectionContext<TState>, object, bool>((ctx, m) => (bool)isValidMethod.Invoke(_mapperInstance, new[] { ctx, m }));
 
@@ -75,8 +75,8 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
             _mapperInstance.TrySetFileNameProvider(_fileNameProvider);
             _mapperInstance.TrySetFileContentsProvider(_fileContentsProvider);
             _mapperInstance.TrySetTemplateCodeCompiler(_templateCodeCompiler);
-            _passThrough = mapperType.GetCustomAttribute<PassThroughAttribute>(true) != null;
-            _tokensAreForRootTemplateSection = mapperType.GetCustomAttribute<RootTemplateAttribute>(true) != null;
+            _passThrough = mapperType.GetCustomAttribute<PassThroughAttribute>(true) is not null;
+            _tokensAreForRootTemplateSection = mapperType.GetCustomAttribute<RootTemplateAttribute>(true) is not null;
         }
 
         public SectionProcessResult<TState> Process(SectionContext<TState> context)

@@ -34,7 +34,7 @@ namespace TextTemplateTransformationFramework.Common
             TemplateParameter[] parameters
         ) where TState : class
         {
-            if (section == null)
+            if (section is null)
             {
                 throw new ArgumentNullException(nameof(section));
             }
@@ -53,7 +53,7 @@ namespace TextTemplateTransformationFramework.Common
 
         public static SectionContext<TState> FromToken<TState>(ITemplateToken<TState> token, TState state) where TState : class
         {
-            if (token == null)
+            if (token is null)
             {
                 throw new ArgumentNullException(nameof(token));
             }

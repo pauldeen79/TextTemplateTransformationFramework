@@ -97,7 +97,7 @@ namespace Utilities.Extensions
         /// </returns>
         public static string WhenNull(this string value, string defaultValue = "", Action actionWhenNull = null)
         {
-            if (value == null && actionWhenNull != null)
+            if (value is null && actionWhenNull is not null)
             {
                 actionWhenNull();
             }
@@ -112,7 +112,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string FixTypeName(this string instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return null;
             }
@@ -126,7 +126,7 @@ namespace Utilities.Extensions
                     break;
                 }
 
-                int secondIndex = instance.IndexOf("]", startIndex + 1);
+                int secondIndex = instance.IndexOf(']', startIndex + 1);
                 if (secondIndex == -1)
                 {
                     break;
@@ -141,7 +141,7 @@ namespace Utilities.Extensions
 
             while (true)
             {
-                startIndex = instance.IndexOf("`");
+                startIndex = instance.IndexOf('`');
                 if (startIndex == -1)
                 {
                     break;
@@ -196,7 +196,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsTrue(this string instance)
         {
-            return instance != null && Array.Exists(_trueKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance is not null && Array.Exists(_trueKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsFalse(this string instance)
         {
-            return instance != null && Array.Exists(_falseKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance is not null && Array.Exists(_falseKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string WhenNullOrEmpty(this string instance, Func<string> whenNullOrEmptyDelegate)
         {
-            if (whenNullOrEmptyDelegate == null)
+            if (whenNullOrEmptyDelegate is null)
             {
                 throw new ArgumentNullException(nameof(whenNullOrEmptyDelegate));
             }
@@ -284,12 +284,12 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
         {
-            if (oldValue == null)
+            if (oldValue is null)
             {
                 throw new ArgumentNullException(nameof(oldValue));
             }
 
-            if (newValue == null)
+            if (newValue is null)
             {
                 throw new ArgumentNullException(nameof(newValue));
             }
@@ -319,7 +319,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string Sanitize(this string token)
         {
-            if (token == null)
+            if (token is null)
             {
                 return string.Empty;
             }
@@ -416,7 +416,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string GetClassNameWithDefault(this string fullyQualifiedClassName)
         {
-            var idx = fullyQualifiedClassName.LastIndexOf(".");
+            var idx = fullyQualifiedClassName.LastIndexOf('.');
             return idx == -1
                 ? fullyQualifiedClassName
                 : fullyQualifiedClassName.Substring(idx + 1);
@@ -430,7 +430,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string GetNamespaceWithDefault(this string fullyQualifiedClassName, string defaultValue)
         {
-            var idx = fullyQualifiedClassName.LastIndexOf(".");
+            var idx = fullyQualifiedClassName.LastIndexOf('.');
             return idx == -1
                 ? defaultValue
                 : fullyQualifiedClassName.Substring(0, idx).WhenNullOrEmpty(defaultValue);
@@ -443,7 +443,7 @@ namespace Utilities.Extensions
 
         public static string RemoveSuffix(this string instance, string suffix)
         {
-            if (suffix == null)
+            if (suffix is null)
             {
                 throw new ArgumentNullException(nameof(suffix));
             }
@@ -517,7 +517,7 @@ namespace Utilities.Extensions
         /// <returns>Typename without generics (`1)</returns>
         public static string WithoutGenerics(this string typeName)
         {
-            if (typeName == null)
+            if (typeName is null)
             {
                 return typeName;
             }

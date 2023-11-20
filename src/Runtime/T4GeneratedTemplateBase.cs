@@ -219,7 +219,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
                 set
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         formatProviderField = value;
                     }
@@ -231,7 +231,7 @@ namespace TextTemplateTransformationFramework.Runtime
             /// </summary>
             public string ToStringWithCulture(object objectToConvert)
             {
-                if (objectToConvert == null)
+                if (objectToConvert is null)
                 {
                     if (AllowNullExpressions)
                     {
@@ -241,7 +241,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
                 Type t = objectToConvert.GetType();
                 MethodInfo method = t.GetMethod("ToString", new Type[] { typeof(IFormatProvider) });
-                if (method == null)
+                if (method is null)
                 {
                     return objectToConvert.ToString();
                 }

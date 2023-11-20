@@ -27,7 +27,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
     {
         public string Process(string value, IEnumerable<ITemplateToken<TState>> existingTokens, TokenParserState state)
         {
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }
@@ -101,7 +101,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     .SelectMany(hintPathToken => hintPathToken.HintPath.GetDirectories(hintPathToken.Recursive).Select(p => PathSafeCombine(p, value)))
                     .FirstOrDefault(fullPath => !string.IsNullOrEmpty(fullPath) && File.Exists(fullPath));
 
-                if (file != null)
+                if (file is not null)
                 {
                     return file;
                 }

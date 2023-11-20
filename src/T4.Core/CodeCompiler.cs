@@ -22,15 +22,16 @@ namespace TextTemplateTransformationFramework.T4.Core
 
         public CompilerResults Compile(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
         {
-            if ((context?.ContainsKey("CoreAssemblyLoadContext")) != true
-                || !(context?["CoreAssemblyLoadContext"] is AssemblyLoadContext loadContext)
-                || codeOutput == null)
+            if (context is null
+                || !context.TryGetValue("CoreAssemblyLoadContext", out var value)
+                || value is not AssemblyLoadContext loadContext
+                || codeOutput is null)
             {
                 throw new InvalidOperationException("Can't find AssemblyLoadContext. Did you register the TextTemplateProcessorInitializer?");
             }
             var referencedAssemblies = new List<string>(codeOutput.ReferencedAssemblies ?? Enumerable.Empty<string>());
             var packageReferences = new List<string>(codeOutput.PackageReferences ?? Enumerable.Empty<string>());
-            if (!packageReferences.Any())
+            if (packageReferences.Count == 0)
             {
                 packageReferences.Add("NETStandard.Library,2.0.3,.NETStandard,Version=v2.0");
                 packageReferences.Add("System.ComponentModel.Annotations,5.0.0,.NETStandard,Version=v2.0");

@@ -22,7 +22,7 @@ namespace TextTemplateTransformationFramework.Common.Decorators
 
         public ProcessResult Process(ProcessTextTemplateRequest<TState> request)
         {
-            if (request == null)
+            if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }

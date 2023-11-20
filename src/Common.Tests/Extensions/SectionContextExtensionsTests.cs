@@ -73,7 +73,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
             var result = context.CreateTextToken("My text", force);
 
             // Assert
-            if (expectedType == null)
+            if (expectedType is null)
             {
                 result.Should().BeNull();
             }
@@ -105,7 +105,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
             var result = context.CreateExpressionToken("My expression");
 
             // Assert
-            if (expectedType == null)
+            if (expectedType is null)
             {
                 result.Should().BeNull();
             }

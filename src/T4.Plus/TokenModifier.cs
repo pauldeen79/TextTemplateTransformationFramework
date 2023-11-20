@@ -38,7 +38,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                 }
                 else if (token is ISourceSectionToken<TokenParserState> sourceSectionToken)
                 {
-                    var setRootTokens = _rootTokens == null;
+                    var setRootTokens = _rootTokens is null;
                     yield return ScopedBackingMemberOperation.Invoke
                     (
                         ref _rootTokens,

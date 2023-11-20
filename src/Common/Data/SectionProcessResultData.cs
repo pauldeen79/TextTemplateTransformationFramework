@@ -71,22 +71,22 @@ namespace TextTemplateTransformationFramework.Common.Data
 
         public void Validate()
         {
-            if (Context == null)
+            if (Context is null)
             {
                 throw new InvalidOperationException($"{nameof(Context)} is required");
             }
 
-            if (Model == null)
+            if (Model is null)
             {
                 throw new InvalidOperationException($"{nameof(Model)} is required");
             }
 
-            if (IsValidDelegate == null)
+            if (IsValidDelegate is null)
             {
                 throw new InvalidOperationException($"{nameof(IsValidDelegate)} is required");
             }
 
-            if (MapDelegate == null)
+            if (MapDelegate is null)
             {
                 throw new InvalidOperationException($"{nameof(MapDelegate)} is required");
             }

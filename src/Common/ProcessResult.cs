@@ -48,7 +48,7 @@ namespace TextTemplateTransformationFramework.Common
                     &&
                     (
                         (errors ?? Array.Empty<CompilerError>()).HasErrors()
-                        || exception != null
+                        || exception is not null
                     )
                         ? "ErrorGeneratingOutput"
                         : output,

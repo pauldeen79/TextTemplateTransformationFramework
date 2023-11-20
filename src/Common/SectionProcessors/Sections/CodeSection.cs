@@ -11,7 +11,7 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors.Sections
     {
         public SectionProcessResult<TState> Process(SectionContext<TState> context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

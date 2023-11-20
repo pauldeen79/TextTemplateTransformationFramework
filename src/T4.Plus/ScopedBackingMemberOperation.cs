@@ -27,12 +27,12 @@ namespace TextTemplateTransformationFramework.T4.Plus
         public static TReturn Invoke<TRef, TReturn>(ref TRef referenceMember, TRef newMemberValue, Func<TRef, bool> copyToBackingMemberCondition, Func<TReturn> runDelegate)
             where TReturn : class
         {
-            if (copyToBackingMemberCondition == null)
+            if (copyToBackingMemberCondition is null)
             {
                 throw new ArgumentNullException(nameof(copyToBackingMemberCondition));
             }
 
-            if (runDelegate == null)
+            if (runDelegate is null)
             {
                 throw new ArgumentNullException(nameof(runDelegate));
             }

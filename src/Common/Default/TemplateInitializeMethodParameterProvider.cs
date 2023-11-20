@@ -8,7 +8,7 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         public object[] Get(MethodInfo initializeMethod, object template)
         {
-            if (initializeMethod == null)
+            if (initializeMethod is null)
             {
                 throw new ArgumentNullException(nameof(initializeMethod));
             }

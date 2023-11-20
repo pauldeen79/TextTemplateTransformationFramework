@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         public string[] GetCustomPaths(string assemblyName)
         {
-            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
+            if (assemblyName is null) throw new ArgumentNullException(nameof(assemblyName));
 
             if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
             {
@@ -27,8 +27,8 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public Assembly LoadAssembly(string assemblyName, AssemblyLoadContext context)
         {
-            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (assemblyName is null) throw new ArgumentNullException(nameof(assemblyName));
+            if (context is null) throw new ArgumentNullException(nameof(context));
 
             try
             {

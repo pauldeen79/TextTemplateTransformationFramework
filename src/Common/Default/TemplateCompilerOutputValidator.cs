@@ -11,14 +11,14 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         public bool Validate(ITemplateProcessorContext<TState> context, out IEnumerable<CompilerError> compilerErrorCollection)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
             compilerErrorCollection = context.TemplateCompilerOutput.Errors;
 
-            if (context.TemplateCompilerOutput.Template == null)
+            if (context.TemplateCompilerOutput.Template is null)
             {
                 //compilation failed, or typename of template was incorrect
                 return false;

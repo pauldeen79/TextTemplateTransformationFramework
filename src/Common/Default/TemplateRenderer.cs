@@ -27,7 +27,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public ProcessResult Render(ITemplateProcessorContext<TState> context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

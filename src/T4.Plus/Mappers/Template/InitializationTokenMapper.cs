@@ -17,7 +17,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers.Template
     {
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, TemplateDirectiveModel model)
         {
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

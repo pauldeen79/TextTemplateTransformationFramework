@@ -17,22 +17,22 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Chi
                                                      ValueSpecifier resolverDelegateModel)
             : base(context)
         {
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 throw new ArgumentNullException(nameof(viewModel));
             }
 
-            if (customResolverDelegate == null)
+            if (customResolverDelegate is null)
             {
                 throw new ArgumentNullException(nameof(customResolverDelegate));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (resolverDelegateModel == null)
+            if (resolverDelegateModel is null)
             {
                 throw new ArgumentNullException(nameof(resolverDelegateModel));
             }

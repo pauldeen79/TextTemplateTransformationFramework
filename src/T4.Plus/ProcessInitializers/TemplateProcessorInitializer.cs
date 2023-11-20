@@ -22,7 +22,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessInitializers
 
         public void Initialize(ITemplateProcessorContext<TState> context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -37,7 +37,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessInitializers
         {
             lock (TemplateProcessorInitializer._lock)
             {
-                if (!(state["TemplateProcessorDecorator.SourceTokens"] is IEnumerable<ITemplateToken<TState>> sourceTokens))
+                if (state["TemplateProcessorDecorator.SourceTokens"] is not IEnumerable<ITemplateToken<TState>> sourceTokens)
                 {
                     return null;
                 }
@@ -56,7 +56,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessInitializers
                     .Concat(new[] { (Path.Combine(tempPath ?? Path.GetTempPath(), args.Name + ".dll")) })
                     .FirstOrDefault(File.Exists);
 
-                return assemblyPath != null
+                return assemblyPath is not null
                     ? sender.LoadFromAssemblyPath(assemblyPath)
                     : null;
             }

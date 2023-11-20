@@ -27,14 +27,14 @@ namespace TextTemplateTransformationFramework.Common
             sourceTokens
         );
 
-        private static IEnumerable<CompilerError> Combine(IEnumerable<CompilerError> previousPhaseErrors, IEnumerable<CompilerError> errors)
+        private static List<CompilerError> Combine(IEnumerable<CompilerError> previousPhaseErrors, IEnumerable<CompilerError> errors)
         {
             var result = new List<CompilerError>();
-            if (previousPhaseErrors != null)
+            if (previousPhaseErrors is not null)
             {
                 result.AddRange(previousPhaseErrors);
             }
-            if (errors != null)
+            if (errors is not null)
             {
                 result.AddRange(errors);
             }

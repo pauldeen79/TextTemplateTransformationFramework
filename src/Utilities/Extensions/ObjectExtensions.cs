@@ -23,7 +23,7 @@ namespace Utilities.Extensions
         /// </returns>
         public static string ToStringWithNullCheck(this object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
@@ -47,7 +47,7 @@ namespace Utilities.Extensions
         /// </returns>
         public static string ToStringWithDefault(this object value, string defaultValue = null)
         {
-            if (value == null)
+            if (value is null)
             {
                 return defaultValue;
             }
@@ -70,7 +70,7 @@ namespace Utilities.Extensions
         /// </returns>
         public static string CsharpFormat(this object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return "null";
             }
@@ -118,9 +118,9 @@ namespace Utilities.Extensions
                 .Where
                 (
                     p => p.CanRead
-                        && p.CanWrite && p.GetGetMethod() != null
-                        && p.GetSetMethod() != null
-                        && p.GetCustomAttribute<DefaultValueAttribute>(true) != null
+                        && p.CanWrite && p.GetGetMethod() is not null
+                        && p.GetSetMethod() is not null
+                        && p.GetCustomAttribute<DefaultValueAttribute>(true) is not null
                 );
 
             properties.ForEach
@@ -133,12 +133,12 @@ namespace Utilities.Extensions
 
         public static TResult Either<T, TResult>(this T instance, Func<T, TResult> valueDelegate, Func<TResult> defaultValueDelegate)
         {
-            if (valueDelegate == null)
+            if (valueDelegate is null)
             {
                 throw new ArgumentNullException(nameof(valueDelegate));
             }
 
-            if (defaultValueDelegate == null)
+            if (defaultValueDelegate is null)
             {
                 throw new ArgumentNullException(nameof(defaultValueDelegate));
             }
@@ -150,17 +150,17 @@ namespace Utilities.Extensions
 
         public static TResult Either<T, TResult>(this T instance, Func<T, bool> predicate, Func<T, TResult> applyDelegate, Func<T, TResult> defaultValueDelegate)
         {
-            if (predicate == null)
+            if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            if (applyDelegate == null)
+            if (applyDelegate is null)
             {
                 throw new ArgumentNullException(nameof(applyDelegate));
             }
 
-            if (defaultValueDelegate == null)
+            if (defaultValueDelegate is null)
             {
                 throw new ArgumentNullException(nameof(defaultValueDelegate));
             }
@@ -172,7 +172,7 @@ namespace Utilities.Extensions
 
         public static TResult Apply<T, TResult>(this T instance, Func<T, TResult> applyDelegate)
         {
-            if (applyDelegate == null)
+            if (applyDelegate is null)
             {
                 throw new ArgumentNullException(nameof(applyDelegate));
             }
@@ -182,7 +182,7 @@ namespace Utilities.Extensions
 
         public static T Then<T>(this T instance, Action<T> actionDelegate)
         {
-            if (actionDelegate == null)
+            if (actionDelegate is null)
             {
                 throw new ArgumentNullException(nameof(actionDelegate));
             }
@@ -193,7 +193,7 @@ namespace Utilities.Extensions
 
         public static T With<T>(this T instance, Func<T, T> actionDelegate)
         {
-            if (actionDelegate == null)
+            if (actionDelegate is null)
             {
                 throw new ArgumentNullException(nameof(actionDelegate));
             }

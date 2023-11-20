@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public bool IsValidForProcessing(SectionContext<TState> context, TemplateContextDirectiveModel model)
         {
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -29,7 +29,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, TemplateContextDirectiveModel model)
         {
-            if (model != null)
+            if (model is not null)
             {
                 if (!model.Override)
                 {

@@ -20,7 +20,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, IncludesDirectiveModel model)
         {
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

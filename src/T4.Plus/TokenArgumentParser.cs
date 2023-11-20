@@ -13,7 +13,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
     {
         public IEnumerable<string> ParseArgument(SectionContext<TState> context, string argumentName)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

@@ -30,7 +30,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public ProcessSectionResult<TokenParserState> Process(TokenParserState state, ITokenParserCallback<TokenParserState> tokenParserCallback, ILogger logger, TemplateParameter[] parameters)
         {
-            if (state == null)
+            if (state is null)
             {
                 throw new ArgumentNullException(nameof(state));
             }

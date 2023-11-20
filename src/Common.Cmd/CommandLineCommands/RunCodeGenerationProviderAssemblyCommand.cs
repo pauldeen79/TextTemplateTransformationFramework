@@ -21,7 +21,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
+            if (app is null) throw new ArgumentNullException(nameof(app));
             app.Command("assembly", command =>
             {
                 command.Description = "Runs all code generation providers from the specified assembly";

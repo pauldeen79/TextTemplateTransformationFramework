@@ -22,7 +22,7 @@ namespace TextTemplateTransformationFramework.Common.Decorators
 
         public ExtractParametersResult Process(ExtractParametersFromTextTemplateRequest<TState> request)
         {
-            if (request == null)
+            if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }

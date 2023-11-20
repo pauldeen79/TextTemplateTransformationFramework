@@ -22,7 +22,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
 
         public IEnumerable<ITemplateToken<TokenParserState>> Parse(ITextTemplateProcessorContext<TokenParserState> context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -54,7 +54,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                                                        .Reverse().ToArray())
                 {
                     var newResult = interceptorToken.Process(context.TextTemplate, context.Parameters, callback);
-                    if (newResult != null)
+                    if (newResult is not null)
                     {
                         return newResult;
                     }

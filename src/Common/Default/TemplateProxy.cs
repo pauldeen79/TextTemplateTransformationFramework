@@ -16,13 +16,13 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public void Initialize(object template)
         {
-            if (template == null)
+            if (template is null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
             var initializeMethod = template.GetType().GetMethod("Initialize");
-            if (initializeMethod == null)
+            if (initializeMethod is null)
             {
                 return;
             }
@@ -32,26 +32,26 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public void Render(object template, StringBuilder stringBuilder)
         {
-            if (template == null)
+            if (template is null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
-            if (stringBuilder == null)
+            if (stringBuilder is null)
             {
                 throw new ArgumentNullException(nameof(stringBuilder));
             }
 
             var templateType = template.GetType();
             var renderMethod = templateType.GetMethod("Render");
-            if (renderMethod != null)
+            if (renderMethod is not null)
             {
                 renderMethod.Invoke(template, new[] { stringBuilder });
             }
             else
             {
                 var transformTextMethod = templateType.GetMethod("TransformText");
-                if (transformTextMethod != null)
+                if (transformTextMethod is not null)
                 {
                     stringBuilder.Append((string)transformTextMethod.Invoke(template, Array.Empty<object>()));
                 }

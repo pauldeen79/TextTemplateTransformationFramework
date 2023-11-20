@@ -71,7 +71,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                 )
             );
 
-        private ITextTemplateProcessorContext<TState> CreateContext(TextTemplate textTemplate, TemplateParameter[] parameters)
+        private TextTemplateProcessorContext<TState> CreateContext(TextTemplate textTemplate, TemplateParameter[] parameters)
             => new TextTemplateProcessorContext<TState>
             (
                 textTemplate,
@@ -80,7 +80,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                 null
             );
 
-        private ITextTemplateProcessorContext<TState> CreateContext(AssemblyTemplate assemblyTemplate, TemplateParameter[] parameters)
+        private TextTemplateProcessorContext<TState> CreateContext(AssemblyTemplate assemblyTemplate, TemplateParameter[] parameters)
             => new TextTemplateProcessorContext<TState>
             (
                 assemblyTemplate,

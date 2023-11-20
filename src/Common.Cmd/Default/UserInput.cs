@@ -8,7 +8,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Default
     {
         public string GetValue(TemplateParameter parameter)
         {
-            if (parameter == null)
+            if (parameter is null)
             {
                 throw new ArgumentNullException(nameof(parameter));
             }

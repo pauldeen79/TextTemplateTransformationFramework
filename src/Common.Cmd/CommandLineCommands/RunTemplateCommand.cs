@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
@@ -42,7 +43,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
+            if (app is null) throw new ArgumentNullException(nameof(app));
             app!.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
@@ -121,7 +122,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (!string.IsNullOrEmpty(names.shortName))
             {
                 var info = _templateInfoRepository.FindByShortName(names.shortName);
-                if (info == null)
+                if (info is null)
                 {
                     return (true, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {names.shortName}")), null);
                 }
@@ -158,7 +159,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
         }
 
-        private IReadOnlyList<string> MergeParameters(IReadOnlyList<string> commandLineArgumentParameters, TemplateParameter[] globalTemplateParameters)
+        private ReadOnlyCollection<string> MergeParameters(IReadOnlyList<string> commandLineArgumentParameters, TemplateParameter[] globalTemplateParameters)
             => commandLineArgumentParameters
                 .Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) })
                 .Concat(globalTemplateParameters)
@@ -172,7 +173,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             var contents = _fileContentsProvider.GetFileContents(filename);
             var template = new TextTemplate(contents, filename);
             var parameters = GetParameters(template, app, interactive, parameterArguments);
-            if (parameters == null)
+            if (parameters is null)
             {
                 return (false, null);
             }
@@ -197,7 +198,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             var assemblyLoadContext = CommandBase.CreateAssemblyLoadContext(_assemblyService, assemblyName, currentDirectoryIsFilled, currentDirectory);
             var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
             var parameters = GetParameters(template, app, interactive, parameterArguments);
-            if (parameters == null)
+            if (parameters is null)
             {
                 return (false, null, assemblyLoadContext);
             }
@@ -222,7 +223,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         private TemplateParameter[] GetParameters(CommandLineApplication app, List<TemplateParameter> parameters, ExtractParametersResult parametersResult)
         {
-            if (parametersResult.Exception != null)
+            if (parametersResult.Exception is not null)
             {
                 app.Error.WriteLine("Exception occured while extracting parameters from the template:");
                 app.Error.WriteLine(parametersResult.Exception);

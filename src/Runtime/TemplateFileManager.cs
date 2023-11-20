@@ -13,12 +13,12 @@ namespace TextTemplateTransformationFramework.Runtime
                                    string basePath = null,
                                    IMultipleContentBuilder multipleContentBuilder = null)
         {
-            if (setStringBuilderDelegate == null)
+            if (setStringBuilderDelegate is null)
             {
                 throw new ArgumentNullException(nameof(setStringBuilderDelegate));
             }
 
-            if (getStringBuilderDelegate == null)
+            if (getStringBuilderDelegate is null)
             {
                 throw new ArgumentNullException(nameof(getStringBuilderDelegate));
             }

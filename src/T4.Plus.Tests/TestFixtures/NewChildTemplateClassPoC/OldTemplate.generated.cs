@@ -21,12 +21,12 @@ namespace OldTemplate
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
+            if (builder is not null) this.GenerationEnvironment = builder;
 
             RenderChildTemplate(@"Child");
 
 
-            if (builder != null) this.GenerationEnvironment = backup;
+            if (builder is not null) this.GenerationEnvironment = backup;
         }
 
 
@@ -35,7 +35,7 @@ namespace OldTemplate
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session == null)
+            if (Session is null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
@@ -62,10 +62,10 @@ namespace OldTemplate
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder != null) this.GenerationEnvironment = builder;
+            if (builder is not null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"Hello world!"));
 
-            if (builder != null) this.GenerationEnvironment = backup;
+            if (builder is not null) this.GenerationEnvironment = backup;
         }
 
 
@@ -73,7 +73,7 @@ namespace OldTemplate
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session == null)
+            if (Session is null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
@@ -84,7 +84,7 @@ namespace OldTemplate
 
         public override void Write(string textToAppend)
         {
-            if (RootTemplate != null)
+            if (RootTemplate is not null)
             {
                 RootTemplate.Write(textToAppend);
             }
@@ -96,7 +96,7 @@ namespace OldTemplate
 
         public override void WriteLine(string textToAppend)
         {
-            if (RootTemplate != null)
+            if (RootTemplate is not null)
             {
                 RootTemplate.WriteLine(textToAppend);
             }

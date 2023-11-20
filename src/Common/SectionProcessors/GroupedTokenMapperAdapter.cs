@@ -20,7 +20,7 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
                                          IFileContentsProvider fileContentsProvider,
                                          ITemplateCodeCompiler<TState> templateCodeCompiler)
         {
-            if (mapperTypes == null)
+            if (mapperTypes is null)
             {
                 throw new ArgumentNullException(nameof(mapperTypes));
             }

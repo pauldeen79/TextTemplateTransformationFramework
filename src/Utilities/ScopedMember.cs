@@ -26,7 +26,7 @@ namespace Utilities
 
         public static TResult Evaluate<T, TResult>(T member, Func<T, TResult> function)
         {
-            if (function == null)
+            if (function is null)
             {
                 throw new ArgumentNullException(nameof(function));
             }
@@ -36,7 +36,7 @@ namespace Utilities
 
         public static TResult Evaluate<T, TResult>(Func<T> memberDelegate, Func<Func<T>, TResult> function)
         {
-            if (function == null)
+            if (function is null)
             {
                 throw new ArgumentNullException(nameof(function));
             }

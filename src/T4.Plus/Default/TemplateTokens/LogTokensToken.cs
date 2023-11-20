@@ -23,7 +23,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens
                                                            IEnumerable<TemplateParameter> parameters,
                                                            ICallback<TState, ITextTemplateTokenParser<TState>> callback)
         {
-            if (callback == null)
+            if (callback is null)
             {
                 throw new ArgumentNullException(nameof(callback));
             }

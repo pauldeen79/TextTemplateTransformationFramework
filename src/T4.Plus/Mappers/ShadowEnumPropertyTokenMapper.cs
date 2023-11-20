@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public ITemplateToken<TState> Map(SectionContext<TState> context, ShadowEnumPropertyDirectiveModel model)
         {
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -49,7 +49,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
             try
             {
                 var type = GetEnumType(model.EnumTypeName);
-                if (type == null)
+                if (type is null)
                 {
                     return "Error: Could not find type '" + model.EnumTypeName + "'";
                 }
@@ -68,7 +68,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                         && !asm.FullName.IsUnitTestAssembly()))
             {
                 var t = ass.GetType(typeName);
-                if (t != null)
+                if (t is not null)
                 {
                     return t;
                 }

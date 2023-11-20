@@ -23,17 +23,17 @@ namespace TextTemplateTransformationFramework.Common.Default
         public IEnumerable<TemplateParameter> Extract(ITextTemplateProcessorContext<TState> context,
                                                       TemplateCompilerOutput<TState> templateCompilerOutput)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (templateCompilerOutput == null)
+            if (templateCompilerOutput is null)
             {
                 throw new ArgumentNullException(nameof(templateCompilerOutput));
             }
 
-            if (templateCompilerOutput.Template == null)
+            if (templateCompilerOutput.Template is null)
             {
                 return Enumerable.Empty<TemplateParameter>();
             }

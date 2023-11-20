@@ -28,7 +28,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                                                               Type sectionProcessorType,
                                                               SectionProcessResult<TokenParserState> sectionProcessResult)
         {
-            if (sectionProcessResult == null)
+            if (sectionProcessResult is null)
             {
                 throw new ArgumentNullException(nameof(sectionProcessResult));
             }
@@ -54,7 +54,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
 #pragma warning disable S3885 // "Assembly.Load" should be used
                         .Select(a => new { a.PreloadToken, a.AssemblyName, Assembly = Assembly.LoadFrom(a.AssemblyName.GetAssemblyName()) })
 #pragma warning restore S3885 // "Assembly.Load" should be used
-                        .Where(a => a.Assembly != null)
+                        .Where(a => a.Assembly is not null)
                         .Select(a => new AssemblyToken<TokenParserState>(context, a.PreloadToken.Name, a.Assembly))
                 );
             }

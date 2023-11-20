@@ -14,7 +14,7 @@ namespace TextTemplateTransformationFramework.T4
     {
         public static ProcessSectionResult<TState> Unrecognized<TState>(SectionContext<TState> context) where TState : class
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -48,7 +48,7 @@ namespace TextTemplateTransformationFramework.T4
             SectionProcessResult<TState> sectionProcessResult
         ) where TState : class
         {
-            if(sectionProcessResult == null)
+            if(sectionProcessResult is null)
             {
                 throw new ArgumentNullException(nameof(sectionProcessResult));
             }

@@ -18,12 +18,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public bool IsValidForProcessing(SectionContext<TState> context, LogTokensDirectiveModel model)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

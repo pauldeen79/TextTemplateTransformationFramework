@@ -32,7 +32,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 instance.Remove("Common.CustomSectionProcessors");
             }
 
-            if (customSectionProcessors != null)
+            if (customSectionProcessors is not null)
             {
                 instance["Common.CustomSectionProcessors"] = customSectionProcessors.ToList();
             }

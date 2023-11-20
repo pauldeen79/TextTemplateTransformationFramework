@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, ViewModelDirectiveModel model)
         {
-            if (context != null && model != null)
+            if (context is not null && model is not null)
             {
                 yield return new ParameterToken<TState>
                 (

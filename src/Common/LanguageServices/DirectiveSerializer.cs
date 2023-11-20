@@ -71,7 +71,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
             var type = typeof(TToken).GetModelType(typeof(TState));
             var instance = Activator.CreateInstance(type);
             var sectionContextContainer = instance as ISectionContextContainer<TState>;
-            if (sectionContextContainer != null)
+            if (sectionContextContainer is not null)
             {
                 sectionContextContainer.SectionContext = _context;
             }
@@ -80,7 +80,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
             instance.TrySetTemplateCodeCompiler(_templateCodeCompiler);
 
             //First, set all attributes that are found in the directive
-            foreach (var attribute in GetDirectiveAttributes(type, sectionContextContainer != null))
+            foreach (var attribute in GetDirectiveAttributes(type, sectionContextContainer is not null))
             {
                 if (TypeIsEnumerable(attribute.PropertyInfo.PropertyType))
                 {
@@ -117,7 +117,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
                 {
                     //default value, do nothing
                 }
-                else if (typeConverterAttribute != null)
+                else if (typeConverterAttribute is not null)
                 {
                     var typeConverter = (TypeConverter)Activator.CreateInstance(Type.GetType(typeConverterAttribute.ConverterTypeName));
                     var convertedValue = typeConverter.ConvertToString(val);
@@ -142,19 +142,19 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
 
         private static bool GetIsDefaultValue(DirectiveAttribute attribute, object val, DefaultValueAttribute defaultValueAttribute)
         {
-            if (defaultValueAttribute != null)
+            if (defaultValueAttribute is not null)
             {
                 return val.Equals(defaultValueAttribute.Value);
             }
             
-            if (attribute.PropertyInfo.PropertyType == typeof(bool) && val != null)
+            if (attribute.PropertyInfo.PropertyType == typeof(bool) && val is not null)
             {
                 return val.Equals(default(bool));
             }
             
-            return attribute.PropertyInfo.PropertyType == typeof(int) && val != null
+            return attribute.PropertyInfo.PropertyType == typeof(int) && val is not null
                 ? val.Equals(default(int))
-                : val == null;
+                : val is null;
         }
 
         /// <summary>
@@ -170,8 +170,8 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
                 (
                     p => p.CanRead
                         && p.CanWrite
-                        && p.GetGetMethod() != null
-                        && p.GetSetMethod() != null
+                        && p.GetGetMethod() is not null
+                        && p.GetSetMethod() is not null
                         && !(skipSectionContext && p.Name == "SectionContext")
                 )
                 .Select(propertyInfo => new DirectiveAttribute(propertyInfo, GetAttributeName(propertyInfo)));
@@ -202,7 +202,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
                 .FirstOrDefault();
 
             //Note that when there is no DataMemberAttribute, we assume the attribute name is equal to the property name. (note that the get value delegates are responsible for case sensitivity)
-            return dataMemberAttribute == null
+            return dataMemberAttribute is null
                 ? propertyInfo.Name
                 : dataMemberAttribute.Name;
         }
@@ -239,11 +239,11 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
         /// <exception cref="NotSupportedException"></exception>
         private static void SetSinglePropertyValue(PropertyInfo propertyInfo, object instance, string value)
         {
-            if (value == null)
+            if (value is null)
             {
                 //empty attribute values don't need to be set, unless there is a default value attribute
                 var defaultValueAttribute = propertyInfo.GetCustomAttribute<DefaultValueAttribute>(true);
-                if (defaultValueAttribute != null)
+                if (defaultValueAttribute is not null)
                 {
                     propertyInfo.SetValue(instance, defaultValueAttribute.Value, null);
                 }
@@ -255,7 +255,7 @@ namespace TextTemplateTransformationFramework.Common.LanguageServices
                 .Cast<TypeConverterAttribute>()
                 .FirstOrDefault();
 
-            if (typeConverterAttribute != null)
+            if (typeConverterAttribute is not null)
             {
                 var typeConverter = (TypeConverter)Activator.CreateInstance(Type.GetType(typeConverterAttribute.ConverterTypeName));
                 var convertedValue = typeConverter.ConvertFromString(value);

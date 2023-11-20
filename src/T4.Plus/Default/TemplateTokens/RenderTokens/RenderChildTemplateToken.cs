@@ -19,22 +19,22 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
             CustomRenderData customRenderData)
             : base(context)
         {
-            if (childTemplate == null)
+            if (childTemplate is null)
             {
                 throw new ArgumentNullException(nameof(childTemplate));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (separatorTemplate == null)
+            if (separatorTemplate is null)
             {
                 throw new ArgumentNullException(nameof(separatorTemplate));
             }
 
-            if (customRenderData == null)
+            if (customRenderData is null)
             {
                 throw new ArgumentNullException(nameof(customRenderData));
             }

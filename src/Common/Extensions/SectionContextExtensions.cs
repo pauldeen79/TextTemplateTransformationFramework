@@ -80,7 +80,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static T InContext<TState, T>(this SectionContext<TState> context, string childTemplateFileName, Func<T> functionDelegate)
             where TState : class
         {
-            if (functionDelegate == null)
+            if (functionDelegate is null)
             {
                 throw new ArgumentNullException(nameof(functionDelegate));
             }

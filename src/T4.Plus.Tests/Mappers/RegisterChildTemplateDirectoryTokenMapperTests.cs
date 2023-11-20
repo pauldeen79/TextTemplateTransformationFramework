@@ -61,7 +61,7 @@ Hello world!");
             actual.First().Should().BeOfType<RegisterChildTemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>();
             actual.Last().Should().BeOfType<ChildTemplateClassToken<RegisterChildTemplateDirectoryTokenMapperTests>>();
             var childTemplateClassToken = actual.Last() as ChildTemplateClassToken<RegisterChildTemplateDirectoryTokenMapperTests>;
-            if (childTemplateClassToken != null)
+            if (childTemplateClassToken is not null)
             {
                 childTemplateClassToken.BaseClass.Should().Be(expectedBaseClassOutput);
             }

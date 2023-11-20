@@ -17,7 +17,7 @@ namespace TextTemplateTransformationFramework.Common.RequestProcessors
 
         public ProcessResult Process(PreProcessTextTemplateRequest<TState> request)
         {
-            if (request == null)
+            if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }

@@ -133,7 +133,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
 
             var directive = scriptBuilder.GetKnownDirectives().FirstOrDefault(d => d.GetDirectiveName() == directiveName);
-            if (directive == null)
+            if (directive is null)
             {
                 return (false, $"Could not find directive with name [{directiveName}]", null);
             }
@@ -185,7 +185,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             string resultText,
             bool allowParameters)
         {
-            if (app == null) throw new ArgumentNullException(nameof(app));
+            if (app is null) throw new ArgumentNullException(nameof(app));
             app.Command(commandName, command =>
             {
                 command.Description = commandDescription;

@@ -13,7 +13,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
     {
         public void Set(ITemplateProcessorContext<TState> context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -22,7 +22,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
             new TextTemplateTransformationFramework.Common.Default.TemplateInitializeParameterSetter<TState>()
                 .Set(context);
 
-            if (context.TextTemplateProcessorContext.Parameters == null)
+            if (context.TextTemplateProcessorContext.Parameters is null)
             {
                 return;
             }
@@ -45,7 +45,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
             foreach (var prop in props)
             {
                 var parameter = Array.Find(context.TextTemplateProcessorContext.Parameters, p => p.Name == prop.Name);
-                if (parameter == null)
+                if (parameter is null)
                 {
                     continue;
                 }
@@ -57,30 +57,30 @@ namespace TextTemplateTransformationFramework.T4.Plus
         private static void SetViewModel(ITemplateProcessorContext<TState> context)
         {
             var viewModelProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("ViewModel");
-            if (viewModelProperty == null)
+            if (viewModelProperty is null)
             {
                 return;
             }
 
             var viewModelValue = viewModelProperty.GetValue(context.TemplateCompilerOutput.Template);
-            if (viewModelValue == null)
+            if (viewModelValue is null)
             {
                 viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
                 viewModelProperty.SetValue(context.TemplateCompilerOutput.Template, viewModelValue);
             }
 
             var sessionProperty = context.TemplateCompilerOutput.Template.GetType().GetProperty("Session");
-            var sessionPropertyValue = sessionProperty == null
+            var sessionPropertyValue = sessionProperty is null
                 ? null
                 : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
 
-            if (sessionPropertyValue != null)
+            if (sessionPropertyValue is not null)
             {
                 var viewModelValueType = viewModelValue.GetType();
                 foreach (var kvp in sessionPropertyValue.Where(kvp => kvp.Key != "Model"))
                 {
                     var prop = viewModelValueType.GetProperty(kvp.Key);
-                    if (prop != null && prop.GetSetMethod() == null) { continue; }
+                    if (prop is not null && prop.GetSetMethod() is null) { continue; }
                     prop?.SetValue(viewModelValue, new TemplateParameter { Name = kvp.Key, Value = kvp.Value }.ConvertType(viewModelValueType));
                 }
             }
@@ -88,7 +88,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
             foreach (var info in viewModelProperty.PropertyType.GetProperties()
                 .Where(p => sessionPropertyValue?.ContainsKey(p.Name) != true
                     && p.CanWrite
-                    && p.GetSetMethod() != null)
+                    && p.GetSetMethod() is not null)
                 .Select(p => new
                 {
                     Property = p,

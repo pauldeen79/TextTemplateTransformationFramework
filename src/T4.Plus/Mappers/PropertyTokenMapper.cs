@@ -17,7 +17,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public ITemplateToken<TState> Map(SectionContext<TState> context, PropertyDirectiveModel model)
         {
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

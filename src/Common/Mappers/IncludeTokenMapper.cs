@@ -21,12 +21,12 @@ namespace TextTemplateTransformationFramework.Common.Mappers
 
         public bool IsValidForProcessing(SectionContext<TState> context, IncludeDirectiveModel model)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -36,12 +36,12 @@ namespace TextTemplateTransformationFramework.Common.Mappers
 
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, IncludeDirectiveModel model)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

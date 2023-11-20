@@ -16,22 +16,22 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ini
                                                     ValueSpecifier customResolverDelegateModel)
             : base(context)
         {
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 throw new ArgumentNullException(nameof(viewModel));
             }
 
-            if (model == null)
+            if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (customResolverDelegate == null)
+            if (customResolverDelegate is null)
             {
                 throw new ArgumentNullException(nameof(customResolverDelegate));
             }
 
-            if (customResolverDelegateModel == null)
+            if (customResolverDelegateModel is null)
             {
                 throw new ArgumentNullException(nameof(customResolverDelegateModel));
             }

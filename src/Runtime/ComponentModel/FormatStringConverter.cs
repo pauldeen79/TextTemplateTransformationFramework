@@ -11,7 +11,7 @@ namespace TextTemplateTransformationFramework.Runtime.ComponentModel
 
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context == null)
+            if (context is null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
