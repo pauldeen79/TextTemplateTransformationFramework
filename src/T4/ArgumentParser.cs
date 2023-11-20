@@ -17,7 +17,7 @@ namespace TextTemplateTransformationFramework.T4
             var @break = false;
             while (!@break)
             {
-                var start = section.ToLower(CultureInfo.InvariantCulture).IndexOf(" " + name.ToLower(CultureInfo.InvariantCulture) + "=\"", continueAt + 1);
+                var start = section.ToLower(CultureInfo.InvariantCulture).IndexOf(" " + name.ToLower(CultureInfo.InvariantCulture) + "=\"", continueAt + 1, System.StringComparison.OrdinalIgnoreCase);
                 if (start == -1)
                 {
                     break;
@@ -51,7 +51,7 @@ namespace TextTemplateTransformationFramework.T4
         }
 
         private static int GetEndPosition(string section, string name, int continueAt, int start)
-            => section.IndexOf("\"", continueAt > -1
+            => section.IndexOf('\"', continueAt > -1
                 ? continueAt
                 : start + name.Length + 3);
     }

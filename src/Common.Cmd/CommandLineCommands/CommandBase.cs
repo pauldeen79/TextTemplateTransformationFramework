@@ -118,7 +118,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             debuggerOption.LaunchDebuggerIfSet();
 #else
             // This method is left empty intentionally.
-            // When not built for Debug build configuration, debuggerOption is null and there is no way we can launch the debugger.
+            // When not built for Debug build configuration, debuggerOption == null and there is no way we can launch the debugger.
 #endif
         }
 

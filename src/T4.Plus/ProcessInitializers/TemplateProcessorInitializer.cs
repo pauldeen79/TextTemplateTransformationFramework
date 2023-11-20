@@ -37,7 +37,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessInitializers
         {
             lock (TemplateProcessorInitializer._lock)
             {
-                if (!(state["TemplateProcessorDecorator.SourceTokens"] is IEnumerable<ITemplateToken<TState>> sourceTokens))
+                if (state["TemplateProcessorDecorator.SourceTokens"] is not IEnumerable<ITemplateToken<TState>> sourceTokens)
                 {
                     return null;
                 }

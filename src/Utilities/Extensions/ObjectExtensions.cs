@@ -19,7 +19,7 @@ namespace Utilities.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>
-        /// value.ToString() when the value is not null, string.Empty otherwise.
+        /// value.ToString() when the value != null, string.Empty otherwise.
         /// </returns>
         public static string ToStringWithNullCheck(this object value)
         {
@@ -43,7 +43,7 @@ namespace Utilities.Extensions
         /// <param name="value">The value.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns>
-        /// value.ToString() when te value is not null, defaultValue otherwise.
+        /// value.ToString() when te value != null, defaultValue otherwise.
         /// </returns>
         public static string ToStringWithDefault(this object value, string defaultValue = null)
         {

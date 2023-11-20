@@ -338,7 +338,7 @@ namespace TextTemplateTransformationFramework.Runtime
             }
 
             var errorsValue = errorsProperty.GetValue(template, null);
-            if (!(errorsValue is IEnumerable enumerableErrors))
+            if (errorsValue is not IEnumerable enumerableErrors)
             {
                 hasErrors = false;
                 return Enumerable.Empty<CompilerError>();
@@ -482,7 +482,7 @@ namespace TextTemplateTransformationFramework.Runtime
             return Convert.ChangeType(parameter.Value, property.PropertyType);
         }
 
-        private static IEnumerable<KeyValuePair<string, object>> CombineSession(IEnumerable<KeyValuePair<string, object>> session,
+        private static Dictionary<string, object> CombineSession(IEnumerable<KeyValuePair<string, object>> session,
                                                                                 IEnumerable<KeyValuePair<string, object>> additionalParameters)
             => (session ?? new Dictionary<string, object>())
                 .Where(kvp => additionalParameters?.Any(kvp2 => kvp2.Key == kvp.Key) != true)

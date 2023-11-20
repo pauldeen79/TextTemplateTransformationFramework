@@ -91,7 +91,7 @@ namespace Utilities.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="defaultValue">The default value.</param>
-        /// <param name="actionWhenNull">Optional action to perform when the value is null.</param>
+        /// <param name="actionWhenNull">Optional action to perform when the value == null.</param>
         /// <returns>
         /// Default value when null, otherwise the current value.
         /// </returns>
@@ -126,7 +126,7 @@ namespace Utilities.Extensions
                     break;
                 }
 
-                int secondIndex = instance.IndexOf("]", startIndex + 1);
+                int secondIndex = instance.IndexOf(']', startIndex + 1);
                 if (secondIndex == -1)
                 {
                     break;
@@ -141,7 +141,7 @@ namespace Utilities.Extensions
 
             while (true)
             {
-                startIndex = instance.IndexOf("`");
+                startIndex = instance.IndexOf('`');
                 if (startIndex == -1)
                 {
                     break;
@@ -210,7 +210,7 @@ namespace Utilities.Extensions
         }
 
         /// <summary>
-        /// Performs a is null or empty check, and returns another value when this evaluates to true.
+        /// Performs a == null or empty check, and returns another value when this evaluates to true.
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="whenNullOrEmpty">The when null or empty.</param>
@@ -226,7 +226,7 @@ namespace Utilities.Extensions
         }
 
         /// <summary>
-        /// Performs a is null or empty check, and returns another value when this evaluates to true.
+        /// Performs a == null or empty check, and returns another value when this evaluates to true.
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="whenNullOrEmptyDelegate">The delegate to invoke when null or empty.</param>
@@ -416,7 +416,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string GetClassNameWithDefault(this string fullyQualifiedClassName)
         {
-            var idx = fullyQualifiedClassName.LastIndexOf(".");
+            var idx = fullyQualifiedClassName.LastIndexOf('.');
             return idx == -1
                 ? fullyQualifiedClassName
                 : fullyQualifiedClassName.Substring(idx + 1);
@@ -430,7 +430,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string GetNamespaceWithDefault(this string fullyQualifiedClassName, string defaultValue)
         {
-            var idx = fullyQualifiedClassName.LastIndexOf(".");
+            var idx = fullyQualifiedClassName.LastIndexOf('.');
             return idx == -1
                 ? defaultValue
                 : fullyQualifiedClassName.Substring(0, idx).WhenNullOrEmpty(defaultValue);

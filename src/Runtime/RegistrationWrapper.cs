@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 throw new InvalidOperationException($"Template of type [{rootTemplate.GetType().FullName}] doesn't have a _childTemplatesField field, and cannot be mocked.");
             }
 
-            if (!(childTemplatesField.GetValue(rootTemplate) is List<Tuple<string, Func<object>, Type>> childTemplatesValue))
+            if (childTemplatesField.GetValue(rootTemplate) is not List<Tuple<string, Func<object>, Type>> childTemplatesValue)
             {
                 throw new InvalidOperationException($"Template of type [{rootTemplate.GetType().FullName}] returned null on _childTemplatesField field, and cannot be mocked. Make sure the template is already initialized, before adding mocks.");
             }

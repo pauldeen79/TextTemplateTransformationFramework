@@ -69,7 +69,7 @@ namespace TextTemplateTransformationFramework.Runtime
             var basePath = BasePath;
             if (lastGeneratedFilesPath != null && lastGeneratedFilesPath.Contains('\\'))
             {
-                var lastSlash = lastGeneratedFilesPath.LastIndexOf("\\");
+                var lastSlash = lastGeneratedFilesPath.LastIndexOf('\\');
 
                 basePath = $"{basePath}\\{lastGeneratedFilesPath.Substring(0, lastSlash)}";
                 lastGeneratedFilesPath = lastGeneratedFilesPath.Substring(lastSlash + 1);

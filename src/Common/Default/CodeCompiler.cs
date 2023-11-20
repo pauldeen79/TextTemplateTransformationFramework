@@ -30,7 +30,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
             var referencedAssemblies = codeOutput.ReferencedAssemblies.ToList();
             var packageReferences = new List<string>(codeOutput.PackageReferences ?? Enumerable.Empty<string>());
-            if (!packageReferences.Any())
+            if (packageReferences.Count == 0)
             {
                 packageReferences.Add("NETStandard.Library,2.0.3,.NETStandard,Version=v2.0");
                 packageReferences.Add("System.ComponentModel.Annotations,5.0.0,.NETStandard,Version=v2.0");

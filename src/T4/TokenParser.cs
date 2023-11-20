@@ -87,7 +87,7 @@ namespace TextTemplateTransformationFramework.T4
         private ProcessSectionResult<TokenParserState> ProcessState(TokenParserState state)
             => _tokenStateProcessor.Process(state, GetTokenParserCallback(), state.Context.Logger, state.Context.Parameters);
 
-        private ITokenParserCallback<TokenParserState> GetTokenParserCallback()
+        private TokenParserCallback GetTokenParserCallback()
             => new TokenParserCallback
             (
                 _tokenPlaceholderProcessor,

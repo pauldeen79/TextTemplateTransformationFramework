@@ -32,7 +32,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         /// <param name="instance">String value containing the language.</param>
         /// <param name="context">The secction context.</param>
         /// <returns>
-        /// Null when the language is null or empty, initialize error token when the language is unknown, or else a language token.
+        /// Null when the language == null or empty, initialize error token when the language is unknown, or else a language token.
         /// </returns>
         public static ITemplateToken<TState> GetLanguageToken<TState>(this string instance, SectionContext<TState> context)
             where TState : class

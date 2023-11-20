@@ -179,7 +179,7 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             if (renderAsEnumerable == null)
             {
-                renderAsEnumerable = model is IEnumerable && !(model is string);
+                renderAsEnumerable = model is IEnumerable && model is not string;
             }
             if (renderAsEnumerable == true && model != null && model is IEnumerable)
             {
@@ -258,7 +258,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
             if (customDelegates?.RenderChildTemplateDelegate != null)
             {
-                customDelegates?.RenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item.Model, renderAsEnumerable.Value, silentlyContinueOnError, item.IterationNumber, item.IterationCount);
+                customDelegates.RenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item.Model, renderAsEnumerable.Value, silentlyContinueOnError, item.IterationNumber, item.IterationCount);
             }
             else
             {
@@ -385,7 +385,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 throw new ArgumentNullException(nameof(placeholderAction));
             }
 
-            if (!PlaceholderChildrenDictionary.ContainsKey(placeholderName))
+            if (!PlaceholderChildrenDictionary.TryGetValue(placeholderName, out _))
             {
                 PlaceholderChildrenDictionary.Add(placeholderName, new List<object>());
             }

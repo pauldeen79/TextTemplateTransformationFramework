@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Loader;
 using McMaster.Extensions.CommandLineUtils;
@@ -158,7 +159,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
         }
 
-        private IReadOnlyList<string> MergeParameters(IReadOnlyList<string> commandLineArgumentParameters, TemplateParameter[] globalTemplateParameters)
+        private ReadOnlyCollection<string> MergeParameters(IReadOnlyList<string> commandLineArgumentParameters, TemplateParameter[] globalTemplateParameters)
             => commandLineArgumentParameters
                 .Where(p => p.Contains(':')).Select(p => new TemplateParameter { Name = p.Split(':')[0], Value = string.Join(":", p.Split(':').Skip(1)) })
                 .Concat(globalTemplateParameters)

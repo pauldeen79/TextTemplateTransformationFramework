@@ -74,7 +74,7 @@ namespace Utilities.Extensions
         /// <param name="instance">The instance.</param>
         /// <returns></returns>
         public static IEnumerable<TSource> Exclude<TSource, TExclude>(this IEnumerable<TSource> instance)
-            => instance.Where(t => !(t is TExclude));
+            => instance.Where(t => t is not TExclude);
 
         public static IEnumerable<T> Concat<T>(this IEnumerable<T> instance, T additionalItem)
             => instance.Concat(new[] { additionalItem });
