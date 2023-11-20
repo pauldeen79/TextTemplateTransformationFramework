@@ -20,7 +20,7 @@ namespace TextTemplateTransformationFramework.Common.Default
             {
                 throw new ArgumentNullException(nameof(codeGeneratorResult));
             }
-            SourceTokens = sourceTokens.ToArray() ?? Array.Empty<ITemplateToken<TState>>();
+            SourceTokens = sourceTokens?.ToArray() ?? Array.Empty<ITemplateToken<TState>>();
             SourceCode = codeGeneratorResult.SourceCode;
             OutputExtension = outputExtension;
             Language = codeGeneratorResult.Language;
