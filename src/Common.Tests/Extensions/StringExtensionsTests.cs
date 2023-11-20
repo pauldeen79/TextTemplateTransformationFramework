@@ -25,14 +25,14 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
             var result = input.GetLanguageToken(SectionContext.FromCurrentMode(Mode.CodeRender, this));
 
             // Assert
-            if (expectedResultType is null)
+            if (expectedResultType == null)
             {
                 result.Should().BeNull();
             }
             else
             {
                 result.Should().BeOfType(expectedResultType);
-                if (expectedLanguage is not null)
+                if (expectedLanguage != null)
                 {
                     ((LanguageToken<StringExtensionsTests>)result).Value.Should().Be(expectedLanguage);
                 }

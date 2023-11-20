@@ -21,12 +21,12 @@ namespace Placeholder
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
 
             RenderChildTemplate(@"MyPlaceholder");
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -36,7 +36,7 @@ namespace Placeholder
             this.Errors.Clear();
             RegisterChildTemplate(@"MyPlaceholder", () => new MyPlaceholder());
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
@@ -67,7 +67,7 @@ namespace Placeholder
 
         public override void Write(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.Write(textToAppend);
             }
@@ -79,7 +79,7 @@ namespace Placeholder
 
         public override void WriteLine(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.WriteLine(textToAppend);
             }
@@ -121,7 +121,7 @@ namespace Placeholder
 
         public override void Write(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.Write(textToAppend);
             }
@@ -133,7 +133,7 @@ namespace Placeholder
 
         public override void WriteLine(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.WriteLine(textToAppend);
             }
@@ -150,16 +150,16 @@ namespace Placeholder
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"Hello world!"));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
         public virtual void Initialize(global::System.Action additionalActionDelegate = null)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -169,7 +169,7 @@ namespace Placeholder
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }

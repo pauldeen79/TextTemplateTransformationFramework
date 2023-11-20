@@ -35,7 +35,7 @@ namespace TextTemplateTransformationFramework.Runtime
             PerformActionOnPlaceholder(placeholderName, val =>
             {
                 var childTemplate = GetChildTemplate(templateName, model, silentlyContinueOnError, customResolverDelegate);
-                if (childTemplate is not null)
+                if (childTemplate != null)
                 {
                     val.Add(childTemplate);
                 }
@@ -65,7 +65,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public virtual void RenderTemplate(object template, object model, int? iterationNumber = null, int? iterationCount = null, string resolveTemplateName = null)
         {
-            if (template is null)
+            if (template == null)
             {
                 return;
             }
@@ -73,16 +73,16 @@ namespace TextTemplateTransformationFramework.Runtime
             var templateType = template.GetType();
 
             var childRootTemplateProperty = templateType.GetProperty("RootTemplate");
-            if (childRootTemplateProperty is not null && childRootTemplateProperty.GetSetMethod() is not null)
+            if (childRootTemplateProperty != null && childRootTemplateProperty.GetSetMethod() != null)
             {
                 var currentTemplateRootTemplate = GetType().GetProperty("RootTemplate");
-                var rootTemplate = currentTemplateRootTemplate is null
+                var rootTemplate = currentTemplateRootTemplate == null
                     ? this
                     : currentTemplateRootTemplate.GetValue(this, null);
                 childRootTemplateProperty.SetValue(template, rootTemplate, null);
             }
 
-            var modelProperty = model is null
+            var modelProperty = model == null
                 ? null
                 : templateType.GetProperty("Model", Constants.BindingFlags);
             modelProperty?.SetValue(template, model, null);
@@ -91,7 +91,7 @@ namespace TextTemplateTransformationFramework.Runtime
             initializeMethod?.Invoke(template, initializeMethod.GetParameters().Length == 0 ? Array.Empty<object>() : new object[] { null });
 
             var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
-            if (viewModelProperty is not null && viewModelProperty.PropertyType != typeof(object))
+            if (viewModelProperty != null && viewModelProperty.PropertyType != typeof(object))
             {
                 InitializeViewModel(template, model, iterationNumber, iterationCount, resolveTemplateName, templateType, viewModelProperty);
             }
@@ -102,7 +102,7 @@ namespace TextTemplateTransformationFramework.Runtime
             }
 
             var toStringHelperProperty = templateType.GetProperty("ToStringHelper");
-            if (toStringHelperProperty?.GetSetMethod() is not null)
+            if (toStringHelperProperty?.GetSetMethod() != null)
             {
                 toStringHelperProperty.SetValue(template, ToStringHelper, null);
             }
@@ -134,7 +134,7 @@ namespace TextTemplateTransformationFramework.Runtime
         private void InitializeViewModel(object template, object model, int? iterationNumber, int? iterationCount, string resolveTemplateName, Type templateType, PropertyInfo viewModelProperty)
         {
             var viewModelValue = viewModelProperty.GetValue(template);
-            if (viewModelValue is null)
+            if (viewModelValue == null)
             {
                 viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
                 viewModelProperty.SetValue(template, viewModelValue);
@@ -144,7 +144,7 @@ namespace TextTemplateTransformationFramework.Runtime
             foreach (var kvp in Session.Where(kvp => kvp.Key != "Model"))
             {
                 var prop = viewModelValueType.GetProperty(kvp.Key);
-                if (prop is not null && prop.GetSetMethod() is null) { continue; }
+                if (prop != null && prop.GetSetMethod() == null) { continue; }
                 prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
             }
 
@@ -153,13 +153,13 @@ namespace TextTemplateTransformationFramework.Runtime
 
             var viewModelRootTemplateProp = viewModelValueType.GetProperty("RootTemplate", BindingFlags.Public | BindingFlags.Instance);
             var templateRootTemplateProp = templateType.GetProperty("RootTemplate", Constants.BindingFlags);
-            if (viewModelRootTemplateProp is not null && templateRootTemplateProp is not null && viewModelRootTemplateProp.GetSetMethod() is not null)
+            if (viewModelRootTemplateProp != null && templateRootTemplateProp != null && viewModelRootTemplateProp.GetSetMethod() != null)
             {
                 viewModelRootTemplateProp.SetValue(viewModelValue, templateRootTemplateProp.GetValue(template));
             }
 
             var viewModelTemplateContextProperty = viewModelValueType.GetProperty("TemplateContext", Constants.BindingFlags);
-            if (viewModelTemplateContextProperty is not null)
+            if (viewModelTemplateContextProperty != null)
             {
                 var currentContext = TemplateContext;
                 viewModelTemplateContextProperty.SetValue(viewModelValue, currentContext.CreateChildContext(template, model, viewModelValue, iterationNumber, iterationCount, resolveTemplateName), Constants.BindingFlags, null, null, CultureInfo.CurrentCulture);
@@ -177,11 +177,11 @@ namespace TextTemplateTransformationFramework.Runtime
                                         object resolverDelegateModel = null,
                                         CustomDelegates customDelegates = null)
         {
-            if (renderAsEnumerable is null)
+            if (renderAsEnumerable == null)
             {
                 renderAsEnumerable = model is IEnumerable && model is not string;
             }
-            if (renderAsEnumerable == true && model is not null && model is IEnumerable)
+            if (renderAsEnumerable == true && model != null && model is IEnumerable)
             {
                 var items = ((IEnumerable)model).OfType<object>().ToArray();
                 var iterationCount = items.Length;
@@ -191,7 +191,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 {
                     templateName = GetTemplateName(templateName, customDelegates?.TemplateNameDelegate, originalTemplateName, item);
                     var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customDelegates?.ResolverDelegate);
-                    if (customDelegates?.RenderChildTemplateDelegate is not null)
+                    if (customDelegates?.RenderChildTemplateDelegate != null)
                     {
                         customDelegates?.RenderChildTemplateDelegate.Invoke(templateName, template, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
                     }
@@ -207,7 +207,7 @@ namespace TextTemplateTransformationFramework.Runtime
             {
                 templateName = GetTemplateName(templateName, customDelegates?.TemplateNameDelegate, templateName, model);
                 var template = GetChildTemplate(templateName, resolverDelegateModel ?? model, silentlyContinueOnError, customDelegates?.ResolverDelegate);
-                if (customDelegates?.RenderChildTemplateDelegate is not null)
+                if (customDelegates?.RenderChildTemplateDelegate != null)
                 {
                     customDelegates?.RenderChildTemplateDelegate.Invoke(templateName, template, model, renderAsEnumerable.Value, silentlyContinueOnError, null, null);
                 }
@@ -222,11 +222,11 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             var renderMethod = templateType.GetMethod("Render");
             var transformTextMethod = templateType.GetMethod("TransformText");
-            if (renderMethod is not null)
+            if (renderMethod != null)
             {
                 renderMethod.Invoke(template, new object[] { GenerationEnvironment });
             }
-            else if (transformTextMethod is not null)
+            else if (transformTextMethod != null)
             {
                 GenerationEnvironment.Append((string)transformTextMethod.Invoke(template, Array.Empty<object>()));
             }
@@ -251,12 +251,12 @@ namespace TextTemplateTransformationFramework.Runtime
             }
 
             var separatorTemplate = GetChildTemplate(separatorTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customDelegates?.ResolverDelegate);
-            if (separatorTemplate is null)
+            if (separatorTemplate == null)
             {
                 return;
             }
 
-            if (customDelegates?.RenderChildTemplateDelegate is not null)
+            if (customDelegates?.RenderChildTemplateDelegate != null)
             {
                 customDelegates.RenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item.Model, renderAsEnumerable.Value, silentlyContinueOnError, item.IterationNumber, item.IterationCount);
             }
@@ -268,7 +268,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
         private static string GetTemplateName(string templateName, Func<object, string> customTemplateNameDelegate, string originalTemplateName, object item)
         {
-            if (customTemplateNameDelegate is null)
+            if (customTemplateNameDelegate == null)
             {
                 return templateName;
             }
@@ -294,7 +294,7 @@ namespace TextTemplateTransformationFramework.Runtime
         protected virtual object GetViewModel(string viewModelName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
         {
             var returnValue = GetRegisteredObject(_viewModelsField, "View model", viewModelName, model, silentlyContinueOnError, customResolverDelegate);
-            if (returnValue is not null && model is not null)
+            if (returnValue != null && model != null)
             {
                 var modelProperty = returnValue.GetType().GetProperty("Model", Constants.BindingFlags);
                 modelProperty?.SetValue(returnValue, model);
@@ -304,16 +304,16 @@ namespace TextTemplateTransformationFramework.Runtime
 
         protected object GetRegisteredObject(List<Tuple<string, Func<object>, Type>> registrations, string objectName, string name, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
         {
-            if (objectName is null)
+            if (objectName == null)
             {
                 throw new ArgumentNullException(nameof(objectName));
             }
 
-            var registrationTuples = customResolverDelegate is not null
+            var registrationTuples = customResolverDelegate != null
                 ? registrations.Where(t => customResolverDelegate(name, t.Item1, t.Item3, model))
                 : Resolve(registrations, name, model);
 
-            if (!registrationTuples.Any() && customResolverDelegate is null && string.IsNullOrEmpty(name) && model is not null)
+            if (!registrationTuples.Any() && customResolverDelegate == null && string.IsNullOrEmpty(name) && model != null)
             {
                 registrationTuples = registrations.Where(t => t.Item3?.IsAssignableFrom(model.GetType()) == true);
             }
@@ -327,14 +327,14 @@ namespace TextTemplateTransformationFramework.Runtime
             else
             {
                 var registrationTuple = templateTuplesArray.Length == 1 ? templateTuplesArray[0] : null;
-                if (registrationTuple is null)
+                if (registrationTuple == null)
                 {
                     ReportErrorOnMissingRegistration(objectName, name, model, silentlyContinueOnError);
                     return null;
                 }
 
                 var registeredInstance = registrationTuple.Item2();
-                if (registeredInstance is null)
+                if (registeredInstance == null)
                 {
                     ReportErrorOnRegistrationInstanciation(objectName, silentlyContinueOnError, registrationTuple);
                     return null;
@@ -351,7 +351,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 return;
             }
 
-            Error("Multiple " + objectName.ToLower(CultureInfo.InvariantCulture) + "s found with model type " + (model is null ? "{null}" : model.GetType().FullName) + ": " + string.Join(", ", templateTuplesArray.Select(t => t.Item1)));
+            Error("Multiple " + objectName.ToLower(CultureInfo.InvariantCulture) + "s found with model type " + (model == null ? "{null}" : model.GetType().FullName) + ": " + string.Join(", ", templateTuplesArray.Select(t => t.Item1)));
         }
 
         private void ReportErrorOnRegistrationInstanciation(string objectName, bool silentlyContinueOnError, Tuple<string, Func<object>, Type> registrationTuple)
@@ -371,7 +371,7 @@ namespace TextTemplateTransformationFramework.Runtime
                 return;
             }
 
-            var errorMessage = string.IsNullOrEmpty(name) && model is not null
+            var errorMessage = string.IsNullOrEmpty(name) && model != null
                 ? "Could not resolve " + objectName.ToLower(CultureInfo.InvariantCulture) + " with model type " + model.GetType().FullName
                 : "Could not resolve " + objectName.ToLower(CultureInfo.InvariantCulture) + " with name " + name;
 
@@ -380,7 +380,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
         protected void PerformActionOnPlaceholder(string placeholderName, Action<IList<object>> placeholderAction)
         {
-            if (placeholderAction is null)
+            if (placeholderAction == null)
             {
                 throw new ArgumentNullException(nameof(placeholderAction));
             }
@@ -396,21 +396,21 @@ namespace TextTemplateTransformationFramework.Runtime
 
         protected static object ConvertType(KeyValuePair<string, object> parameter, Type type)
         {
-            if (type is null)
+            if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
             var property = type.GetProperty(parameter.Key);
 
-            return property is null
+            return property == null
                 ? parameter.Value
                 : ConvertParameter(parameter, property);
         }
 
         protected static object ConvertParameter(KeyValuePair<string, object> parameter, PropertyInfo property)
         {
-            if (property is null)
+            if (property == null)
             {
                 throw new ArgumentNullException(nameof(property));
             }
@@ -421,7 +421,7 @@ namespace TextTemplateTransformationFramework.Runtime
         }
 
         private static IEnumerable<Tuple<string, Func<object>, Type>> Resolve(List<Tuple<string, Func<object>, Type>> registrations, string name, object model)
-            => string.IsNullOrEmpty(name) && model is not null
+            => string.IsNullOrEmpty(name) && model != null
                 ? registrations.Where(t => t.Item3 == model.GetType())
                 : registrations.Where(t => t.Item1 == name);
         #endregion

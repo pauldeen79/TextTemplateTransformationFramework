@@ -13,7 +13,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                                                    TemplateCompilerOutput<TState> templateCompilerOutput,
                                                    Type templateType)
         {
-            if (templateCompilerOutput is null)
+            if (templateCompilerOutput == null)
             {
                 throw new ArgumentNullException(nameof(templateCompilerOutput));
             }

@@ -9,7 +9,7 @@ namespace TextTemplateTransformationFramework.T4.Core.ProcessInitializers
     {
         public void Initialize(ITextTemplateProcessorContext<TState> context)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

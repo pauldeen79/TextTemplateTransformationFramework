@@ -24,14 +24,14 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static bool IsProcessorForSection<TState>(this ITemplateSectionProcessor<TState> instance, SectionContext<TState> context)
             where TState : class
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
             return instance.GetType().GetModelType(typeof(TState)) switch
             {
-                var type when type.GetCustomAttribute<AllowAllSectionsAttribute>(true) is not null => true,
+                var type when type.GetCustomAttribute<AllowAllSectionsAttribute>(true) != null => true,
 #if NETFRAMEWORK
                     var type when context.Section.StartsWith("@") =>
 #else
@@ -41,7 +41,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 (
                     type.GetCustomAttribute<DirectivePrefixAttribute>(true),
                     directivePrefixAttribute =>
-                        directivePrefixAttribute is null
+                        directivePrefixAttribute == null
                             ? typeof(ITemplateCustomDirectiveName).IsAssignableFrom(type)
                                 && context.TokenParserCallback.SectionIsDirectiveWithName(context, ((ITemplateCustomDirectiveName)instance).TemplateCustomDirectiveName)
                             : context.TokenParserCallback.SectionIsDirectiveWithName(context, directivePrefixAttribute.Name)
@@ -49,7 +49,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
                 var type => ScopedMember.Evaluate
                 (
                     type.GetCustomAttribute<SectionPrefixAttribute>(true),
-                    sectionPrefixAttribute => sectionPrefixAttribute is not null
+                    sectionPrefixAttribute => sectionPrefixAttribute != null
                         && context.TokenParserCallback.SectionStartsWithPrefix(context, sectionPrefixAttribute.Prefix)
                 )
             };
@@ -84,7 +84,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
 
         public static bool IsDirective<TState>(this ITemplateSectionProcessor<TState> instance)
             where TState : class
-            => instance.GetType().GetCustomAttribute<DirectiveModelAttribute>(true) is not null
+            => instance.GetType().GetCustomAttribute<DirectiveModelAttribute>(true) != null
             || instance is IModeledTemplateSectionProcessor<TState>;
 
         public static IEnumerable<ITemplateSectionProcessor<TState>> GetContainedTemplateSectionProcessors<TState>(this ITemplateSectionProcessor<TState> instance)

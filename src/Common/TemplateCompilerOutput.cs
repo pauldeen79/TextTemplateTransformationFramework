@@ -30,11 +30,11 @@ namespace TextTemplateTransformationFramework.Common
         private static List<CompilerError> Combine(IEnumerable<CompilerError> previousPhaseErrors, IEnumerable<CompilerError> errors)
         {
             var result = new List<CompilerError>();
-            if (previousPhaseErrors is not null)
+            if (previousPhaseErrors != null)
             {
                 result.AddRange(previousPhaseErrors);
             }
-            if (errors is not null)
+            if (errors != null)
             {
                 result.AddRange(errors);
             }

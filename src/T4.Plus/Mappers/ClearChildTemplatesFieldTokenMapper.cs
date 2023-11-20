@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public bool IsValidForProcessing(SectionContext<TState> context, ClearChildTemplatesFieldModel model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

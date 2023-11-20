@@ -17,17 +17,17 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.Ren
             bool dryRun)
             : base(context)
         {
-            if (assemblyName is null)
+            if (assemblyName == null)
             {
                 throw new ArgumentNullException(nameof(assemblyName));
             }
 
-            if (basePath is null)
+            if (basePath == null)
             {
                 throw new ArgumentNullException(nameof(basePath));
             }
 
-            if (currentDirectory is null)
+            if (currentDirectory == null)
             {
                 throw new ArgumentNullException(nameof(currentDirectory));
             }

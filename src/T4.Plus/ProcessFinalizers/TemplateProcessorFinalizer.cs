@@ -11,7 +11,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessFinalizers
         public void Finalize(ITemplateProcessorContext<TState> context)
         {
             var handler = context?["TemplateProcessorDecorator.Handler"] as Func<AssemblyLoadContext, AssemblyName, Assembly>;
-            if (handler is not null)
+            if (handler != null)
             {
                 AssemblyLoadContext.Default.Resolving -= handler;
             }

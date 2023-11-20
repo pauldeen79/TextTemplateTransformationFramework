@@ -22,12 +22,12 @@ namespace TextTemplateTransformationFramework.T4.Plus
         public TemplateCompilerOutput<TState> Compile(ITextTemplateProcessorContext<TState> context,
                                                       TemplateCodeOutput<TState> codeOutput)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (codeOutput is null)
+            if (codeOutput == null)
             {
                 throw new ArgumentNullException(nameof(codeOutput));
             }
@@ -47,7 +47,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                     .ToArray())
                 {
                     var result = interceptorToken.Process(codeOutput, callback);
-                    if (result is not null)
+                    if (result != null)
                     {
                         return result;
                     }

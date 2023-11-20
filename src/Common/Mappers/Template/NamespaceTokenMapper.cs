@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.Common.Mappers.Template
     {
         public bool IsValidForProcessing(SectionContext<TState> context, TemplateDirectiveModel model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -25,7 +25,7 @@ namespace TextTemplateTransformationFramework.Common.Mappers.Template
 
         public ITemplateToken<TState> Map(SectionContext<TState> context, TemplateDirectiveModel model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

@@ -118,7 +118,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             debuggerOption.LaunchDebuggerIfSet();
 #else
             // This method is left empty intentionally.
-            // When not built for Debug build configuration, debuggerOption is null and there is no way we can launch the debugger.
+            // When not built for Debug build configuration, debuggerOption == null and there is no way we can launch the debugger.
 #endif
         }
 
@@ -133,7 +133,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             }
 
             var directive = scriptBuilder.GetKnownDirectives().FirstOrDefault(d => d.GetDirectiveName() == directiveName);
-            if (directive is null)
+            if (directive == null)
             {
                 return (false, $"Could not find directive with name [{directiveName}]", null);
             }
@@ -185,7 +185,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             string resultText,
             bool allowParameters)
         {
-            if (app is null) throw new ArgumentNullException(nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command(commandName, command =>
             {
                 command.Description = commandDescription;

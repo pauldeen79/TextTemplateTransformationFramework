@@ -8,13 +8,13 @@ namespace TextTemplateTransformationFramework.Runtime
     {
         public static void WrapChildTemplates(object rootTemplate)
         {
-            if (rootTemplate is null)
+            if (rootTemplate == null)
             {
                 throw new ArgumentNullException(nameof(rootTemplate));
             }
 
             var childTemplatesField = rootTemplate.GetType().GetField("_childTemplatesField", Constants.BindingFlags);
-            if (childTemplatesField is null)
+            if (childTemplatesField == null)
             {
                 throw new InvalidOperationException($"Template of type [{rootTemplate.GetType().FullName}] doesn't have a _childTemplatesField field, and cannot be mocked.");
             }
@@ -39,7 +39,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public static Tuple<string, Func<object>, Type> WrapTemplate(Tuple<string, Func<object>, Type> registration, object rootTemplate)
         {
-            if (registration is null)
+            if (registration == null)
             {
                 throw new ArgumentNullException(nameof(registration));
             }
@@ -51,13 +51,13 @@ namespace TextTemplateTransformationFramework.Runtime
             => new Tuple<string, Func<object>, Type>(templateName, () => new TemplateWrapper(templateName, templateCreationDelegate, modelType, null, onInitializeEventHandler, onRenderEvenHandler), modelType);
 
         public static Tuple<string, Func<object>, Type> WrapTemplate<T>(string templateName, Type modelType, Func<object> templateFactory = null, EventHandler<TemplateInitializeEventArgs> onInitializeEventHandler = null, EventHandler<TemplateRenderEventArgs> onRenderEvenHandler = null) where T : new()
-            => WrapTemplate(templateName, () => templateFactory is null ? new T() : templateFactory.Invoke(), modelType, onInitializeEventHandler, onRenderEvenHandler);
+            => WrapTemplate(templateName, () => templateFactory == null ? new T() : templateFactory.Invoke(), modelType, onInitializeEventHandler, onRenderEvenHandler);
 
         public static Tuple<string, Func<object>, Type> WrapTemplate<T>(Func<object> templateFactory, EventHandler<TemplateInitializeEventArgs> onInitializeEventHandler = null, EventHandler<TemplateRenderEventArgs> onRenderEvenHandler = null) where T : new()
             => WrapTemplate<T>(new T().GetType().FullName, null, templateFactory, onInitializeEventHandler, onRenderEvenHandler);
 
         public static Tuple<string, Func<object>, Type> WrapTemplate<T>(object templateInstance, EventHandler<TemplateInitializeEventArgs> onInitializeEventHandler = null, EventHandler<TemplateRenderEventArgs> onRenderEvenHandler = null) where T : new()
-            => WrapTemplate<T>(templateInstance is null ? null : new Func<object>(() => templateInstance), onInitializeEventHandler, onRenderEvenHandler);
+            => WrapTemplate<T>(templateInstance == null ? null : new Func<object>(() => templateInstance), onInitializeEventHandler, onRenderEvenHandler);
 
         public static Tuple<string, Func<object>, Type> WrapTemplate<T>(EventHandler<TemplateInitializeEventArgs> onInitializeEventHandler = null, EventHandler<TemplateRenderEventArgs> onRenderEvenHandler = null) where T : new()
             => WrapTemplate<T>((object)null, onInitializeEventHandler, onRenderEvenHandler);
@@ -69,13 +69,13 @@ namespace TextTemplateTransformationFramework.Runtime
             => new Tuple<string, Func<object>, Type>(viewModelName, viewModelCreationDelegate, modelType);
 
         public static Tuple<string, Func<object>, Type> WrapViewModel<T>(string viewModelName, Type modelType, Func<object> viewModelFactory = null) where T : new()
-            => WrapViewModel(viewModelName, () => viewModelFactory is null ? new T() : viewModelFactory.Invoke(), modelType);
+            => WrapViewModel(viewModelName, () => viewModelFactory == null ? new T() : viewModelFactory.Invoke(), modelType);
 
         public static Tuple<string, Func<object>, Type> WrapViewModel<T>(Func<object> viewModelFactory) where T : new()
             => WrapViewModel<T>(new T().GetType().FullName, null, viewModelFactory);
 
         public static Tuple<string, Func<object>, Type> WrapViewModel<T>(object viewModelInstance) where T : new()
-            => WrapViewModel<T>(viewModelInstance is null ? null : new Func<object>(() => viewModelInstance));
+            => WrapViewModel<T>(viewModelInstance == null ? null : new Func<object>(() => viewModelInstance));
 
         public static Tuple<string, Func<object>, Type> WrapViewModel<T>() where T : new()
             => WrapViewModel<T>((object)null);

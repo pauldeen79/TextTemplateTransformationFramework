@@ -91,13 +91,13 @@ namespace Utilities.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="defaultValue">The default value.</param>
-        /// <param name="actionWhenNull">Optional action to perform when the value is null.</param>
+        /// <param name="actionWhenNull">Optional action to perform when the value == null.</param>
         /// <returns>
         /// Default value when null, otherwise the current value.
         /// </returns>
         public static string WhenNull(this string value, string defaultValue = "", Action actionWhenNull = null)
         {
-            if (value is null && actionWhenNull is not null)
+            if (value == null && actionWhenNull != null)
             {
                 actionWhenNull();
             }
@@ -112,7 +112,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string FixTypeName(this string instance)
         {
-            if (instance is null)
+            if (instance == null)
             {
                 return null;
             }
@@ -196,7 +196,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsTrue(this string instance)
         {
-            return instance is not null && Array.Exists(_trueKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance != null && Array.Exists(_trueKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -206,11 +206,11 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static bool IsFalse(this string instance)
         {
-            return instance is not null && Array.Exists(_falseKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
+            return instance != null && Array.Exists(_falseKeywords, s => s.Equals(instance, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
-        /// Performs a is null or empty check, and returns another value when this evaluates to true.
+        /// Performs a == null or empty check, and returns another value when this evaluates to true.
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="whenNullOrEmpty">The when null or empty.</param>
@@ -226,14 +226,14 @@ namespace Utilities.Extensions
         }
 
         /// <summary>
-        /// Performs a is null or empty check, and returns another value when this evaluates to true.
+        /// Performs a == null or empty check, and returns another value when this evaluates to true.
         /// </summary>
         /// <param name="instance">The instance.</param>
         /// <param name="whenNullOrEmptyDelegate">The delegate to invoke when null or empty.</param>
         /// <returns></returns>
         public static string WhenNullOrEmpty(this string instance, Func<string> whenNullOrEmptyDelegate)
         {
-            if (whenNullOrEmptyDelegate is null)
+            if (whenNullOrEmptyDelegate == null)
             {
                 throw new ArgumentNullException(nameof(whenNullOrEmptyDelegate));
             }
@@ -284,12 +284,12 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
         {
-            if (oldValue is null)
+            if (oldValue == null)
             {
                 throw new ArgumentNullException(nameof(oldValue));
             }
 
-            if (newValue is null)
+            if (newValue == null)
             {
                 throw new ArgumentNullException(nameof(newValue));
             }
@@ -319,7 +319,7 @@ namespace Utilities.Extensions
         /// <returns></returns>
         public static string Sanitize(this string token)
         {
-            if (token is null)
+            if (token == null)
             {
                 return string.Empty;
             }
@@ -443,7 +443,7 @@ namespace Utilities.Extensions
 
         public static string RemoveSuffix(this string instance, string suffix)
         {
-            if (suffix is null)
+            if (suffix == null)
             {
                 throw new ArgumentNullException(nameof(suffix));
             }
@@ -517,7 +517,7 @@ namespace Utilities.Extensions
         /// <returns>Typename without generics (`1)</returns>
         public static string WithoutGenerics(this string typeName)
         {
-            if (typeName is null)
+            if (typeName == null)
             {
                 return typeName;
             }

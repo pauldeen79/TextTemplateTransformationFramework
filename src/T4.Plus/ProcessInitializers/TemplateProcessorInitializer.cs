@@ -22,7 +22,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessInitializers
 
         public void Initialize(ITemplateProcessorContext<TState> context)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -56,7 +56,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.ProcessInitializers
                     .Concat(new[] { (Path.Combine(tempPath ?? Path.GetTempPath(), args.Name + ".dll")) })
                     .FirstOrDefault(File.Exists);
 
-                return assemblyPath is not null
+                return assemblyPath != null
                     ? sender.LoadFromAssemblyPath(assemblyPath)
                     : null;
             }

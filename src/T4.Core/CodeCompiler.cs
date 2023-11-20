@@ -22,10 +22,10 @@ namespace TextTemplateTransformationFramework.T4.Core
 
         public CompilerResults Compile(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
         {
-            if (context is null
+            if (context == null
                 || !context.TryGetValue("CoreAssemblyLoadContext", out var value)
                 || value is not AssemblyLoadContext loadContext
-                || codeOutput is null)
+                || codeOutput == null)
             {
                 throw new InvalidOperationException("Can't find AssemblyLoadContext. Did you register the TextTemplateProcessorInitializer?");
             }

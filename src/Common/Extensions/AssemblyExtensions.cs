@@ -27,12 +27,12 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static IEnumerable<Type> GetTokenMapperTypes(this Assembly instance)
             => instance
                 .GetExportedTypes<ITokenMapper>()
-                .Where(t => !t.IsInterface && !t.IsAbstract && t.GetCustomAttribute<TokenMapperAttribute>(true) is not null);
+                .Where(t => !t.IsInterface && !t.IsAbstract && t.GetCustomAttribute<TokenMapperAttribute>(true) != null);
 
         public static IEnumerable<IGrouping<Type, Type>> GetGroupedTokenMapperTypes(this Assembly instance)
             => instance
                 .GetExportedTypes<ITokenMapper>()
-                .Where(t => !t.IsInterface && !t.IsAbstract && t.GetCustomAttribute<GroupedTokenMapperAttribute>(true) is not null)
+                .Where(t => !t.IsInterface && !t.IsAbstract && t.GetCustomAttribute<GroupedTokenMapperAttribute>(true) != null)
                 .GroupBy(t => t.GetCustomAttribute<GroupedTokenMapperAttribute>(true).Type);
     }
 }

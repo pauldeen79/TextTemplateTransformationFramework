@@ -23,7 +23,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public CompilerResults Compile(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
         {
-            if (codeOutput is null)
+            if (codeOutput == null)
             {
                 throw new ArgumentNullException(nameof(codeOutput));
             }

@@ -28,17 +28,17 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public TemplateCompilerOutput<TState> Compile(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (codeOutput is null)
+            if (codeOutput == null)
             {
                 throw new ArgumentNullException(nameof(codeOutput));
             }
 
-            if (context.AssemblyTemplate is not null)
+            if (context.AssemblyTemplate != null)
             {
                 var assembly = _assemblyService.LoadAssembly(context.AssemblyTemplate.AssemblyName, context.AssemblyTemplate.AssemblyLoadContext);
                 return new TemplateCompilerOutput<TState>(assembly, Activator.CreateInstance(Array.Find(assembly.GetExportedTypes(), x => x.FullName == context.AssemblyTemplate.ClassName)), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<TState>>());
@@ -48,11 +48,11 @@ namespace TextTemplateTransformationFramework.Common.Default
             var template = result?.Errors.HasErrors() != false
                 ? null
                 : CreateTemplate(context, codeOutput, result);
-            var errors = result?.Errors is null
+            var errors = result?.Errors == null
                 ? null
                 : result.Errors.Select(CreateCompilerError(codeOutput)).ToList();
 
-            if (errors is not null && errors.HasErrors())
+            if (errors != null && errors.HasErrors())
             {
                 //when compilation fails, add parse-time errors.
                 errors.AddRange

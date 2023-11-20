@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.Runtime
             get
             {
                 var p = this;
-                while (p?.ParentContext is not null)
+                while (p?.ParentContext != null)
                 {
                     p = p.ParentContext;
                 }
@@ -26,9 +26,9 @@ namespace TextTemplateTransformationFramework.Runtime
         public T GetModelFromContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
         {
             var p = this;
-            while (p is not null)
+            while (p != null)
             {
-                if (p.Model is T t && (predicate is null || predicate(p)))
+                if (p.Model is T t && (predicate == null || predicate(p)))
                 {
                     return t;
                 }
@@ -40,9 +40,9 @@ namespace TextTemplateTransformationFramework.Runtime
         public T GetViewModelFromContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
         {
             var p = this;
-            while (p is not null)
+            while (p != null)
             {
-                if (p.ViewModel is T t && (predicate is null || predicate(p)))
+                if (p.ViewModel is T t && (predicate == null || predicate(p)))
                 {
                     return t;
                 }
@@ -54,9 +54,9 @@ namespace TextTemplateTransformationFramework.Runtime
         public T GetContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
         {
             var p = this;
-            while (p is not null)
+            while (p != null)
             {
-                if (p.Template is T t && (predicate is null || predicate(p)))
+                if (p.Template is T t && (predicate == null || predicate(p)))
                 {
                     return t;
                 }
@@ -69,7 +69,7 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             get
             {
-                return ParentContext is null;
+                return ParentContext == null;
             }
         }
 

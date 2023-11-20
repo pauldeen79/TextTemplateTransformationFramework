@@ -15,12 +15,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public ITemplateToken<TState> Map(SectionContext<TState> context, RenderChildTemplateDirectiveModel model)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

@@ -30,7 +30,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
                                       string currentDirectory = null,
                                       IEnumerable<string> classNameFilter = null)
         {
-            if (assemblyName is null) throw new ArgumentNullException(nameof(assemblyName));
+            if (assemblyName == null) throw new ArgumentNullException(nameof(assemblyName));
             _assemblyName = assemblyName;
             _basePath = basePath;
             _generateMultipleFiles = generateMultipleFiles;

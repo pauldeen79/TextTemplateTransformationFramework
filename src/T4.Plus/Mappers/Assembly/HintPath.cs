@@ -15,12 +15,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers.Assembly
     {
         public bool IsValidForProcessing(SectionContext<TState> context, AssemblyDirectiveModel<TState> model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            return model.GetHintPathToken() is not null && model.FrameworkFilter.IsValidFrameworkVersion();
+            return model.GetHintPathToken() != null && model.FrameworkFilter.IsValidFrameworkVersion();
         }
 
         public ITemplateToken<TState> Map(SectionContext<TState> context, AssemblyDirectiveModel<TState> model)

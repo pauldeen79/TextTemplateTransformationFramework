@@ -16,7 +16,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                                   string className,
                                   string tempPath)
         {
-            if (codeGeneratorResult is null)
+            if (codeGeneratorResult == null)
             {
                 throw new ArgumentNullException(nameof(codeGeneratorResult));
             }
@@ -42,7 +42,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                    previousResult?.ClassName,
                    previousResult?.TempPath)
         {
-            if (previousResult is null)
+            if (previousResult == null)
             {
                 throw new ArgumentNullException(nameof(previousResult));
             }

@@ -25,7 +25,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public void Add(TemplateInfo templateInfo)
         {
-            if (templateInfo is null)
+            if (templateInfo == null)
             {
                 throw new ArgumentNullException(nameof(templateInfo));
             }
@@ -33,7 +33,7 @@ namespace TextTemplateTransformationFramework.Common.Default
             var templates = GetTemplates().ToList();
 
             var existingTemplate = FindTemplate(templateInfo, templates);
-            if (existingTemplate is not null)
+            if (existingTemplate != null)
             {
                 throw new ArgumentOutOfRangeException(nameof(templateInfo), "Template already exists");
             }
@@ -55,7 +55,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public void Update(TemplateInfo templateInfo)
         {
-            if (templateInfo is null)
+            if (templateInfo == null)
             {
                 throw new ArgumentNullException(nameof(templateInfo));
             }
@@ -79,7 +79,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public void Remove(TemplateInfo templateInfo)
         {
-            if (templateInfo is null)
+            if (templateInfo == null)
             {
                 throw new ArgumentNullException(nameof(templateInfo));
             }

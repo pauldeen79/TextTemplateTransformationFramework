@@ -13,7 +13,7 @@ namespace Utilities.Extensions
         /// <param name="instance">The instance.</param>
         /// <returns></returns>
         public static object GetDefaultValue(this Type instance)
-            => instance.IsValueType && Nullable.GetUnderlyingType(instance) is null
+            => instance.IsValueType && Nullable.GetUnderlyingType(instance) == null
                 ? Activator.CreateInstance(instance)
                 : null;
     }

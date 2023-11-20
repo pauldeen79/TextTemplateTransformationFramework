@@ -19,19 +19,19 @@ namespace TextTemplateTransformationFramework.T4.Plus
                              TemplateCodeOutput<TState> codeOutput,
                              CompilerResults result)
         {
-            if (codeOutput is null)
+            if (codeOutput == null)
             {
                 throw new ArgumentNullException(nameof(codeOutput));
             }
 
-            if (result is null)
+            if (result == null)
             {
                 throw new ArgumentNullException(nameof(result));
             }
 
             var compositionRoot = result.CompiledAssembly.CreateInstance(codeOutput.ClassName + "CompositionRoot");
 
-            return compositionRoot is null
+            return compositionRoot == null
                 ? _baseFactory.Create(context, codeOutput, result)
                 : compositionRoot.GetType().GetMethod("ResolveTemplate").Invoke(compositionRoot, Array.Empty<object>());
         }

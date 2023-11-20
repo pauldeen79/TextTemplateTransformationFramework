@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers.RegisterPlaceholde
     {
         public ITemplateToken<TState> Map(SectionContext<TState> context, PlaceholderDirectiveModel<TState> model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }

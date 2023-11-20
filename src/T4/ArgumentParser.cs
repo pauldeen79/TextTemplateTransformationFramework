@@ -8,7 +8,7 @@ namespace TextTemplateTransformationFramework.T4
     {
         public IEnumerable<string> Parse(string section, string name)
         {
-            if (section is null || name is null)
+            if (section == null || name == null)
             {
                 yield break;
             }

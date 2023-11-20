@@ -14,7 +14,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                                                    TemplateCompilerOutput<TState> templateCompilerOutput,
                                                    Type templateType)
         {
-            if (templateCompilerOutput is null)
+            if (templateCompilerOutput == null)
             {
                 throw new ArgumentNullException(nameof(templateCompilerOutput));
             }
@@ -30,14 +30,14 @@ namespace TextTemplateTransformationFramework.T4.Plus
         {
             var viewModelProperty = templateCompilerOutput.Template.GetType().GetProperty("ViewModel");
 
-            if (viewModelProperty is null)
+            if (viewModelProperty == null)
             {
                 return Enumerable.Empty<PropertyDescriptor>();
             }
 
             var viewModelPropertyValue = viewModelProperty.GetValue(templateCompilerOutput.Template);
 
-            if (viewModelPropertyValue is null)
+            if (viewModelPropertyValue == null)
             {
                 viewModelPropertyValue = Activator.CreateInstance(viewModelProperty.PropertyType);
                 viewModelProperty.SetValue(templateCompilerOutput.Template, viewModelPropertyValue);

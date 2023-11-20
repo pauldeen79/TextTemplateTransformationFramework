@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens
 
         public IEnumerable<ITemplateToken<TState>> Process(TextTemplate textTemplate, IEnumerable<TemplateParameter> parameters, ICallback<TState, ITextTemplateTokenParser<TState>> callback)
         {
-            if (callback is null)
+            if (callback == null)
             {
                 throw new ArgumentNullException(nameof(callback));
             }

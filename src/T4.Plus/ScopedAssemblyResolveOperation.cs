@@ -7,12 +7,12 @@ namespace TextTemplateTransformationFramework.T4.Plus
     {
         public static TReturn Invoke<TReturn>(Func<object, ResolveEventArgs, Assembly> assemblyResolveDelegate, Func<TReturn> function)
         {
-            if (assemblyResolveDelegate is null)
+            if (assemblyResolveDelegate == null)
             {
                 throw new ArgumentNullException(nameof(assemblyResolveDelegate));
             }
 
-            if (function is null)
+            if (function == null)
             {
                 throw new ArgumentNullException(nameof(function));
             }

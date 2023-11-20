@@ -34,7 +34,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app is null) throw new ArgumentNullException(nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command("list-parameters", command =>
             {
                 command.Description = "Lists template parameters";
@@ -97,7 +97,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (!string.IsNullOrEmpty(shortName))
             {
                 var info = _templateInfoRepository.FindByShortName(shortName);
-                if (info is null)
+                if (info == null)
                 {
                     return ExtractParametersResult.Create(Enumerable.Empty<TemplateParameter>(), Array.Empty<CompilerError>(), string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {shortName}"));
                 }

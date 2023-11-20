@@ -37,12 +37,12 @@ namespace TextTemplateTransformationFramework.T4
 
         public IEnumerable<string> GetSectionArguments(SectionContext<TokenParserState> context, string name)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (name is null)
+            if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
@@ -60,7 +60,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public bool SectionIsDirectiveWithName(SectionContext<TokenParserState> context, string name)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -70,7 +70,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public bool SectionStartsWithPrefix(SectionContext<TokenParserState> context, string prefix)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

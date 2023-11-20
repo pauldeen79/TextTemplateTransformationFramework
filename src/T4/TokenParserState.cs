@@ -42,7 +42,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public static TokenParserState Initial(ITextTemplateProcessorContext<TokenParserState> context)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -116,7 +116,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public TokenParserState StartSection(Func<TokenParserState, ProcessSectionResult<TokenParserState>> processStateDelegate)
         {
-            if (processStateDelegate is null)
+            if (processStateDelegate == null)
             {
                 throw new ArgumentNullException(nameof(processStateDelegate));
             }
@@ -153,7 +153,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public TokenParserState EndSection(Func<TokenParserState, ProcessSectionResult<TokenParserState>> processStateDelegate)
         {
-            if (processStateDelegate is null)
+            if (processStateDelegate == null)
             {
                 throw new ArgumentNullException(nameof(processStateDelegate));
             }
@@ -187,7 +187,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public TokenParserState ProcessLastSection(Func<TokenParserState, ProcessSectionResult<TokenParserState>> processStateDelegate)
         {
-            if (processStateDelegate is null)
+            if (processStateDelegate == null)
             {
                 throw new ArgumentNullException(nameof(processStateDelegate));
             }
@@ -235,7 +235,7 @@ namespace TextTemplateTransformationFramework.T4
 
         public TokenParserState AddToCurrentSection(Func<TokenParserState, ProcessSectionResult<TokenParserState>> processStateDelegate)
         {
-            if (processStateDelegate is null)
+            if (processStateDelegate == null)
             {
                 throw new ArgumentNullException(nameof(processStateDelegate));
             }

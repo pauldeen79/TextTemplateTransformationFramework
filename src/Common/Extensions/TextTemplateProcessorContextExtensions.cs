@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.Common.Extensions
         public static ITextTemplateProcessorContext<TState> SetCustomSectionProcessors<TState>(this ITextTemplateProcessorContext<TState> instance, IEnumerable<ITemplateSectionProcessor<TState>> customSectionProcessors)
             where TState : class
         {
-            if (customSectionProcessors is not null)
+            if (customSectionProcessors != null)
             {
                 instance["Common.CustomSectionProcessors"] = customSectionProcessors.ToList();
             }

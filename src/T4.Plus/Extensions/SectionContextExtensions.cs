@@ -18,12 +18,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                                                                                     RenderChildTemplateDirectiveModel model)
             where TState : class
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -54,8 +54,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                                                                                     string childTemplateFileName)
             where TState : class
         {
-            if (context is null) throw new ArgumentNullException(nameof(context));
-            if (fileContentsProvider is null) throw new ArgumentNullException(nameof(fileContentsProvider));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (fileContentsProvider == null) throw new ArgumentNullException(nameof(fileContentsProvider));
 
             var childTemplateTokens = new List<ITemplateToken<TState>>();
             var rootTemplateTokens = new List<ITemplateToken<TState>>();
@@ -105,7 +105,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
         public static string GetRootClassName<TState>(this SectionContext<TState> context)
             where TState : class
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -116,7 +116,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
         public static string GetClassName<TState>(this SectionContext<TState> context)
             where TState : class
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

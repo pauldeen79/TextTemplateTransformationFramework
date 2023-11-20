@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public bool IsValidForProcessing(SectionContext<TState> context, UseTemplateRuntimeBaseClassDirectiveModel model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -28,7 +28,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 
         public IEnumerable<ITemplateToken<TState>> Map(SectionContext<TState> context, UseTemplateRuntimeBaseClassDirectiveModel model)
         {
-            if (model is not null)
+            if (model != null)
             {
                 yield return new BaseClassInheritsFromToken<TState>(context, typeof(T4PlusGeneratedTemplateBase).FullName);
                 yield return new NamespaceImportToken<TState>(context, "TextTemplateTransformationFramework.Runtime");

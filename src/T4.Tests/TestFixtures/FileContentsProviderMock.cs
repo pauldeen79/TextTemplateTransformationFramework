@@ -25,7 +25,7 @@ namespace TextTemplateTransformationFramework.T4.Tests.TestFixtures
         }
 
         public string GetFileContents(string fileName)
-            => GetFileContentsDelegate is null
+            => GetFileContentsDelegate == null
                 ? default
                 : GetFileContentsDelegate(fileName);
 

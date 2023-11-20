@@ -20,7 +20,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            if (assemblyName is null)
+            if (assemblyName == null)
             {
                 return null;
             }
@@ -34,7 +34,7 @@ namespace TextTemplateTransformationFramework.Runtime.CodeGeneration
                 .Select(directory => Path.Combine(directory, assemblyName.Name + ".dll"))
                 .FirstOrDefault(File.Exists);
 
-            if (customPath is null)
+            if (customPath == null)
             {
                 return null;
             }

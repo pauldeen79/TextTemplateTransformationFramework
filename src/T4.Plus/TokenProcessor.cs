@@ -21,7 +21,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
 
         public TemplateCodeOutput<TState> Process(ITextTemplateProcessorContext<TState> context, IEnumerable<ITemplateToken<TState>> tokens)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -39,7 +39,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
                                                        .Reverse().ToArray())
                 {
                     var result = interceptorToken.Process(tokens, callback);
-                    if (result is not null)
+                    if (result != null)
                     {
                         return result;
                     }

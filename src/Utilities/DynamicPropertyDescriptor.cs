@@ -49,7 +49,7 @@ namespace Utilities
 
         public override bool IsReadOnly
         {
-            get { return setter is null; }
+            get { return setter == null; }
         }
 
         public override Type PropertyType

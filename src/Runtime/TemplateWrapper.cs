@@ -30,11 +30,11 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             _rootTemplate = rootTemplate;
             Registration = registration;
-            if (onInitializeEventHandler is not null)
+            if (onInitializeEventHandler != null)
             {
                 OnInitialize += onInitializeEventHandler;
             }
-            if (onRenderEvenHandler is not null)
+            if (onRenderEvenHandler != null)
             {
                 OnRender += onRenderEvenHandler;
             }
@@ -49,22 +49,22 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             OnRender?.Invoke(this, new TemplateRenderEventArgs(this, builder));
 
-            if (_currentInstance is null)
+            if (_currentInstance == null)
             {
                 _currentInstance = Registration.Item2();
                 _additionalActionDelegate = null;
             }
 
-            if (Model is not null)
+            if (Model != null)
             {
                 TemplateRenderHelper.SetModelOnTemplate(_currentInstance, Model, true);
             }
 
-            if (_rootTemplate is not null)
+            if (_rootTemplate != null)
             {
                 TemplateRenderHelper.SetTemplateContextOnChildTemplate(_rootTemplate, _currentInstance, Model, ViewModel, null, TemplateContext);
 
-                if (TemplateContext is not null)
+                if (TemplateContext != null)
                 {
                     TemplateRenderHelper.SetRootTemplateOnChildTemplate(_rootTemplate, _currentInstance, true);
                 }

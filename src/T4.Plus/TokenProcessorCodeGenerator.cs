@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.T4.Plus
     {
         public CodeGeneratorResultBuilder Generate(GenerateCodeRequest<TState> request)
         {
-            if (request is null)
+            if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }

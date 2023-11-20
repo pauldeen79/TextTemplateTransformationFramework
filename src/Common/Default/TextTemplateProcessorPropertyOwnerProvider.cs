@@ -11,7 +11,7 @@ namespace TextTemplateTransformationFramework.Common.Default
                           PropertyDescriptor property,
                           TemplateCompilerOutput<TState> templateCompilerOutput)
         {
-            if (templateCompilerOutput is null)
+            if (templateCompilerOutput == null)
             {
                 throw new ArgumentNullException(nameof(templateCompilerOutput));
             }

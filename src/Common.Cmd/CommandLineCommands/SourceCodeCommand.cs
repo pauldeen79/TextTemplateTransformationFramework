@@ -24,7 +24,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app is null) throw new ArgumentNullException(nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app.Command("source", command =>
             {
                 command.Description = "Generates the template, and shows the template source code";

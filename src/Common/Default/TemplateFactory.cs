@@ -12,17 +12,17 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         public object Create(ITextTemplateProcessorContext<TState> context, TemplateCodeOutput<TState> codeOutput, CompilerResults result)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (codeOutput is null)
+            if (codeOutput == null)
             {
                 throw new ArgumentNullException(nameof(codeOutput));
             }
 
-            if (result is null)
+            if (result == null)
             {
                 throw new ArgumentNullException(nameof(result));
             }

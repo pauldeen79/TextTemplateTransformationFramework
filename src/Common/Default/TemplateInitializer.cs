@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
         public void Initialize(ITemplateProcessorContext<TState> context)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.T4.Core
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            if (assemblyName is null)
+            if (assemblyName == null)
             {
                 return null;
             }
@@ -33,7 +33,7 @@ namespace TextTemplateTransformationFramework.T4.Core
                 .Select(directory => Path.Combine(directory, assemblyName.Name + ".dll"))
                 .FirstOrDefault(File.Exists);
 
-            if (customPath is null)
+            if (customPath == null)
             {
                 return null;
             }

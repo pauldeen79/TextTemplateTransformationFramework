@@ -43,7 +43,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         public void Initialize(CommandLineApplication app)
         {
-            if (app is null) throw new ArgumentNullException(nameof(app));
+            if (app == null) throw new ArgumentNullException(nameof(app));
             app!.Command("run", command =>
             {
                 command.Description = "Runs the template, and shows the template output";
@@ -122,7 +122,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             if (!string.IsNullOrEmpty(names.shortName))
             {
                 var info = _templateInfoRepository.FindByShortName(names.shortName);
-                if (info is null)
+                if (info == null)
                 {
                     return (true, ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, string.Empty, string.Empty, string.Empty, new InvalidOperationException($"Could not find template with short name {names.shortName}")), null);
                 }
@@ -173,7 +173,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             var contents = _fileContentsProvider.GetFileContents(filename);
             var template = new TextTemplate(contents, filename);
             var parameters = GetParameters(template, app, interactive, parameterArguments);
-            if (parameters is null)
+            if (parameters == null)
             {
                 return (false, null);
             }
@@ -198,7 +198,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             var assemblyLoadContext = CommandBase.CreateAssemblyLoadContext(_assemblyService, assemblyName, currentDirectoryIsFilled, currentDirectory);
             var template = new AssemblyTemplate(assemblyName, className, assemblyLoadContext);
             var parameters = GetParameters(template, app, interactive, parameterArguments);
-            if (parameters is null)
+            if (parameters == null)
             {
                 return (false, null, assemblyLoadContext);
             }
@@ -223,7 +223,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
 
         private TemplateParameter[] GetParameters(CommandLineApplication app, List<TemplateParameter> parameters, ExtractParametersResult parametersResult)
         {
-            if (parametersResult.Exception is not null)
+            if (parametersResult.Exception != null)
             {
                 app.Error.WriteLine("Exception occured while extracting parameters from the template:");
                 app.Error.WriteLine(parametersResult.Exception);

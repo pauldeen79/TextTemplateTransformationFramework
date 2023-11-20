@@ -19,21 +19,21 @@ namespace TextTemplateTransformationFramework.Runtime
                                                StringBuilder builder = null,
                                                object additionalParameters = null)
         {
-            if (template is null)
+            if (template == null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
-            if (builder is null)
+            if (builder == null)
             {
                 var templateType = template.GetType();
                 var generationEnvironmentProperty = templateType.GetProperty("GenerationEnvironment", Constants.BindingFlags);
-                if (generationEnvironmentProperty is not null)
+                if (generationEnvironmentProperty != null)
                 {
                     builder = generationEnvironmentProperty.GetValue(template) as StringBuilder;
                 }
 
-                if (builder is null)
+                if (builder == null)
                 {
                     builder = new StringBuilder();
                 }
@@ -53,12 +53,12 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                    Action additionalActionDelegate = null,
                                                                    object additionalParameters = null)
         {
-            if (template is null)
+            if (template == null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
-            if (builder is null)
+            if (builder == null)
             {
                 throw new ArgumentNullException(nameof(builder));
             }
@@ -97,12 +97,12 @@ namespace TextTemplateTransformationFramework.Runtime
                                           Action additionalActionDelegate = null,
                                           object additionalParameters = null)
         {
-            if (template is null)
+            if (template == null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
-            if (generationEnvironment is null)
+            if (generationEnvironment == null)
             {
                 throw new ArgumentNullException(nameof(generationEnvironment));
             }
@@ -135,12 +135,12 @@ namespace TextTemplateTransformationFramework.Runtime
                                                    Action additionalActionDelegate = null,
                                                    object additionalParameters = null)
         {
-            if (template is null)
+            if (template == null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
-            if (generationEnvironment is null)
+            if (generationEnvironment == null)
             {
                 throw new ArgumentNullException(nameof(generationEnvironment));
             }
@@ -149,7 +149,7 @@ namespace TextTemplateTransformationFramework.Runtime
             InitializeTemplate(template, additionalActionDelegate);
 
             var templateType = template.GetType();
-            SetViewModelOnTemplate(templateType, template, model is null ? Enumerable.Empty<KeyValuePair<string, object>>() : new[] { new KeyValuePair<string, object>("Model", model) }, additionalParameters);
+            SetViewModelOnTemplate(templateType, template, model == null ? Enumerable.Empty<KeyValuePair<string, object>>() : new[] { new KeyValuePair<string, object>("Model", model) }, additionalParameters);
             var errorsProperty = templateType.GetProperty("Errors");
             var errors = GetErrors(errorsProperty, template, out bool hasErrors);
             if (hasErrors)
@@ -205,7 +205,7 @@ namespace TextTemplateTransformationFramework.Runtime
             InitializeTemplate(rootTemplate, () => rootAdditionalActionDelegate?.Invoke(rootTemplate));
 
             var childTemplate = new TChild();
-            if (model is not null)
+            if (model != null)
             {
                 SetModelOnTemplate(childTemplate, model);
             }
@@ -224,16 +224,16 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public static void SetModelOnTemplate(object template, object model, bool continueOnError = false)
         {
-            if (template is null)
+            if (template == null)
             {
                 throw new ArgumentNullException(nameof(template));
             }
 
             var modelProperty = template.GetType().GetProperty("Model");
-            if (modelProperty is null || modelProperty.GetSetMethod() is null)
+            if (modelProperty == null || modelProperty.GetSetMethod() == null)
             {
                 var modelField = template.GetType().GetField("_modelField", Constants.BindingFlags);
-                if (modelField is null)
+                if (modelField == null)
                 {
                     if (continueOnError)
                     {
@@ -257,12 +257,12 @@ namespace TextTemplateTransformationFramework.Runtime
                                                                object childTemplateContext = null,
                                                                object iterationContextModel = null)
         {
-            if (rootTemplate is null)
+            if (rootTemplate == null)
             {
                 throw new ArgumentNullException(nameof(rootTemplate));
             }
 
-            if (childTemplate is null)
+            if (childTemplate == null)
             {
                 throw new ArgumentNullException(nameof(childTemplate));
             }
@@ -271,15 +271,15 @@ namespace TextTemplateTransformationFramework.Runtime
             var childTemplateContextProperty = childTemplate.GetType().GetProperty("TemplateContext");
 
             object childContext = childTemplateContext;
-            if (rootTemplateContextProperty is not null && childContext is null)
+            if (rootTemplateContextProperty != null && childContext == null)
             {
                 var rootTemplateContext = rootTemplateContextProperty.GetValue(rootTemplate);
                 var rootModelProperty = rootTemplateContext.GetType().GetProperty("Model");
-                if (rootModelProperty is not null && rootModelProperty.GetValue(rootTemplateContext) is null)
+                if (rootModelProperty != null && rootModelProperty.GetValue(rootTemplateContext) == null)
                 {
                     rootModelProperty.SetValue(rootTemplateContext, rootModel);
                 }
-                if (iterationContextModel is not null)
+                if (iterationContextModel != null)
                 {
                     childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, new[] { rootTemplate, iterationContextModel, null, null, null, null });
                     childContext = childContext.GetType().GetMethod("CreateChildContext").Invoke(childContext, new[] { childTemplate, model, viewModel, null, null, null });
@@ -290,10 +290,10 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
             }
 
-            if (childContext is null)
+            if (childContext == null)
             {
                 //no child context on root template, and no custom child context via argument
-                if (iterationContextModel is not null)
+                if (iterationContextModel != null)
                 {
                     childContext = TemplateInstanceContext.CreateRootContext(rootTemplate)
                         .CreateChildContext(rootTemplate, iterationContextModel)
@@ -312,13 +312,13 @@ namespace TextTemplateTransformationFramework.Runtime
 
         public static void SetRootTemplateOnChildTemplate(object rootTemplate, object childTemplate, bool continueOnError = false)
         {
-            if (childTemplate is null)
+            if (childTemplate == null)
             {
                 throw new ArgumentNullException(nameof(childTemplate));
             }
 
             var rootTemplateProperty = childTemplate.GetType().GetProperty("RootTemplate");
-            if (rootTemplateProperty is null || rootTemplateProperty.GetSetMethod() is null)
+            if (rootTemplateProperty == null || rootTemplateProperty.GetSetMethod() == null)
             {
                 if (continueOnError)
                 {
@@ -331,7 +331,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
         private static IEnumerable<CompilerError> GetErrors(PropertyInfo errorsProperty, object template, out bool hasErrors)
         {
-            if (errorsProperty is null)
+            if (errorsProperty == null)
             {
                 hasErrors = false;
                 return Enumerable.Empty<CompilerError>();
@@ -371,11 +371,11 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             var renderMethod = templateType.GetMethod("Render");
             var transformTextMethod = templateType.GetMethod("TransformText");
-            if (renderMethod is not null)
+            if (renderMethod != null)
             {
                 renderMethod.Invoke(template, new object[] { builder });
             }
-            else if (transformTextMethod is not null)
+            else if (transformTextMethod != null)
             {
                 builder.Append((string)transformTextMethod.Invoke(template, Array.Empty<object>()));
             }
@@ -394,13 +394,13 @@ namespace TextTemplateTransformationFramework.Runtime
         private static IEnumerable<KeyValuePair<string, object>> ConvertSession(IEnumerable<KeyValuePair<string, object>> session,
                                                                                 object template)
         {
-            if (session is not null)
+            if (session != null)
             {
                 var templateType = template.GetType();
                 foreach (var kvp in session)
                 {
                     var prop = templateType.GetProperty(kvp.Key);
-                    if (prop is null)
+                    if (prop == null)
                     {
                         yield return kvp;
                     }
@@ -418,10 +418,10 @@ namespace TextTemplateTransformationFramework.Runtime
                                                    object additionalParameters)
         {
             var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
-            if (viewModelProperty is not null && viewModelProperty.PropertyType != typeof(object))
+            if (viewModelProperty != null && viewModelProperty.PropertyType != typeof(object))
             {
                 var viewModelValue = viewModelProperty.GetValue(template);
-                if (viewModelValue is null)
+                if (viewModelValue == null)
                 {
                     viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
                     viewModelProperty.SetValue(template, viewModelValue);
@@ -433,7 +433,7 @@ namespace TextTemplateTransformationFramework.Runtime
 
         private static void CopySessionVariablesToViewModel(object viewModelValue, IEnumerable<KeyValuePair<string, object>> session)
         {
-            if (session is null)
+            if (session == null)
             {
                 return;
             }
@@ -442,12 +442,12 @@ namespace TextTemplateTransformationFramework.Runtime
             foreach (var kvp in session.Where(kvp => kvp.Key != "Model"))
             {
                 var prop = viewModelValueType.GetProperty(kvp.Key);
-                if (prop is not null && prop.GetSetMethod() is null) { continue; }
+                if (prop != null && prop.GetSetMethod() == null) { continue; }
                 prop?.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
             }
 
             var modelProperty = viewModelValueType.GetProperty("Model");
-            if (modelProperty is not null && modelProperty.GetValue(viewModelValue) is null && session.Any(kvp => kvp.Key == "Model"))
+            if (modelProperty != null && modelProperty.GetValue(viewModelValue) == null && session.Any(kvp => kvp.Key == "Model"))
             {
                 modelProperty.SetValue(viewModelValue, session.First(kvp => kvp.Key == "Model").Value);
             }
@@ -457,7 +457,7 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             var templateContextProperty = template.GetType().GetProperty("TemplateContext");
             var templateContextValue = templateContextProperty?.GetValue(template);
-            if (templateContextValue is null)
+            if (templateContextValue == null)
             {
                 return;
             }
@@ -469,7 +469,7 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             var property = parentContainerType.GetProperty(parameter.Key);
 
-            if (property is null)
+            if (property == null)
             {
                 return parameter.Value;
             }
@@ -500,14 +500,14 @@ namespace TextTemplateTransformationFramework.Runtime
             var s = builder.ToString();
             var multipleContentBuilderType = multipleContentBuilder.GetType();
             var multipleContentBuilderProperty = multipleContentBuilderType.GetProperty("MultipleContentBuilder");
-            if (multipleContentBuilderProperty is not null)
+            if (multipleContentBuilderProperty != null)
             {
                 // TemplateFileManager
                 multipleContentBuilder = multipleContentBuilderProperty.GetValue(multipleContentBuilder);
                 multipleContentBuilderType = multipleContentBuilder.GetType();
             }
             var addContentMethod = multipleContentBuilderType.GetMethod("AddContent");
-            if (addContentMethod is null)
+            if (addContentMethod == null)
             {
                 throw new ArgumentException("Parameter does not have an AddContent method, and cannot be used as multiple content builder", nameof(multipleContentBuilder));
             }
@@ -532,9 +532,9 @@ namespace TextTemplateTransformationFramework.Runtime
         {
             var templateType = template.GetType();
             var sessionProperty = templateType.GetProperty("Session");
-            if (sessionProperty is not null)
+            if (sessionProperty != null)
             {
-                var parameters = model is not null && !string.IsNullOrEmpty(modelPropertyName)
+                var parameters = model != null && !string.IsNullOrEmpty(modelPropertyName)
                     ? new Dictionary<string, object> { { modelPropertyName, model } }
                     : new Dictionary<string, object>();
 
@@ -552,7 +552,7 @@ namespace TextTemplateTransformationFramework.Runtime
                     .OfType<PropertyDescriptor>()
                     .ToArray();
 
-                var modelProperty = model is null || string.IsNullOrEmpty(modelPropertyName)
+                var modelProperty = model == null || string.IsNullOrEmpty(modelPropertyName)
                     ? null
                     : Array.Find(props, p => p.Name == modelPropertyName);
 
@@ -569,7 +569,7 @@ namespace TextTemplateTransformationFramework.Runtime
         private static void SetGenerationEnvironmentOnTemplate(StringBuilder builder, object rootTemplate)
         {
             var generationEnvironmentProperty = rootTemplate.GetType().GetProperty("GenerationEnvironment");
-            if (generationEnvironmentProperty is null)
+            if (generationEnvironmentProperty == null)
             {
                 throw new InvalidOperationException($"Parent type [{rootTemplate.GetType().FullName}] doesn't have a GenerationEnvironment property");
             }
@@ -580,7 +580,7 @@ namespace TextTemplateTransformationFramework.Runtime
         private static void InitializeTemplate(object template, Action additionalActionDelegate = null)
         {
             var initializeMethod = template.GetType().GetMethod("Initialize");
-            if (initializeMethod is not null)
+            if (initializeMethod != null)
             {
                 switch (initializeMethod.GetParameters().Length)
                 {

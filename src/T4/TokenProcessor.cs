@@ -38,17 +38,17 @@ namespace TextTemplateTransformationFramework.T4
 
         public TemplateCodeOutput<TState> Process(ITextTemplateProcessorContext<TState> context, IEnumerable<ITemplateToken<TState>> tokens)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (tokens is null)
+            if (tokens == null)
             {
                 throw new ArgumentNullException(nameof(tokens));
             }
 
-            if (context.AssemblyTemplate is not null)
+            if (context.AssemblyTemplate != null)
             {
                 // Short-hand: Skip processing because there is no text template
                 return new TemplateCodeOutput<TState>(Enumerable.Empty<ITemplateToken<TState>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), context.AssemblyTemplate.ClassName, string.Empty);
@@ -77,7 +77,7 @@ namespace TextTemplateTransformationFramework.T4
 
             var tempPathParameter = Array.Find(context.Parameters, x => x.Name == "$T4.TempPath");
             var templateTokensTempPath = templateTokens.GetTempPath();
-            var tempPath = tempPathParameter is not null
+            var tempPath = tempPathParameter != null
                 ? tempPathParameter.Value.ToStringWithDefault(templateTokensTempPath)
                 : templateTokensTempPath;
 

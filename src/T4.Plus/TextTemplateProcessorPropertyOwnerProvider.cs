@@ -12,12 +12,12 @@ namespace TextTemplateTransformationFramework.T4.Plus
                           PropertyDescriptor property,
                           TemplateCompilerOutput<TState> templateCompilerOutput)
         {
-            if (property is null)
+            if (property == null)
             {
                 throw new ArgumentNullException(nameof(property));
             }
 
-            if (templateCompilerOutput is null)
+            if (templateCompilerOutput == null)
             {
                 throw new ArgumentNullException(nameof(templateCompilerOutput));
             }

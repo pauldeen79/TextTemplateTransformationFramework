@@ -28,7 +28,7 @@ namespace Utilities
 
         public void Process(Action action)
         {
-            if (action is null)
+            if (action == null)
             {
                 throw new ArgumentNullException(nameof(action));
             }
@@ -47,7 +47,7 @@ namespace Utilities
 
         public T Process<T>(Func<T> func)
         {
-            if (func is null)
+            if (func == null)
             {
                 throw new ArgumentNullException(nameof(func));
             }

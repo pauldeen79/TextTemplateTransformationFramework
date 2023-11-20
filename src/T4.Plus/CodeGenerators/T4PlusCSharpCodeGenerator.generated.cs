@@ -102,7 +102,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.ChildViewModelClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_ViewModel(), typeof(IChildViewModelNamespaceFooterClassToken<TokenParserState>));
             RegisterViewModel(@"T4PlusCSharpCodeGenerator.NamespaceFooterTokens.PlaceholderClassToken.ViewModel", () => new T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_ViewModel(), typeof(IPlaceholderClassToken<TokenParserState>));
             bool enableAdditionalActionDelegateValueAcquired = false;
-            if (this.Session is not null && this.Session.ContainsKey("EnableAdditionalActionDelegate") && this.Session["EnableAdditionalActionDelegate"] is not null)
+            if (this.Session != null && this.Session.ContainsKey("EnableAdditionalActionDelegate") && this.Session["EnableAdditionalActionDelegate"] != null)
             {
                 if ((typeof(System.Boolean).IsAssignableFrom(this.Session["EnableAdditionalActionDelegate"].GetType()) == false))
                 {
@@ -191,7 +191,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public override void Write(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.Write(textToAppend);
             }
@@ -203,7 +203,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public override void WriteLine(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.WriteLine(textToAppend);
             }
@@ -219,7 +219,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             WriteLine("");
 
             Write(this.ToStringHelper.ToStringWithCulture(@"AddTemplateToPlaceholder("));
@@ -231,7 +231,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             WriteLine("");
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -239,11 +239,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -253,7 +253,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -273,12 +273,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        private static object ConvertType(KeyValuePair<string, object> parameter, Type type)
         {
             var property = type.GetProperty(parameter.Key);
 
-            return property is null
+            return property == null
                 ? parameter.Value
                 : parameter.Value is int && property.PropertyType.IsEnum
                     ? Enum.ToObject(property.PropertyType, parameter.Value)
@@ -286,7 +286,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -294,11 +294,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -308,7 +308,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -327,14 +327,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        protected virtual object GetRegisteredObject(List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>> registrations, string objectName, string name, object model, bool silentlyContinueOnError, global::System.Func<string, string, global::System.Type, object, bool> customResolverDelegate, global::System.Action<string> errorDelegate)
         {
-            var registrationTuples = customResolverDelegate is not null
+            var registrationTuples = customResolverDelegate != null
                 ? registrations.Where(t => customResolverDelegate(name, t.Item1, t.Item3, model))
                 : Resolve(registrations, name, model);
 
-            if (!registrationTuples.Any() && customResolverDelegate is null && string.IsNullOrEmpty(name) && model is not null)
+            if (!registrationTuples.Any() && customResolverDelegate == null && string.IsNullOrEmpty(name) && model != null)
             {
                 registrationTuples = registrations.Where(t => t.Item3?.IsAssignableFrom(model.GetType()) == true);
             }
@@ -344,16 +344,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             {
                 if (!silentlyContinueOnError)
                 {
-                    errorDelegate(""Multiple "" + objectName.ToLower() + ""s found with model type "" + (model is null ? ""{null}"" : model.GetType().FullName) + "": "" + string.Join("", "", templateTuplesArray.Select(t => t.Item1)));
+                    errorDelegate(""Multiple "" + objectName.ToLower() + ""s found with model type "" + (model == null ? ""{null}"" : model.GetType().FullName) + "": "" + string.Join("", "", templateTuplesArray.Select(t => t.Item1)));
                 }
                 return null;
             }
             else
             {
                 var registrationTuple = templateTuplesArray.Length == 1 ? templateTuplesArray[0] : null;
-                if (registrationTuple is null)
+                if (registrationTuple == null)
                 {
-                    if (string.IsNullOrEmpty(name) && model is not null)
+                    if (string.IsNullOrEmpty(name) && model != null)
                     {
                         if (!silentlyContinueOnError)
                         {
@@ -372,7 +372,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 }
 
                 var registeredInstance = registrationTuple.Item2();
-                if (registeredInstance is null)
+                if (registeredInstance == null)
                 {
                     if (!silentlyContinueOnError)
                     {
@@ -386,12 +386,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 
         private static global::System.Collections.Generic.IEnumerable<global::System.Tuple<string, global::System.Func<object>, global::System.Type>> Resolve(global::System.Collections.Generic.List<global::System.Tuple<string, global::System.Func<object>, global::System.Type>> registrations, string name, object model)
-            => string.IsNullOrEmpty(name) && model is not null
+            => string.IsNullOrEmpty(name) && model != null
                 ? registrations.Where(t => t.Item3 == model.GetType())
                 : registrations.Where(t => t.Item1 == name);
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -399,11 +399,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -413,7 +413,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -432,7 +432,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             
             RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", new GeneratorModel(Model.GeneratorName, Model.GeneratorVersion), null, false, null, null, new CustomDelegates { RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
@@ -453,14 +453,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"        public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
 "));
             
             RenderChildTemplate(null, ViewModel.RenderTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = Model.RenderTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (builder is not null) this.GenerationEnvironment = backup;
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 "));
@@ -505,7 +505,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"    }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
         protected T4PlusCSharpCodeGenerator_MainClass_ViewModel _viewModelField;
@@ -529,11 +529,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -543,7 +543,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -564,7 +564,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        protected "));
             Write(this.ToStringHelper.ToStringWithCulture(Model.TypeName.FixTypeName()));
             Write(this.ToStringHelper.ToStringWithCulture(@" _"));
@@ -625,7 +625,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 "));
             }
 
-            if (Model.DefaultValue is not null && !Model.OmitValueAssignment)
+            if (Model.DefaultValue != null && !Model.OmitValueAssignment)
    {
 
             Write(this.ToStringHelper.ToStringWithCulture(@"        [global::System.ComponentModel.DefaultValue("));
@@ -682,7 +682,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"        }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -690,11 +690,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -704,7 +704,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -724,7 +724,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             if (!Model.OmitInitialization)
    {
        if (!Model.NetCoreCompatible || !Model.OmitValueAssignment)
@@ -736,11 +736,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 "));
             }
 
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (this.Session is not null && this.Session.ContainsKey("""));
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (this.Session != null && this.Session.ContainsKey("""));
             Write(this.ToStringHelper.ToStringWithCulture(Model.Name));
             Write(this.ToStringHelper.ToStringWithCulture(@""") && this.Session["""));
             Write(this.ToStringHelper.ToStringWithCulture(Model.Name));
-            Write(this.ToStringHelper.ToStringWithCulture(@"""] is not null)
+            Write(this.ToStringHelper.ToStringWithCulture(@"""] != null)
             {
                 if ((typeof("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.TypeName.FixTypeName()));
@@ -786,7 +786,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 object data = global::System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("""));
             Write(this.ToStringHelper.ToStringWithCulture(Model.Name));
             Write(this.ToStringHelper.ToStringWithCulture(@""");
-                if ((data is not null))
+                if ((data != null))
                 {
                     if ((typeof("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.TypeName.FixTypeName()));
@@ -821,7 +821,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"ValueAcquired == false))
             {
 "));
-            if (Model.DefaultValue is not null)
+            if (Model.DefaultValue != null)
        {
 
             Write(this.ToStringHelper.ToStringWithCulture(@"                this._"));
@@ -851,7 +851,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
    }
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -859,11 +859,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -873,7 +873,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -893,7 +893,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        public void ClearPlaceholder(string placeholderName)
         {
             PerformActionOnPlaceholder(placeholderName, (val) => val.Clear());
@@ -904,7 +904,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             PerformActionOnPlaceholder(placeholderName, (val) =>
                 {
                     var childTemplate = GetChildTemplate(templateName, model, silentlyContinueOnError, customResolverDelegate);
-                    if (childTemplate is not null)
+                    if (childTemplate != null)
                     {
                         val.Add(childTemplate);
                     }
@@ -925,7 +925,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -933,11 +933,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -947,7 +947,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -966,14 +966,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        public void RenderChildTemplate(string templateName, object model = null, bool? renderAsEnumerable = null, bool silentlyContinueOnError = false, string separatorTemplateName = null, Func<string, string, Type, object, bool> customResolverDelegate = null, object resolverDelegateModel = null, Action<string, object, object, bool, bool, int?, int?> customRenderChildTemplateDelegate = null, Func<object, string> customTemplateNameDelegate = null)
         {
-            if (renderAsEnumerable is null)
+            if (renderAsEnumerable == null)
             {
                 renderAsEnumerable = model is global::System.Collections.IEnumerable && !(model is string);
             }
-            if (renderAsEnumerable == true && model is not null && model is global::System.Collections.IEnumerable)
+            if (renderAsEnumerable == true && model != null && model is global::System.Collections.IEnumerable)
             {
                 var items = ((global::System.Collections.IEnumerable)model).OfType<object>().ToArray();
                 var iterationCount = items.Length;
@@ -981,7 +981,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 var originalTemplateName = templateName;
                 foreach (var item in items)
                 {
-                    if (customTemplateNameDelegate is not null)
+                    if (customTemplateNameDelegate != null)
                     {
                         var customTemplateName = customTemplateNameDelegate(item);
                         if (!string.IsNullOrEmpty(customTemplateName))
@@ -994,9 +994,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                         }
                     }
                     var template = GetChildTemplate(templateName, resolverDelegateModel ?? item, silentlyContinueOnError, customResolverDelegate);
-                    if (template is not null)
+                    if (template != null)
                     {
-                        if (customRenderChildTemplateDelegate is not null)
+                        if (customRenderChildTemplateDelegate != null)
                         {
                             customRenderChildTemplateDelegate.Invoke(templateName, template, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
                         }
@@ -1008,9 +1008,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                     if (iterationNumber + 1 < iterationCount && !string.IsNullOrEmpty(separatorTemplateName))
                     {
                         var separatorTemplate = GetChildTemplate(separatorTemplateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                        if (separatorTemplate is not null)
+                        if (separatorTemplate != null)
                         {
-                            if (customRenderChildTemplateDelegate is not null)
+                            if (customRenderChildTemplateDelegate != null)
                             {
                                 customRenderChildTemplateDelegate.Invoke(separatorTemplateName, separatorTemplate, item, renderAsEnumerable.Value, silentlyContinueOnError, iterationNumber, iterationCount);
                             }
@@ -1025,7 +1025,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
             else
             {
-                if (customTemplateNameDelegate is not null)
+                if (customTemplateNameDelegate != null)
                 {
                     var customTemplateName = customTemplateNameDelegate(model);
                     if (!string.IsNullOrEmpty(customTemplateName))
@@ -1034,9 +1034,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                     }
                 }
                 var template = GetChildTemplate(templateName, resolverDelegateModel ?? model, silentlyContinueOnError, customResolverDelegate);
-                if (template is not null)
+                if (template != null)
                 {
-                    if (customRenderChildTemplateDelegate is not null)
+                    if (customRenderChildTemplateDelegate != null)
                     {
                         customRenderChildTemplateDelegate.Invoke(templateName, template, model, renderAsEnumerable.Value, silentlyContinueOnError, null, null);
                     }
@@ -1049,7 +1049,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1057,11 +1057,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1071,7 +1071,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1090,7 +1090,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             WriteLine("");
 
             Write(this.ToStringHelper.ToStringWithCulture(@"            RenderChildTemplate("));
@@ -1101,7 +1101,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             WriteLine("");
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
         protected T4PlusCSharpCodeGenerator_RenderChildTemplateToken_ViewModel _viewModelField;
@@ -1125,11 +1125,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1139,7 +1139,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1160,16 +1160,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        public virtual void RenderTemplate(object template, object model, int? iterationNumber = null, int? iterationCount = null, string resolveTemplateName = null)
         {
             var templateType = template.GetType();
 
             var childRootTemplateProperty = templateType.GetProperty(""RootTemplate"");
-            if (childRootTemplateProperty is not null && childRootTemplateProperty.GetSetMethod() is not null)
+            if (childRootTemplateProperty != null && childRootTemplateProperty.GetSetMethod() != null)
             {
                 var currentTemplateRootTemplate = this.GetType().GetProperty(""RootTemplate"");
-                var rootTemplate = currentTemplateRootTemplate is null
+                var rootTemplate = currentTemplateRootTemplate == null
                     ? this
                     : currentTemplateRootTemplate.GetValue(this, null);
                 childRootTemplateProperty.SetValue(template, rootTemplate, null);
@@ -1181,23 +1181,23 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
-            Write(this.ToStringHelper.ToStringWithCulture(@"            var modelProperty = model is null ? null : templateType.GetProperty(""Model"");
-            if (modelProperty is not null)
+            Write(this.ToStringHelper.ToStringWithCulture(@"            var modelProperty = model == null ? null : templateType.GetProperty(""Model"");
+            if (modelProperty != null)
             {
                 modelProperty.SetValue(template, model, null);
             }
 
             var initializeMethod = templateType.GetMethod(""Initialize"");
-            if (initializeMethod is not null)
+            if (initializeMethod != null)
             {
                 initializeMethod.Invoke(template, initializeMethod.GetParameters().Length == 0 ? new object[0] : new object[] { null });
             }
 
             var viewModelProperty = templateType.GetProperty(""ViewModel"", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (viewModelProperty is not null)
+            if (viewModelProperty != null)
             {
                 var viewModelValue = viewModelProperty.GetValue(template);
-                if (viewModelValue is null)
+                if (viewModelValue == null)
                 {
                     viewModelValue = Activator.CreateInstance(viewModelProperty.PropertyType);
                     viewModelProperty.SetValue(template, viewModelValue);
@@ -1207,47 +1207,47 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 foreach (var kvp in Session.Where(kvp => kvp.Key != ""Model""))
                 {
                     var prop = viewModelValueType.GetProperty(kvp.Key);
-                    if (prop is not null)
+                    if (prop != null)
                     {
-                        if (prop.GetSetMethod() is null) { continue; }
+                        if (prop.GetSetMethod() == null) { continue; }
                         prop.SetValue(viewModelValue, ConvertType(kvp, viewModelValueType));
                     }
                 }
 
                 var modelProp = viewModelValueType.GetProperty(""Model"", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (modelProp is not null)
+                if (modelProp != null)
                 {
                     modelProp.SetValue(viewModelValue, model);
                 }
 
                 var viewModelRootTemplateProp = viewModelValueType.GetProperty(""RootTemplate"", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                 var templateRootTemplateProp = templateType.GetProperty(""RootTemplate"", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (viewModelRootTemplateProp is not null && templateRootTemplateProp is not null && viewModelRootTemplateProp.GetSetMethod() is not null)
+                if (viewModelRootTemplateProp != null && templateRootTemplateProp != null && viewModelRootTemplateProp.GetSetMethod() != null)
                 {
                     viewModelRootTemplateProp.SetValue(viewModelValue, templateRootTemplateProp.GetValue(template));
                 }
 
                 var templateContextProp = viewModelValueType.GetProperty(""TemplateContext"", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 var templateContextPropOnTemplate = this.GetType().GetProperty(""TemplateContext"", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-                if (templateContextProp is not null && templateContextPropOnTemplate is not null)
+                if (templateContextProp != null && templateContextPropOnTemplate != null)
                 {
                     templateContextProp.SetValue(viewModelValue, templateContextPropOnTemplate.GetValue(this));
                 }
             }
 
             var toStringHelperProperty = templateType.GetProperty(""ToStringHelper"");
-            if (toStringHelperProperty is not null && toStringHelperProperty.GetSetMethod() is not null)
+            if (toStringHelperProperty != null && toStringHelperProperty.GetSetMethod() != null)
             {
                 toStringHelperProperty.SetValue(template, ToStringHelper, null);
             }
 
             var renderMethod = templateType.GetMethod(""Render"");
             var transformTextMethod = templateType.GetMethod(""TransformText"");
-            if (renderMethod is not null)
+            if (renderMethod != null)
             {
                 renderMethod.Invoke(template, new[] { this.GenerationEnvironment });
             }
-            else if (transformTextMethod is not null)
+            else if (transformTextMethod != null)
             {
                 this.GenerationEnvironment.Append((string)transformTextMethod.Invoke(template, new object[0]));
             }
@@ -1258,10 +1258,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
 
             var errorsProperty = template.GetType().GetProperty(""Errors"");
-            if (errorsProperty is not null)
+            if (errorsProperty != null)
             {
                 var errors = errorsProperty.GetValue(template, null) as System.Collections.Generic.List<CompilerError>;
-                if (errors is not null)
+                if (errors != null)
                 {
                     foreach (var error in errors)
                     {
@@ -1279,7 +1279,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1287,11 +1287,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1301,7 +1301,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1320,7 +1320,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        #region Child templates
         private global::System.Collections.Generic.List<global::System.Tuple<string, Func<object>, global::System.Type>> _childTemplatesField = new global::System.Collections.Generic.List<Tuple<string, Func<object>, Type>>();
         public global::System.Collections.Generic.List<global::System.Tuple<string, Func<object>, global::System.Type>> ChildTemplates { get { return _childTemplatesField; } protected set { _childTemplatesField = value; } }
@@ -1357,7 +1357,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"        protected virtual object GetChildTemplate(string templateName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
         {
             var result = GetRegisteredObject(ChildTemplates, ""Child template"", templateName, model, silentlyContinueOnError, customResolverDelegate);
-            if (ChildTemplateCreated is not null)
+            if (ChildTemplateCreated != null)
             {
                 ChildTemplateCreated.Invoke(result);
             }
@@ -1367,7 +1367,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         protected virtual object GetViewModel(string viewModelName, object model = null, bool silentlyContinueOnError = false, Func<string, string, Type, object, bool> customResolverDelegate = null)
         {
             var returnValue = GetRegisteredObject(ViewModels, ""View model"", viewModelName, model, silentlyContinueOnError, customResolverDelegate);
-            if (returnValue is not null && model is not null)
+            if (returnValue != null && model != null)
             {
                 var modelProperty = returnValue.GetType().GetProperty(""Model"", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 modelProperty?.SetValue(returnValue, model);
@@ -1394,7 +1394,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"        #endregion
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1402,11 +1402,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1416,7 +1416,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1436,7 +1436,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        public "));
             Write(this.ToStringHelper.ToStringWithCulture(Model.TemplateClassName));
             Write(this.ToStringHelper.ToStringWithCulture(@"Base()
@@ -1445,7 +1445,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1453,11 +1453,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1467,7 +1467,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1487,13 +1487,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1501,11 +1501,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1515,7 +1515,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1535,13 +1535,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1549,11 +1549,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1563,7 +1563,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1583,13 +1583,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1597,11 +1597,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1611,7 +1611,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1631,13 +1631,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1645,11 +1645,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1659,7 +1659,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1679,13 +1679,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1693,11 +1693,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1707,7 +1707,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1727,7 +1727,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        private TemplateInstanceContext _templateContextField;
         "));
             Write(this.ToStringHelper.ToStringWithCulture(RootTemplate.GenerationEnvironmentAccessor));
@@ -1735,7 +1735,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             get
             {
-                if (_templateContextField is null)
+                if (_templateContextField == null)
                 {
                     _templateContextField = TemplateInstanceContext.CreateRootContext(this);
                 }
@@ -1745,7 +1745,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1753,11 +1753,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1767,7 +1767,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1786,7 +1786,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            ViewModel = GetViewModel("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.ViewModelName.FormatLiteral(Model.ViewModelNameIsLiteral)));
             if (!string.IsNullOrEmpty(Model.Model)) {
@@ -1814,7 +1814,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@";
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1822,11 +1822,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1836,7 +1836,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1856,8 +1856,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (RootTemplate is not null)
+            if (builder != null) this.GenerationEnvironment = builder;
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1867,7 +1867,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1875,11 +1875,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1889,7 +1889,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1908,8 +1908,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (RootTemplate is not null)
+            if (builder != null) this.GenerationEnvironment = builder;
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1921,7 +1921,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1929,11 +1929,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1943,7 +1943,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -1962,16 +1962,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            var templateContextProperty = templateType.GetProperty(""TemplateContext"", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-            if (templateContextProperty is not null)
+            if (templateContextProperty != null)
             {
                 var childContext = TemplateContext.CreateChildContext(template, model, templateType.GetProperty(""ViewModel"")?.GetValue(template), iterationNumber, iterationCount, resolveTemplateName);
                 templateContextProperty.SetValue(template, childContext, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null, null, global::System.Globalization.CultureInfo.CurrentCulture);
             }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -1979,11 +1979,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -1993,7 +1993,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2012,11 +2012,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             if (!Model.SkipInitializationCode)
    {
 
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (additionalActionDelegate is not null)
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (additionalActionDelegate != null)
             {
                 additionalActionDelegate();
             }
@@ -2024,7 +2024,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2032,11 +2032,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2046,7 +2046,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2066,12 +2066,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            this.ChildTemplates.Clear();
             this.ViewModels.Clear();
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2079,11 +2079,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2093,7 +2093,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2112,11 +2112,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            this.Errors.Clear();
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2124,11 +2124,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2138,7 +2138,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2157,11 +2157,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            this.GenerationEnvironment.Clear();
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2169,11 +2169,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2183,7 +2183,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2202,11 +2202,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            PlaceholderChildrenDictionary.Clear();
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2214,11 +2214,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2228,7 +2228,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2247,14 +2247,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (Session is null)
+            if (builder != null) this.GenerationEnvironment = builder;
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2262,11 +2262,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2276,7 +2276,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2295,13 +2295,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2309,11 +2309,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2323,7 +2323,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2343,7 +2343,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            base.Initialize("));
             if (Model.AdditionalActionDelegate) {
 
@@ -2353,7 +2353,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@");
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2361,11 +2361,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2375,7 +2375,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2395,7 +2395,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            ViewModel = GetViewModel("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.ViewModelName.FormatLiteral(Model.ViewModelNameIsLiteral)));
             if (!string.IsNullOrEmpty(Model.Model)) {
@@ -2423,7 +2423,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@";
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2431,11 +2431,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2445,7 +2445,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2465,7 +2465,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            RegisterChildTemplate("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral)));
             Write(this.ToStringHelper.ToStringWithCulture(@", () => new "));
@@ -2481,7 +2481,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@");
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2489,11 +2489,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2503,7 +2503,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2523,7 +2523,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            RegisterChildTemplate("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.ChildTemplateName.FormatLiteral(Model.ChildTemplateNameIsLiteral)));
             Write(this.ToStringHelper.ToStringWithCulture(@", () => new "));
@@ -2539,7 +2539,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@");
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2547,11 +2547,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2561,7 +2561,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2581,7 +2581,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            RegisterViewModel("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.ViewModelName.FormatLiteral(Model.ViewModelNameIsLiteral)));
             Write(this.ToStringHelper.ToStringWithCulture(@", () => new "));
@@ -2597,7 +2597,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@");
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -2605,11 +2605,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2619,7 +2619,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2639,7 +2639,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             
             RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
@@ -2658,7 +2658,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public override void Write(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.Write(textToAppend);
             }
@@ -2670,7 +2670,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public override void WriteLine(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.WriteLine(textToAppend);
             }
@@ -2682,7 +2682,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
         protected T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassBaseToken_ViewModel _viewModelField;
@@ -2706,11 +2706,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2720,7 +2720,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2741,7 +2741,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             
             RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
@@ -2757,14 +2757,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
 "));
             
             RenderChildTemplate(null, ViewModel.RenderTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = RenderTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
             Write(this.ToStringHelper.ToStringWithCulture(@"
 "));
-            Write(this.ToStringHelper.ToStringWithCulture(@"            if (builder is not null) this.GenerationEnvironment = backup;
+            Write(this.ToStringHelper.ToStringWithCulture(@"            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 "));
@@ -2810,7 +2810,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             RenderChildTemplate(null, ViewModel.ChildTemplateFooterTokens, null, false, null, null, new CustomDelegates { ResolverDelegate = ViewModel.RootTemplate.ChildTemplateFooterTemplate, RenderChildTemplateDelegate = RenderWithHeaderAndFooter, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
         protected T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildTemplateClassToken_ViewModel _viewModelField;
@@ -2834,11 +2834,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2848,7 +2848,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2869,7 +2869,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             
             RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
@@ -2915,7 +2915,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"    }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
         protected T4PlusCSharpCodeGenerator_NamespaceFooterTokens_ChildViewModelClassToken_ViewModel _viewModelField;
@@ -2939,11 +2939,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -2953,7 +2953,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -2974,7 +2974,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             
             RenderChildTemplate(@"T4CSharpCodeGenerator.GeneratedCodeAttribute.Template", ViewModel.GeneratorModel, null, false, null, null, new CustomDelegates { });
 
@@ -3025,7 +3025,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public override void Write(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.Write(textToAppend);
             }
@@ -3037,7 +3037,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public override void WriteLine(string textToAppend)
         {
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 RootTemplate.WriteLine(textToAppend);
             }
@@ -3060,7 +3060,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             Write(this.ToStringHelper.ToStringWithCulture(@"    }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
         protected T4PlusCSharpCodeGenerator_NamespaceFooterTokens_PlaceholderClassToken_ViewModel _viewModelField;
@@ -3084,11 +3084,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -3098,7 +3098,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -3119,7 +3119,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    public class TemplateInstanceContext
     {
         public object Template { get; private set; }
@@ -3132,16 +3132,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             get
             {
                 var p = this;
-                while (p is not null && p.ParentContext is not null) p = p.ParentContext;
+                while (p != null && p.ParentContext != null) p = p.ParentContext;
                 return p;
             }
         }
         public T GetModelFromContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
         {
             var p = this;
-            while (p is not null)
+            while (p != null)
             {
-                if (p.Model is not null && typeof(T).IsAssignableFrom(p.Model.GetType()))
+                if (p.Model != null && typeof(T).IsAssignableFrom(p.Model.GetType()))
                 {
                     return (T)p.Model;
                 }
@@ -3152,9 +3152,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public T GetViewModelFromContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
         {
             var p = this;
-            while (p is not null)
+            while (p != null)
             {
-                if (p.ViewModel is not null && typeof(T).IsAssignableFrom(p.ViewModel.GetType()))
+                if (p.ViewModel != null && typeof(T).IsAssignableFrom(p.ViewModel.GetType()))
                 {
                     return (T)p.ViewModel;
                 }
@@ -3165,9 +3165,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public T GetContextByType<T>(Func<TemplateInstanceContext, bool> predicate = null)
         {
             var p = this;
-            while (p is not null)
+            while (p != null)
             {
-                if (p.Template is not null && typeof(T).IsAssignableFrom(p.Template.GetType()))
+                if (p.Template != null && typeof(T).IsAssignableFrom(p.Template.GetType()))
                 {
                     return (T)p.Template;
                 }
@@ -3179,7 +3179,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             get
             {
-                return ParentContext is null;
+                return ParentContext == null;
             }
         }
         public TemplateInstanceContext CreateChildContext(object template, object model, object viewModel = null, int? iterationNumber = null, int? iterationCount = null, string resolveTemplateName = null)
@@ -3225,7 +3225,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -3233,11 +3233,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -3247,7 +3247,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -3266,7 +3266,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"    public class TemplateFileManager
     {
         private readonly global::System.Action<global::System.Text.StringBuilder> _setStringBuilderDelegate;
@@ -3357,12 +3357,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                     ? content.FileName
                     : global::System.IO.Path.Combine(BasePath, content.FileName);
 
-                if (filenameTransformFunc is not null)
+                if (filenameTransformFunc != null)
                 {
                     path = filenameTransformFunc(path);
                 }
                 var contents = content.Builder.ToString();
-                if (contentTransformFunc is not null)
+                if (contentTransformFunc != null)
                 {
                     contents = contentTransformFunc(contents);
                 }
@@ -3387,7 +3387,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 global::System.IO.Directory.CreateDirectory(dir);
             }
 
-            if (fullPath is not null && !fullPath.Contains(""*""))
+            if (fullPath != null && !fullPath.Contains(""*""))
             {
                 global::System.IO.File.WriteAllLines(fullPath, _contentList.OrderBy(c => c.FileName).Select(c => c.FileName));
             }
@@ -3410,7 +3410,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
             if (!global::System.IO.File.Exists(fullPath))
             {
-                if (fullPath is not null && fullPath.Contains(""*"") && !string.IsNullOrEmpty(basePath) && global::System.IO.Directory.Exists(basePath))
+                if (fullPath != null && fullPath.Contains(""*"") && !string.IsNullOrEmpty(basePath) && global::System.IO.Directory.Exists(basePath))
                 {
                     foreach (var filename in global::System.IO.Directory.GetFiles(basePath, lastGeneratedFilesPath, global::System.IO.SearchOption.AllDirectories))
                     {
@@ -3436,7 +3436,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
 
         public Content AddContent(string fileName = null, bool skipWhenFileExists = false, global::System.Text.StringBuilder builder = null)
         {
-            var content = builder is null
+            var content = builder == null
             ? new Content
             {
                 FileName = fileName,
@@ -3501,13 +3501,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
             finally
             {
-                if (stringReader is not null)
+                if (stringReader != null)
                 {
                     stringReader.Dispose();
                 }
             }
 
-            if (mc is null)
+            if (mc == null)
             {
                 return null;
             }
@@ -3581,7 +3581,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             }
             finally
             {
-                if (stringReader is not null)
+                if (stringReader != null)
                 {
                     stringReader.Dispose();
                 }
@@ -3655,7 +3655,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                     ? content.FileName
                     : global::System.IO.Path.Combine(BasePath, content.FileName);
 
-                if (filenameTransformFunc is not null)
+                if (filenameTransformFunc != null)
                 {
                     path = filenameTransformFunc(path);
                 }
@@ -3666,7 +3666,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 }
 
                 var contents = string.Join(Environment.NewLine, content.Lines);
-                if (contentTransformFunc is not null)
+                if (contentTransformFunc != null)
                 {
                     contents = contentTransformFunc(contents);
                 }
@@ -3687,7 +3687,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
     }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -3695,11 +3695,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -3709,7 +3709,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -3729,7 +3729,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            TextTemplateTransformationFramework.Runtime.CodeGeneration.CodeGenerationAssembly codeGenerationAssembly = new TextTemplateTransformationFramework.Runtime.CodeGeneration.CodeGenerationAssembly("));
             Write(this.ToStringHelper.ToStringWithCulture(Model.AssemblyName.FormatLiteral(Model.AssemblyNameIsLiteral)));
             Write(this.ToStringHelper.ToStringWithCulture(@", "));
@@ -3744,7 +3744,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
             WriteLine(codeGenerationAssembly.Generate());
             codeGenerationAssembly.Dispose();"));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -3752,11 +3752,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -3766,7 +3766,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -3786,13 +3786,13 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"            "));
             
             RenderChildTemplate(null, Model, null, false, null, null, new CustomDelegates { ResolverDelegate = RootTemplate.BaseTemplate, });
 
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -3800,11 +3800,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -3814,7 +3814,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -3834,11 +3834,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         public virtual void Render(global::System.Text.StringBuilder builder)
         {
             var backup = this.GenerationEnvironment;
-            if (builder is not null) this.GenerationEnvironment = builder;
+            if (builder != null) this.GenerationEnvironment = builder;
             Write(this.ToStringHelper.ToStringWithCulture(@"        public TemplateInstanceContext TemplateContext { get; set; }
 "));
 
-            if (builder is not null) this.GenerationEnvironment = backup;
+            if (builder != null) this.GenerationEnvironment = backup;
         }
 
 
@@ -3846,11 +3846,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
         {
             this.Errors.Clear();
             this.GenerationEnvironment.Clear();
-            if (Session is null)
+            if (Session == null)
             {
                 Session = new global::System.Collections.Generic.Dictionary<string, object>();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 ChildTemplates = RootTemplate.ChildTemplates;
                 ViewModels = RootTemplate.ViewModels;
@@ -3860,7 +3860,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 ChildTemplates.Clear();
                 ViewModels.Clear();
             }
-            if (RootTemplate is not null)
+            if (RootTemplate != null)
             {
                 PlaceholderChildrenDictionary = RootTemplate.PlaceholderChildrenDictionary;
             }
@@ -3920,7 +3920,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.CodeGenerators
                 {
                     yield return ", null";
                 }
-                if (Model.Enumerable is not null)
+                if (Model.Enumerable != null)
                 {
                     yield return ", " + Model.Enumerable.Value.CsharpFormat();
                 }

@@ -18,7 +18,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
     {
         public bool IsValidForProcessing(SectionContext<TState> context, AllowNullExpressionsDirectiveModel model)
         {
-            if (model is null)
+            if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
@@ -28,7 +28,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
 
         public ITemplateToken<TState> Map(SectionContext<TState> context, AllowNullExpressionsDirectiveModel model)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }

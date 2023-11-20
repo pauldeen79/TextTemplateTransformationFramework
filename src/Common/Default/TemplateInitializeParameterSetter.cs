@@ -12,7 +12,7 @@ namespace TextTemplateTransformationFramework.Common.Default
     {
         public void Set(ITemplateProcessorContext<TState> context)
         {
-            if (context is null)
+            if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
@@ -20,11 +20,11 @@ namespace TextTemplateTransformationFramework.Common.Default
             var type = context.TemplateCompilerOutput.Template.GetType();
             var sessionProperty = type.GetProperty("Session");
 
-            var sessionPropertyValue = sessionProperty is null
+            var sessionPropertyValue = sessionProperty == null
                 ? null
                 : (IDictionary<string, object>)sessionProperty.GetValue(context.TemplateCompilerOutput.Template, null);
 
-            if (sessionProperty is not null && sessionPropertyValue is null)
+            if (sessionProperty != null && sessionPropertyValue == null)
             {
                 var dict = new Dictionary<string, object>();
                 sessionProperty.SetValue(context.TemplateCompilerOutput.Template, dict, null);
@@ -33,18 +33,18 @@ namespace TextTemplateTransformationFramework.Common.Default
 
             foreach (var info in type.GetProperties().Select(p => new { Property = p, Attributes = p.GetCustomAttributes(typeof(DefaultValueAttribute), true).Cast<DefaultValueAttribute>() }).Where(p => p.Attributes?.Any() == true))
             {
-                if (info.Property.CanWrite && info.Property.GetSetMethod() is not null)
+                if (info.Property.CanWrite && info.Property.GetSetMethod() != null)
                 {
                     info.Property.SetValue(context.TemplateCompilerOutput.Template, info.Attributes.First().Value.ConvertValue(info.Property.PropertyType));
                 }
 
-                if (sessionPropertyValue is not null && !sessionPropertyValue.ContainsKey(info.Property.Name))
+                if (sessionPropertyValue != null && !sessionPropertyValue.ContainsKey(info.Property.Name))
                 {
                     sessionPropertyValue.Add(info.Property.Name, info.Attributes.First().Value.ConvertValue(info.Property.PropertyType));
                 }
             }
 
-            if (context.TextTemplateProcessorContext.Parameters is null)
+            if (context.TextTemplateProcessorContext.Parameters == null)
             {
                 return;
             }

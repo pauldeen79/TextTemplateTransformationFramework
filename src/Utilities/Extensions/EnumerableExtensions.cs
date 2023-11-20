@@ -29,7 +29,7 @@ namespace Utilities.Extensions
         public static IEnumerable<T> NotNull<T>(this IEnumerable<T> instance, Func<T, bool> predicate = null)
         {
             var notNull = instance ?? Array.Empty<T>();
-            return predicate is null
+            return predicate == null
                 ? notNull
                 : notNull.Where(predicate);
         }
@@ -87,7 +87,7 @@ namespace Utilities.Extensions
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> instance, Action<T> action)
         {
-            if (action is null)
+            if (action == null)
             {
                 throw new ArgumentNullException(nameof(action));
             }
