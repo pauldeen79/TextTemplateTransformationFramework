@@ -156,6 +156,7 @@ dotnet_diagnostic.CA1506.severity = warning
 dotnet_diagnostic.CA1507.severity = warning
 #Avoid dead conditional code (does not seem to work on using statement?)
 dotnet_diagnostic.CA1508.severity = none
+dotnet_diagnostic.CA1510.severity = none # Use 'ArgumentNullException.ThrowIfNull' instead of explicitly throwing a new exception instance
 
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = none
