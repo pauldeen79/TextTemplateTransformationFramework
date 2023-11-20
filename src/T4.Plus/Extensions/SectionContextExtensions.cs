@@ -27,7 +27,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
             {
                 throw new ArgumentNullException(nameof(model));
             }
-
+// False positive
+#pragma warning disable S2589 // Boolean expressions should not be gratuitous
             return context.GetModePosition() switch
             {
                 var i when i == ModePosition.Render => new RenderChildTemplateToken<TState>
@@ -47,6 +48,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Extensions
                     ),
                 _ => new RenderErrorToken<TState>(context, "Unsupported mode: " + context.CurrentMode)
             };
+#pragma warning restore S2589 // Boolean expressions should not be gratuitous
         }
 
         public static ChildTemplateTokenInfo<TState> GetChildTemplateTokens<TState>(this SectionContext<TState> context,
