@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
-using Moq;
+using NSubstitute;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
@@ -14,19 +15,17 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     [ExcludeFromCodeCoverage]
     public class SourceCodeCommandTests : TestBase
     {
-        private readonly Mock<ITextTemplateProcessor> _processorMock;
-        private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
-        private readonly Mock<IClipboard> _clipboardMock;
+        private readonly ITextTemplateProcessor _processorMock;
+        private readonly IFileContentsProvider _fileContentsProviderMock;
+        private readonly IClipboard _clipboardMock;
 
-        private SourceCodeCommand CreateSut() => new SourceCodeCommand(_processorMock.Object,
-                                                                       _fileContentsProviderMock.Object,
-                                                                       _clipboardMock.Object);
+        private SourceCodeCommand CreateSut() => Fixture.Create<SourceCodeCommand>();
 
         public SourceCodeCommandTests()
         {
-            _processorMock = new Mock<ITextTemplateProcessor>();
-            _fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            _clipboardMock = new Mock<IClipboard>();
+            _processorMock = Fixture.Freeze<ITextTemplateProcessor>();
+            _fileContentsProviderMock = Fixture.Freeze<IFileContentsProvider>();
+            _clipboardMock = Fixture.Freeze<IClipboard>();
         }
 
         [Fact]
@@ -40,9 +39,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             // Arrange
             var app = new CommandLineApplication();
-            var textTemplateProcessorMock = new Mock<ITextTemplateProcessor>();
-            var fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            var sut = new SourceCodeCommand(textTemplateProcessorMock.Object, fileContentsProviderMock.Object, _clipboardMock.Object);
+            var textTemplateProcessorMock = Fixture.Freeze<ITextTemplateProcessor>();
+            var fileContentsProviderMock = Fixture.Freeze<IFileContentsProvider>();
+            var sut = new SourceCodeCommand(textTemplateProcessorMock, fileContentsProviderMock, _clipboardMock);
 
             // Act
             sut.Initialize(app);
@@ -84,9 +83,9 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         [Fact]
         public void Execute_With_Exception_Leads_To_Error()
         {
-            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
-            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
-            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+            _fileContentsProviderMock.FileExists("existing.template").Returns(true);
+            _fileContentsProviderMock.GetFileContents("existing.template").Returns("<#@ template language=\"c#\" #>");
+            _processorMock.PreProcess(Arg.Any<TextTemplate>(), Arg.Any<TemplateParameter[]>())
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "code", exception: new InvalidOperationException("kaboom")));
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
 
@@ -99,9 +98,9 @@ System.InvalidOperationException: kaboom
         [Fact]
         public void Execute_Without_Errors_And_Exception_Produces_Correct_Template_Output()
         {
-            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
-            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
-            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+            _fileContentsProviderMock.FileExists("existing.template").Returns(true);
+            _fileContentsProviderMock.GetFileContents("existing.template").Returns("<#@ template language=\"c#\" #>");
+            _processorMock.PreProcess(Arg.Any<TextTemplate>(), Arg.Any<TemplateParameter[]>())
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
 
@@ -114,31 +113,31 @@ CodeGoesHere();
         [Fact]
         public void Execute_With_Output_Option_Saves_Output_To_File()
         {
-            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
-            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
-            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+            _fileContentsProviderMock.FileExists("existing.template").Returns(true);
+            _fileContentsProviderMock.GetFileContents("existing.template").Returns("<#@ template language=\"c#\" #>");
+            _processorMock.PreProcess(Arg.Any<TextTemplate>(), Arg.Any<TemplateParameter[]>())
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-o output.cs");
 
             // Assert
             actual.Should().Be(@"Written source code output to file: output.cs
 ");
-            _fileContentsProviderMock.Verify(x => x.WriteFileContents("output.cs", "CodeGoesHere();"), Times.Once);
+            _fileContentsProviderMock.Received(1).WriteFileContents("output.cs", "CodeGoesHere();");
         }
 
         [Fact]
         public void Execute_With_Clipboard_Option_Saves_Output_To_Clipboard()
         {
-            _fileContentsProviderMock.Setup(x => x.FileExists("existing.template")).Returns(true);
-            _fileContentsProviderMock.Setup(x => x.GetFileContents("existing.template")).Returns("<#@ template language=\"c#\" #>");
-            _processorMock.Setup(x => x.PreProcess(It.IsAny<TextTemplate>(), It.IsAny<TemplateParameter[]>()))
+            _fileContentsProviderMock.FileExists("existing.template").Returns(true);
+            _fileContentsProviderMock.GetFileContents("existing.template").Returns("<#@ template language=\"c#\" #>");
+            _processorMock.PreProcess(Arg.Any<TextTemplate>(), Arg.Any<TemplateParameter[]>())
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), string.Empty, "CodeGoesHere();"));
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template", "-c");
 
             // Assert
             actual.Should().Be(@"Copied source code to clipboard
 ");
-            _clipboardMock.Verify(x => x.SetText("CodeGoesHere();"), Times.Once);
+            _clipboardMock.Received(1).SetText("CodeGoesHere();");
         }
     }
 }

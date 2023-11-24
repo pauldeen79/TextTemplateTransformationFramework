@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Extensions;
@@ -14,7 +15,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
 {
     [ExcludeFromCodeCoverage]
-    public class DirectiveSerializerTests
+    public class DirectiveSerializerTests : TestBase
     {
         [Fact]
         public void CanDeserializeFromDirectiveToObject()
@@ -22,9 +23,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             // Arrange
             const string Section = @"@ Directive name=""name 1"" optionalBoolean=""false"" language=""vb"" list=""a"" list=""b"" list=""c""";
             var callback = CreateTokenParserCallback();
-            callback.Setup(x => x.GetSectionArguments(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>())).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
+            callback.GetSectionArguments(Arg.Any<SectionContext<DirectiveSerializerTests>>(), Arg.Any<string>()).Returns(x =>
             {
-                return name.ToLower(CultureInfo.InvariantCulture) switch
+                return x.ArgAt<string>(1).ToLower(CultureInfo.InvariantCulture) switch
                 {
                     "name" => new[] { "name 1" },
                     "optionalboolean" => new[] { "false" },
@@ -38,14 +39,14 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 new Section("test.template", 1, Section),
                 1,
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
-                callback.Object,
+                callback,
                 this,
                 new Logger(),
                 Array.Empty<TemplateParameter>()
             );
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, TestModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -66,9 +67,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
         {
             // Arrange
             var context = SectionContext<DirectiveSerializerTests>.Empty;
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, TestModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -83,9 +84,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
         {
             // Arrange
             var context = SectionContext<DirectiveSerializerTests>.Empty;
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, TestModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -100,9 +101,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
         {
             // Arrange
             var context = SectionContext<DirectiveSerializerTests>.Empty;
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, FloatSinglePropertyTypeModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -117,9 +118,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
         {
             // Arrange
             var context = SectionContext<DirectiveSerializerTests>.Empty;
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, FloatMultiplePropertyTypeModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -135,9 +136,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             // Arrange
             const string Section = @"@ Directive MyFloatProperty=""2.3""";
             var callback = CreateTokenParserCallback();
-            callback.Setup(x => x.GetSectionArguments(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>())).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
+            callback.GetSectionArguments(Arg.Any<SectionContext<DirectiveSerializerTests>>(), Arg.Any<string>()).Returns(x =>
             {
-                return name.ToLower(CultureInfo.InvariantCulture) switch
+                return x.ArgAt<string>(1).ToLower(CultureInfo.InvariantCulture) switch
                 {
                     "myfloatproperty" => new[] { "2.3" },
                     _ => Array.Empty<string>(),
@@ -148,14 +149,14 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 new Section("test.template", 1, Section),
                 1,
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
-                callback.Object,
+                callback,
                 this,
                 new Logger(),
                 Array.Empty<TemplateParameter>()
             );
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, FloatSinglePropertyTypeModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -176,14 +177,14 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 new Section("test.template", 1, Section),
                 1,
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
-                callback.Object,
+                callback,
                 this,
                 new Logger(),
                 Array.Empty<TemplateParameter>()
             );
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, FloatMultiplePropertyTypeModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -197,9 +198,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             // Arrange
             const string Section = @"@ Directive MyStringArrayProperty=""2.3"" MyStringArrayProperty=""2.4"" MyStringArrayProperty=""2.5""";
             var callback = CreateTokenParserCallback();
-            callback.Setup(x => x.GetSectionArguments(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>())).Returns<SectionContext<DirectiveSerializerTests>, string>((_, name) =>
+            callback.GetSectionArguments(Arg.Any<SectionContext<DirectiveSerializerTests>>(), Arg.Any<string>()).Returns(x =>
             {
-                return name.ToLower(CultureInfo.InvariantCulture) switch
+                return x.ArgAt<string>(1).ToLower(CultureInfo.InvariantCulture) switch
                 {
                     "mystringarrayproperty" => new[] { "2.3", "2.4", "2.5" },
                     _ => Array.Empty<string>(),
@@ -210,14 +211,14 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
                 new Section("test.template", 1, Section),
                 1,
                 Array.Empty<ITemplateToken<DirectiveSerializerTests>>(),
-                callback.Object,
+                callback,
                 this,
                 new Logger(),
                 Array.Empty<TemplateParameter>()
             );
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<DirectiveSerializerTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<DirectiveSerializerTests>>();
             var sut = new DirectiveSerializer<DirectiveSerializerTests, StringMultiplePropertyTypeModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -230,15 +231,16 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             actual.MyStringArrayProperty[2].Should().Be("2.5");
         }
 
-        private static Mock<ITokenParserCallback<DirectiveSerializerTests>> CreateTokenParserCallback()
+        private ITokenParserCallback<DirectiveSerializerTests> CreateTokenParserCallback()
         {
-            var mock = new Mock<ITokenParserCallback<DirectiveSerializerTests>>();
-            mock.Setup(x => x.Parse(It.IsAny<ITextTemplateProcessorContext<DirectiveSerializerTests>>()))
+            var mock = Fixture.Freeze<ITokenParserCallback<DirectiveSerializerTests>>();
+            mock.Parse(Arg.Any<ITextTemplateProcessorContext<DirectiveSerializerTests>>())
                 .Returns(Array.Empty<ITemplateToken<DirectiveSerializerTests>>());
-            mock.Setup(x => x.SectionIsDirectiveWithName(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>()))
-                .Returns<SectionContext<DirectiveSerializerTests>, string>((context, name) => context.Section.IsDirective(name, "@ ", " "));
-            mock.Setup(x => x.SectionStartsWithPrefix(It.IsAny<SectionContext<DirectiveSerializerTests>>(), It.IsAny<string>()))
-                .Returns<SectionContext<DirectiveSerializerTests>, string>((context, prefix) => context.Section.StartsWith(prefix));
+            mock.SectionIsDirectiveWithName(Arg.Any<SectionContext<DirectiveSerializerTests>>(), Arg.Any<string>())
+                .Returns(x => x.ArgAt<SectionContext<DirectiveSerializerTests>>(0).Section.IsDirective(x.ArgAt<string>(1), "@ ", " "));
+            mock.SectionStartsWithPrefix(Arg.Any<SectionContext<DirectiveSerializerTests>>(), Arg.Any<string>())
+                .Returns(x => x.ArgAt<SectionContext<DirectiveSerializerTests>>(0).Section.StartsWith(x.ArgAt<string>(1)));
+
             return mock;
         }
 

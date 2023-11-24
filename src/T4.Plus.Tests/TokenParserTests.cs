@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
@@ -10,16 +11,22 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.T4.Plus.Tests
 {
-    public class TokenParserTests
+    public class TokenParserTests : TestBase
     {
-        private readonly Mock<ITextTemplateTokenParser<TokenParserState>> _baseParser = new Mock<ITextTemplateTokenParser<TokenParserState>>();
-        private readonly Mock<ILogger> _loggerMock = new Mock<ILogger>();
+        private readonly ITextTemplateTokenParser<TokenParserState> _baseParser;
+        private readonly ILogger _loggerMock;
+
+        public TokenParserTests()
+        {
+            _baseParser = Fixture.Freeze<ITextTemplateTokenParser<TokenParserState>>();
+            _loggerMock = Fixture.Freeze<ILogger>();
+        }
 
         [Fact]
         public void Parse_Throws_On_Null_Context()
         {
             // Arrange
-            var sut = new TokenParser(_baseParser.Object);
+            var sut = new TokenParser(_baseParser);
 
             // Act & Assert
             sut.Invoking(x => x.Parse(null)).Should().Throw<ArgumentNullException>();
@@ -29,14 +36,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
         public void Parse_Adds_TemplateSection_When_Not_Present_In_Source_Template()
         {
             // Arrange
-            _baseParser.Setup(x => x.Parse(It.IsAny<ITextTemplateProcessorContext<TokenParserState>>()))
-                       .Returns<ITextTemplateProcessorContext<TokenParserState>>(ctx => ctx.TextTemplate.Template == "<#@ template language=\"C#\" #>"
+            _baseParser.Parse(Arg.Any<ITextTemplateProcessorContext<TokenParserState>>())
+                       .Returns(x => x.ArgAt<ITextTemplateProcessorContext<TokenParserState>>(0).TextTemplate.Template == "<#@ template language=\"C#\" #>"
                         ? new ITemplateToken<TokenParserState>[] { new TemplateClassNameToken<TokenParserState>(SectionContext<TokenParserState>.Empty, "MyClassName", "") }
                         : Array.Empty<ITemplateToken<TokenParserState>>());
-            var sut = new TokenParser(_baseParser.Object);
+            var sut = new TokenParser(_baseParser);
 
             // Act
-            var actual = sut.Parse(new TextTemplateProcessorContext<TokenParserState>(new TextTemplate(string.Empty), Array.Empty<TemplateParameter>(), _loggerMock.Object, null));
+            var actual = sut.Parse(new TextTemplateProcessorContext<TokenParserState>(new TextTemplate(string.Empty), Array.Empty<TemplateParameter>(), _loggerMock, null));
 
             // Assert
             actual.Should().HaveCount(1);

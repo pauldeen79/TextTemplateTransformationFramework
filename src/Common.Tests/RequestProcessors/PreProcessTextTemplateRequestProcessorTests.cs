@@ -2,9 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.RequestProcessors;
@@ -14,10 +14,9 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
 {
     [ExcludeFromCodeCoverage]
-    public class PreProcessTextTemplateRequestProcessorTests
+    public class PreProcessTextTemplateRequestProcessorTests : TestBase
     {
-        private readonly IFixture _fixture = new Fixture().Customize(new AutoMoqCustomization());
-        private PreProcessTextTemplateRequestProcessor<PreProcessTextTemplateRequestProcessorTests> CreateSut() => _fixture.Create<PreProcessTextTemplateRequestProcessor<PreProcessTextTemplateRequestProcessorTests>>();
+        private PreProcessTextTemplateRequestProcessor<PreProcessTextTemplateRequestProcessorTests> CreateSut() => Fixture.Create<PreProcessTextTemplateRequestProcessor<PreProcessTextTemplateRequestProcessorTests>>();
 
         [Fact]
         public void Ctor_Throws_On_Null_TemplateOutputCreator()
@@ -44,9 +43,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
         public void Process_Returns_Correct_Result_On_Success()
         {
             // Arrange
-            var contextMock = _fixture.Freeze<Mock<ITextTemplateProcessorContext<PreProcessTextTemplateRequestProcessorTests>>>();
-            var templateOutputCreatorMock = _fixture.Freeze<Mock<ITemplateOutputCreator<PreProcessTextTemplateRequestProcessorTests>>>();
-            templateOutputCreatorMock.Setup(x => x.Create(contextMock.Object)).Returns(new TemplateCodeOutput<PreProcessTextTemplateRequestProcessorTests>
+            var contextMock = Fixture.Freeze<ITextTemplateProcessorContext<PreProcessTextTemplateRequestProcessorTests>>();
+            var templateOutputCreatorMock = Fixture.Freeze<ITemplateOutputCreator<PreProcessTextTemplateRequestProcessorTests>>();
+            templateOutputCreatorMock.Create(contextMock).Returns(new TemplateCodeOutput<PreProcessTextTemplateRequestProcessorTests>
             (
                 Enumerable.Empty<ITemplateToken<PreProcessTextTemplateRequestProcessorTests>>(),
                 new CodeGeneratorResult("code", "c#", Enumerable.Empty<CompilerError>()),
@@ -57,7 +56,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
                 "C:\\Temp"
             ));
             var sut = CreateSut();
-            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), contextMock.Object);
+            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), contextMock);
 
             // Act
             var actual = sut.Process(request);
@@ -72,11 +71,11 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
         public void Process_Returns_Result_With_Exception_On_Exception()
         {
             // Arrange
-            var contextMock = _fixture.Freeze<Mock<ITextTemplateProcessorContext<PreProcessTextTemplateRequestProcessorTests>>>();
-            var templateOutputCreatorMock = _fixture.Freeze<Mock<ITemplateOutputCreator<PreProcessTextTemplateRequestProcessorTests>>>();
-            templateOutputCreatorMock.Setup(x => x.Create(contextMock.Object)).Throws<ApplicationException>();
+            var contextMock = Fixture.Freeze<ITextTemplateProcessorContext<PreProcessTextTemplateRequestProcessorTests>>();
+            var templateOutputCreatorMock = Fixture.Freeze<ITemplateOutputCreator<PreProcessTextTemplateRequestProcessorTests>>();
+            templateOutputCreatorMock.Create(contextMock).Throws<ApplicationException>();
             var sut = CreateSut();
-            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), contextMock.Object);
+            var request = new PreProcessTextTemplateRequest<PreProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), contextMock);
 
             // Act
             var actual = sut.Process(request);

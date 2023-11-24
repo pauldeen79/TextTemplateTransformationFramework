@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using Xunit;
@@ -12,14 +13,17 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
 {
     public class TemplateCodeCompilerTests : TestBase
     {
-        private readonly Mock<ICodeCompiler<TemplateCodeCompilerTests>> _codeCompilerMock = new();
-        private readonly Mock<ITemplateFactory<TemplateCodeCompilerTests>> _templateFactoryMock = new();
-        private readonly Mock<IAssemblyService> _assemblyServiceMock = new();
+        private readonly ICodeCompiler<TemplateCodeCompilerTests> _codeCompilerMock;
+        private readonly ITemplateFactory<TemplateCodeCompilerTests> _templateFactoryMock;
+        private readonly IAssemblyService _assemblyServiceMock;
 
         public TemplateCodeCompilerTests()
         {
-            _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
-                                .Returns<string, AssemblyLoadContext>((assemblyName, context) => context.LoadFromAssemblyName(new AssemblyName(assemblyName)));
+            _templateFactoryMock = Fixture.Freeze<ITemplateFactory<TemplateCodeCompilerTests>>();
+            _codeCompilerMock = Fixture.Freeze<ICodeCompiler<TemplateCodeCompilerTests>>();
+            _assemblyServiceMock = Fixture.Freeze<IAssemblyService>();
+            _assemblyServiceMock.LoadAssembly(Arg.Any<string>(), Arg.Any<AssemblyLoadContext>())
+                                .Returns(x => x.ArgAt<AssemblyLoadContext>(1).LoadFromAssemblyName(new AssemblyName(x.ArgAt<string>(0))));
         }
 
         [Fact]
@@ -46,7 +50,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             var sut = CreateSut();
 
             // Act & Assert
-            sut.Invoking(x => x.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), Array.Empty<TemplateParameter>(), new Mock<ILogger>().Object, SectionContext<TemplateCodeCompilerTests>.Empty), null))
+            sut.Invoking(x => x.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), Array.Empty<TemplateParameter>(), Fixture.Freeze<ILogger>(), SectionContext<TemplateCodeCompilerTests>.Empty), null))
                .Should().Throw<ArgumentNullException>();
         }
 
@@ -57,7 +61,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             var sut = CreateSut();
 
             // Act
-            var actual = sut.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), Array.Empty<TemplateParameter>(), new Mock<ILogger>().Object, SectionContext<TemplateCodeCompilerTests>.Empty), new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<TemplateToken<TemplateCodeCompilerTests>>(), string.Empty, new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<ITemplateToken<TemplateCodeCompilerTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty)));
+            var actual = sut.Compile(new TextTemplateProcessorContext<TemplateCodeCompilerTests>(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), Array.Empty<TemplateParameter>(), Fixture.Freeze<ILogger>(), SectionContext<TemplateCodeCompilerTests>.Empty), new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<TemplateToken<TemplateCodeCompilerTests>>(), string.Empty, new TemplateCodeOutput<TemplateCodeCompilerTests>(Enumerable.Empty<ITemplateToken<TemplateCodeCompilerTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty)));
 
             // Assert
             actual.Should().NotBeNull();
@@ -66,8 +70,8 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         }
 
         private TemplateCodeCompiler<TemplateCodeCompilerTests> CreateSut() => new(
-            _codeCompilerMock.Object,
-            _templateFactoryMock.Object,
-            _assemblyServiceMock.Object);
+            _codeCompilerMock,
+            _templateFactoryMock,
+            _assemblyServiceMock);
     }
 }

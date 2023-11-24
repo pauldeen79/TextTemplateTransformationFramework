@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -13,8 +14,14 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     [ExcludeFromCodeCoverage]
     public class AddTemplateCommandTests : TestBase
     {
-        private readonly Mock<IFileContentsProvider> _fileContentsProviderMock = new();
-        private readonly Mock<ITemplateInfoRepository> _templateInfoRepositoryMock = new();
+        private readonly IFileContentsProvider _fileContentsProviderMock;
+        private readonly ITemplateInfoRepository _templateInfoRepositoryMock;
+
+        public AddTemplateCommandTests()
+        {
+            _fileContentsProviderMock = Fixture.Freeze<IFileContentsProvider>();
+            _templateInfoRepositoryMock = Fixture.Freeze<ITemplateInfoRepository>();
+        }
 
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
@@ -50,7 +57,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_Without_ShortName_Leads_To_Error()
         {
             // Arrange
-            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            _fileContentsProviderMock.FileExists(Arg.Any<string>()).Returns(true);
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f my.template");
@@ -63,7 +70,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_Without_FileName_And_AssemblyName_Leads_To_Error()
         {
             // Arrange
-            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            _fileContentsProviderMock.FileExists(Arg.Any<string>()).Returns(true);
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s MyShortName");
@@ -76,7 +83,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_With_Both_FileName_And_AssemblyName_Leads_To_Error()
         {
             // Arrange
-            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            _fileContentsProviderMock.FileExists(Arg.Any<string>()).Returns(true);
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s MyShortName", "-f my.template", "-a my.dll", "-n myclass");
@@ -89,7 +96,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_With_AssemblyName_But_Without_ClassName_Leads_To_Error()
         {
             // Arrange
-            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            _fileContentsProviderMock.FileExists(Arg.Any<string>()).Returns(true);
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s MyShortName", "-a my.dll");
@@ -102,7 +109,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_With_ShortName_And_Filename_Gives_Error_When_File_Does_Not_Exist()
         {
             // Arrange
-            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+            _fileContentsProviderMock.FileExists(Arg.Any<string>()).Returns(false);
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f my.template", "-s mytemplate");
@@ -115,17 +122,16 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_With_ShortName_And_Filename_Adds_Template_To_Repository()
         {
             // Arrange
-            _fileContentsProviderMock.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+            _fileContentsProviderMock.FileExists(Arg.Any<string>()).Returns(true);
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f my.template", "-s mytemplate");
 
             // Assert
             actual.Should().Be("Template has been added successfully." + Environment.NewLine);
-            _templateInfoRepositoryMock.Verify(x => x.Add(It.IsAny<TemplateInfo>()), Times.Once);
+            _templateInfoRepositoryMock.Received(1).Add(Arg.Any<TemplateInfo>());
         }
 
-        private AddTemplateCommand CreateSut()
-            => new AddTemplateCommand(_fileContentsProviderMock.Object, _templateInfoRepositoryMock.Object);
+        private AddTemplateCommand CreateSut() => Fixture.Create<AddTemplateCommand>();
     }
 }

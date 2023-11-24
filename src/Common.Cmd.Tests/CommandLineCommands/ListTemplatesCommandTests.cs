@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -13,7 +14,12 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     [ExcludeFromCodeCoverage]
     public class ListTemplatesCommandTests : TestBase
     {
-        private readonly Mock<ITemplateInfoRepository> _templateInfoRepositoryMock = new();
+        private readonly ITemplateInfoRepository _templateInfoRepositoryMock;
+
+        public ListTemplatesCommandTests()
+        {
+            _templateInfoRepositoryMock = Fixture.Freeze<ITemplateInfoRepository>();
+        }
 
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
@@ -49,7 +55,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         public void Execute_Returns_Data_In_Output()
         {
             // Arrange
-            _templateInfoRepositoryMock.Setup(x => x.GetTemplates()).Returns(new[] { new TemplateInfo("ShortName", "FileName.template", string.Empty, string.Empty, TemplateType.TextTemplate, Array.Empty<TemplateParameter>()) });
+            _templateInfoRepositoryMock.GetTemplates()
+                .Returns(new[] { new TemplateInfo("ShortName", "FileName.template", string.Empty, string.Empty, TemplateType.TextTemplate, Array.Empty<TemplateParameter>()) });
 
             // Act
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut);
@@ -58,6 +65,6 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             actual.Should().Be("TemplateInfo { ShortName = ShortName, FileName = FileName.template, AssemblyName = , ClassName = , Type = TextTemplate, Parameters = TextTemplateTransformationFramework.Common.TemplateParameter[] }" + Environment.NewLine);
         }
 
-        private ListTemplatesCommand CreateSut() => new(_templateInfoRepositoryMock.Object);
+        private ListTemplatesCommand CreateSut() => Fixture.Create<ListTemplatesCommand>();
     }
 }

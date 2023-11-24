@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.T4.Plus.Tests.TestFixtures;
@@ -11,7 +12,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class TemplateRenderParameterSetterTests
+    public class TemplateRenderParameterSetterTests : TestBase
     {
         [Fact]
         public void Set_Throws_On_Null_Context()
@@ -30,9 +31,9 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
             // Arrange
             var sut = new TemplateRenderParameterSetter<TemplateRenderParameterSetterTests>();
             var template = new object();
-            var templateProcessorContextMock = new Mock<ITemplateProcessorContext<TemplateRenderParameterSetterTests>>();
-            templateProcessorContextMock.SetupGet(x => x.TemplateCompilerOutput).Returns(TemplateCompilerOutput.Create(GetType().Assembly, template, Enumerable.Empty<CompilerError>(), "", "cs", Enumerable.Empty<ITemplateToken<TemplateRenderParameterSetterTests>>(), null));
-            var action = new Action(() => sut.Set(templateProcessorContextMock.Object));
+            var templateProcessorContextMock = Fixture.Freeze<ITemplateProcessorContext<TemplateRenderParameterSetterTests>>();
+            templateProcessorContextMock.TemplateCompilerOutput.Returns(TemplateCompilerOutput.Create(GetType().Assembly, template, Enumerable.Empty<CompilerError>(), "", "cs", Enumerable.Empty<ITemplateToken<TemplateRenderParameterSetterTests>>(), null));
+            var action = new Action(() => sut.Set(templateProcessorContextMock));
 
             // Act
             action.Should().NotThrow();
@@ -50,11 +51,11 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
             };
             template.Session.Add(nameof(ViewModelTemplate.Property), "Test");
             template.Session.Add("Ignored", "Value");
-            var templateProcessorContextMock = new Mock<ITemplateProcessorContext<TemplateRenderParameterSetterTests>>();
-            templateProcessorContextMock.SetupGet(x => x.TemplateCompilerOutput).Returns(TemplateCompilerOutput.Create(GetType().Assembly, template, Enumerable.Empty<CompilerError>(), "", "cs", Enumerable.Empty<ITemplateToken<TemplateRenderParameterSetterTests>>(), null));
+            var templateProcessorContextMock = Fixture.Freeze<ITemplateProcessorContext<TemplateRenderParameterSetterTests>>();
+            templateProcessorContextMock.TemplateCompilerOutput.Returns(TemplateCompilerOutput.Create(GetType().Assembly, template, Enumerable.Empty<CompilerError>(), "", "cs", Enumerable.Empty<ITemplateToken<TemplateRenderParameterSetterTests>>(), null));
 
             // Act
-            sut.Set(templateProcessorContextMock.Object);
+            sut.Set(templateProcessorContextMock);
 
             // Assert
             template.ViewModel.Should().NotBeNull();

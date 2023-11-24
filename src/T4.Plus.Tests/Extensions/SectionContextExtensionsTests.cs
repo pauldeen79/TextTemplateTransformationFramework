@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Contracts.TemplateTokens.RenderTokens;
@@ -14,7 +14,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.Extensions
 {
     [ExcludeFromCodeCoverage]
-    public class SectionContextExtensionsTests
+    public class SectionContextExtensionsTests : TestBase
     {
         [Fact]
         public void CreateRenderChildTemplateToken_Returns_ErrorToken_When_Mode_Is_Not_Render()
@@ -110,14 +110,14 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Extensions
 
         private SectionContext<SectionContextExtensionsTests> CreateSut(int modePosition = ModePosition.Render)
         {
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<SectionContextExtensionsTests>>();
-            var loggerMock = new Mock<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<SectionContextExtensionsTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
             return SectionContext.FromSection(new Section("test.template", 1, "<# Hello world! #>"),
                                               modePosition,
                                               Enumerable.Empty<ITemplateToken<SectionContextExtensionsTests>>(),
-                                              tokenParserCallbackMock.Object,
+                                              tokenParserCallbackMock,
                                               this,
-                                              loggerMock.Object,
+                                              loggerMock,
                                               Array.Empty<TemplateParameter>());
         }
     }

@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Runtime.CodeGeneration;
 using Xunit;
 
 namespace TextTemplateTransformationFramework.Runtime.Tests;
 
 [ExcludeFromCodeCoverage]
-public class GenerateCodeTests
+public class GenerateCodeTests : TestBase
 {
     [Fact]
     public void For_Throws_On_Null_Settings()
     {
-        this.Invoking(_ => GenerateCode.For(null, new MultipleContentBuilder(), new Mock<ICodeGenerationProvider>().Object))
+        this.Invoking(_ => GenerateCode.For(null, new MultipleContentBuilder(), Fixture.Freeze<ICodeGenerationProvider>()))
             .Should().Throw<ArgumentNullException>().WithParameterName("settings");
     }
 
@@ -21,11 +22,11 @@ public class GenerateCodeTests
     public void For_Should_Not_Throw_On_Null_MultipleContentBuilder()
     {
         // Arrange
-        var providerMock = new Mock<ICodeGenerationProvider>();
-        providerMock.Setup(x => x.CreateGenerator()).Returns(new GenerateCodeTests());
+        var providerMock = Fixture.Freeze<ICodeGenerationProvider>();
+        providerMock.CreateGenerator().Returns(new GenerateCodeTests());
 
         // Act & Assert
-        this.Invoking(_ => GenerateCode.For(new CodeGenerationSettings("UnitTest", true), null, providerMock.Object))
+        this.Invoking(_ => GenerateCode.For(new CodeGenerationSettings("UnitTest", true), null, providerMock))
             .Should().NotThrow<ArgumentNullException>();
     }
 

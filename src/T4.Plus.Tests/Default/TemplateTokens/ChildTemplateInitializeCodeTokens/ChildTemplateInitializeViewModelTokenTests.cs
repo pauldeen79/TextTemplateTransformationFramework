@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net.Mime;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.ChildTemplateInitializeCodeTokens;
@@ -12,22 +11,22 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateTokens.ChildTemplateInitializeCodeTokens
 {
     [ExcludeFromCodeCoverage]
-    public class ChildTemplateInitializeViewModelTokenTests
+    public class ChildTemplateInitializeViewModelTokenTests : TestBase
     {
         [Fact]
         public void Ctor_Throws_On_Null_ViewModel()
         {
             // Arrange
-            var loggerMock = new Mock<ILogger>();
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, "contents"),
                 Mode.CodeCompositionRootFeature,
                 Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             var model = new ValueSpecifier("model", true);
@@ -50,16 +49,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
         public void Ctor_Throws_On_Null_CustomResolverDelegate()
         {
             // Arrange
-            var loggerMock = new Mock<ILogger>();
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, "contents"),
                 Mode.CodeCompositionRootFeature,
                 Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             var viewModel = new ValueSpecifier("viewModel", true);
@@ -82,16 +81,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
         public void Ctor_Throws_On_Null_Model()
         {
             // Arrange
-            var loggerMock = new Mock<ILogger>();
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, "contents"),
                 Mode.CodeCompositionRootFeature,
                 Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             var viewModel = new ValueSpecifier("viewModel", true);
@@ -114,16 +113,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
         public void Ctor_Throws_On_Null_ResolverDelegateModel()
         {
             // Arrange
-            var loggerMock = new Mock<ILogger>();
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, "contents"),
                 Mode.CodeCompositionRootFeature,
                 Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             var viewModel = new ValueSpecifier("viewModel", true);
@@ -146,16 +145,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Default.TemplateToke
         public void Can_Construct()
         {
             // Arrange
-            var loggerMock = new Mock<ILogger>();
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<ChildTemplateInitializeViewModelTokenTests>>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, "contents"),
                 Mode.CodeCompositionRootFeature,
                 Enumerable.Empty<ITemplateToken<ChildTemplateInitializeViewModelTokenTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             var viewModel = new ValueSpecifier("viewModel", true);

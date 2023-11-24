@@ -3,9 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
+using AutoFixture;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
-using Moq;
+using NSubstitute;
 using TextCopy;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
@@ -18,17 +19,19 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     [ExcludeFromCodeCoverage]
     public class RunCodeGenerationProviderAssemblyCommandTests : TestBase
     {
-        private readonly Mock<IClipboard> _clipboardMock;
-        private readonly Mock<IAssemblyService> _assemblyServiceMock;
+        private readonly IClipboard _clipboardMock;
+        private readonly IAssemblyService _assemblyServiceMock;
 
-        private RunCodeGenerationProviderAssemblyCommand CreateSut() => new RunCodeGenerationProviderAssemblyCommand(_clipboardMock.Object, _assemblyServiceMock.Object);
+        private RunCodeGenerationProviderAssemblyCommand CreateSut() => Fixture.Create<RunCodeGenerationProviderAssemblyCommand>();
 
         public RunCodeGenerationProviderAssemblyCommandTests()
         {
-            _clipboardMock = new Mock<IClipboard>();
-            _assemblyServiceMock = new Mock<IAssemblyService>();
-            _assemblyServiceMock.Setup(x => x.LoadAssembly(It.IsAny<string>(), It.IsAny<AssemblyLoadContext>()))
-                                .Returns<string, AssemblyLoadContext>((name, ctx) => name.EndsWith(".dll") ? ctx.LoadFromAssemblyPath(FullyQualify(name)) : ctx.LoadFromAssemblyName(new AssemblyName(name)));
+            _clipboardMock = Fixture.Freeze<IClipboard>();
+            _assemblyServiceMock = Fixture.Freeze<IAssemblyService>();
+            _assemblyServiceMock.LoadAssembly(Arg.Any<string>(), Arg.Any<AssemblyLoadContext>())
+                                .Returns(x => x.ArgAt<string>(0).EndsWith(".dll")
+                                    ? x.ArgAt<AssemblyLoadContext>(1).LoadFromAssemblyPath(FullyQualify(x.ArgAt<string>(0)))
+                                    : x.ArgAt<AssemblyLoadContext>(1).LoadFromAssemblyName(new AssemblyName(x.ArgAt<string>(0))));
         }
 
         private static string FullyQualify(string name)
@@ -132,7 +135,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             actual.Should().Be(@"Copied code generation output to clipboard
 ");
             var content = new MultipleContentBuilder().ToString();
-            _clipboardMock.Verify(x => x.SetText(content), Times.Once);
+            _clipboardMock.Received(1).SetText(content);
         }
 
         [Fact]

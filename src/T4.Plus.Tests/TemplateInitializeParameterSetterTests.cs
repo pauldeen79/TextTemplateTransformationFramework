@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
@@ -12,7 +13,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class TemplateInitializeParameterSetterTests
+    public class TemplateInitializeParameterSetterTests : TestBase
     {
         [Fact]
         public void Set_Throws_On_Null_Context()
@@ -32,10 +33,10 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
             var template = new ViewModelTemplate();
             template.Session.Add("Key", "Value");
             var sut = new TemplateInitializeParameterSetter<TemplateInitializeParameterSetterTests>();
-            var textTemplateProcessorContextMock = new Mock<ITextTemplateProcessorContext<TemplateInitializeParameterSetterTests>>();
-            textTemplateProcessorContextMock.SetupGet(x => x.Parameters).Returns(new[] { new TemplateParameter { Name = nameof(ViewModelTemplate.Property), Value = "test" } });
+            var textTemplateProcessorContextMock = Fixture.Freeze<ITextTemplateProcessorContext<TemplateInitializeParameterSetterTests>>();
+            textTemplateProcessorContextMock.Parameters.Returns(new[] { new TemplateParameter { Name = nameof(ViewModelTemplate.Property), Value = "test" } });
             var templateCompilerOutput = TemplateCompilerOutput.Create(GetType().Assembly, template, Enumerable.Empty<CompilerError>(), "", "cs", Enumerable.Empty<ITemplateToken<TemplateInitializeParameterSetterTests>>(), null);
-            var context = new TemplateProcessorContext<TemplateInitializeParameterSetterTests>(textTemplateProcessorContextMock.Object, templateCompilerOutput);
+            var context = new TemplateProcessorContext<TemplateInitializeParameterSetterTests>(textTemplateProcessorContextMock, templateCompilerOutput);
 
             // Act
             sut.Set(context);

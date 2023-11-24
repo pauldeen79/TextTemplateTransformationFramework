@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Extensions;
 using TextTemplateTransformationFramework.Common.Mappers;
@@ -12,15 +12,15 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Tests.Extensions
 {
     [ExcludeFromCodeCoverage]
-    public class TemplateSectionProcessorExtensionsTests
+    public class TemplateSectionProcessorExtensionsTests : TestBase
     {
         [Fact]
         public void CanGetModelInstanceFromMappedTemplateSectionProcessor()
         {
             // Arrange
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<TemplateSectionProcessorExtensionsTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<TemplateSectionProcessorExtensionsTests>>();
             var input = new TokenMapperAdapter<TemplateSectionProcessorExtensionsTests>(typeof(AssemblyTokenMapper<TemplateSectionProcessorExtensionsTests>), fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -49,9 +49,9 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
         public void CanGetDirectivePrefixFromMappedTemplateSectionProcessor()
         {
             // Arrange
-            var fileNameProvider = new Mock<IFileNameProvider>().Object;
-            var fileContentsProvider = new Mock<IFileContentsProvider>().Object;
-            var templateCodeCompiler = new Mock<ITemplateCodeCompiler<TemplateSectionProcessorExtensionsTests>>().Object;
+            var fileNameProvider = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProvider = Fixture.Freeze<IFileContentsProvider>();
+            var templateCodeCompiler = Fixture.Freeze<ITemplateCodeCompiler<TemplateSectionProcessorExtensionsTests>>();
             var input = new TokenMapperAdapter<TemplateSectionProcessorExtensionsTests>(typeof(AssemblyTokenMapper<TemplateSectionProcessorExtensionsTests>), fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
@@ -78,7 +78,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Extensions
         public void IsProcessorForSection_Throws_On_Null_Context()
         {
             // Arrange
-            var sut = new Mock<ITemplateSectionProcessor<TemplateSectionProcessorExtensionsTests>>().Object;
+            var sut = Fixture.Freeze<ITemplateSectionProcessor<TemplateSectionProcessorExtensionsTests>>();
 
             // Act & Assert
             sut.Invoking(x => x.IsProcessorForSection(null))

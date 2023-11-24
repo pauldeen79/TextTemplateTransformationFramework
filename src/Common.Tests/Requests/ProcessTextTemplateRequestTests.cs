@@ -1,18 +1,18 @@
 ﻿using System;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Requests;
 using Xunit;
 
 namespace TextTemplateTransformationFramework.Common.Tests.Requests
 {
-    public class ProcessTextTemplateRequestTests
+    public class ProcessTextTemplateRequestTests : TestBase
     {
         [Fact]
         public void Ctor_Does_Not_Throw_On_Null_Parameters()
         {
-            this.Invoking(_ => new ProcessTextTemplateRequest<ProcessTextTemplateRequestTests>(null, new Mock<ITextTemplateProcessorContext<ProcessTextTemplateRequestTests>>().Object))
+            this.Invoking(_ => new ProcessTextTemplateRequest<ProcessTextTemplateRequestTests>(null, Fixture.Freeze<ITextTemplateProcessorContext<ProcessTextTemplateRequestTests>>()))
                 .Should().NotThrow<ArgumentNullException>();
         }
 

@@ -3,8 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.Requests;
@@ -15,19 +16,23 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
     [ExcludeFromCodeCoverage]
     public class TextTemplateProcessorTests : TestBase
     {
-        private readonly Mock<ILoggerFactory> _loggerFactoryMock = new();
-        private readonly Mock<IRequestProcessor<ProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult>> _processTextTemplateProcessorMock = new();
-        private readonly Mock<IRequestProcessor<PreProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult>> _preProcessTextTemplateProcessorMock = new();
-        private readonly Mock<IRequestProcessor<ExtractParametersFromTextTemplateRequest<TextTemplateProcessorTests>, ExtractParametersResult>> _extractParametersFromTextTemplateProcessorMock = new();
+        private readonly ILoggerFactory _loggerFactoryMock;
+        private readonly IRequestProcessor<ProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult> _processTextTemplateProcessorMock;
+        private readonly IRequestProcessor<PreProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult> _preProcessTextTemplateProcessorMock;
+        private readonly IRequestProcessor<ExtractParametersFromTextTemplateRequest<TextTemplateProcessorTests>, ExtractParametersResult> _extractParametersFromTextTemplateProcessorMock;
 
         public TextTemplateProcessorTests()
         {
-            _loggerFactoryMock.Setup(x => x.Create()).Returns(new Mock<ILogger>().Object);
+            _loggerFactoryMock = Fixture.Freeze<ILoggerFactory>();
+            _processTextTemplateProcessorMock = Fixture.Freeze<IRequestProcessor<ProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult>>();
+            _preProcessTextTemplateProcessorMock = Fixture.Freeze<IRequestProcessor<PreProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult>>();
+            _extractParametersFromTextTemplateProcessorMock = Fixture.Freeze<IRequestProcessor<ExtractParametersFromTextTemplateRequest<TextTemplateProcessorTests>, ExtractParametersResult>>();
+            _loggerFactoryMock.Create().Returns(Fixture.Freeze<ILogger>());
             _processTextTemplateProcessorMock
-                .Setup(x => x.Process(It.IsAny<ProcessTextTemplateRequest<TextTemplateProcessorTests>>()))
-                .Returns<ProcessTextTemplateRequest<TextTemplateProcessorTests>>(request => ProcessResult.Create(Enumerable.Empty<CompilerError>(), GetOutput(request.Context)));
+                .Process(Arg.Any<ProcessTextTemplateRequest<TextTemplateProcessorTests>>())
+                .Returns(x => ProcessResult.Create(Enumerable.Empty<CompilerError>(), GetOutput(x.ArgAt<ProcessTextTemplateRequest<TextTemplateProcessorTests>>(0).Context)));
             _extractParametersFromTextTemplateProcessorMock
-                .Setup(x => x.Process(It.IsAny<ExtractParametersFromTextTemplateRequest<TextTemplateProcessorTests>>()))
+                .Process(Arg.Any<ExtractParametersFromTextTemplateRequest<TextTemplateProcessorTests>>())
                 .Returns(ExtractParametersResult.Create(new[] { new TemplateParameter { Name = nameof(MyAssemblyTemplate.MyParameter), Type = typeof(string) } }, Array.Empty<CompilerError>(), string.Empty, string.Empty));
         }
 
@@ -78,10 +83,10 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             result.Parameters.Should().ContainSingle();
         }
         private TextTemplateProcessor<TextTemplateProcessorTests> CreateSut() => new(
-            _loggerFactoryMock.Object,
-            _processTextTemplateProcessorMock.Object,
-            _preProcessTextTemplateProcessorMock.Object,
-            _extractParametersFromTextTemplateProcessorMock.Object);
+            _loggerFactoryMock,
+            _processTextTemplateProcessorMock,
+            _preProcessTextTemplateProcessorMock,
+            _extractParametersFromTextTemplateProcessorMock);
     }
 
     [ExcludeFromCodeCoverage]

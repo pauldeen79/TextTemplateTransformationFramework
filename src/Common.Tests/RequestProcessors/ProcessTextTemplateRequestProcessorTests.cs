@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.Common.Default;
 using TextTemplateTransformationFramework.Common.RequestProcessors;
@@ -14,23 +15,31 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
 {
     public class ProcessTextTemplateRequestProcessorTests : TestBase
     {
-        private readonly Mock<ITemplateCodeCompiler<ProcessTextTemplateRequestProcessorTests>> _templateCodeCompilerMock = new();
-        private readonly Mock<ITemplateOutputCreator<ProcessTextTemplateRequestProcessorTests>> _templateOutputCreatorMock = new();
-        private readonly Mock<ITemplateProcessor<ProcessTextTemplateRequestProcessorTests>> _templateProcessorMock = new();
-        private readonly Mock<ILogger> _loggerMock = new();
+        private readonly ITemplateCodeCompiler<ProcessTextTemplateRequestProcessorTests> _templateCodeCompilerMock;
+        private readonly ITemplateOutputCreator<ProcessTextTemplateRequestProcessorTests> _templateOutputCreatorMock;
+        private readonly ITemplateProcessor<ProcessTextTemplateRequestProcessorTests> _templateProcessorMock;
+        private readonly ILogger _loggerMock;
 
         public ProcessTextTemplateRequestProcessorTests()
         {
-            _templateCodeCompilerMock.Setup(x => x.Compile(It.IsAny<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(), It.IsAny<TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>>()))
-                                     .Returns<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>, TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>>((context, codeOutput) =>
+            _templateCodeCompilerMock = Fixture.Freeze<ITemplateCodeCompiler<ProcessTextTemplateRequestProcessorTests>>();
+            _templateOutputCreatorMock = Fixture.Freeze<ITemplateOutputCreator<ProcessTextTemplateRequestProcessorTests>>();
+            _templateProcessorMock = Fixture.Freeze<ITemplateProcessor<ProcessTextTemplateRequestProcessorTests>>();
+            _loggerMock = Fixture.Freeze<ILogger>();
+
+            _templateCodeCompilerMock.Compile(Arg.Any<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(), Arg.Any<TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>>())
+                                     .Returns(x =>
                                      {
+                                         var context = x.ArgAt<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(0);
                                          var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(context.AssemblyTemplate.AssemblyName));
                                          return TemplateCompilerOutput.Create(assembly, Array.Find(assembly.GetExportedTypes(), x => x.FullName == context.AssemblyTemplate.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<ProcessTextTemplateRequestProcessorTests>>());
                                      });
-            _templateOutputCreatorMock.Setup(x => x.Create(It.IsAny<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>()))
-                                      .Returns<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(context => new TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>(Enumerable.Empty<ITemplateToken<ProcessTextTemplateRequestProcessorTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty));
-            _templateProcessorMock.Setup(x => x.Process(It.IsAny<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(), It.IsAny<TemplateCompilerOutput<ProcessTextTemplateRequestProcessorTests>>()))
-                                  .Returns<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>, TemplateCompilerOutput<ProcessTextTemplateRequestProcessorTests>>((context, templateCompilerOutput) => ProcessResult.Create(Enumerable.Empty<CompilerError>(),  Activator.CreateInstance(templateCompilerOutput.Assembly.GetExportedTypes().First(x => x.FullName == context.AssemblyTemplate.ClassName)).ToString()));
+
+            _templateOutputCreatorMock.Create(Arg.Any<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>())
+                                      .Returns(new TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>(Enumerable.Empty<ITemplateToken<ProcessTextTemplateRequestProcessorTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty));
+
+            _templateProcessorMock.Process(Arg.Any<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(), Arg.Any<TemplateCompilerOutput<ProcessTextTemplateRequestProcessorTests>>())
+                                  .Returns(x => ProcessResult.Create(Enumerable.Empty<CompilerError>(), Activator.CreateInstance(x.ArgAt<TemplateCompilerOutput<ProcessTextTemplateRequestProcessorTests>>(1).Assembly.GetExportedTypes().First(y => y.FullName == x.ArgAt<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(0).AssemblyTemplate.ClassName)).ToString()));
         }
 
         [Fact]
@@ -57,7 +66,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
 
             // Act
             var TextTemplate = new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default);
-            var actual = sut.Process(new ProcessTextTemplateRequest<ProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), new TextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>(TextTemplate, Array.Empty<TemplateParameter>(), _loggerMock.Object, null)));
+            var actual = sut.Process(new ProcessTextTemplateRequest<ProcessTextTemplateRequestProcessorTests>(Array.Empty<TemplateParameter>(), new TextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>(TextTemplate, Array.Empty<TemplateParameter>(), _loggerMock, null)));
 
             // Assert
             actual.Should().NotBeNull();
@@ -67,6 +76,6 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
         }
 
         private ProcessTextTemplateRequestProcessor<ProcessTextTemplateRequestProcessorTests> CreateSut()
-            => new(_templateOutputCreatorMock.Object, _templateCodeCompilerMock.Object, _templateProcessorMock.Object);
+            => new(_templateOutputCreatorMock, _templateCodeCompilerMock, _templateProcessorMock);
     }
 }

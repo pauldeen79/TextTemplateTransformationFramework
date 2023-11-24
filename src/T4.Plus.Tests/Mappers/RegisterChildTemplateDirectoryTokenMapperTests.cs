@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.InitializeTokens;
@@ -14,7 +15,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.Mappers
 {
     [ExcludeFromCodeCoverage]
-    public class RegisterChildTemplateDirectoryTokenMapperTests
+    public class RegisterChildTemplateDirectoryTokenMapperTests : TestBase
     {
         [Theory]
         [InlineData("MyBaseClass", "MyBaseClass")]
@@ -22,26 +23,26 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Mappers
         public void Map_Returns_Correct_Tokens(string baseClassInput, string expectedBaseClassOutput)
         {
             // Arrange
-            var fileNameProviderMock = new Mock<IFileNameProvider>();
-            var fileContentsProviderMock = new Mock<IFileContentsProvider>();
-            fileNameProviderMock.Setup(x => x.GetFiles(@"C:\", "*.template", true)).Returns(new[] { @"C:\My.template" });
-            fileContentsProviderMock.Setup(x => x.GetFileContents(@"C:\My.template")).Returns(@"<# template language=""c#"" #>
+            var fileNameProviderMock = Fixture.Freeze<IFileNameProvider>();
+            var fileContentsProviderMock = Fixture.Freeze<IFileContentsProvider>();
+            fileNameProviderMock.GetFiles(@"C:\", "*.template", true).Returns(new[] { @"C:\My.template" });
+            fileContentsProviderMock.GetFileContents(@"C:\My.template").Returns(@"<# template language=""c#"" #>
 Hello world!");
             var sut = new RegisterChildTemplateDirectoryTokenMapper<RegisterChildTemplateDirectoryTokenMapperTests>
             {
-                FileNameProvider = fileNameProviderMock.Object,
-                FileContentsProvider = fileContentsProviderMock.Object
+                FileNameProvider = fileNameProviderMock,
+                FileContentsProvider = fileContentsProviderMock
             };
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<RegisterChildTemplateDirectoryTokenMapperTests>>();
-            var loggerMock = new Mock<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<RegisterChildTemplateDirectoryTokenMapperTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, string.Empty),
                 0,
                 Enumerable.Empty<ITemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             var model = new RegisterChildTemplateDirectoryDirectiveModel<RegisterChildTemplateDirectoryTokenMapperTests>()
@@ -58,9 +59,9 @@ Hello world!");
 
             // Assert
             actual.Should().HaveCount(2);
-            actual.First().Should().BeOfType<RegisterChildTemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>();
-            actual.Last().Should().BeOfType<ChildTemplateClassToken<RegisterChildTemplateDirectoryTokenMapperTests>>();
-            var childTemplateClassToken = actual.Last() as ChildTemplateClassToken<RegisterChildTemplateDirectoryTokenMapperTests>;
+            actual[0].Should().BeOfType<RegisterChildTemplateToken<RegisterChildTemplateDirectoryTokenMapperTests>>();
+            actual[^1].Should().BeOfType<ChildTemplateClassToken<RegisterChildTemplateDirectoryTokenMapperTests>>();
+            var childTemplateClassToken = actual[^1] as ChildTemplateClassToken<RegisterChildTemplateDirectoryTokenMapperTests>;
             if (childTemplateClassToken != null)
             {
                 childTemplateClassToken.BaseClass.Should().Be(expectedBaseClassOutput);

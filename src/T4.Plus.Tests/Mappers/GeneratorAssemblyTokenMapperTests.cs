@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using AutoFixture;
 using FluentAssertions;
-using Moq;
 using TextTemplateTransformationFramework.Common;
 using TextTemplateTransformationFramework.Common.Contracts;
 using TextTemplateTransformationFramework.T4.Plus.Default.TemplateTokens.RenderTokens;
@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.T4.Plus.Tests.Mappers
 {
-    public class GeneratorAssemblyTokenMapperTests
+    public class GeneratorAssemblyTokenMapperTests : TestBase
     {
         [Fact]
         public void Map_Throws_On_Null_Argument()
@@ -53,16 +53,16 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests.Mappers
 
         private SectionContext<GeneratorAssemblyTokenMapperTests> CreateContext()
         {
-            var tokenParserCallbackMock = new Mock<ITokenParserCallback<GeneratorAssemblyTokenMapperTests>>();
-            var loggerMock = new Mock<ILogger>();
+            var tokenParserCallbackMock = Fixture.Freeze<ITokenParserCallback<GeneratorAssemblyTokenMapperTests>>();
+            var loggerMock = Fixture.Freeze<ILogger>();
             var context = SectionContext.FromSection
             (
                 new Section("test.template", 1, string.Empty),
                 0,
                 Enumerable.Empty<ITemplateToken<GeneratorAssemblyTokenMapperTests>>(),
-                tokenParserCallbackMock.Object,
+                tokenParserCallbackMock,
                 this,
-                loggerMock.Object,
+                loggerMock,
                 Array.Empty<TemplateParameter>()
             );
             return context;

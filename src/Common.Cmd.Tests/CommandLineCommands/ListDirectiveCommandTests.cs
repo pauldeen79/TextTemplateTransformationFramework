@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using AutoFixture;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
-using Moq;
+using NSubstitute;
 using TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands;
 using TextTemplateTransformationFramework.Common.Cmd.Tests.TestFixtures;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -14,13 +15,13 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
     [ExcludeFromCodeCoverage]
     public class ListDirectiveCommandTests : TestBase
     {
-        private readonly Mock<IScriptBuilder<MyDirectiveModel>> _scriptBuilderMock;
+        private readonly IScriptBuilder<MyDirectiveModel> _scriptBuilderMock;
 
-        private ListDirectiveCommand<MyDirectiveModel> CreateSut() => new ListDirectiveCommand<MyDirectiveModel>(_scriptBuilderMock.Object);
+        private ListDirectiveCommand<MyDirectiveModel> CreateSut() => Fixture.Create<ListDirectiveCommand<MyDirectiveModel>>();
 
         public ListDirectiveCommandTests()
         {
-            _scriptBuilderMock = new Mock<IScriptBuilder<MyDirectiveModel>>();
+            _scriptBuilderMock = Fixture.Freeze<IScriptBuilder<MyDirectiveModel>>();
         }
 
         [Fact]
@@ -34,8 +35,8 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             // Arrange
             var app = new CommandLineApplication();
-            var scriptBuilderMock = new Mock<IScriptBuilder<ListDirectiveCommandTests>>();
-            var sut = new ListDirectiveCommand<ListDirectiveCommandTests>(scriptBuilderMock.Object);
+            var scriptBuilderMock = Fixture.Freeze<IScriptBuilder<ListDirectiveCommandTests>>();
+            var sut = new ListDirectiveCommand<ListDirectiveCommandTests>(scriptBuilderMock);
 
             // Act
             sut.Initialize(app);
@@ -82,11 +83,11 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         {
             // Arrange
             var argument = "-n MyDirective";
-            var templateSectionProcessorMock = new Mock<IModeledTemplateSectionProcessor<MyDirectiveModel>>();
-            templateSectionProcessorMock.SetupGet(x => x.ModelType).Returns(typeof(MyDirectiveModel));
-            _scriptBuilderMock.Setup(x => x.GetKnownDirectives())
-                              .Returns(new[] { templateSectionProcessorMock.Object });
-            _scriptBuilderMock.Setup(x => x.Build(templateSectionProcessorMock.Object, It.IsAny<object[]>()))
+            var templateSectionProcessorMock = Fixture.Freeze<IModeledTemplateSectionProcessor<MyDirectiveModel>>();
+            templateSectionProcessorMock.ModelType.Returns(typeof(MyDirectiveModel));
+            _scriptBuilderMock.GetKnownDirectives()
+                              .Returns(new[] { templateSectionProcessorMock });
+            _scriptBuilderMock.Build(templateSectionProcessorMock, Arg.Any<object[]>())
                               .Returns($"<# {nameof(ListDirectiveCommandTests)} #>");
 
             // Act
