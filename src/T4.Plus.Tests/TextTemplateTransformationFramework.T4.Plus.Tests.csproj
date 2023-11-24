@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="pauldeen79.CrossCutting.Common.Testing" Version="2.8.0" />
-    <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="3.0.0" />
+    <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="3.3.0" />
     <PackageReference Include="xunit" Version="2.6.2" />
     <PackageReference Include="xunit.runner.console" Version="2.6.2">
       <PrivateAssets>all</PrivateAssets>
