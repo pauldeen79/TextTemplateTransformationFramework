@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Utilities.Extensions;
 using Xunit;
@@ -66,19 +68,18 @@ namespace TextTemplateTransformationFramework.T4.Tests
                     Constructors = t.GetConstructors().Where
                     (
                         x => x.GetParameters().Length > 0
-                        && !x.GetParameters().Any
-                        (
+                        && !Array.Exists(x.GetParameters(),
                             y => y.ParameterType != typeof(string)
                             && typeof(IEnumerable).IsAssignableFrom(y.ParameterType)
                         )
-                        && !x.GetParameters().Any(y => y.ParameterType.IsGenericType)
+                        && !Array.Exists(x.GetParameters(), y => y.ParameterType.IsGenericType)
                     ).ToArray()
                 })
                 .Where(x => x.Constructors.Length == 1)
                 .Select(x => x.Type)
                 .ToList();
 
-            types.ForEach(x => CrossCutting.Common.Testing.TestHelpers.ConstructorMustThrowArgumentNullException(x));
+            types.ForEach(x => x.ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(Activator.CreateInstance));
         }
     }
 }

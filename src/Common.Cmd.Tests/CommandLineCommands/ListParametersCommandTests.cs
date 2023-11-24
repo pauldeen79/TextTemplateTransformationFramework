@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
@@ -13,7 +12,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineCommands
 {
     [ExcludeFromCodeCoverage]
-    public class ListParametersCommandTests
+    public class ListParametersCommandTests : TestBase
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
@@ -37,7 +36,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(ListParametersCommand));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(ListParametersCommand));
         }
 
         [Fact]

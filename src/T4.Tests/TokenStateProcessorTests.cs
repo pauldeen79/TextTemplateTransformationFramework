@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -15,7 +10,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class TokenStateProcessorTests
+    public class TokenStateProcessorTests : TestBase
     {
         private readonly Mock<ICompositeTemplateSectionProcessor<TokenParserState>> _sectionProcessorMock = new();
         private readonly Mock<ICodeSectionProcessor<TokenParserState>> _codeSectionProcessorMock = new();
@@ -25,7 +20,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
         [Fact]
         public void Ctor_Throws_On_Null_Arguments()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(TokenStateProcessor));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(TokenStateProcessor));
         }
 
         [Fact]

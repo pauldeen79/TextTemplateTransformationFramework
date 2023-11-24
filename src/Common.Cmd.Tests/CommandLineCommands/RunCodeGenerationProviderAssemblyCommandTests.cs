@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
@@ -17,7 +16,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineCommands
 {
     [ExcludeFromCodeCoverage]
-    public class RunCodeGenerationProviderAssemblyCommandTests
+    public class RunCodeGenerationProviderAssemblyCommandTests : TestBase
     {
         private readonly Mock<IClipboard> _clipboardMock;
         private readonly Mock<IAssemblyService> _assemblyServiceMock;
@@ -40,7 +39,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(RunCodeGenerationProviderAssemblyCommand));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(RunCodeGenerationProviderAssemblyCommand));
         }
 
         [Fact]

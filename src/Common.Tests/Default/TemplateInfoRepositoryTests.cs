@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -9,7 +8,7 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.Common.Tests.Default
 {
-    public class TemplateInfoRepositoryTests
+    public class TemplateInfoRepositoryTests : TestBase
     {
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock = new();
         private string _contents = "";
@@ -25,7 +24,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         [Fact]
         public void Ctor_Throws_On_Null_Arguments()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(TemplateInfoRepository));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(TemplateInfoRepository));
         }
 
         [Fact]

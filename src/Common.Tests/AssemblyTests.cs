@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
@@ -8,7 +9,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Tests
 {
     [ExcludeFromCodeCoverage]
-    public class AssemblyTests
+    public class AssemblyTests : TestBase
     {
         [Fact]
         public void AssemblyDoesNotContainInterfacesWithTooManyMethods()
@@ -66,19 +67,18 @@ namespace TextTemplateTransformationFramework.Common.Tests
                     Constructors = t.GetConstructors().Where
                     (
                         x => x.GetParameters().Length > 0
-                        && !x.GetParameters().Any
-                        (
+                        && !Array.Exists(x.GetParameters(),
                             y => y.ParameterType != typeof(string)
                             && typeof(IEnumerable).IsAssignableFrom(y.ParameterType)
                         )
-                        && !x.GetParameters().Any(y => y.ParameterType.IsGenericType)
+                        && !Array.Exists(x.GetParameters(), y => y.ParameterType.IsGenericType)
                     ).ToArray()
                 })
                 .Where(x => x.Constructors.Length == 1)
                 .Select(x => x.Type)
                 .ToList();
 
-            types.ForEach(x => CrossCutting.Common.Testing.TestHelpers.ConstructorMustThrowArgumentNullException(x, pi => pi.Name != nameof(CompilerError.FileName).ToPascalCase()));
+            types.ForEach(x => ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(x, pi => pi.Name != nameof(CompilerError.FileName).ToPascalCase()));
         }
     }
 }

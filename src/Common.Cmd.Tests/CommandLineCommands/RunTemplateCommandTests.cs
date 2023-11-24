@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using McMaster.Extensions.CommandLineUtils;
 using Moq;
@@ -16,7 +14,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineCommands
 {
     [ExcludeFromCodeCoverage]
-    public class RunTemplateCommandTests
+    public class RunTemplateCommandTests : TestBase
     {
         private readonly Mock<ITextTemplateProcessor> _processorMock;
         private readonly Mock<IFileContentsProvider> _fileContentsProviderMock;
@@ -45,7 +43,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
         [Fact]
         public void Ctor_Throws_On_Null_Argument()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(RunTemplateCommand));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(RunTemplateCommand));
         }
 
         [Fact]
@@ -335,7 +333,7 @@ template output
             _ = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-s myshortname", "param1:value1", "param2:value2");
 
             // Assert
-            _processorMock.Verify(x => x.Process(It.IsAny<TextTemplate>(), It.Is<TemplateParameter[]>(x => x.Length == 2 && x.First().Name == "param1" && x.First().Value.ToString() == "value1" && x.Last().Name == "param2" && x.Last().Value.ToString() == "value2")));
+            _processorMock.Verify(x => x.Process(It.IsAny<TextTemplate>(), It.Is<TemplateParameter[]>(x => x.Length == 2 && x[0].Name == "param1" && x[0].Value.ToString() == "value1" && x[x.Length - 1].Name == "param2" && x[x.Length - 1].Value.ToString() == "value2")));
         }
 
         [Fact]

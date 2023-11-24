@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -13,7 +12,7 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
 {
-    public class ProcessTextTemplateRequestProcessorTests
+    public class ProcessTextTemplateRequestProcessorTests : TestBase
     {
         private readonly Mock<ITemplateCodeCompiler<ProcessTextTemplateRequestProcessorTests>> _templateCodeCompilerMock = new();
         private readonly Mock<ITemplateOutputCreator<ProcessTextTemplateRequestProcessorTests>> _templateOutputCreatorMock = new();
@@ -26,7 +25,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
                                      .Returns<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>, TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>>((context, codeOutput) =>
                                      {
                                          var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(context.AssemblyTemplate.AssemblyName));
-                                         return TemplateCompilerOutput.Create(assembly, assembly.GetExportedTypes().FirstOrDefault(x => x.FullName == context.AssemblyTemplate.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<ProcessTextTemplateRequestProcessorTests>>());
+                                         return TemplateCompilerOutput.Create(assembly, Array.Find(assembly.GetExportedTypes(), x => x.FullName == context.AssemblyTemplate.ClassName), Enumerable.Empty<CompilerError>(), string.Empty, string.Empty, Enumerable.Empty<ITemplateToken<ProcessTextTemplateRequestProcessorTests>>());
                                      });
             _templateOutputCreatorMock.Setup(x => x.Create(It.IsAny<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>()))
                                       .Returns<ITextTemplateProcessorContext<ProcessTextTemplateRequestProcessorTests>>(context => new TemplateCodeOutput<ProcessTextTemplateRequestProcessorTests>(Enumerable.Empty<ITemplateToken<ProcessTextTemplateRequestProcessorTests>>(), new CodeGeneratorResult(string.Empty, "C#", Enumerable.Empty<CompilerError>()), string.Empty, Enumerable.Empty<string>(), Enumerable.Empty<string>(), string.Empty, string.Empty));
@@ -37,7 +36,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.RequestProcessors
         [Fact]
         public void Ctor_Throws_On_Null_Arguments()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(ProcessTextTemplateRequestProcessor<ProcessTextTemplateRequestProcessorTests>));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(ExtractParametersFromTextTemplateRequestProcessor<ExtractParametersFromTextTemplateRequestProcessorTests>));
         }
 
         [Fact]

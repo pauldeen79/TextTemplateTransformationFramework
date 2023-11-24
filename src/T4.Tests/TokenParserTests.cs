@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Loader;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using TextTemplateTransformationFramework.Common;
@@ -18,7 +17,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.T4.Tests
 {
     [ExcludeFromCodeCoverage]
-    public sealed class TokenParserTests : IDisposable
+    public sealed class TokenParserTests : TestBase, IDisposable
     {
         private readonly ServiceProvider _provider;
 
@@ -33,7 +32,7 @@ namespace TextTemplateTransformationFramework.T4.Tests
         [Fact]
         public void Ctor_Throws_On_Null_Arguments()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(TokenParser));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(TokenParser));
         }
 
         [Fact]

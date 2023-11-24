@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -14,7 +13,7 @@ using Xunit;
 namespace TextTemplateTransformationFramework.Common.Tests.Default
 {
     [ExcludeFromCodeCoverage]
-    public class TextTemplateProcessorTests
+    public class TextTemplateProcessorTests : TestBase
     {
         private readonly Mock<ILoggerFactory> _loggerFactoryMock = new();
         private readonly Mock<IRequestProcessor<ProcessTextTemplateRequest<TextTemplateProcessorTests>, ProcessResult>> _processTextTemplateProcessorMock = new();
@@ -44,7 +43,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         [Fact]
         public void Ctor_Throws_On_Null_Arguments()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(TextTemplateProcessor<TextTemplateProcessorTests>));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(TextTemplateProcessor<TextTemplateProcessorTests>));
         }
 
         [Fact]

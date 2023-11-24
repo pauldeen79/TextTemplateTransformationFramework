@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using CrossCutting.Common.Testing;
 using FluentAssertions;
 using Moq;
 using TextTemplateTransformationFramework.Common.Contracts;
@@ -11,7 +10,7 @@ using Xunit;
 
 namespace TextTemplateTransformationFramework.Common.Tests.Default
 {
-    public class TemplateCodeCompilerTests
+    public class TemplateCodeCompilerTests : TestBase
     {
         private readonly Mock<ICodeCompiler<TemplateCodeCompilerTests>> _codeCompilerMock = new();
         private readonly Mock<ITemplateFactory<TemplateCodeCompilerTests>> _templateFactoryMock = new();
@@ -26,7 +25,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         [Fact]
         public void Ctor_Throws_On_Null_Arguments()
         {
-            TestHelpers.ConstructorMustThrowArgumentNullException(typeof(TemplateCodeCompiler<TemplateCodeCompilerTests>));
+            ShouldThrowArgumentNullExceptionsInConstructorsOnNullArguments(typeof(TemplateCodeCompiler<TemplateCodeCompilerTests>));
         }
 
         [Fact]

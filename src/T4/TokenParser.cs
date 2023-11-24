@@ -25,7 +25,7 @@ namespace TextTemplateTransformationFramework.T4
                            ITokenParserTokenModifier tokenModifier)
         {
             _argumentParser = argumentParser ?? throw new ArgumentNullException(nameof(argumentParser));
-            _tokenArgumentParser = tokenArgumentParser ?? throw new ArgumentNullException(nameof(argumentParser));
+            _tokenArgumentParser = tokenArgumentParser ?? throw new ArgumentNullException(nameof(tokenArgumentParser));
             _tokenStateProcessor = tokenStateProcessor ?? throw new ArgumentNullException(nameof(tokenStateProcessor));
             _tokenPlaceholderProcessor = tokenPlaceholderProcessor ?? throw new ArgumentNullException(nameof(tokenPlaceholderProcessor));
             _tokenModifier = tokenModifier ?? throw new ArgumentNullException(nameof(tokenModifier));
