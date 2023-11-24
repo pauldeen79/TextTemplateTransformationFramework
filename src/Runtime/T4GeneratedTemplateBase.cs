@@ -240,14 +240,14 @@ namespace TextTemplateTransformationFramework.Runtime
                     throw new ArgumentNullException(nameof(objectToConvert));
                 }
                 Type t = objectToConvert.GetType();
-                MethodInfo method = t.GetMethod("ToString", new Type[] { typeof(IFormatProvider) });
+                MethodInfo method = t.GetMethod("ToString", [typeof(IFormatProvider)]);
                 if (method == null)
                 {
                     return objectToConvert.ToString();
                 }
                 else
                 {
-                    return (string)(method.Invoke(objectToConvert, new object[] { formatProviderField }));
+                    return (string)(method.Invoke(objectToConvert, [formatProviderField]));
                 }
             }
         }

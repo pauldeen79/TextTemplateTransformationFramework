@@ -19,7 +19,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
             if (assemblyName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase) && !Path.IsPathRooted(assemblyName))
             {
-                return new[] { Path.GetDirectoryName(Path.Combine(Directory.GetCurrentDirectory(), assemblyName)) };
+                return [Path.GetDirectoryName(Path.Combine(Directory.GetCurrentDirectory(), assemblyName))];
             }
 
             return Array.Empty<string>();

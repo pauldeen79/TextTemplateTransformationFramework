@@ -54,7 +54,7 @@ namespace TextTemplateTransformationFramework.T4.LanguageServices
                     ? sm.Code ?? string.Empty
                     : serializerType
                         .GetMethod(nameof(DirectiveSerializer<TokenParserState, object>.Serialize))
-                        .Invoke(serializer, new[] { model })
+                        .Invoke(serializer, [model])
                         .ToStringWithDefault(string.Empty);
 
                 if (stringBuilder.Length > 0)

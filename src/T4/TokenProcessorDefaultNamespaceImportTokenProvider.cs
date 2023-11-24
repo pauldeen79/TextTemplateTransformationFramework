@@ -9,13 +9,13 @@ namespace TextTemplateTransformationFramework.T4
 {
     internal static class TokenProcessorDefaultNamespaceImportTokenProvider
     {
-        internal static readonly string[] DefaultNamespaces = new[]
-        {
+        internal static readonly string[] DefaultNamespaces =
+        [
             "System",
             "System.Collections.Generic",
             "System.Linq",
             "System.Text"
-        };
+        ];
 
     }
     public class TokenProcessorDefaultNamespaceImportTokenProvider<TState> : ITokenProcessorDefaultNamespaceImportTokenProvider<TState>

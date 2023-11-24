@@ -64,7 +64,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
             sut.Add(templateInfo);
 
             // Act & Assert
@@ -98,7 +98,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
 
             // Act
             sut.Add(templateInfo);
@@ -113,7 +113,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             // Arrange
             _fileContentsProviderMock.DirectoryExists(Arg.Any<string>()).Returns(false);
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
 
             // Act
             sut.Add(templateInfo);
@@ -127,7 +127,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
             sut.Add(templateInfo);
 
             // Act
@@ -142,7 +142,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
             sut.Add(templateInfo);
 
             // Act
@@ -170,7 +170,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
             sut.Add(templateInfo);
 
             // Act
@@ -195,7 +195,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
             sut.Add(templateInfo);
 
             // Act
@@ -210,7 +210,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
         {
             // Arrange
             var sut = new TemplateInfoRepository(_fileContentsProviderMock);
-            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "MyParameter", Value = "123" } });
+            var templateInfo = new TemplateInfo("MyTemplate", "my.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "MyParameter", Value = "123" }]);
             sut.Add(templateInfo);
 
             // Act

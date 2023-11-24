@@ -27,10 +27,10 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             {
                 return x.ArgAt<string>(1).ToLower(CultureInfo.InvariantCulture) switch
                 {
-                    "name" => new[] { "name 1" },
-                    "optionalboolean" => new[] { "false" },
-                    "language" => new[] { "vb" },
-                    "list" => new[] { "a", "b", "c" },
+                    "name" => ["name 1"],
+                    "optionalboolean" => ["false"],
+                    "language" => ["vb"],
+                    "list" => ["a", "b", "c"],
                     _ => Array.Empty<string>(),
                 };
             });
@@ -73,7 +73,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             var sut = new DirectiveSerializer<DirectiveSerializerTests, TestModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
-            var actual = sut.Serialize(new TestModel { Name = "name1", OptionalBoolean = false, List = new[] { "a", "b", "c" }, Language = Language.VbNet });
+            var actual = sut.Serialize(new TestModel { Name = "name1", OptionalBoolean = false, List = ["a", "b", "c"], Language = Language.VbNet });
 
             // Assert
             actual.Should().Contain(@"Name=""name1"" Enabled=""false"" OptionalBoolean=""false"" List=""a"" List=""b"" List=""c"" Language=""vb""");
@@ -90,7 +90,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             var sut = new DirectiveSerializer<DirectiveSerializerTests, TestModel>(context, fileNameProvider, fileContentsProvider, templateCodeCompiler);
 
             // Act
-            var actual = sut.Serialize(new TestModel { Name = "name1\"", OptionalBoolean = false, List = new[] { "a", "b", "c" }, Language = Language.VbNet });
+            var actual = sut.Serialize(new TestModel { Name = "name1\"", OptionalBoolean = false, List = ["a", "b", "c"], Language = Language.VbNet });
 
             // Assert
             actual.Should().Contain(@"Name=""name1\"""" Enabled=""false"" OptionalBoolean=""false"" List=""a"" List=""b"" List=""c"" Language=""vb""");
@@ -140,7 +140,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             {
                 return x.ArgAt<string>(1).ToLower(CultureInfo.InvariantCulture) switch
                 {
-                    "myfloatproperty" => new[] { "2.3" },
+                    "myfloatproperty" => ["2.3"],
                     _ => Array.Empty<string>(),
                 };
             });
@@ -202,7 +202,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.LanguageServices
             {
                 return x.ArgAt<string>(1).ToLower(CultureInfo.InvariantCulture) switch
                 {
-                    "mystringarrayproperty" => new[] { "2.3", "2.4", "2.5" },
+                    "mystringarrayproperty" => ["2.3", "2.4", "2.5"],
                     _ => Array.Empty<string>(),
                 };
             });

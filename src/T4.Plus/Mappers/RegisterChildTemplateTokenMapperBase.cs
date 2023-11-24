@@ -65,8 +65,8 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                             context.GetChildTemplateTokens(FileContentsProvider, model.FileName).ChildTokens
                         )
                     }
-                    : new ITemplateToken<TState>[]
-                    {
+                    :
+                    [
                         new RegisterViewModelToken<TState>
                         (
                             context,
@@ -85,7 +85,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers
                             templateTokens.ChildTokens.OfType<ICopyPropertiesToViewModelToken<TState>>().All(t => t.Enabled),
                             templateTokens.ChildTokens
                         )
-                    }
+                    ]
                 );
         }
     }

@@ -281,12 +281,12 @@ namespace TextTemplateTransformationFramework.Runtime
                 }
                 if (iterationContextModel != null)
                 {
-                    childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, new[] { rootTemplate, iterationContextModel, null, null, null, null });
-                    childContext = childContext.GetType().GetMethod("CreateChildContext").Invoke(childContext, new[] { childTemplate, model, viewModel, null, null, null });
+                    childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, [rootTemplate, iterationContextModel, null, null, null, null]);
+                    childContext = childContext.GetType().GetMethod("CreateChildContext").Invoke(childContext, [childTemplate, model, viewModel, null, null, null]);
                 }
                 else
                 {
-                    childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, new[] { childTemplate, model, viewModel, null, null, null });
+                    childContext = rootTemplateContext.GetType().GetMethod("CreateChildContext").Invoke(rootTemplateContext, [childTemplate, model, viewModel, null, null, null]);
                 }
             }
 
@@ -373,7 +373,7 @@ namespace TextTemplateTransformationFramework.Runtime
             var transformTextMethod = templateType.GetMethod("TransformText");
             if (renderMethod != null)
             {
-                renderMethod.Invoke(template, new object[] { builder });
+                renderMethod.Invoke(template, [builder]);
             }
             else if (transformTextMethod != null)
             {
@@ -516,12 +516,12 @@ namespace TextTemplateTransformationFramework.Runtime
                 var multipleContents = MultipleContentBuilder.FromString(s);
                 foreach (var c in multipleContents.Contents)
                 {
-                    addContentMethod.Invoke(multipleContentBuilder, new object[] { fileNamePrefix + c.FileName, c.SkipWhenFileExists, c.Builder });
+                    addContentMethod.Invoke(multipleContentBuilder, [fileNamePrefix + c.FileName, c.SkipWhenFileExists, c.Builder]);
                 }
             }
             else
             {
-                addContentMethod.Invoke(multipleContentBuilder, new object[] { defaultFileName, defaultSkipWhenFileExists, new StringBuilder(s) });
+                addContentMethod.Invoke(multipleContentBuilder, [defaultFileName, defaultSkipWhenFileExists, new StringBuilder(s)]);
             }
         }
 
@@ -588,7 +588,7 @@ namespace TextTemplateTransformationFramework.Runtime
                         initializeMethod.Invoke(template, null);
                         break;
                     case 1:
-                        initializeMethod.Invoke(template, new object[] { additionalActionDelegate });
+                        initializeMethod.Invoke(template, [additionalActionDelegate]);
                         break;
                     default:
                         throw new InvalidOperationException($"Template of type [{template.GetType().FullName}] has Initialize method with more than 1 argument. This is not supported.");

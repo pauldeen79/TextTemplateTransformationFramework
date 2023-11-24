@@ -38,7 +38,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
             // Arrange
             _baseParser.Parse(Arg.Any<ITextTemplateProcessorContext<TokenParserState>>())
                        .Returns(x => x.ArgAt<ITextTemplateProcessorContext<TokenParserState>>(0).TextTemplate.Template == "<#@ template language=\"C#\" #>"
-                        ? new ITemplateToken<TokenParserState>[] { new TemplateClassNameToken<TokenParserState>(SectionContext<TokenParserState>.Empty, "MyClassName", "") }
+                        ? [new TemplateClassNameToken<TokenParserState>(SectionContext<TokenParserState>.Empty, "MyClassName", "")]
                         : Array.Empty<ITemplateToken<TokenParserState>>());
             var sut = new TokenParser(_baseParser);
 

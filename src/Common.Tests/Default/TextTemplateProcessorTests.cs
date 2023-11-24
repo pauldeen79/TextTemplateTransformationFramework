@@ -58,7 +58,7 @@ namespace TextTemplateTransformationFramework.Common.Tests.Default
             var sut = CreateSut();
 
             // Act
-            var result = sut.Process(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), new[] { new TemplateParameter { Name = nameof(MyAssemblyTemplate.MyParameter), Value = "something" } });
+            var result = sut.Process(new AssemblyTemplate(GetType().Assembly.FullName, typeof(MyAssemblyTemplate).FullName, AssemblyLoadContext.Default), [new TemplateParameter { Name = nameof(MyAssemblyTemplate.MyParameter), Value = "something" }]);
 
             // Assert
             result.Should().NotBeNull();

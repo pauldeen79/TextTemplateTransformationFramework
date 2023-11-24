@@ -12,14 +12,14 @@ namespace TextTemplateTransformationFramework.T4.Plus
 {
     internal static class TokenPlaceholderProcessor
     {
-        internal static readonly string[] HintPathFileExtensions = new[]
-        {
+        internal static readonly string[] HintPathFileExtensions =
+        [
             ".cs",
             ".dll",
             ".tt",
             ".ttinclude",
             ".template"
-        };
+        ];
     }
 
     public class TokenPlaceholderProcessor<TState> : ITokenPlaceholderProcessor<TState>

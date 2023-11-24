@@ -88,7 +88,7 @@ namespace TextTemplateTransformationFramework.Runtime
             modelProperty?.SetValue(template, model, null);
 
             var initializeMethod = templateType.GetMethod("Initialize");
-            initializeMethod?.Invoke(template, initializeMethod.GetParameters().Length == 0 ? Array.Empty<object>() : new object[] { null });
+            initializeMethod?.Invoke(template, initializeMethod.GetParameters().Length == 0 ? Array.Empty<object>() : [null]);
 
             var viewModelProperty = templateType.GetProperty("ViewModel", Constants.BindingFlags);
             if (viewModelProperty != null && viewModelProperty.PropertyType != typeof(object))
@@ -224,7 +224,7 @@ namespace TextTemplateTransformationFramework.Runtime
             var transformTextMethod = templateType.GetMethod("TransformText");
             if (renderMethod != null)
             {
-                renderMethod.Invoke(template, new object[] { GenerationEnvironment });
+                renderMethod.Invoke(template, [GenerationEnvironment]);
             }
             else if (transformTextMethod != null)
             {

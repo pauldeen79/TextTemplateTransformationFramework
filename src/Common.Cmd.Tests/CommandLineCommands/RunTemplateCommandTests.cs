@@ -319,7 +319,7 @@ template output
             // Arrange
             _fileContentsProviderMock.FileExists("existing.template").Returns(true);
             _fileContentsProviderMock.GetFileContents("existing.template").Returns("<#@ template language=\"c#\" #>");
-            _templateInfoRepositoryMock.FindByShortName(Arg.Any<string>()).Returns(new TemplateInfo("myshortname", "existing.template", "", "", TemplateType.TextTemplate, new[] { new TemplateParameter { Name = "param1", Value = "defaultValue" } }));
+            _templateInfoRepositoryMock.FindByShortName(Arg.Any<string>()).Returns(new TemplateInfo("myshortname", "existing.template", "", "", TemplateType.TextTemplate, [new TemplateParameter { Name = "param1", Value = "defaultValue" }]));
             _processorMock.Process(Arg.Any<TextTemplate>(), Arg.Any<TemplateParameter[]>())
                           .Returns(ProcessResult.Create(Array.Empty<CompilerError>(), "template output"));
 

@@ -68,7 +68,7 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
             var isValidMethod = mapperType.GetMethod("IsValidForProcessing");
             _isValidDelegate = isValidMethod == null
                 ? new Func<SectionContext<TState>, object, bool>((ctx, m) => true)
-                : new Func<SectionContext<TState>, object, bool>((ctx, m) => (bool)isValidMethod.Invoke(_mapperInstance, new[] { ctx, m }));
+                : new Func<SectionContext<TState>, object, bool>((ctx, m) => (bool)isValidMethod.Invoke(_mapperInstance, [ctx, m]));
 
             _directiveSerializerType = typeof(DirectiveSerializer<,>).MakeGenericType(typeof(TState), _tokenMapperAttribute.Type.GetModelType(typeof(TState)));
             _mapperInstance = Activator.CreateInstance(mapperType);
@@ -101,7 +101,7 @@ namespace TextTemplateTransformationFramework.Common.SectionProcessors
                         .WithMapDelegate(() => _mapMethod.Invoke
                         (
                             _mapperInstance,
-                            new[] { context, model }
+                            [context, model]
                         ))
                         .WithPassThrough(_passThrough)
                         .WithTokensAreForRootTemplateSection(_tokensAreForRootTemplateSection)

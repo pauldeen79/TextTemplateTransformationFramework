@@ -40,7 +40,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.CommandLineCommands
             assemblyLoadContext = AssemblyLoadContext.Default;
 #else
             assemblyLoadContext = new CustomAssemblyLoadContext("T4PlusCmd", true, () => currentDirectoryIsFilled
-                ? new[] { currentDirectory }
+                ? [currentDirectory]
                 : assemblyService.GetCustomPaths(assemblyName));
 #endif
             return assemblyLoadContext;

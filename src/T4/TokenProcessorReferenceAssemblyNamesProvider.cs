@@ -10,11 +10,11 @@ namespace TextTemplateTransformationFramework.T4
 {
     internal static class Skip
     {
-        internal static readonly string[] Assemblies = new[]
-        {
+        internal static readonly string[] Assemblies =
+        [
             "mscorlib.dll",
             "system.core"
-        };
+        ];
     }
 
     public class TokenProcessorReferenceAssemblyNamesProvider<TState> : ITokenProcessorReferenceAssemblyNamesProvider<TState>

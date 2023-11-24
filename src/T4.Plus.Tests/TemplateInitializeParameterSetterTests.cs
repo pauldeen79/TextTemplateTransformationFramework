@@ -34,7 +34,7 @@ namespace TextTemplateTransformationFramework.T4.Plus.Tests
             template.Session.Add("Key", "Value");
             var sut = new TemplateInitializeParameterSetter<TemplateInitializeParameterSetterTests>();
             var textTemplateProcessorContextMock = Fixture.Freeze<ITextTemplateProcessorContext<TemplateInitializeParameterSetterTests>>();
-            textTemplateProcessorContextMock.Parameters.Returns(new[] { new TemplateParameter { Name = nameof(ViewModelTemplate.Property), Value = "test" } });
+            textTemplateProcessorContextMock.Parameters.Returns([new TemplateParameter { Name = nameof(ViewModelTemplate.Property), Value = "test" }]);
             var templateCompilerOutput = TemplateCompilerOutput.Create(GetType().Assembly, template, Enumerable.Empty<CompilerError>(), "", "cs", Enumerable.Empty<ITemplateToken<TemplateInitializeParameterSetterTests>>(), null);
             var context = new TemplateProcessorContext<TemplateInitializeParameterSetterTests>(textTemplateProcessorContextMock, templateCompilerOutput);
 

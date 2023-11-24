@@ -23,12 +23,12 @@ namespace TextTemplateTransformationFramework.T4.Plus.Mappers.Template
             }
 
             return string.IsNullOrEmpty(model.BaseClassName)
-                ? new ITemplateToken<TState>[]
-                {
+                ?
+                [
                     new ClearErrorsToken<TState>(context),
                     new ClearGenerationEnvironmentToken<TState>(context),
                     new EnsureSessionInitializedToken<TState>(context),
-                }
+                ]
                 : Array.Empty<ITemplateToken<TState>>();
         }
     }

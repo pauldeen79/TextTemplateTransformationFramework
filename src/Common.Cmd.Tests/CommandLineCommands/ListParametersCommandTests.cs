@@ -104,7 +104,7 @@ namespace TextTemplateTransformationFramework.Common.Cmd.Tests.CommandLineComman
             _fileContentsProviderMock.FileExists("existing.template").Returns(true);
             _fileContentsProviderMock.GetFileContents("existing.template").Returns("<#@ template language=\"c#\" #>");
             _processorMock.ExtractParameters(Arg.Any<TextTemplate>())
-                          .Returns(ExtractParametersResult.Create(Enumerable.Empty<TemplateParameter>(), new[] { new CompilerError(1, "CS1001", "Kaboom", "existing.template", false, 1) }, "code", string.Empty));
+                          .Returns(ExtractParametersResult.Create(Enumerable.Empty<TemplateParameter>(), [new CompilerError(1, "CS1001", "Kaboom", "existing.template", false, 1)], "code", string.Empty));
             var actual = CommandLineCommandHelper.ExecuteCommand(CreateSut, "-f existing.template");
 
             // Assert

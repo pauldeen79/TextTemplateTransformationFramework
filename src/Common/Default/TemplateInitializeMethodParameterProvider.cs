@@ -15,7 +15,7 @@ namespace TextTemplateTransformationFramework.Common.Default
 
             return initializeMethod.GetParameters().Length == 0
                 ? Array.Empty<object>()
-                : new object[] { null };
+                : [null];
         }
     }
 }
