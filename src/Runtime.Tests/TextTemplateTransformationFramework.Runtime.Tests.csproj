@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.0" />
+    <PackageReference Include="AutoFixture.AutoNSubstitute" Version="4.18.1" />
     <PackageReference Include="Castle.Core" Version="5.1.1" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
@@ -17,12 +17,13 @@
     <PackageReference Include="pauldeen79.CrossCutting.Common.Testing" Version="2.10.0" />
     <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="3.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="xunit" Version="2.6.2" />
-    <PackageReference Include="xunit.runner.console" Version="2.6.2">
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="xunit" Version="2.6.3" />
+    <PackageReference Include="xunit.runner.console" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
