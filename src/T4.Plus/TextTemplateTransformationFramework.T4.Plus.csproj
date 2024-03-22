@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="3.3.0" />
+    <PackageReference Include="pauldeen79.CrossCutting.Utilities.ObjectDumper" Version="3.7.0" />
   </ItemGroup>
 
   <ItemGroup>
